@@ -1,0 +1,25 @@
+Library
+-------
+
+- Interrupts (only VBL, HBL and VCOUNT are done): Keypad, etc.
+- Examples for interrupts.
+- Examples for input.
+- Examples for graphics.
+- Timers.
+- Examples for timers.
+- DMA.
+- Examples for DMA.
+- BIOS services.
+- Examples for BIOS services.
+
+SDL2 port
+---------
+
+- Add debugger windows from GiiBiiAdvance.
+- Add helper to configure user input.
+- Add helper to take screenshots for testing.
+
+General
+-------
+
+- CI scripts for mGBA and PC.
