@@ -12,7 +12,9 @@ set(C_STANDARD_REQUIRED ON)
 
 add_subdirectory(libgbaline)
 
+add_subdirectory(template)
+add_subdirectory(tools)
+
 include(cmake/example.cmake)
 
 add_subdirectory(examples)
-add_subdirectory(template)
