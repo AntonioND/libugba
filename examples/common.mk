@@ -26,8 +26,8 @@ TARGET		:= $(notdir $(CURDIR))
 BUILD		:= build
 SOURCES		:= source
 INCLUDES	:= include
-DATA		:=
-MUSIC		:=
+DATA		:= data
+MUSIC		:= music
 GRAPHICS	:= graphics
 
 #---------------------------------------------------------------------------------
