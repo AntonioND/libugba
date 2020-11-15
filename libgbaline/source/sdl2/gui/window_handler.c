@@ -77,29 +77,6 @@ void WH_Init(void)
 
 //------------------------------------------------------------------------------
 
-#if 0
-// This is in window_icon_data.c
-//extern const uint8_t icon_data[];
-#endif
-
-static void wh_set_window_icon(SDL_Window *window)
-{
-#if 0
-    SDL_Surface *surface;
-
-    surface = SDL_CreateRGBSurfaceFrom((void *)icon_data,
-                                       32, 32, 32, 32 * 4,
-                                       0x000000FF, 0x0000FF00, 0x00FF0000,
-                                       0xFF000000);
-
-    SDL_SetWindowIcon(window, surface);
-
-    SDL_FreeSurface(surface);
-#endif
-}
-
-//------------------------------------------------------------------------------
-
 // Returns -1 on error
 int WH_Create(int width, int height, int texw, int texh, int scale)
 {
@@ -146,8 +123,6 @@ int WH_Create(int width, int height, int texw, int texh, int scale)
                   SDL_GetError());
         return -1;
     }
-
-    wh_set_window_icon(w->mWindow);
 
     w->mMouseFocus = 1;
     w->mKeyboardFocus = 1;
