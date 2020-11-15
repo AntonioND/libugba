@@ -2,6 +2,8 @@
 #
 # Copyright (c) 2020 Antonio Niño Díaz
 
-LIBGBALINE := $(CURDIR)/../../../libgbaline
+EXAMPLE_PATH := $(dir $(realpath $(firstword $(MAKEFILE_LIST))))
 
-include ../../common.mk
+LIBGBALINE := $(EXAMPLE_PATH)/../../../libgbaline
+
+include $(EXAMPLE_PATH)/../../common.mk

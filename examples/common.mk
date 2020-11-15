@@ -27,7 +27,7 @@ BUILD		:= build
 SOURCES		:= source
 INCLUDES	:= include
 DATA		:= data
-MUSIC		:= music
+MUSIC		:=
 GRAPHICS	:= graphics
 
 #---------------------------------------------------------------------------------
@@ -49,7 +49,7 @@ LDFLAGS	=	-g $(ARCH) -Wl,-Map,$(notdir $*.map)
 #---------------------------------------------------------------------------------
 # any extra libraries we wish to link with the project
 #---------------------------------------------------------------------------------
-LIBS	:= -lmm -lgbaline
+LIBS	:= -lgbaline # -lmm
 
 
 #---------------------------------------------------------------------------------
@@ -121,6 +121,7 @@ $(BUILD):
 
 #---------------------------------------------------------------------------------
 clean:
+	echo $(LIBDIRS)
 	@echo clean ...
 	@rm -fr $(BUILD) $(TARGET).elf $(TARGET).gba
 
