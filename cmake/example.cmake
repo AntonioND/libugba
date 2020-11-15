@@ -3,10 +3,9 @@
 # Copyright (c) 2020 Antonio Niño Díaz
 
 function(define_example)
-    # Name this example the same way as the folder it's in
-    get_filename_component(EXECUTABLE_NAME ${CMAKE_CURRENT_SOURCE_DIR} NAME)
 
-    project(${EXECUTABLE_NAME})
+    # Get name of the folder we are in
+    get_filename_component(EXECUTABLE_NAME ${CMAKE_CURRENT_SOURCE_DIR} NAME)
 
     add_executable(${EXECUTABLE_NAME})
 
@@ -31,4 +30,22 @@ function(define_example)
     if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/graphics)
         add_grit_files(graphics ${EXECUTABLE_NAME})
     endif()
+endfunction()
+
+
+function(unittest_screenshot)
+
+    # Get name of the folder we are in
+    get_filename_component(EXECUTABLE_NAME ${CMAKE_CURRENT_SOURCE_DIR} NAME)
+
+    set(CMD1 "$<TARGET_FILE:${EXECUTABLE_NAME}> --autotest")
+    set(CMD2 "$<TARGET_FILE:pngmatch> ${CMAKE_CURRENT_SOURCE_DIR}/reference.png screenshot.png")
+
+    add_test(NAME test
+        COMMAND ${CMAKE_COMMAND}
+                    -DCMD1=${CMD1}
+                    -DCMD2=${CMD2}
+                    -P ${CMAKE_SOURCE_DIR}/cmake/runcommands.cmake
+        WORKING_DIRECTORY ${CMAKE_CURRENT_BUILD_DIR}
+    )
 endfunction()
