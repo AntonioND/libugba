@@ -38,6 +38,13 @@ static int Init(void)
     return 0;
 }
 
+static int autotest_enabled = 0;
+
+int Debug_Autotest(void)
+{
+    return autotest_enabled;
+}
+
 // Defined in the application that links this library
 extern int GBA_main(int argc, char *argv[]);
 
@@ -54,6 +61,23 @@ int main(int argc, char *argv[])
     Win_MainCreate();
 
     GBA_FillFadeTables();
+
+    // Detect arguments
+
+    if (argc > 1)
+    {
+        if (strcmp(argv[1], "--autotest") == 0)
+        {
+             autotest_enabled = 1;
+
+             // Remove argv[1]
+
+             for (int i = 1; i < argc - 1; i++)
+                 argv[i] = argv[i + 1];
+
+             argc--;
+        }
+    }
 
     // Library initialization
 

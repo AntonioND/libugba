@@ -82,11 +82,19 @@ int GBA_main(int argc, char *argv[])
         //     https://www.coranac.com/tonc/text/regobj.htm#sec-tiles
         DISPCNT_OBJ_1D_MAPPING;
 
-    while (1)
+    if (Debug_Autotest())
     {
-        // Wait for the next frame
-        SWI_VBlankIntrWait();
+        for (int i = 0; i < 5; i++)
+            SWI_VBlankIntrWait();
+        Debug_Screenshot();
     }
+    else
+    {
+        while (1)
+            SWI_VBlankIntrWait();
+    }
+
+    return 0;
 }
 
 
