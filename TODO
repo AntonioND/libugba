@@ -18,6 +18,7 @@ SDL2 port
 - Add debugger windows from GiiBiiAdvance.
 - Add helper to configure user input.
 - Add helper to take screenshots for testing.
+- Add bin2o support to CMake.
 
 General
 -------

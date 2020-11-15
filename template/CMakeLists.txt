@@ -2,7 +2,7 @@
 #
 # Copyright (c) 2020 Antonio Niño Díaz
 
-cmake_minimum_required(VERSION 3.13)
+cmake_minimum_required(VERSION 3.15)
 
 # Name this project the same way as the folder it's in
 get_filename_component(EXECUTABLE_NAME ${CMAKE_CURRENT_SOURCE_DIR} NAME)
@@ -27,3 +27,7 @@ search_source_files(source FILES_SOURCE)
 target_sources(${EXECUTABLE_NAME} PRIVATE
     ${FILES_SOURCE}
 )
+
+if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/graphics)
+    add_grit_files(graphics ${EXECUTABLE_NAME})
+endif()

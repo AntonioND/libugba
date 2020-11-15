@@ -2,7 +2,7 @@
 #
 # Copyright (c) 2020 Antonio Niño Díaz
 
-cmake_minimum_required(VERSION 3.13)
+cmake_minimum_required(VERSION 3.15)
 project(libgbaline)
 enable_language(C)
 
