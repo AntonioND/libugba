@@ -17,18 +17,4 @@ typedef int16_t s16;
 typedef uint8_t u8;
 typedef int8_t s8;
 
-#define BIT(n) (1 << (n))
-
-#if defined(_MSC_VER)
-# define unused__
-#else
-# define unused__ __attribute__((unused))
-#endif
-
-#if defined(_MSC_VER)
-# define ALIGNED(x) __declspec(align(x))
-#else
-# define ALIGNED(x) __attribute__((aligned(x)))
-#endif
-
 #endif // SDL2_GENERAL_UTILS__

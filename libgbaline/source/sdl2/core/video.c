@@ -11,26 +11,6 @@
 #include "../debug_utils.h"
 #include "../general_utils.h"
 
-typedef struct
-{
-    u16 attr0;
-    u16 attr1;
-    u16 attr2;
-    u16 dummy;
-} oam_spr_entry_t;
-
-typedef struct
-{
-    u16 dummy0[3];
-    s16 pa;
-    u16 dummy1[3];
-    s16 pb;
-    u16 dummy2[3];
-    s16 pc;
-    u16 dummy3[3];
-    s16 pd;
-} oam_matrix_entry_t;
-
 static int curr_screen_buffer = 0;
 static u16 screen_buffer_array[2][240 * 160]; // Doble buffer
 static u16 *screen_buffer = screen_buffer_array[0];
@@ -213,7 +193,7 @@ static const int spr_size[4][4][2] = { // Inputs = [Shape][Size][{x, y}]
 
 static void gba_sprites_draw_mode012(s32 ly)
 {
-    oam_spr_entry_t *spr = (oam_spr_entry_t *)((u8 *)MEM_OAM_ADDR);
+    oam_entry_t *spr = (oam_entry_t *)((u8 *)MEM_OAM_ADDR);
 
     for (int i = 0; i < 128; i++)
     {
@@ -582,7 +562,7 @@ static void gba_sprites_draw_mode012(s32 ly)
 
 static void gba_sprites_draw_mode345(s32 ly)
 {
-    oam_spr_entry_t *spr = (oam_spr_entry_t *)((u8 *)MEM_OAM_ADDR);
+    oam_entry_t *spr = (oam_entry_t *)((u8 *)MEM_OAM_ADDR);
 
     for (int i = 0; i < 128; i++)
     {

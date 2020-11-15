@@ -6,7 +6,7 @@
 #define GBALINE_H__
 
 #include "bios.h"
-#include "gba_defs.h"
+#include "hardware.h"
 #include "interrupts.h"
 
 #endif // GBALINE_H__
