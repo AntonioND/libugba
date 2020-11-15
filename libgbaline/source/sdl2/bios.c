@@ -18,12 +18,15 @@ void IRQ_Internal_CallHandler(irq_index index);
 
 static void handle_hbl(void)
 {
-    GBA_DrawScanline(current_vcount);
-
-    IRQ_Internal_CallHandler(IRQ_HBLANK);
-
+    // First, VCOUNT interrupt
     if (current_vcount == (REG_DISPSTAT >> 8))
         IRQ_Internal_CallHandler(IRQ_VCOUNT);
+
+    // Then, draw
+    GBA_DrawScanline(current_vcount);
+
+    // Finally, HBL interrupt
+    IRQ_Internal_CallHandler(IRQ_HBLANK);
 }
 
 static void handle_vbl(void)
