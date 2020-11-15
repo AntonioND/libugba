@@ -8,7 +8,7 @@ int GBA_main(int argc, char *argv[])
 {
     IRQ_Enable(IRQ_VBLANK);
 
-    REG_DISPCNT = 3 | (1 << 10);
+    REG_DISPCNT = DISPCNT_BG_MODE(3) | DISPCNT_BG2_ENABLE;
 
     REG_BG2PA = 1 << 8;
     REG_BG2PB = 0 << 8;
@@ -17,15 +17,17 @@ int GBA_main(int argc, char *argv[])
 
     uint16_t *vram = MEM_VRAM;
 
-    for (int j = 0; j < 160; j++)
+    for (int j = 0; j < GBA_SCREEN_H; j++)
     {
-        for (int i = 0; i < 240; i++)
+        for (int i = 0; i < GBA_SCREEN_W; i++)
         {
             uint16_t r = i & 0x1F;
             uint16_t g = j & 0x1F;
             uint16_t b = (i + j) & 0x1F;
 
-            vram[240 * j + i] = (b << 10) | (g << 5) | r;
+            uint16_t color = RGB15(r, g, b);
+
+            vram[240 * j + i] = color;
         }
     }
 
