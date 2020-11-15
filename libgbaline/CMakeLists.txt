@@ -144,3 +144,7 @@ if(ENABLE_OPENGL)
     target_include_directories(libgbaline PRIVATE ${OPENGL_INCLUDE_DIRS})
     target_link_libraries(libgbaline PRIVATE ${OPENGL_LIBRARIES})
 endif()
+
+# Add utilities to work with other tools like GRIT
+
+include(cmake/grit.cmake)
