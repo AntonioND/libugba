@@ -6,6 +6,7 @@
 #define GBALINE_H__
 
 #include "bios.h"
+#include "debug.h"
 #include "hardware.h"
 #include "interrupts.h"
 

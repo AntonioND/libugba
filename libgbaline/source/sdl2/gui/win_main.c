@@ -11,6 +11,7 @@
 
 #include "../debug_utils.h"
 #include "../general_utils.h"
+#include "../png_utils.h"
 #include "../core/video.h"
 
 //------------------------------------------------------------------
@@ -227,4 +228,9 @@ void Win_MainLoopHandle(void)
         //Sound_Disable();
     }
 #endif
+}
+
+void Debug_Screenshot(void)
+{
+    Save_PNG("screenshot.png", &GBA_SCREEN[0], 240, 160, 0);
 }
