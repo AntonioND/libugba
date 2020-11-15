@@ -165,10 +165,10 @@ soundbank.bin soundbank.h : $(AUDIOFILES)
 # add additional rules like this for each image extension
 # you use in the graphics folders
 #---------------------------------------------------------------------------------
-%.s %.h: %.png %.grit
+%.c %.h: %.png %.grit
 #---------------------------------------------------------------------------------
 	@echo "grit $<"
-	grit $< -fts -o$*
+	grit $< -ftc -o$*
 
 -include $(DEPSDIR)/*.d
 #---------------------------------------------------------------------------------------

@@ -10,6 +10,8 @@ macro(define_example)
 
     add_executable(${EXECUTABLE_NAME})
 
+    target_include_directories(${EXECUTABLE_NAME} PRIVATE build)
+
     target_link_libraries(${EXECUTABLE_NAME} libgbaline)
 
     # Add source code files
@@ -22,6 +24,10 @@ macro(define_example)
     endmacro()
 
     search_source_files(source FILES_SOURCE)
+    search_source_files(build FILES_BUILD)
 
-    target_sources(${EXECUTABLE_NAME} PRIVATE ${FILES_SOURCE})
+    target_sources(${EXECUTABLE_NAME} PRIVATE
+        ${FILES_SOURCE}
+        ${FILES_BUILD}
+    )
 endmacro()
