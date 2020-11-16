@@ -4,7 +4,7 @@
 
 add_executable(pngmatch pngmatch.c)
 
-# libpng and SLD2 are required
+# libpng is required
 
 if(CMAKE_C_COMPILER_ID STREQUAL "MSVC")
     find_package(libpng REQUIRED 1.6)
