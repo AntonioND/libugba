@@ -65,16 +65,16 @@ void GBALINE_Init(int *argc, char **argv[])
     {
         if (*argc > 1)
         {
-            if (strcmp(*argv[1], "--autotest") == 0)
+            if (strcmp((*argv)[1], "--autotest") == 0)
             {
                 autotest_enabled = 1;
 
                 // Remove argv[1]
 
                 for (int i = 1; i < *argc - 1; i++)
-                    *argv[i] = *argv[i + 1];
+                    (*argv)[i] = (*argv)[i + 1];
 
-                (*argc)--;
+                *argc = *argc - 1;
             }
         }
     }
