@@ -10,7 +10,6 @@
 #include "window_handler.h"
 
 #include "../debug_utils.h"
-#include "../general_utils.h"
 #include "../png_utils.h"
 #include "../core/video.h"
 

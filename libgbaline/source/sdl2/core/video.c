@@ -9,33 +9,32 @@
 #include "video.h"
 
 #include "../debug_utils.h"
-#include "../general_utils.h"
 
 static int curr_screen_buffer = 0;
-static u16 screen_buffer_array[2][240 * 160]; // Doble buffer
-static u16 *screen_buffer = screen_buffer_array[0];
+static uint16_t screen_buffer_array[2][240 * 160]; // Doble buffer
+static uint16_t *screen_buffer = screen_buffer_array[0];
 
-typedef void (*draw_scanline_fn)(s32);
+typedef void (*draw_scanline_fn)(int32_t);
 static draw_scanline_fn DrawScanlineFn;
 
-static void GBA_DrawScanlineMode0(s32 y);
-static void GBA_DrawScanlineMode1(s32 y);
-static void GBA_DrawScanlineMode2(s32 y);
-static void GBA_DrawScanlineMode3(s32 y);
-static void GBA_DrawScanlineMode4(s32 y);
-static void GBA_DrawScanlineMode5(s32 y);
-void GBA_DrawScanlineWhite(s32 y);
+static void GBA_DrawScanlineMode0(int32_t y);
+static void GBA_DrawScanlineMode1(int32_t y);
+static void GBA_DrawScanlineMode2(int32_t y);
+static void GBA_DrawScanlineMode3(int32_t y);
+static void GBA_DrawScanlineMode4(int32_t y);
+static void GBA_DrawScanlineMode5(int32_t y);
+void GBA_DrawScanlineWhite(int32_t y);
 
-static s32 BG2lastx, BG2lasty; // For affine transformation
-static s32 BG3lastx, BG3lasty;
+static int32_t BG2lastx, BG2lasty; // For affine transformation
+static int32_t BG3lastx, BG3lasty;
 
-static s32 MosSprX, MosSprY, MosBgX, MosBgY;
-static u32 Win0X1, Win0X2, Win0Y1, Win0Y2;
-static u32 Win1X1, Win1X2, Win1Y1, Win1Y2;
+static int32_t MosSprX, MosSprY, MosBgX, MosBgY;
+static uint32_t Win0X1, Win0X2, Win0Y1, Win0Y2;
+static uint32_t Win1X1, Win1X2, Win1Y1, Win1Y2;
 
 //-----------------------------------------------------------
 
-static void mem_clear_32(u32 *ptr, u32 size)
+static void mem_clear_32(uint32_t *ptr, uint32_t size)
 {
     size >>= 2;
     while (size--)
@@ -46,7 +45,7 @@ static void mem_clear_32(u32 *ptr, u32 size)
 
 void GBA_UpdateDrawScanlineFn(void)
 {
-    u32 mode = REG_DISPCNT & 0x7;
+    uint32_t mode = REG_DISPCNT & 0x7;
 
     switch (mode)
     {
@@ -156,11 +155,11 @@ void GBA_DrawScanline(int y)
     DrawScanlineFn(y);
 
     // Update values of the affine matrices internal registers
-    BG2lastx += (s32)(s16)REG_BG2PB;
-    BG2lasty += (s32)(s16)REG_BG2PD;
+    BG2lastx += (int32_t)(int16_t)REG_BG2PB;
+    BG2lasty += (int32_t)(int16_t)REG_BG2PD;
 
-    BG3lastx += (s32)(s16)REG_BG3PB;
-    BG3lasty += (s32)(s16)REG_BG3PD;
+    BG3lastx += (int32_t)(int16_t)REG_BG3PB;
+    BG3lasty += (int32_t)(int16_t)REG_BG3PD;
 }
 
 void GBA_DrawScanlineWhite(int y)
@@ -170,7 +169,7 @@ void GBA_DrawScanlineWhite(int y)
         curr_screen_buffer ^= 1;
         screen_buffer = screen_buffer_array[curr_screen_buffer];
     }
-    u32 *destptr = (u32 *)&screen_buffer[240 * y];
+    uint32_t *destptr = (uint32_t *)&screen_buffer[240 * y];
 
     for (int i = 0; i < 240 / 2; i++)
         *destptr++ = 0x7FFF7FFF;
@@ -178,11 +177,11 @@ void GBA_DrawScanlineWhite(int y)
 
 //------------------------------------------------------------------------------
 //
-u16 sprfb[4][240];
+uint16_t sprfb[4][240];
 int sprvisible[4][240];
 int sprwin[240];
 int sprblend[4][240];   // This sprite pixel is in blending mode
-u16 sprblendfb[4][240]; // One line for each sprite priority
+uint16_t sprblendfb[4][240]; // One line for each sprite priority
 
 static const int spr_size[4][4][2] = { // Inputs = [Shape][Size][{x, y}]
     { { 8, 8 }, { 16, 16 }, { 32, 32 }, { 64, 64 } }, // Square
@@ -191,28 +190,28 @@ static const int spr_size[4][4][2] = { // Inputs = [Shape][Size][{x, y}]
     { { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 } }        // Prohibited
 };
 
-static void gba_sprites_draw_mode012(s32 ly)
+static void gba_sprites_draw_mode012(int32_t ly)
 {
-    oam_entry_t *spr = (oam_entry_t *)((u8 *)MEM_OAM_ADDR);
+    oam_entry_t *spr = (oam_entry_t *)((uint8_t *)MEM_OAM_ADDR);
 
     for (int i = 0; i < 128; i++)
     {
-        u16 attr0 = spr->attr0;
+        uint16_t attr0 = spr->attr0;
 
         if (attr0 & BIT(8)) // Affine sprite -- No H flip or V flip
         {
             int mosaic = attr0 & BIT(12);
 
-            u16 attr1 = spr->attr1;
-            u16 attr2 = spr->attr2;
+            uint16_t attr1 = spr->attr1;
+            uint16_t attr2 = spr->attr2;
 
             oam_matrix_entry_t *mat =
-                    &(((oam_matrix_entry_t *)((u8 *)MEM_OAM_ADDR))[(attr1 >> 9) & 0x1F]);
+                    &(((oam_matrix_entry_t *)((uint8_t *)MEM_OAM_ADDR))[(attr1 >> 9) & 0x1F]);
 
-            u16 shape = attr0 >> 14;
-            u16 size = attr1 >> 14;
-            u32 hsx = spr_size[shape][size][0] >> 1; // Half size
-            u32 hsy = spr_size[shape][size][1] >> 1;
+            uint16_t shape = attr0 >> 14;
+            uint16_t size = attr1 >> 14;
+            uint32_t hsx = spr_size[shape][size][0] >> 1; // Half size
+            uint32_t hsy = spr_size[shape][size][1] >> 1;
 
             int y = (attr0 & 0xFF);
             y |= (y < 160) ? 0 : 0xFFFFFF00;
@@ -229,8 +228,8 @@ static void gba_sprites_draw_mode012(s32 ly)
             {
                 int mode = (attr0 >> 10) & 3;
 
-                u16 prio = (attr2 >> 10) & 3;
-                u16 tilebaseno = attr2 & 0x3FF;
+                uint16_t prio = (attr2 >> 10) & 3;
+                uint16_t tilebaseno = attr2 & 0x3FF;
                 int ydiff = ly - cy;
                 if (mosaic)
                     ydiff = ydiff - ydiff % MosSprY;
@@ -239,7 +238,7 @@ static void gba_sprites_draw_mode012(s32 ly)
                 {
                     tilebaseno >>= 1; // In 256 mode, they need double space
 
-                    u16 *palptr = (u16 *)&(((u8 *)MEM_PALETTE_ADDR)[256 * 2]);
+                    uint16_t *palptr = (uint16_t *)&(((uint8_t *)MEM_PALETTE_ADDR)[256 * 2]);
 
                     int j = (x < 0) ? 0 : x; // Search start point
                     while (j < (x + (hrealsx << 1)) && (j < 240))
@@ -251,8 +250,8 @@ static void gba_sprites_draw_mode012(s32 ly)
                                 xdiff = xdiff - xdiff % MosSprX;
 
                             // Get texture coordinates (relative to center)
-                            u32 px = (mat->pa * xdiff + mat->pb * ydiff) >> 8;
-                            u32 py = (mat->pc * xdiff + mat->pd * ydiff) >> 8;
+                            uint32_t px = (mat->pa * xdiff + mat->pb * ydiff) >> 8;
+                            uint32_t py = (mat->pc * xdiff + mat->pd * ydiff) >> 8;
                             // Get texture coordinates (absolute)
                             px += hsx;
                             py += hsy;
@@ -261,7 +260,7 @@ static void gba_sprites_draw_mode012(s32 ly)
                             // for negative numbers
                             if ((px < (hsx << 1)) && (py < (hsy << 1)))
                             {
-                                u32 tileadd = 0;
+                                uint32_t tileadd = 0;
                                 if (REG_DISPCNT & BIT(6)) // 1D mapping
                                 {
                                     int tilex = px >> 3;
@@ -275,13 +274,14 @@ static void gba_sprites_draw_mode012(s32 ly)
                                     tileadd = tilex + (tiley * 16);
                                 }
 
-                                u8 *tile_ptr = (u8 *)&(((u8 *)MEM_VRAM_ADDR)[0x10000
-                                        + ((tilebaseno + tileadd) * 64)]);
+                                uint8_t *tile_ptr =
+                                    (uint8_t *)&(((uint8_t *)MEM_VRAM_ADDR)
+                                            [0x10000 + ((tilebaseno + tileadd) * 64)]);
 
                                 int _x = px & 7;
                                 int _y = py & 7;
 
-                                u8 data = tile_ptr[_x + (_y * 8)];
+                                uint8_t data = tile_ptr[_x + (_y * 8)];
 
                                 if (data)
                                 {
@@ -309,8 +309,8 @@ static void gba_sprites_draw_mode012(s32 ly)
                 }
                 else // 16 colors
                 {
-                    u16 palno = attr2 >> 12;
-                    u16 *palptr = (u16 *)&((u8 *)MEM_PALETTE_ADDR)[512 + (palno * 32)];
+                    uint16_t palno = attr2 >> 12;
+                    uint16_t *palptr = (uint16_t *)&((uint8_t *)MEM_PALETTE_ADDR)[512 + (palno * 32)];
 
                     int j = (x < 0) ? 0 : x; // Search start point
                     while (j < (x + (hrealsx << 1)) && (j < 240))
@@ -322,8 +322,8 @@ static void gba_sprites_draw_mode012(s32 ly)
                                 xdiff = xdiff - xdiff % MosSprX;
 
                             // Get texture coordinates (relative to center)
-                            u32 px = (mat->pa * xdiff + mat->pb * ydiff) >> 8;
-                            u32 py = (mat->pc * xdiff + mat->pd * ydiff) >> 8;
+                            uint32_t px = (mat->pa * xdiff + mat->pb * ydiff) >> 8;
+                            uint32_t py = (mat->pc * xdiff + mat->pd * ydiff) >> 8;
                             // Get texture coordinates (absolute)
                             px += hsx;
                             py += hsy;
@@ -332,7 +332,7 @@ static void gba_sprites_draw_mode012(s32 ly)
                             // for negative numbers
                             if ((px < (hsx << 1)) && (py < (hsy << 1)))
                             {
-                                u32 tileadd = 0;
+                                uint32_t tileadd = 0;
                                 if (REG_DISPCNT & BIT(6)) // 1D mapping
                                 {
                                     int tilex = px >> 3;
@@ -346,13 +346,13 @@ static void gba_sprites_draw_mode012(s32 ly)
                                     tileadd = tilex + (tiley * 32);
                                 }
 
-                                u8 *tile_ptr = (u8 *)&(((u8 *)MEM_VRAM_ADDR)[0x10000
-                                        + ((tilebaseno + tileadd) * 32)]);
+                                uint8_t *tile_ptr =
+                                    (uint8_t *)&(((uint8_t *)MEM_VRAM_ADDR)[0x10000 + ((tilebaseno + tileadd) * 32)]);
 
                                 int _x = px & 7;
                                 int _y = py & 7;
 
-                                u8 data = tile_ptr[(_x / 2) + (_y * 4)];
+                                uint8_t data = tile_ptr[(_x / 2) + (_y * 4)];
 
                                 if (_x & 1)
                                     data = data >> 4;
@@ -391,11 +391,11 @@ static void gba_sprites_draw_mode012(s32 ly)
             {
                 int mosaic = attr0 & BIT(12);
 
-                u16 attr1 = spr->attr1;
-                u16 attr2 = spr->attr2;
+                uint16_t attr1 = spr->attr1;
+                uint16_t attr2 = spr->attr2;
 
-                u16 shape = attr0 >> 14;
-                u16 size = attr1 >> 14;
+                uint16_t shape = attr0 >> 14;
+                uint16_t size = attr1 >> 14;
                 int sx = spr_size[shape][size][0];
                 int sy = spr_size[shape][size][1];
 
@@ -416,14 +416,14 @@ static void gba_sprites_draw_mode012(s32 ly)
                     if (mosaic)
                         ydiff = ydiff - ydiff % MosSprY;
 
-                    u16 prio = (attr2 >> 10) & 3;
-                    u16 tilebaseno = attr2 & 0x3FF;
+                    uint16_t prio = (attr2 >> 10) & 3;
+                    uint16_t tilebaseno = attr2 & 0x3FF;
 
                     if (attr0 & BIT(13)) // 256 colors
                     {
                         tilebaseno >>= 1; // In 256 mode, they need double space
 
-                        u16 *palptr = (u16 *)&(((u8 *)MEM_PALETTE_ADDR)[256 * 2]);
+                        uint16_t *palptr = (uint16_t *)&(((uint8_t *)MEM_PALETTE_ADDR)[256 * 2]);
 
                         int j = (x < 0) ? 0 : x; // Search start point
                         while (j < (x + sx) && (j < 240))
@@ -438,7 +438,7 @@ static void gba_sprites_draw_mode012(s32 ly)
                                 if (mosaic)
                                     xdiff = xdiff - xdiff % MosSprX;
 
-                                u32 tileadd = 0;
+                                uint32_t tileadd = 0;
                                 if (REG_DISPCNT & BIT(6)) // 1D mapping
                                 {
                                     int tilex = xdiff >> 3;
@@ -452,14 +452,14 @@ static void gba_sprites_draw_mode012(s32 ly)
                                     tileadd = tilex + (tiley * 16);
                                 }
 
-                                u32 tileindex = tilebaseno + tileadd;
-                                u8 *tile_ptr = (u8 *)&(((u8 *)MEM_VRAM_ADDR)[0x10000
-                                        + (tileindex * 64)]);
+                                uint32_t tileindex = tilebaseno + tileadd;
+                                uint8_t *tile_ptr =
+                                    (uint8_t *)&(((uint8_t *)MEM_VRAM_ADDR)[0x10000 + (tileindex * 64)]);
 
                                 int _x = xdiff & 7;
                                 int _y = ydiff & 7;
 
-                                u8 data = tile_ptr[_x + (_y * 8)];
+                                uint8_t data = tile_ptr[_x + (_y * 8)];
 
                                 if (data)
                                 {
@@ -486,8 +486,8 @@ static void gba_sprites_draw_mode012(s32 ly)
                     }
                     else // 16 colors
                     {
-                        u16 palno = attr2 >> 12;
-                        u16 *palptr = (u16 *)&((u8 *)MEM_PALETTE_ADDR)[512 + (palno * 32)];
+                        uint16_t palno = attr2 >> 12;
+                        uint16_t *palptr = (uint16_t *)&((uint8_t *)MEM_PALETTE_ADDR)[512 + (palno * 32)];
 
                         int j = (x < 0) ? 0 : x; // Search start point
                         while (j < (x + sx) && (j < 240))
@@ -502,7 +502,7 @@ static void gba_sprites_draw_mode012(s32 ly)
                                 if (mosaic)
                                     xdiff = xdiff - xdiff % MosSprX;
 
-                                u32 tileadd = 0;
+                                uint32_t tileadd = 0;
                                 if (REG_DISPCNT & BIT(6)) // 1D mapping
                                 {
                                     int tilex = xdiff >> 3;
@@ -516,14 +516,14 @@ static void gba_sprites_draw_mode012(s32 ly)
                                     tileadd = tilex + (tiley * 32);
                                 }
 
-                                u32 tileindex = tilebaseno + tileadd;
-                                u8 *tile_ptr = (u8 *)&(((u8 *)MEM_VRAM_ADDR)[0x10000
-                                        + (tileindex * 32)]);
+                                uint32_t tileindex = tilebaseno + tileadd;
+                                uint8_t *tile_ptr =
+                                    (uint8_t *)&(((uint8_t *)MEM_VRAM_ADDR)[0x10000 + (tileindex * 32)]);
 
                                 int _x = xdiff & 7;
                                 int _y = ydiff & 7;
 
-                                u8 data = tile_ptr[(_x / 2) + (_y * 4)];
+                                uint8_t data = tile_ptr[(_x / 2) + (_y * 4)];
 
                                 if (_x & 1)
                                     data = data >> 4;
@@ -560,28 +560,28 @@ static void gba_sprites_draw_mode012(s32 ly)
     }
 }
 
-static void gba_sprites_draw_mode345(s32 ly)
+static void gba_sprites_draw_mode345(int32_t ly)
 {
-    oam_entry_t *spr = (oam_entry_t *)((u8 *)MEM_OAM_ADDR);
+    oam_entry_t *spr = (oam_entry_t *)((uint8_t *)MEM_OAM_ADDR);
 
     for (int i = 0; i < 128; i++)
     {
-        u16 attr0 = spr->attr0;
+        uint16_t attr0 = spr->attr0;
 
         if (attr0 & BIT(8)) // Affine sprite -- No H flip or V flip
         {
             int mosaic = attr0 & BIT(12);
 
-            u16 attr1 = spr->attr1;
-            u16 attr2 = spr->attr2;
+            uint16_t attr1 = spr->attr1;
+            uint16_t attr2 = spr->attr2;
 
             oam_matrix_entry_t *mat =
-                    &(((oam_matrix_entry_t *)((u8 *)MEM_OAM_ADDR))[(attr1 >> 9) & 0x1F]);
+                    &(((oam_matrix_entry_t *)((uint8_t *)MEM_OAM_ADDR))[(attr1 >> 9) & 0x1F]);
 
-            u16 shape = attr0 >> 14;
-            u16 size = attr1 >> 14;
-            u32 hsx = spr_size[shape][size][0] >> 1; // Half size
-            u32 hsy = spr_size[shape][size][1] >> 1;
+            uint16_t shape = attr0 >> 14;
+            uint16_t size = attr1 >> 14;
+            uint32_t hsx = spr_size[shape][size][0] >> 1; // Half size
+            uint32_t hsy = spr_size[shape][size][1] >> 1;
 
             int y = (attr0 & 0xFF);
             y |= (y < 160) ? 0 : 0xFFFFFF00;
@@ -598,8 +598,8 @@ static void gba_sprites_draw_mode345(s32 ly)
             {
                 int mode = (attr0 >> 10) & 3;
 
-                u16 prio = (attr2 >> 10) & 3;
-                u16 tilebaseno = attr2 & 0x3FF;
+                uint16_t prio = (attr2 >> 10) & 3;
+                uint16_t tilebaseno = attr2 & 0x3FF;
                 int ydiff = ly - cy;
                 if (mosaic)
                     ydiff = ydiff - ydiff % MosSprY;
@@ -608,7 +608,7 @@ static void gba_sprites_draw_mode345(s32 ly)
                 {
                     tilebaseno >>= 1; // In 256 mode, they need double space
 
-                    u16 *palptr = (u16 *)&(((u8 *)MEM_PALETTE_ADDR)[256 * 2]);
+                    uint16_t *palptr = (uint16_t *)&(((uint8_t *)MEM_PALETTE_ADDR)[256 * 2]);
 
                     int j = (x < 0) ? 0 : x; // Search start point
                     while (j < (x + (hrealsx << 1)) && (j < 240))
@@ -620,8 +620,8 @@ static void gba_sprites_draw_mode345(s32 ly)
                                 xdiff = xdiff - xdiff % MosSprX;
 
                             // Get texture coordinates (relative to center)
-                            u32 px = (mat->pa * xdiff + mat->pb * ydiff) >> 8;
-                            u32 py = (mat->pc * xdiff + mat->pd * ydiff) >> 8;
+                            uint32_t px = (mat->pa * xdiff + mat->pb * ydiff) >> 8;
+                            uint32_t py = (mat->pc * xdiff + mat->pd * ydiff) >> 8;
                             // Get texture coordinates (absolute)
                             px += hsx;
                             py += hsy;
@@ -630,7 +630,7 @@ static void gba_sprites_draw_mode345(s32 ly)
                             // for negative numbers
                             if ((px < (hsx << 1)) && (py < (hsy << 1)))
                             {
-                                u32 tileadd = 0;
+                                uint32_t tileadd = 0;
                                 if (REG_DISPCNT & BIT(6)) // 1D mapping
                                 {
                                     int tilex = px >> 3;
@@ -647,13 +647,13 @@ static void gba_sprites_draw_mode345(s32 ly)
                                 // Each tile needs double space
                                 if (tilebaseno + tileadd >= 256)
                                 {
-                                    u8 *tile_ptr = (u8 *)&(((u8 *)MEM_VRAM_ADDR)[0x10000
-                                            + ((tilebaseno + tileadd) * 64)]);
+                                    uint8_t *tile_ptr =
+                                        (uint8_t *)&(((uint8_t *)MEM_VRAM_ADDR)[0x10000 + ((tilebaseno + tileadd) * 64)]);
 
                                     int _x = px & 7;
                                     int _y = py & 7;
 
-                                    u8 data = tile_ptr[_x + (_y * 8)];
+                                    uint8_t data = tile_ptr[_x + (_y * 8)];
 
                                     if (data)
                                     {
@@ -682,8 +682,8 @@ static void gba_sprites_draw_mode345(s32 ly)
                 }
                 else // 16 colors
                 {
-                    u16 palno = attr2 >> 12;
-                    u16 *palptr = (u16 *)&((u8 *)MEM_PALETTE_ADDR)[512 + (palno * 32)];
+                    uint16_t palno = attr2 >> 12;
+                    uint16_t *palptr = (uint16_t *)&((uint8_t *)MEM_PALETTE_ADDR)[512 + (palno * 32)];
 
                     int j = (x < 0) ? 0 : x; // Search start point
                     while (j < (x + (hrealsx << 1)) && (j < 240))
@@ -695,8 +695,8 @@ static void gba_sprites_draw_mode345(s32 ly)
                                 xdiff = xdiff - xdiff % MosSprX;
 
                             // Get texture coordinates (relative to center)
-                            u32 px = (mat->pa * xdiff + mat->pb * ydiff) >> 8;
-                            u32 py = (mat->pc * xdiff + mat->pd * ydiff) >> 8;
+                            uint32_t px = (mat->pa * xdiff + mat->pb * ydiff) >> 8;
+                            uint32_t py = (mat->pc * xdiff + mat->pd * ydiff) >> 8;
                             // Get texture coordinates (absolute)
                             px += hsx;
                             py += hsy;
@@ -705,7 +705,7 @@ static void gba_sprites_draw_mode345(s32 ly)
                             // for negative numbers
                             if ((px < (hsx << 1)) && (py < (hsy << 1)))
                             {
-                                u32 tileadd = 0;
+                                uint32_t tileadd = 0;
                                 if (REG_DISPCNT & BIT(6)) // 1D mapping
                                 {
                                     int tilex = px >> 3;
@@ -721,13 +721,13 @@ static void gba_sprites_draw_mode345(s32 ly)
 
                                 if (tilebaseno + tileadd >= 512)
                                 {
-                                    u8 *tile_ptr = (u8 *)&(((u8 *)MEM_VRAM_ADDR)[0x10000
+                                    uint8_t *tile_ptr = (uint8_t *)&(((uint8_t *)MEM_VRAM_ADDR)[0x10000
                                             + ((tilebaseno + tileadd) * 32)]);
 
                                     int _x = px & 7;
                                     int _y = py & 7;
 
-                                    u8 data = tile_ptr[(_x / 2) + (_y * 4)];
+                                    uint8_t data = tile_ptr[(_x / 2) + (_y * 4)];
 
                                     if (_x & 1)
                                         data = data >> 4;
@@ -767,11 +767,11 @@ static void gba_sprites_draw_mode345(s32 ly)
             {
                 int mosaic = attr0 & BIT(12);
 
-                u16 attr1 = spr->attr1;
-                u16 attr2 = spr->attr2;
+                uint16_t attr1 = spr->attr1;
+                uint16_t attr2 = spr->attr2;
 
-                u16 shape = attr0 >> 14;
-                u16 size = attr1 >> 14;
+                uint16_t shape = attr0 >> 14;
+                uint16_t size = attr1 >> 14;
                 int sx = spr_size[shape][size][0];
                 int sy = spr_size[shape][size][1];
 
@@ -792,14 +792,14 @@ static void gba_sprites_draw_mode345(s32 ly)
                     if (mosaic)
                         ydiff = ydiff - ydiff % MosSprY;
 
-                    u16 prio = (attr2 >> 10) & 3;
-                    u16 tilebaseno = attr2 & 0x3FF;
+                    uint16_t prio = (attr2 >> 10) & 3;
+                    uint16_t tilebaseno = attr2 & 0x3FF;
 
                     if (attr0 & BIT(13)) // 256 colors
                     {
                         tilebaseno >>= 1; // in 256 mode, they need double space
 
-                        u16 *palptr = (u16 *)&(((u8 *)MEM_PALETTE_ADDR)[256 * 2]);
+                        uint16_t *palptr = (uint16_t *)&(((uint8_t *)MEM_PALETTE_ADDR)[256 * 2]);
 
                         int j = (x < 0) ? 0 : x; // Search start point
                         while (j < (x + sx) && (j < 240))
@@ -814,7 +814,7 @@ static void gba_sprites_draw_mode345(s32 ly)
                                 if (mosaic)
                                     xdiff = xdiff - xdiff % MosSprX;
 
-                                u32 tileadd = 0;
+                                uint32_t tileadd = 0;
                                 if (REG_DISPCNT & BIT(6)) // 1D mapping
                                 {
                                     int tilex = xdiff >> 3;
@@ -828,18 +828,18 @@ static void gba_sprites_draw_mode345(s32 ly)
                                     tileadd = tilex + (tiley * 16);
                                 }
 
-                                u32 tileindex = tilebaseno + tileadd;
+                                uint32_t tileindex = tilebaseno + tileadd;
 
                                 // Each tile needs double space
                                 if (tileindex >= 256)
                                 {
-                                    u8 *tile_ptr = (u8 *)&(((u8 *)MEM_VRAM_ADDR)[0x10000
+                                    uint8_t *tile_ptr = (uint8_t *)&(((uint8_t *)MEM_VRAM_ADDR)[0x10000
                                             + (tileindex * 64)]);
 
                                     int _x = xdiff & 7;
                                     int _y = ydiff & 7;
 
-                                    u8 data = tile_ptr[_x + (_y * 8)];
+                                    uint8_t data = tile_ptr[_x + (_y * 8)];
 
                                     if (data)
                                     {
@@ -867,8 +867,8 @@ static void gba_sprites_draw_mode345(s32 ly)
                     }
                     else // 16 colors
                     {
-                        u16 palno = attr2 >> 12;
-                        u16 *palptr = (u16 *)&((u8 *)MEM_PALETTE_ADDR)[512 + (palno * 32)];
+                        uint16_t palno = attr2 >> 12;
+                        uint16_t *palptr = (uint16_t *)&((uint8_t *)MEM_PALETTE_ADDR)[512 + (palno * 32)];
 
                         int j = (x < 0) ? 0 : x; // Search start point
                         while (j < (x + sx) && (j < 240))
@@ -883,7 +883,7 @@ static void gba_sprites_draw_mode345(s32 ly)
                                 if (mosaic)
                                     xdiff = xdiff - xdiff % MosSprX;
 
-                                u32 tileadd = 0;
+                                uint32_t tileadd = 0;
                                 if (REG_DISPCNT & BIT(6)) // 1D mapping
                                 {
                                     int tilex = xdiff >> 3;
@@ -897,17 +897,17 @@ static void gba_sprites_draw_mode345(s32 ly)
                                     tileadd = tilex + (tiley * 32);
                                 }
 
-                                u32 tileindex = tilebaseno + tileadd;
+                                uint32_t tileindex = tilebaseno + tileadd;
 
                                 if (tileindex >= 512)
                                 {
-                                    u8 *tile_ptr = (u8 *)&(((u8 *)MEM_VRAM_ADDR)[0x10000
+                                    uint8_t *tile_ptr = (uint8_t *)&(((uint8_t *)MEM_VRAM_ADDR)[0x10000
                                             + (tileindex * 32)]);
 
                                     int _x = xdiff & 7;
                                     int _y = ydiff & 7;
 
-                                    u8 data = tile_ptr[(_x / 2) + (_y * 4)];
+                                    uint8_t data = tile_ptr[(_x / 2) + (_y * 4)];
 
                                     if (_x & 1)
                                         data = data >> 4;
@@ -947,43 +947,43 @@ static void gba_sprites_draw_mode345(s32 ly)
 
 //------------------------------------------------------------------------------
 
-u16 bgfb[4][240];
+uint16_t bgfb[4][240];
 int bgvisible[4][240];
-u16 backdrop[240];
+uint16_t backdrop[240];
 int backdropvisible[240]; // This array is filled in GBA_FillFadeTables()
 
-static const u32 text_bg_size[4][2] = {
+static const uint32_t text_bg_size[4][2] = {
     { 256, 256 }, { 512, 256 }, { 256, 512 }, { 512, 512 }
 };
 
-static u32 se_index(u32 tx, u32 ty, u32 pitch) // From tonc
+static uint32_t se_index(uint32_t tx, uint32_t ty, uint32_t pitch) // From tonc
 {
-    u32 sbb = (ty / 32) * (pitch / 32) + (tx / 32);
+    uint32_t sbb = (ty / 32) * (pitch / 32) + (tx / 32);
     return sbb * 1024 + (ty % 32) * 32 + tx % 32;
 }
 
-static void gba_bg0drawtext(s32 y)
+static void gba_bg0drawtext(int32_t y)
 {
     int sx = REG_BG0HOFS;
     int sy = REG_BG0VOFS;
-    u16 control = REG_BG0CNT;
+    uint16_t control = REG_BG0CNT;
 
-    u8 *charbaseblockptr = (u8 *)&((u8 *)MEM_VRAM_ADDR)[((control >> 2) & 3) * (16 * 1024)];
-    u16 *scrbaseblockptr = (u16 *)&((u8 *)MEM_VRAM_ADDR)[((control >> 8) & 0x1F) * (2 * 1024)];
+    uint8_t *charbaseblockptr = (uint8_t *)&((uint8_t *)MEM_VRAM_ADDR)[((control >> 2) & 3) * (16 * 1024)];
+    uint16_t *scrbaseblockptr = (uint16_t *)&((uint8_t *)MEM_VRAM_ADDR)[((control >> 8) & 0x1F) * (2 * 1024)];
 
-    u32 maskx = text_bg_size[control >> 14][0] - 1;
-    u32 masky = text_bg_size[control >> 14][1] - 1;
+    uint32_t maskx = text_bg_size[control >> 14][0] - 1;
+    uint32_t masky = text_bg_size[control >> 14][1] - 1;
 
-    u32 startx = sx & maskx;
-    u32 starty = (y + sy) & masky;
+    uint32_t startx = sx & maskx;
+    uint32_t starty = (y + sy) & masky;
 
-    u32 sizex = text_bg_size[control >> 14][0] / 8;
+    uint32_t sizex = text_bg_size[control >> 14][0] / 8;
 
     int mosaic = (control & BIT(6)); // Mosaic
     if (mosaic)
         starty -= starty % MosBgY;
 
-    u16 *fb = bgfb[0];
+    uint16_t *fb = bgfb[0];
     int *visptr = bgvisible[0];
     if (control & BIT(7)) // 256 colors
     {
@@ -993,8 +993,8 @@ static void gba_bg0drawtext(s32 y)
             if (mosaic)
                 startx -= startx % MosBgX;
 
-            u32 index = se_index(startx / 8, starty / 8, sizex);
-            u16 SE = scrbaseblockptr[index];
+            uint32_t index = se_index(startx / 8, starty / 8, sizex);
+            uint16_t SE = scrbaseblockptr[index];
             // Screen entry data:
             // 0-9 tile id
             // 10-hflip
@@ -1009,7 +1009,7 @@ static void gba_bg0drawtext(s32 y)
 
             int data = charbaseblockptr[((SE & 0x3FF) * 64) + (_x + (_y * 8))];
 
-            *fb++ = ((u16 *)((u8 *)MEM_PALETTE_ADDR))[data];
+            *fb++ = ((uint16_t *)((uint8_t *)MEM_PALETTE_ADDR))[data];
             *visptr++ = data;
 
             //startx = (startx + 1) & maskx;
@@ -1023,14 +1023,14 @@ static void gba_bg0drawtext(s32 y)
             if (mosaic)
                 startx -= startx % MosBgX;
 
-            u32 index = se_index(startx / 8, starty / 8, sizex);
-            u16 SE = scrbaseblockptr[index];
+            uint32_t index = se_index(startx / 8, starty / 8, sizex);
+            uint16_t SE = scrbaseblockptr[index];
             // Screen entry data:
             // 0-9 tile id
             // 10-hflip
             // 11-vflip
             // 12-15-pal
-            u16 *palptr = (u16 *)&((u8 *)MEM_PALETTE_ADDR)[(SE >> 12) * (2 * 16)];
+            uint16_t *palptr = (uint16_t *)&((uint8_t *)MEM_PALETTE_ADDR)[(SE >> 12) * (2 * 16)];
 
             int _x = startx & 7;
             if (SE & BIT(10))
@@ -1040,7 +1040,7 @@ static void gba_bg0drawtext(s32 y)
             if (SE & BIT(11))
                 _y = 7 - _y; // V flip
 
-            u32 data =
+            uint32_t data =
                     charbaseblockptr[((SE & 0x3FF) * 32) + ((_x / 2) + (_y * 4))];
 
             if (_x & 1)
@@ -1056,29 +1056,29 @@ static void gba_bg0drawtext(s32 y)
     }
 }
 
-static void gba_bg1drawtext(s32 y)
+static void gba_bg1drawtext(int32_t y)
 {
     int sx = REG_BG1HOFS;
     int sy = REG_BG1VOFS;
-    u16 control = REG_BG1CNT;
+    uint16_t control = REG_BG1CNT;
 
-    u8 *charbaseblockptr = (u8 *)&((u8 *)MEM_VRAM_ADDR)[((control >> 2) & 3) * (16 * 1024)];
-    u16 *scrbaseblockptr =
-            (u16 *)&((u8 *)MEM_VRAM_ADDR)[((control >> 8) & 0x1F) * (2 * 1024)];
+    uint8_t *charbaseblockptr = (uint8_t *)&((uint8_t *)MEM_VRAM_ADDR)[((control >> 2) & 3) * (16 * 1024)];
+    uint16_t *scrbaseblockptr =
+            (uint16_t *)&((uint8_t *)MEM_VRAM_ADDR)[((control >> 8) & 0x1F) * (2 * 1024)];
 
-    u32 maskx = text_bg_size[control >> 14][0] - 1;
-    u32 masky = text_bg_size[control >> 14][1] - 1;
+    uint32_t maskx = text_bg_size[control >> 14][0] - 1;
+    uint32_t masky = text_bg_size[control >> 14][1] - 1;
 
-    u32 startx = sx & maskx;
-    u32 starty = (y + sy) & masky;
+    uint32_t startx = sx & maskx;
+    uint32_t starty = (y + sy) & masky;
 
-    u32 sizex = text_bg_size[control >> 14][0] / 8;
+    uint32_t sizex = text_bg_size[control >> 14][0] / 8;
 
     int mosaic = (control & BIT(6)); // Mosaic
     if (mosaic)
         starty -= starty % MosBgY;
 
-    u16 *fb = bgfb[1];
+    uint16_t *fb = bgfb[1];
     int *visptr = bgvisible[1];
     if (control & BIT(7)) // 256 colors
     {
@@ -1088,8 +1088,8 @@ static void gba_bg1drawtext(s32 y)
             if (mosaic)
                 startx -= startx % MosBgX;
 
-            u32 index = se_index(startx / 8, starty / 8, sizex);
-            u16 SE = scrbaseblockptr[index];
+            uint32_t index = se_index(startx / 8, starty / 8, sizex);
+            uint16_t SE = scrbaseblockptr[index];
             // Screen entry data:
             // 0-9 tile id
             // 10-hflip
@@ -1104,7 +1104,7 @@ static void gba_bg1drawtext(s32 y)
 
             int data = charbaseblockptr[((SE & 0x3FF) * 64) + (_x + (_y * 8))];
 
-            *fb++ = ((u16 *)((u8 *)MEM_PALETTE_ADDR))[data];
+            *fb++ = ((uint16_t *)((uint8_t *)MEM_PALETTE_ADDR))[data];
             *visptr++ = data;
 
             //startx = (startx + 1) & maskx;
@@ -1118,14 +1118,14 @@ static void gba_bg1drawtext(s32 y)
             if (mosaic)
                 startx -= startx % MosBgX;
 
-            u32 index = se_index(startx / 8, starty / 8, sizex);
-            u16 SE = scrbaseblockptr[index];
+            uint32_t index = se_index(startx / 8, starty / 8, sizex);
+            uint16_t SE = scrbaseblockptr[index];
             // Screen entry data:
             // 0-9 tile id
             // 10-hflip
             // 11-vflip
             // 12-15-pal
-            u16 *palptr = (u16 *)&((u8 *)MEM_PALETTE_ADDR)[(SE >> 12) * (2 * 16)];
+            uint16_t *palptr = (uint16_t *)&((uint8_t *)MEM_PALETTE_ADDR)[(SE >> 12) * (2 * 16)];
 
             int _x = startx & 7;
             if (SE & BIT(10))
@@ -1135,7 +1135,7 @@ static void gba_bg1drawtext(s32 y)
             if (SE & BIT(11))
                 _y = 7 - _y; // V flip
 
-            u32 data =
+            uint32_t data =
                     charbaseblockptr[((SE & 0x3FF) * 32) + ((_x / 2) + (_y * 4))];
 
             if (_x & 1)
@@ -1151,29 +1151,29 @@ static void gba_bg1drawtext(s32 y)
     }
 }
 
-static void gba_bg2drawtext(s32 y)
+static void gba_bg2drawtext(int32_t y)
 {
     int sx = REG_BG2HOFS;
     int sy = REG_BG2VOFS;
-    u16 control = REG_BG2CNT;
+    uint16_t control = REG_BG2CNT;
 
-    u8 *charbaseblockptr = (u8 *)&((u8 *)MEM_VRAM_ADDR)[((control >> 2) & 3) * (16 * 1024)];
-    u16 *scrbaseblockptr =
-            (u16 *)&((u8 *)MEM_VRAM_ADDR)[((control >> 8) & 0x1F) * (2 * 1024)];
+    uint8_t *charbaseblockptr = (uint8_t *)&((uint8_t *)MEM_VRAM_ADDR)[((control >> 2) & 3) * (16 * 1024)];
+    uint16_t *scrbaseblockptr =
+            (uint16_t *)&((uint8_t *)MEM_VRAM_ADDR)[((control >> 8) & 0x1F) * (2 * 1024)];
 
-    u32 maskx = text_bg_size[control >> 14][0] - 1;
-    u32 masky = text_bg_size[control >> 14][1] - 1;
+    uint32_t maskx = text_bg_size[control >> 14][0] - 1;
+    uint32_t masky = text_bg_size[control >> 14][1] - 1;
 
-    u32 startx = sx & maskx;
-    u32 starty = (y + sy) & masky;
+    uint32_t startx = sx & maskx;
+    uint32_t starty = (y + sy) & masky;
 
-    u32 sizex = text_bg_size[control >> 14][0] / 8;
+    uint32_t sizex = text_bg_size[control >> 14][0] / 8;
 
     int mosaic = (control & BIT(6)); // Mosaic
     if (mosaic)
         starty -= starty % MosBgY;
 
-    u16 *fb = bgfb[2];
+    uint16_t *fb = bgfb[2];
     int *visptr = bgvisible[2];
     if (control & BIT(7)) // 256 colors
     {
@@ -1183,8 +1183,8 @@ static void gba_bg2drawtext(s32 y)
             if (mosaic)
                 startx -= startx % MosBgX;
 
-            u32 index = se_index(startx / 8, starty / 8, sizex);
-            u16 SE = scrbaseblockptr[index];
+            uint32_t index = se_index(startx / 8, starty / 8, sizex);
+            uint16_t SE = scrbaseblockptr[index];
             // Screen entry data:
             // 0-9 tile id
             // 10-hflip
@@ -1201,7 +1201,7 @@ static void gba_bg2drawtext(s32 y)
 
             int data = charbaseblockptr[((SE & 0x3FF) * 64) + (_x + (_y * 8))];
 
-            *fb++ = ((u16 *)((u8 *)MEM_PALETTE_ADDR))[data];
+            *fb++ = ((uint16_t *)((uint8_t *)MEM_PALETTE_ADDR))[data];
             *visptr++ = data;
 
             //startx = (startx + 1) & maskx;
@@ -1215,14 +1215,14 @@ static void gba_bg2drawtext(s32 y)
             if (mosaic)
                 startx -= startx % MosBgX;
 
-            u32 index = se_index(startx / 8, starty / 8, sizex);
-            u16 SE = scrbaseblockptr[index];
+            uint32_t index = se_index(startx / 8, starty / 8, sizex);
+            uint16_t SE = scrbaseblockptr[index];
             // Screen entry data
             // 0-9 tile id
             // 10-hflip
             // 11-vflip
             // 12-15-pal
-            u16 *palptr = (u16 *)&((u8 *)MEM_PALETTE_ADDR)[(SE >> 12) * (2 * 16)];
+            uint16_t *palptr = (uint16_t *)&((uint8_t *)MEM_PALETTE_ADDR)[(SE >> 12) * (2 * 16)];
 
             int _x = startx & 7;
             if (SE & BIT(10))
@@ -1232,7 +1232,7 @@ static void gba_bg2drawtext(s32 y)
             if (SE & BIT(11))
                 _y = 7 - _y; // V flip
 
-            u32 data =
+            uint32_t data =
                     charbaseblockptr[((SE & 0x3FF) * 32) + ((_x / 2) + (_y * 4))];
 
             if (_x & 1)
@@ -1248,29 +1248,29 @@ static void gba_bg2drawtext(s32 y)
     }
 }
 
-static void gba_bg3drawtext(s32 y)
+static void gba_bg3drawtext(int32_t y)
 {
     int sx = REG_BG3HOFS;
     int sy = REG_BG3VOFS;
-    u16 control = REG_BG3CNT;
+    uint16_t control = REG_BG3CNT;
 
-    u8 *charbaseblockptr = (u8 *)&((u8 *)MEM_VRAM_ADDR)[((control >> 2) & 3) * (16 * 1024)];
-    u16 *scrbaseblockptr =
-            (u16 *)&((u8 *)MEM_VRAM_ADDR)[((control >> 8) & 0x1F) * (2 * 1024)];
+    uint8_t *charbaseblockptr = (uint8_t *)&((uint8_t *)MEM_VRAM_ADDR)[((control >> 2) & 3) * (16 * 1024)];
+    uint16_t *scrbaseblockptr =
+            (uint16_t *)&((uint8_t *)MEM_VRAM_ADDR)[((control >> 8) & 0x1F) * (2 * 1024)];
 
-    u32 maskx = text_bg_size[control >> 14][0] - 1;
-    u32 masky = text_bg_size[control >> 14][1] - 1;
+    uint32_t maskx = text_bg_size[control >> 14][0] - 1;
+    uint32_t masky = text_bg_size[control >> 14][1] - 1;
 
-    u32 startx = sx & maskx;
-    u32 starty = (y + sy) & masky;
+    uint32_t startx = sx & maskx;
+    uint32_t starty = (y + sy) & masky;
 
-    u32 sizex = text_bg_size[control >> 14][0] / 8;
+    uint32_t sizex = text_bg_size[control >> 14][0] / 8;
 
     int mosaic = (control & BIT(6)); // Mosaic
     if (mosaic)
         starty -= starty % MosBgY;
 
-    u16 *fb = bgfb[3];
+    uint16_t *fb = bgfb[3];
     int *visptr = bgvisible[3];
     if (control & BIT(7)) // 256 colors
     {
@@ -1280,8 +1280,8 @@ static void gba_bg3drawtext(s32 y)
             if (mosaic)
                 startx -= startx % MosBgX;
 
-            u32 index = se_index(startx / 8, starty / 8, sizex);
-            u16 SE = scrbaseblockptr[index];
+            uint32_t index = se_index(startx / 8, starty / 8, sizex);
+            uint16_t SE = scrbaseblockptr[index];
             // Screen entry data:
             // 0-9 tile id
             // 10-hflip
@@ -1296,7 +1296,7 @@ static void gba_bg3drawtext(s32 y)
 
             int data = charbaseblockptr[((SE & 0x3FF) * 64) + (_x + (_y * 8))];
 
-            *fb++ = ((u16 *)((u8 *)MEM_PALETTE_ADDR))[data];
+            *fb++ = ((uint16_t *)((uint8_t *)MEM_PALETTE_ADDR))[data];
             *visptr++ = data;
 
             //startx = (startx + 1) & maskx;
@@ -1310,14 +1310,14 @@ static void gba_bg3drawtext(s32 y)
             if (mosaic)
                 startx -= startx % MosBgX;
 
-            u32 index = se_index(startx / 8, starty / 8, sizex);
-            u16 SE = scrbaseblockptr[index];
+            uint32_t index = se_index(startx / 8, starty / 8, sizex);
+            uint16_t SE = scrbaseblockptr[index];
             // Screen entry data:
             // 0-9 tile id
             // 10-hflip
             // 11-vflip
             // 12-15-pal
-            u16 *palptr = (u16 *)&((u8 *)MEM_PALETTE_ADDR)[(SE >> 12) * (2 * 16)];
+            uint16_t *palptr = (uint16_t *)&((uint8_t *)MEM_PALETTE_ADDR)[(SE >> 12) * (2 * 16)];
 
             int _x = startx & 7;
             if (SE & BIT(10))
@@ -1327,7 +1327,7 @@ static void gba_bg3drawtext(s32 y)
             if (SE & BIT(11))
                 _y = 7 - _y; // V flip
 
-            u32 data =
+            uint32_t data =
                     charbaseblockptr[((SE & 0x3FF) * 32) + ((_x / 2) + (_y * 4))];
 
             if (_x & 1)
@@ -1345,38 +1345,38 @@ static void gba_bg3drawtext(s32 y)
 
 //------------------------------------------------------------------------------
 
-static u32 se_index_affine(u32 tx, u32 ty, u32 tpitch)
+static uint32_t se_index_affine(uint32_t tx, uint32_t ty, uint32_t tpitch)
 {
     return (ty * tpitch) + tx;
 }
 
-static const u32 affine_bg_size[4] = {
+static const uint32_t affine_bg_size[4] = {
     128, 256, 512, 1024
 };
 
-static s32 mosBG2lastx, mosBG2lasty, mos2A, mos2C;
+static int32_t mosBG2lastx, mosBG2lasty, mos2A, mos2C;
 
-static void gba_bg2drawaffine(s32 y)
+static void gba_bg2drawaffine(int32_t y)
 {
-    u16 control = REG_BG2CNT;
+    uint16_t control = REG_BG2CNT;
 
-    u8 *charbaseblockptr = (u8 *)&((u8 *)MEM_VRAM_ADDR)[((control >> 2) & 3) * (16 * 1024)];
-    u8 *scrbaseblockptr = (u8 *)&((u8 *)MEM_VRAM_ADDR)[((control >> 8) & 0x1F) * (2 * 1024)];
+    uint8_t *charbaseblockptr = (uint8_t *)&((uint8_t *)MEM_VRAM_ADDR)[((control >> 2) & 3) * (16 * 1024)];
+    uint8_t *scrbaseblockptr = (uint8_t *)&((uint8_t *)MEM_VRAM_ADDR)[((control >> 8) & 0x1F) * (2 * 1024)];
 
-    u32 size = affine_bg_size[control >> 14];
-    u32 sizemask = size - 1;
-    u32 tilesize = size / 8;
+    uint32_t size = affine_bg_size[control >> 14];
+    uint32_t sizemask = size - 1;
+    uint32_t tilesize = size / 8;
 
-    s32 currx = BG2lastx;
-    s32 curry = BG2lasty;
+    int32_t currx = BG2lastx;
+    int32_t curry = BG2lasty;
 
     // | PA PB |
     // | PC PD |
 
-    s32 A = (s32)(s16)REG_BG2PA;
-    s32 C = (s32)(s16)REG_BG2PC;
+    int32_t A = (int32_t)(int16_t)REG_BG2PA;
+    int32_t C = (int32_t)(int16_t)REG_BG2PC;
 
-    u16 *fb = bgfb[2];
+    uint16_t *fb = bgfb[2];
     int *visptr = bgvisible[2];
 
     int mosaic = (control & BIT(6)); // Mosaic
@@ -1399,11 +1399,11 @@ static void gba_bg2drawaffine(s32 y)
         }
     }
 
-    u8 data = 0;
+    uint8_t data = 0;
     for (int i = 0; i < 240; i++) // Always 256 colors
     {
-        u32 _x = (currx >> 8);
-        u32 _y = (curry >> 8);
+        uint32_t _x = (currx >> 8);
+        uint32_t _y = (curry >> 8);
 
         if (!mosaic || ((i % MosBgX) == 0))
         {
@@ -1416,8 +1416,8 @@ static void gba_bg2drawaffine(s32 y)
                 int __x = _x & 7;
                 int __y = _y & 7;
 
-                u32 index = se_index_affine(_x / 8, _y / 8, tilesize);
-                u8 SE = scrbaseblockptr[index];
+                uint32_t index = se_index_affine(_x / 8, _y / 8, tilesize);
+                uint8_t SE = scrbaseblockptr[index];
                 data = charbaseblockptr[(SE * 64) + (__x + (__y * 8))];
             }
             else if ((_x < size) && (_y < size))
@@ -1425,12 +1425,12 @@ static void gba_bg2drawaffine(s32 y)
                 int __x = _x & 7;
                 int __y = _y & 7;
 
-                u32 index = se_index_affine(_x / 8, _y / 8, tilesize);
-                u8 SE = scrbaseblockptr[index];
+                uint32_t index = se_index_affine(_x / 8, _y / 8, tilesize);
+                uint8_t SE = scrbaseblockptr[index];
                 data = charbaseblockptr[(SE * 64) + (__x + (__y * 8))];
             }
         }
-        *fb++ = ((u16 *)((u8 *)MEM_PALETTE_ADDR))[data];
+        *fb++ = ((uint16_t *)((uint8_t *)MEM_PALETTE_ADDR))[data];
         *visptr++ = data;
 
         currx += A;
@@ -1438,29 +1438,29 @@ static void gba_bg2drawaffine(s32 y)
     }
 }
 
-static s32 mosBG3lastx, mosBG3lasty, mos3A, mos3C;
+static int32_t mosBG3lastx, mosBG3lasty, mos3A, mos3C;
 
-static void gba_bg3drawaffine(s32 y)
+static void gba_bg3drawaffine(int32_t y)
 {
-    u16 control = REG_BG3CNT;
+    uint16_t control = REG_BG3CNT;
 
-    u8 *charbaseblockptr = (u8 *)&((u8 *)MEM_VRAM_ADDR)[((control >> 2) & 3) * (16 * 1024)];
-    u8 *scrbaseblockptr = (u8 *)&((u8 *)MEM_VRAM_ADDR)[((control >> 8) & 0x1F) * (2 * 1024)];
+    uint8_t *charbaseblockptr = (uint8_t *)&((uint8_t *)MEM_VRAM_ADDR)[((control >> 2) & 3) * (16 * 1024)];
+    uint8_t *scrbaseblockptr = (uint8_t *)&((uint8_t *)MEM_VRAM_ADDR)[((control >> 8) & 0x1F) * (2 * 1024)];
 
-    u32 size = affine_bg_size[control >> 14];
-    u32 sizemask = size - 1;
-    u32 tilesize = size / 8;
+    uint32_t size = affine_bg_size[control >> 14];
+    uint32_t sizemask = size - 1;
+    uint32_t tilesize = size / 8;
 
-    s32 currx = BG3lastx;
-    s32 curry = BG3lasty;
+    int32_t currx = BG3lastx;
+    int32_t curry = BG3lasty;
 
     // | PA PB |
     // | PC PD |
 
-    s32 A = (s32)(s16)REG_BG3PA;
-    s32 C = (s32)(s16)REG_BG3PC;
+    int32_t A = (int32_t)(int16_t)REG_BG3PA;
+    int32_t C = (int32_t)(int16_t)REG_BG3PC;
 
-    u16 *fb = bgfb[3];
+    uint16_t *fb = bgfb[3];
     int *visptr = bgvisible[3];
 
     int mosaic = (control & BIT(6)); // Mosaic
@@ -1483,11 +1483,11 @@ static void gba_bg3drawaffine(s32 y)
         }
     }
 
-    u8 data = 0;
+    uint8_t data = 0;
     for (int i = 0; i < 240; i++) // Always 256 colors
     {
-        u32 _x = (currx >> 8);
-        u32 _y = (curry >> 8);
+        uint32_t _x = (currx >> 8);
+        uint32_t _y = (curry >> 8);
 
         if (!mosaic || ((i % MosBgX) == 0))
         {
@@ -1500,8 +1500,8 @@ static void gba_bg3drawaffine(s32 y)
                 int __x = _x & 7;
                 int __y = _y & 7;
 
-                u32 index = se_index_affine(_x / 8, _y / 8, tilesize);
-                u8 SE = scrbaseblockptr[index];
+                uint32_t index = se_index_affine(_x / 8, _y / 8, tilesize);
+                uint8_t SE = scrbaseblockptr[index];
                 data = charbaseblockptr[(SE * 64) + (__x + (__y * 8))];
             }
             else if ((_x < size) && (_y < size))
@@ -1509,13 +1509,13 @@ static void gba_bg3drawaffine(s32 y)
                 int __x = _x & 7;
                 int __y = _y & 7;
 
-                u32 index = se_index_affine(_x / 8, _y / 8, tilesize);
-                u8 SE = scrbaseblockptr[index];
+                uint32_t index = se_index_affine(_x / 8, _y / 8, tilesize);
+                uint8_t SE = scrbaseblockptr[index];
                 data = charbaseblockptr[(SE * 64) + (__x + (__y * 8))];
             }
         }
 
-        *fb++ = ((u16 *)((u8 *)MEM_PALETTE_ADDR))[data];
+        *fb++ = ((uint16_t *)((uint8_t *)MEM_PALETTE_ADDR))[data];
         *visptr++ = data;
 
         currx += A;
@@ -1525,26 +1525,26 @@ static void gba_bg3drawaffine(s32 y)
 
 //------------------------------------------------------------------------------
 
-static void gba_bg2drawbitmapmode3(unused__ s32 y)
+static void gba_bg2drawbitmapmode3(unused__ int32_t y)
 {
-    s32 currx = BG2lastx;
-    s32 curry = BG2lasty;
+    int32_t currx = BG2lastx;
+    int32_t curry = BG2lasty;
 
-    u16 *srcptr = (u16 *)MEM_VRAM_ADDR;
+    uint16_t *srcptr = (uint16_t *)MEM_VRAM_ADDR;
 
     // | PA PB |
     // | PC PD |
 
-    s32 A = (s32)(s16)REG_BG2PA;
-    s32 C = (s32)(s16)REG_BG2PC;
+    int32_t A = (int32_t)(int16_t)REG_BG2PA;
+    int32_t C = (int32_t)(int16_t)REG_BG2PC;
 
-    u16 *fb = bgfb[2];
+    uint16_t *fb = bgfb[2];
     int *visptr = bgvisible[2];
 
     for (int i = 0; i < 240; i++)
     {
-        u32 _x = (currx >> 8);
-        s32 _y = (curry >> 8);
+        uint32_t _x = (currx >> 8);
+        int32_t _y = (curry >> 8);
         if (!((_x > 239) || (_y > 159)))
         {
             *fb = srcptr[_x + 240 * _y];
@@ -1557,29 +1557,29 @@ static void gba_bg2drawbitmapmode3(unused__ s32 y)
     }
 }
 
-static void gba_bg2drawbitmapmode4(unused__ s32 y)
+static void gba_bg2drawbitmapmode4(unused__ int32_t y)
 {
-    s32 currx = BG2lastx;
-    s32 curry = BG2lasty;
+    int32_t currx = BG2lastx;
+    int32_t curry = BG2lasty;
 
-    u8 *srcptr = (u8 *)&((u8 *)MEM_VRAM_ADDR)[(REG_DISPCNT & BIT(4)) ? 0xA000 : 0];
+    uint8_t *srcptr = (uint8_t *)&((uint8_t *)MEM_VRAM_ADDR)[(REG_DISPCNT & BIT(4)) ? 0xA000 : 0];
 
     // | PA PB |
     // | PC PD |
 
-    s32 A = (s32)(s16)REG_BG2PA;
-    s32 C = (s32)(s16)REG_BG2PC;
+    int32_t A = (int32_t)(int16_t)REG_BG2PA;
+    int32_t C = (int32_t)(int16_t)REG_BG2PC;
 
-    u16 *fb = bgfb[2];
+    uint16_t *fb = bgfb[2];
     int *visptr = bgvisible[2];
 
     for (int i = 0; i < 240; i++)
     {
-        u32 _x = (currx >> 8);
-        s32 _y = (curry >> 8);
+        uint32_t _x = (currx >> 8);
+        int32_t _y = (curry >> 8);
         if (!((_x > 239) || (_y > 159)))
         {
-            *fb = ((u16 *)((u8 *)MEM_PALETTE_ADDR))[srcptr[_x + 240 * _y]];
+            *fb = ((uint16_t *)((uint8_t *)MEM_PALETTE_ADDR))[srcptr[_x + 240 * _y]];
             *visptr = 1;
         }
         fb++;
@@ -1589,29 +1589,29 @@ static void gba_bg2drawbitmapmode4(unused__ s32 y)
     }
 }
 
-static void gba_bg2drawbitmapmode5(unused__ s32 y)
+static void gba_bg2drawbitmapmode5(unused__ int32_t y)
 {
-    s32 currx = BG2lastx;
-    s32 curry = BG2lasty;
+    int32_t currx = BG2lastx;
+    int32_t curry = BG2lasty;
 
-    u16 *srcptr = (u16 *)&((u8 *)MEM_VRAM_ADDR)[((REG_DISPCNT & BIT(4)) ? 0xA000 : 0)];
+    uint16_t *srcptr = (uint16_t *)&((uint8_t *)MEM_VRAM_ADDR)[((REG_DISPCNT & BIT(4)) ? 0xA000 : 0)];
 
     // | PA PB |
     // | PC PD |
 
-    s32 A = (s32)(s16)REG_BG2PA;
-    s32 C = (s32)(s16)REG_BG2PC;
+    int32_t A = (int32_t)(int16_t)REG_BG2PA;
+    int32_t C = (int32_t)(int16_t)REG_BG2PC;
 
-    u16 *fb = bgfb[2];
+    uint16_t *fb = bgfb[2];
     int *visptr = bgvisible[2];
 
     for (int i = 0; i < 240; i++)
     {
-        u32 _x = (currx >> 8);
-        s32 _y = (curry >> 8);
+        uint32_t _x = (currx >> 8);
+        int32_t _y = (curry >> 8);
         if (!((_x > 159) || (_y > 127)))
         {
-            *fb = (u16)srcptr[_x + 160 * _y];
+            *fb = (uint16_t)srcptr[_x + 160 * _y];
             *visptr = 1;
         }
         fb++;
@@ -1625,14 +1625,14 @@ static void gba_bg2drawbitmapmode5(unused__ s32 y)
 
 static void gba_video_all_buffers_clear(void)
 {
-    mem_clear_32((u32 *)bgfb, sizeof(bgfb));
-    mem_clear_32((u32 *)bgvisible, sizeof(bgvisible));
-    mem_clear_32((u32 *)sprfb, sizeof(sprfb));
-    mem_clear_32((u32 *)sprvisible, sizeof(sprvisible));
-    mem_clear_32((u32 *)sprblend, sizeof(sprblend));
-    mem_clear_32((u32 *)sprblendfb, sizeof(sprblendfb));
-    mem_clear_32((u32 *)sprwin, sizeof(sprwin));
-    mem_clear_32((u32 *)backdrop, sizeof(backdrop));
+    mem_clear_32((uint32_t *)bgfb, sizeof(bgfb));
+    mem_clear_32((uint32_t *)bgvisible, sizeof(bgvisible));
+    mem_clear_32((uint32_t *)sprfb, sizeof(sprfb));
+    mem_clear_32((uint32_t *)sprvisible, sizeof(sprvisible));
+    mem_clear_32((uint32_t *)sprblend, sizeof(sprblend));
+    mem_clear_32((uint32_t *)sprblendfb, sizeof(sprblendfb));
+    mem_clear_32((uint32_t *)sprwin, sizeof(sprwin));
+    mem_clear_32((uint32_t *)backdrop, sizeof(backdrop));
 }
 
 //------------------------------------------------------------------------------
@@ -1654,7 +1654,7 @@ typedef enum
 
 // layer_fb[0] goes at the bottom, layer_fb[layer_active_num - 1] at the top
 static int *layer_vis[9];
-static u16 *layer_fb[9];
+static uint16_t *layer_fb[9];
 static _layer_type_ layer_id[9];
 static int layer_active_num;
 
@@ -1666,7 +1666,7 @@ static void gba_sort_layers(int video_mode)
     static const int bg2act[6] = { 1, 1, 1, 1, 1, 1 };
     static const int bg3act[6] = { 1, 0, 1, 0, 0, 0 };
 
-    u16 cnt = REG_DISPCNT;
+    uint16_t cnt = REG_DISPCNT;
 
     int bgprio[4];
     bgprio[0] = ((cnt & BIT(8)) && bg0act[video_mode]) ? (REG_BG0CNT & 3) : -1;
@@ -1780,14 +1780,14 @@ static void gba_sort_layers(int video_mode)
 
 static void gba_blit_layers(int y)
 {
-    u16 *destptr = (u16 *)&screen_buffer[240 * y];
+    uint16_t *destptr = (uint16_t *)&screen_buffer[240 * y];
 
     for (int i = 0; i < layer_active_num; i++)
     {
-        u16 *dest = destptr;
+        uint16_t *dest = destptr;
 
         int *vis = layer_vis[i];
-        u16 *fb = layer_fb[i];
+        uint16_t *fb = layer_fb[i];
 
         for (int j = 0; j < 240; j++)
         {
@@ -1805,7 +1805,8 @@ static void gba_blit_layers(int y)
 int win_coloreffect_enable[240];
 
 // bits 13-15 of DISPCNT
-static void gba_window_apply(u32 y, u32 win0, u32 win1, u32 winobj)
+static void gba_window_apply(uint32_t y, uint32_t win0,
+                             uint32_t win1, uint32_t winobj)
 {
     if (!(winobj || win1 || win0))
     {
@@ -1817,10 +1818,10 @@ static void gba_window_apply(u32 y, u32 win0, u32 win1, u32 winobj)
         return;
     }
 
-    u32 in0 = REG_WININ & 0xFF;
-    u32 in1 = (REG_WININ >> 8) & 0xFF;
-    u32 out = REG_WINOUT & 0xFF;
-    u32 inobj = (REG_WINOUT >> 8) & 0xFF;
+    uint32_t in0 = REG_WININ & 0xFF;
+    uint32_t in1 = (REG_WININ >> 8) & 0xFF;
+    uint32_t out = REG_WINOUT & 0xFF;
+    uint32_t inobj = (REG_WINOUT >> 8) & 0xFF;
 
     int win_show[240];
 
@@ -1867,7 +1868,7 @@ static void gba_window_apply(u32 y, u32 win0, u32 win1, u32 winobj)
             {
                 if (y >= Win1Y1 && y <= Win1Y2)
                 {
-                    for (u32 i = Win1X1; i < Win1X2; i++)
+                    for (uint32_t i = Win1X1; i < Win1X2; i++)
                         win_show[i] = 1;
                 }
             }
@@ -1875,7 +1876,7 @@ static void gba_window_apply(u32 y, u32 win0, u32 win1, u32 winobj)
             {
                 if (y >= Win1Y1 && y <= Win1Y2)
                 {
-                    for (u32 i = Win1X1; i < Win1X2; i++)
+                    for (uint32_t i = Win1X1; i < Win1X2; i++)
                         win_show[i] = 0;
                 }
             }
@@ -1886,7 +1887,7 @@ static void gba_window_apply(u32 y, u32 win0, u32 win1, u32 winobj)
             {
                 if (y >= Win0Y1 && y <= Win0Y2)
                 {
-                    for (u32 i = Win0X1; i < Win0X2; i++)
+                    for (uint32_t i = Win0X1; i < Win0X2; i++)
                         win_show[i] = 1;
                 }
             }
@@ -1894,7 +1895,7 @@ static void gba_window_apply(u32 y, u32 win0, u32 win1, u32 winobj)
             {
                 if (y >= Win0Y1 && y <= Win0Y2)
                 {
-                    for (u32 i = Win0X1; i < Win0X2; i++)
+                    for (uint32_t i = Win0X1; i < Win0X2; i++)
                         win_show[i] = 0;
                 }
             }
@@ -1952,7 +1953,7 @@ static void gba_window_apply(u32 y, u32 win0, u32 win1, u32 winobj)
             {
                 if (y >= Win1Y1 && y <= Win1Y2)
                 {
-                    for (u32 i = Win1X1; i < Win1X2; i++)
+                    for (uint32_t i = Win1X1; i < Win1X2; i++)
                         win_show[i] = 1;
                 }
             }
@@ -1960,7 +1961,7 @@ static void gba_window_apply(u32 y, u32 win0, u32 win1, u32 winobj)
             {
                 if (y >= Win1Y1 && y <= Win1Y2)
                 {
-                    for (u32 i = Win1X1; i < Win1X2; i++)
+                    for (uint32_t i = Win1X1; i < Win1X2; i++)
                         win_show[i] = 0;
                 }
             }
@@ -1971,7 +1972,7 @@ static void gba_window_apply(u32 y, u32 win0, u32 win1, u32 winobj)
             {
                 if (y >= Win0Y1 && y <= Win0Y2)
                 {
-                    for (u32 i = Win0X1; i < Win0X2; i++)
+                    for (uint32_t i = Win0X1; i < Win0X2; i++)
                         win_show[i] = 1;
                 }
             }
@@ -1979,7 +1980,7 @@ static void gba_window_apply(u32 y, u32 win0, u32 win1, u32 winobj)
             {
                 if (y >= Win0Y1 && y <= Win0Y2)
                 {
-                    for (u32 i = Win0X1; i < Win0X2; i++)
+                    for (uint32_t i = Win0X1; i < Win0X2; i++)
                         win_show[i] = 0;
                 }
             }
@@ -2037,7 +2038,7 @@ static void gba_window_apply(u32 y, u32 win0, u32 win1, u32 winobj)
             {
                 if (y >= Win1Y1 && y <= Win1Y2)
                 {
-                    for (u32 i = Win1X1; i < Win1X2; i++)
+                    for (uint32_t i = Win1X1; i < Win1X2; i++)
                         win_show[i] = 1;
                 }
             }
@@ -2045,7 +2046,7 @@ static void gba_window_apply(u32 y, u32 win0, u32 win1, u32 winobj)
             {
                 if (y >= Win1Y1 && y <= Win1Y2)
                 {
-                    for (u32 i = Win1X1; i < Win1X2; i++)
+                    for (uint32_t i = Win1X1; i < Win1X2; i++)
                         win_show[i] = 0;
                 }
             }
@@ -2056,7 +2057,7 @@ static void gba_window_apply(u32 y, u32 win0, u32 win1, u32 winobj)
             {
                 if (y >= Win0Y1 && y <= Win0Y2)
                 {
-                    for (u32 i = Win0X1; i < Win0X2; i++)
+                    for (uint32_t i = Win0X1; i < Win0X2; i++)
                         win_show[i] = 1;
                 }
             }
@@ -2064,7 +2065,7 @@ static void gba_window_apply(u32 y, u32 win0, u32 win1, u32 winobj)
             {
                 if (y >= Win0Y1 && y <= Win0Y2)
                 {
-                    for (u32 i = Win0X1; i < Win0X2; i++)
+                    for (uint32_t i = Win0X1; i < Win0X2; i++)
                         win_show[i] = 0;
                 }
             }
@@ -2122,7 +2123,7 @@ static void gba_window_apply(u32 y, u32 win0, u32 win1, u32 winobj)
             {
                 if (y >= Win1Y1 && y <= Win1Y2)
                 {
-                    for (u32 i = Win1X1; i < Win1X2; i++)
+                    for (uint32_t i = Win1X1; i < Win1X2; i++)
                         win_show[i] = 1;
                 }
             }
@@ -2130,7 +2131,7 @@ static void gba_window_apply(u32 y, u32 win0, u32 win1, u32 winobj)
             {
                 if (y >= Win1Y1 && y <= Win1Y2)
                 {
-                    for (u32 i = Win1X1; i < Win1X2; i++)
+                    for (uint32_t i = Win1X1; i < Win1X2; i++)
                         win_show[i] = 0;
                 }
             }
@@ -2141,7 +2142,7 @@ static void gba_window_apply(u32 y, u32 win0, u32 win1, u32 winobj)
             {
                 if (y >= Win0Y1 && y <= Win0Y2)
                 {
-                    for (u32 i = Win0X1; i < Win0X2; i++)
+                    for (uint32_t i = Win0X1; i < Win0X2; i++)
                         win_show[i] = 1;
                 }
             }
@@ -2149,7 +2150,7 @@ static void gba_window_apply(u32 y, u32 win0, u32 win1, u32 winobj)
             {
                 if (y >= Win0Y1 && y <= Win0Y2)
                 {
-                    for (u32 i = Win0X1; i < Win0X2; i++)
+                    for (uint32_t i = Win0X1; i < Win0X2; i++)
                         win_show[i] = 0;
                 }
             }
@@ -2207,7 +2208,7 @@ static void gba_window_apply(u32 y, u32 win0, u32 win1, u32 winobj)
             {
                 if (y >= Win1Y1 && y <= Win1Y2)
                 {
-                    for (u32 i = Win1X1; i < Win1X2; i++)
+                    for (uint32_t i = Win1X1; i < Win1X2; i++)
                         win_show[i] = 1;
                 }
             }
@@ -2215,7 +2216,7 @@ static void gba_window_apply(u32 y, u32 win0, u32 win1, u32 winobj)
             {
                 if (y >= Win1Y1 && y <= Win1Y2)
                 {
-                    for (u32 i = Win1X1; i < Win1X2; i++)
+                    for (uint32_t i = Win1X1; i < Win1X2; i++)
                         win_show[i] = 0;
                 }
             }
@@ -2226,7 +2227,7 @@ static void gba_window_apply(u32 y, u32 win0, u32 win1, u32 winobj)
             {
                 if (y >= Win0Y1 && y <= Win0Y2)
                 {
-                    for (u32 i = Win0X1; i < Win0X2; i++)
+                    for (uint32_t i = Win0X1; i < Win0X2; i++)
                         win_show[i] = 1;
                 }
             }
@@ -2234,7 +2235,7 @@ static void gba_window_apply(u32 y, u32 win0, u32 win1, u32 winobj)
             {
                 if (y >= Win0Y1 && y <= Win0Y2)
                 {
-                    for (u32 i = Win0X1; i < Win0X2; i++)
+                    for (uint32_t i = Win0X1; i < Win0X2; i++)
                         win_show[i] = 0;
                 }
             }
@@ -2316,7 +2317,7 @@ static void gba_window_apply(u32 y, u32 win0, u32 win1, u32 winobj)
             {
                 if (y >= Win1Y1 && y <= Win1Y2)
                 {
-                    for (u32 i = Win1X1; i < Win1X2; i++)
+                    for (uint32_t i = Win1X1; i < Win1X2; i++)
                         win_show[i] = 1;
                 }
             }
@@ -2324,7 +2325,7 @@ static void gba_window_apply(u32 y, u32 win0, u32 win1, u32 winobj)
             {
                 if (y >= Win1Y1 && y <= Win1Y2)
                 {
-                    for (u32 i = Win1X1; i < Win1X2; i++)
+                    for (uint32_t i = Win1X1; i < Win1X2; i++)
                         win_show[i] = 0;
                 }
             }
@@ -2335,7 +2336,7 @@ static void gba_window_apply(u32 y, u32 win0, u32 win1, u32 winobj)
             {
                 if (y >= Win0Y1 && y <= Win0Y2)
                 {
-                    for (u32 i = Win0X1; i < Win0X2; i++)
+                    for (uint32_t i = Win0X1; i < Win0X2; i++)
                         win_show[i] = 1;
                 }
             }
@@ -2343,7 +2344,7 @@ static void gba_window_apply(u32 y, u32 win0, u32 win1, u32 winobj)
             {
                 if (y >= Win0Y1 && y <= Win0Y2)
                 {
-                    for (u32 i = Win0X1; i < Win0X2; i++)
+                    for (uint32_t i = Win0X1; i < Win0X2; i++)
                         win_show[i] = 0;
                 }
             }
@@ -2354,8 +2355,8 @@ static void gba_window_apply(u32 y, u32 win0, u32 win1, u32 winobj)
     }
 }
 
-static u16 white_table[32][17]; // color, evy
-static u16 black_table[32][17]; // color, evy
+static uint16_t white_table[32][17]; // color, evy
+static uint16_t black_table[32][17]; // color, evy
 
 void GBA_FillFadeTables(void)
 {
@@ -2376,31 +2377,32 @@ void GBA_FillFadeTables(void)
     }
 }
 
-static u16 fade_white(u16 col, u16 evy)
+static uint16_t fade_white(uint16_t col, uint16_t evy)
 {
     return (white_table[(col >> 10) & 0x1F][evy] << 10)
            | (white_table[(col >> 5) & 0x1F][evy] << 5)
            | white_table[col & 0x1F][evy];
 }
-static u16 fade_black(u16 col, u16 evy)
+static uint16_t fade_black(uint16_t col, uint16_t evy)
 {
     return (black_table[(col >> 10) & 0x1F][evy] << 10)
            | (black_table[(col >> 5) & 0x1F][evy] << 5)
            | black_table[col & 0x1F][evy];
 }
 
-static u16 min(u16 a, u16 b)
+static uint16_t min(uint16_t a, uint16_t b)
 {
     return (a < b) ? a : b;
 }
 
-static u16 blend(u16 col_1, u16 col_2, u16 eva, u16 evb)
+static uint16_t blend(uint16_t col_1, uint16_t col_2,
+                      uint16_t eva, uint16_t evb)
 {
-    u16 r = min(31, (((col_1 & 0x1F) * eva) >> 4)
+    uint16_t r = min(31, (((col_1 & 0x1F) * eva) >> 4)
                             + (((col_2 & 0x1F) * evb) >> 4));
-    u16 g = min(31, ((((col_1 >> 5) & 0x1F) * eva) >> 4)
+    uint16_t g = min(31, ((((col_1 >> 5) & 0x1F) * eva) >> 4)
                             + ((((col_2 >> 5) & 0x1F) * evb) >> 4));
-    u16 b = min(31, ((((col_1 >> 10) & 0x1F) * eva) >> 4)
+    uint16_t b = min(31, ((((col_1 >> 10) & 0x1F) * eva) >> 4)
                             + ((((col_2 >> 10) & 0x1F) * evb) >> 4));
     return (b << 10) | (g << 5) | r;
 }
@@ -2445,7 +2447,7 @@ static void gba_effects_apply(void)
         }
     }
 
-    u16 bldcnt = REG_BLDCNT;
+    uint16_t bldcnt = REG_BLDCNT;
     int mode = (bldcnt >> 6) & 3;
 
     if (mode == 0) // Nothing -- only blend transparent sprites
@@ -2533,10 +2535,10 @@ static void gba_effects_apply(void)
         }
     }
 
-    u32 eva = REG_BLDALPHA & 0x1F;
+    uint32_t eva = REG_BLDALPHA & 0x1F;
     if (eva > 16)
         eva = 16;
-    u32 evb = (REG_BLDALPHA >> 8) & 0x1F;
+    uint32_t evb = (REG_BLDALPHA >> 8) & 0x1F;
     if (evb > 16)
         evb = 16;
 
@@ -2659,7 +2661,7 @@ static void gba_effects_apply(void)
     }
     else if (mode == 2) // White
     {
-        u32 evy = REG_BLDY & 0x1F;
+        uint32_t evy = REG_BLDY & 0x1F;
         if (evy > 16)
             evy = 16;
 
@@ -2697,7 +2699,7 @@ static void gba_effects_apply(void)
     }
     if (mode == 3) // Black
     {
-        u32 evy = REG_BLDY & 0x1F;
+        uint32_t evy = REG_BLDY & 0x1F;
         if (evy > 16)
             evy = 16;
 
@@ -2741,11 +2743,11 @@ static void gba_greenswap_apply(int y)
 {
     if (REG_GREENSWAP & 1)
     {
-        u16 *destptr = (u16 *)&screen_buffer[240 * y];
+        uint16_t *destptr = (uint16_t *)&screen_buffer[240 * y];
         for (int i = 0; i < 240; i += 2)
         {
-            u16 pix1 = *destptr;
-            u16 pix2 = *(destptr + 1);
+            uint16_t pix1 = *destptr;
+            uint16_t pix2 = *(destptr + 1);
             *destptr++ = (pix1 & ~(31 << 5)) | (pix2 & (31 << 5));
             *destptr++ = (pix2 & ~(31 << 5)) | (pix1 & (31 << 5));
         }
@@ -2754,12 +2756,12 @@ static void gba_greenswap_apply(int y)
 
 //------------------------------------------------------------------------------
 
-static void GBA_DrawScanlineMode0(s32 y)
+static void GBA_DrawScanlineMode0(int32_t y)
 {
     gba_video_all_buffers_clear();
 
     // Draw layers
-    u16 bd_col = *((u16 *)((u8 *)MEM_PALETTE_ADDR));
+    uint16_t bd_col = *((uint16_t *)((uint8_t *)MEM_PALETTE_ADDR));
     for (int i = 0; i < 240; i++)
         backdrop[i] = bd_col;
     if (REG_DISPCNT & BIT(8))
@@ -2783,12 +2785,12 @@ static void GBA_DrawScanlineMode0(s32 y)
     gba_greenswap_apply(y);
 }
 
-static void GBA_DrawScanlineMode1(s32 y)
+static void GBA_DrawScanlineMode1(int32_t y)
 {
     gba_video_all_buffers_clear();
 
     // Draw layers
-    u16 bd_col = *((u16 *)((u8 *)MEM_PALETTE_ADDR));
+    uint16_t bd_col = *((uint16_t *)((uint8_t *)MEM_PALETTE_ADDR));
     for (int i = 0; i < 240; i++)
         backdrop[i] = bd_col;
     if (REG_DISPCNT & BIT(8))
@@ -2809,12 +2811,12 @@ static void GBA_DrawScanlineMode1(s32 y)
     gba_greenswap_apply(y);
 }
 
-static void GBA_DrawScanlineMode2(s32 y)
+static void GBA_DrawScanlineMode2(int32_t y)
 {
     gba_video_all_buffers_clear();
 
     // Draw layers
-    u16 bd_col = *((u16 *)((u8 *)MEM_PALETTE_ADDR));
+    uint16_t bd_col = *((uint16_t *)((uint8_t *)MEM_PALETTE_ADDR));
     for (int i = 0; i < 240; i++)
         backdrop[i] = bd_col;
     if (REG_DISPCNT & BIT(10))
@@ -2833,12 +2835,12 @@ static void GBA_DrawScanlineMode2(s32 y)
     gba_greenswap_apply(y);
 }
 
-static void GBA_DrawScanlineMode3(s32 y)
+static void GBA_DrawScanlineMode3(int32_t y)
 {
     gba_video_all_buffers_clear();
 
     // Draw layers
-    u16 bd_col = *((u16 *)((u8 *)MEM_PALETTE_ADDR));
+    uint16_t bd_col = *((uint16_t *)((uint8_t *)MEM_PALETTE_ADDR));
     for (int i = 0; i < 240; i++)
         backdrop[i] = bd_col;
     if (REG_DISPCNT & BIT(12))
@@ -2855,12 +2857,12 @@ static void GBA_DrawScanlineMode3(s32 y)
     gba_greenswap_apply(y);
 }
 
-static void GBA_DrawScanlineMode4(s32 y)
+static void GBA_DrawScanlineMode4(int32_t y)
 {
     gba_video_all_buffers_clear();
 
     // Draw layers
-    u16 bd_col = *((u16 *)((u8 *)MEM_PALETTE_ADDR));
+    uint16_t bd_col = *((uint16_t *)((uint8_t *)MEM_PALETTE_ADDR));
     for (int i = 0; i < 240; i++)
         backdrop[i] = bd_col;
     if (REG_DISPCNT & BIT(12))
@@ -2877,12 +2879,12 @@ static void GBA_DrawScanlineMode4(s32 y)
     gba_greenswap_apply(y);
 }
 
-static void GBA_DrawScanlineMode5(s32 y)
+static void GBA_DrawScanlineMode5(int32_t y)
 {
     gba_video_all_buffers_clear();
 
     // Draw layers
-    u16 bd_col = *((u16 *)((u8 *)MEM_PALETTE_ADDR));
+    uint16_t bd_col = *((uint16_t *)((uint8_t *)MEM_PALETTE_ADDR));
     for (int i = 0; i < 240; i++)
         backdrop[i] = bd_col;
     if (REG_DISPCNT & BIT(12))
@@ -2940,11 +2942,11 @@ void GBA_VideoUpdateRegister(uint32_t offset)
 
 void GBA_ConvertScreenBufferTo32RGB(void *dst)
 {
-    u16 *src = screen_buffer_array[curr_screen_buffer ^ 1];
-    u32 *dest = (u32 *)dst;
+    uint16_t *src = screen_buffer_array[curr_screen_buffer ^ 1];
+    uint32_t *dest = (uint32_t *)dst;
     for (int i = 0; i < 240 * 160; i++)
     {
-        u32 data = (u32)*src++;
+        uint32_t data = (uint32_t)*src++;
         *dest++ = ((data & 0x1F) << 3)
                   | ((data & (0x1F << 5)) << 6)
                   | ((data & (0x1F << 10)) << 9)
@@ -2954,12 +2956,12 @@ void GBA_ConvertScreenBufferTo32RGB(void *dst)
 
 void GBA_ConvertScreenBufferTo24RGB(void *dst)
 {
-    u16 *src = screen_buffer_array[curr_screen_buffer ^ 1];
-    u8 *dest = (void *)dst;
+    uint16_t *src = screen_buffer_array[curr_screen_buffer ^ 1];
+    uint8_t *dest = (void *)dst;
 
     for (int i = 0; i < 240 * 160; i++)
     {
-        u32 data = (u32)*src++;
+        uint32_t data = (uint32_t)*src++;
         *dest++ = (data & 0x1F) << 3;
         *dest++ = (data & (0x1F << 5)) >> 2;
         *dest++ = (data & (0x1F << 10)) >> 7;

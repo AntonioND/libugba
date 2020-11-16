@@ -10,7 +10,6 @@
 #include <gbaline.h>
 
 #include "debug_utils.h"
-#include "general_utils.h"
 #include "input_utils.h"
 
 //------------------------------------------------------------------------------
