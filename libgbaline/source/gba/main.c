@@ -4,14 +4,9 @@
 
 #include <gbaline.h>
 
-// Defined in the application that links this library
-extern int GBA_main(int argc, char *argv[]);
-
-int main(int argc, char *argv[])
+void GBALINE_Init(int *argc, char **argv[])
 {
     // Library initialization
 
     IRQ_Init();
-
-    return GBA_main(argc, argv);
 }

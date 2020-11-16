@@ -4,8 +4,10 @@
 
 #include <gbaline.h>
 
-int GBA_main(int argc, char *argv[])
+int main(int argc, char *argv[])
 {
+    GBALINE_Init(&argc, &argv);
+
     IRQ_Enable(IRQ_VBLANK);
 
     REG_DISPCNT = DISPCNT_BG_MODE(3) | DISPCNT_BG2_ENABLE;

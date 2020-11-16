@@ -17,8 +17,10 @@
 // 16 colors each available.
 #define BALL_PALETTE        (2)
 
-int GBA_main(int argc, char *argv[])
+int main(int argc, char *argv[])
 {
+    GBALINE_Init(&argc, &argv);
+
     // Enable interrupts. This is needed for SWI_VBlankIntrWait() to work.
     IRQ_Enable(IRQ_VBLANK);
 

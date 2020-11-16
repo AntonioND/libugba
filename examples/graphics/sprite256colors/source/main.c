@@ -13,8 +13,10 @@
 // This defines the tile index where the data of the ball is loaded in tile VRAM
 #define BALL_TILES_BASE    (16)
 
-int GBA_main(int argc, char *argv[])
+int main(int argc, char *argv[])
 {
+    GBALINE_Init(&argc, &argv);
+
     // Enable interrupts. This is needed for SWI_VBlankIntrWait() to work.
     IRQ_Enable(IRQ_VBLANK);
 

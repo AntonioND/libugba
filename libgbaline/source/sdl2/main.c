@@ -45,10 +45,7 @@ int Debug_Autotest(void)
     return autotest_enabled;
 }
 
-// Defined in the application that links this library
-extern int GBA_main(int argc, char *argv[]);
-
-int main(int argc, char *argv[])
+void GBALINE_Init(int *argc, char **argv[])
 {
     // SDL2 port initialization
 
@@ -56,7 +53,7 @@ int main(int argc, char *argv[])
     atexit(Debug_End);
 
     if (Init() != 0)
-        return 1;
+        exit(1);
 
     Win_MainCreate();
 
@@ -64,24 +61,25 @@ int main(int argc, char *argv[])
 
     // Detect arguments
 
-    if (argc > 1)
+    if ((argc != NULL) && (argv != NULL))
     {
-        if (strcmp(argv[1], "--autotest") == 0)
+        if (*argc > 1)
         {
-             autotest_enabled = 1;
+            if (strcmp(*argv[1], "--autotest") == 0)
+            {
+                autotest_enabled = 1;
 
-             // Remove argv[1]
+                // Remove argv[1]
 
-             for (int i = 1; i < argc - 1; i++)
-                 argv[i] = argv[i + 1];
+                for (int i = 1; i < *argc - 1; i++)
+                    *argv[i] = *argv[i + 1];
 
-             argc--;
+                (*argc)--;
+            }
         }
     }
 
     // Library initialization
 
     IRQ_Init();
-
-    return GBA_main(argc, argv);
 }

@@ -10,4 +10,6 @@
 #include "hardware.h"
 #include "interrupts.h"
 
+void GBALINE_Init(int *argc, char **argv[]);
+
 #endif // GBALINE_H__

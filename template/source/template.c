@@ -27,8 +27,10 @@ void VcountHandler(void)
     b = 0x1F;
 }
 
-int GBA_main(int argc, char *argv[])
+int main(int argc, char *argv[])
 {
+    GBALINE_Init(&argc, &argv);
+
     IRQ_SetHandler(IRQ_VBLANK, VBLHandler);
     IRQ_SetHandler(IRQ_HBLANK, HBLHandler);
     IRQ_SetHandler(IRQ_VCOUNT, VcountHandler);
