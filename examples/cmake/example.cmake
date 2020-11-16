@@ -45,7 +45,7 @@ function(unittest_screenshot)
         COMMAND ${CMAKE_COMMAND}
                     -DCMD1=${CMD1}
                     -DCMD2=${CMD2}
-                    -P ${CMAKE_SOURCE_DIR}/cmake/runcommands.cmake
+                    -P ${CMAKE_SOURCE_DIR}/examples/cmake/runcommands.cmake
         WORKING_DIRECTORY ${CMAKE_CURRENT_BUILD_DIR}
     )
 endfunction()

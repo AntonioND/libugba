@@ -17,6 +17,4 @@ add_subdirectory(tools)
 
 enable_testing()
 
-include(cmake/example.cmake)
-
 add_subdirectory(examples)
