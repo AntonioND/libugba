@@ -105,11 +105,12 @@ target_include_directories(libgbaline PUBLIC
 # Link with libraries and check build options
 # -------------------------------------------
 
-# libpng and SLD2 are required
+# libpng, SLD2 and Lua are required
 
 if(CMAKE_C_COMPILER_ID STREQUAL "MSVC")
     find_package(libpng REQUIRED 1.6)
     find_package(SDL2 REQUIRED)
+    find_package(lua REQUIRED 5.2)
 
     target_link_libraries(libgbaline PRIVATE
         png
@@ -118,14 +119,17 @@ if(CMAKE_C_COMPILER_ID STREQUAL "MSVC")
 else()
     find_package(PNG REQUIRED 1.6)
     find_package(SDL2 REQUIRED)
+    find_package(Lua REQUIRED 5.2)
 
     target_include_directories(libgbaline PRIVATE
         ${PNG_INCLUDE_DIRS}
         ${SDL2_INCLUDE_DIRS}
+        ${LUA_INCLUDE_DIR}
     )
     target_link_libraries(libgbaline PRIVATE
         ${PNG_LIBRARIES}
         ${SDL2_LIBRARIES}
+        ${LUA_LIBRARIES}
     )
 endif()
 

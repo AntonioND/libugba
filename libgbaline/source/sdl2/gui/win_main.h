@@ -8,5 +8,6 @@
 int Win_MainCreate(void); // returns 1 if error
 void Win_MainRender(void);
 void Win_MainLoopHandle(void);
+void Win_MainExit(void);
 
 #endif // SDL2_GUI_WIN_MAIN_H__

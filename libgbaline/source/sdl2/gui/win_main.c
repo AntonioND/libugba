@@ -115,6 +115,13 @@ static unsigned char WIN_MAIN_GAME_SCREEN_BUFFER[240 * ZOOM_MAX *
 
 //------------------------------------------------------------------
 
+static int exit_program_requested = 0;
+
+void Win_MainExit(void)
+{
+    exit_program_requested = 1;
+}
+
 static int Win_MainEventCallback(SDL_Event *e)
 {
     int exit_program = 0;
@@ -198,6 +205,12 @@ void Win_MainRender(void)
 
 void Win_MainLoopHandle(void)
 {
+    if (exit_program_requested)
+    {
+        WH_CloseAll();
+        exit(0);
+    }
+
 #if 0
     if (WH_HasKeyboardFocus(WinIDMain))
     {
