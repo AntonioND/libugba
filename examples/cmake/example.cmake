@@ -38,8 +38,8 @@ function(unittest_screenshot)
     # Get name of the folder we are in
     get_filename_component(EXECUTABLE_NAME ${CMAKE_CURRENT_SOURCE_DIR} NAME)
 
-    set(CMD1 "$<TARGET_FILE:${EXECUTABLE_NAME}> --autotest")
-    set(CMD2 "$<TARGET_FILE:pngmatch> ${CMAKE_CURRENT_SOURCE_DIR}/reference.png screenshot.png")
+    set(CMD1 "$<TARGET_FILE:${EXECUTABLE_NAME}> --lua ${CMAKE_CURRENT_SOURCE_DIR}/test-sdl2.lua")
+    set(CMD2 "$<TARGET_FILE:pngmatch> ${CMAKE_CURRENT_SOURCE_DIR}/reference-sdl2.png screenshot.png")
 
     add_test(NAME test
         COMMAND ${CMAKE_COMMAND}

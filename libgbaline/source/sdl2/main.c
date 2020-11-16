@@ -10,6 +10,7 @@
 
 #include "debug_utils.h"
 #include "input_utils.h"
+#include "lua.h"
 
 #include "core/video.h"
 #include "gui/win_main.h"
@@ -38,13 +39,6 @@ static int Init(void)
     return 0;
 }
 
-static int autotest_enabled = 0;
-
-int Debug_Autotest(void)
-{
-    return autotest_enabled;
-}
-
 void GBALINE_Init(int *argc, char **argv[])
 {
     // SDL2 port initialization
@@ -63,18 +57,18 @@ void GBALINE_Init(int *argc, char **argv[])
 
     if ((argc != NULL) && (argv != NULL))
     {
-        if (*argc > 1)
+        if (*argc > 2)
         {
-            if (strcmp((*argv)[1], "--autotest") == 0)
+            if (strcmp((*argv)[1], "--lua") == 0)
             {
-                autotest_enabled = 1;
+                // Remove argv[1] and argv[2]
 
-                // Remove argv[1]
+                for (int i = 1; i < *argc - 2; i++)
+                    (*argv)[i] = (*argv)[i + 2];
 
-                for (int i = 1; i < *argc - 1; i++)
-                    (*argv)[i] = (*argv)[i + 1];
+                *argc = *argc - 2;
 
-                *argc = *argc - 1;
+                Script_RunLua((*argv)[2]);
             }
         }
     }

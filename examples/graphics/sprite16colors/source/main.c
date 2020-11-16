@@ -91,19 +91,8 @@ int main(int argc, char *argv[])
         //     https://www.coranac.com/tonc/text/regobj.htm#sec-tiles
         DISPCNT_OBJ_1D_MAPPING;
 
-    if (Debug_Autotest())
-    {
-        for (int i = 0; i < 5; i++)
-            SWI_VBlankIntrWait();
-        Debug_Screenshot();
-    }
-    else
-    {
-        while (1)
-            SWI_VBlankIntrWait();
-    }
-
-    return 0;
+    while (1)
+        SWI_VBlankIntrWait();
 }
 
 

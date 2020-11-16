@@ -12,10 +12,8 @@
 #include <stdint.h>
 
 #ifdef __GBA__
-#define Debug_Autotest()    0
 #define Debug_Screenshot()  do { } while (0)
 #else
-int Debug_Autotest(void);
 void Debug_Screenshot(void);
 #endif
 

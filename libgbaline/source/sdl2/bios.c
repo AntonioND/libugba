@@ -7,6 +7,7 @@
 #include <gbaline.h>
 
 #include "input_utils.h"
+#include "lua.h"
 
 #include "core/video.h"
 #include "gui/win_main.h"
@@ -46,6 +47,9 @@ static void handle_vbl(void)
 
     // Update input state
     Input_Update_GBA();
+
+    // Update script handler
+    Script_FrameDrawn();
 
     // Synchronise video
     if (Input_Speedup_Enabled())
