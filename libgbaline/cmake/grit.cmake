@@ -2,8 +2,11 @@
 #
 # Copyright (c) 2020 Antonio Niño Díaz
 
+# Default Grit path
+set(GRIT_PATH "$ENV{DEVKITPRO}/tools/bin/grit"
+    CACHE STRING "Path to the Grit executable")
+
 function(add_grit_files source_directory destination_target)
-    set(GRIT "$ENV{DEVKITPRO}/tools/bin/grit")
 
     file(GLOB PNG_FILES "${source_directory}/*.png")
 
@@ -38,7 +41,7 @@ function(add_grit_files source_directory destination_target)
 
         add_custom_command(
             OUTPUT ${OUT_FILES}
-            COMMAND ${GRIT} ${PNG_FILE} -ftc -o ${PNG_NAME}
+            COMMAND ${GRIT_PATH} ${PNG_FILE} -ftc -o ${PNG_NAME}
             DEPENDS ${GRIT_FILE} ${PNG_FILE}
             WORKING_DIRECTORY ${OUT_DIR}
         )

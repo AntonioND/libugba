@@ -11,10 +11,12 @@
 
 #include <stdint.h>
 
+#include "definitions.h"
+
 #ifdef __GBA__
 #define Debug_Screenshot()  do { } while (0)
 #else
-void Debug_Screenshot(void);
+EXPORT_API void Debug_Screenshot(void);
 #endif
 
 #endif // DEBUG_H__

@@ -7,11 +7,12 @@
 
 #include "bios.h"
 #include "debug.h"
+#include "definitions.h"
 #include "hardware.h"
 #include "interrupts.h"
 #include "obj.h"
 
 // This function needs to be called at the start of main()
-void GBALINE_Init(int *argc, char **argv[]);
+EXPORT_API void GBALINE_Init(int *argc, char **argv[]);
 
 #endif // GBALINE_H__

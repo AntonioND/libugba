@@ -7,6 +7,8 @@
 
 #include <stddef.h>
 
+#include "definitions.h"
+
 typedef enum {
     IRQ_VBLANK  = 0,
     IRQ_HBLANK  = 1,
@@ -29,15 +31,15 @@ typedef void (*irq_vector)(void);
 
 // Initialize global interrupt handling. This is called before reaching
 // GBA_main(), so it isn't normally needed to call it.
-void IRQ_Init(void);
+EXPORT_API void IRQ_Init(void);
 
 // Set interrupt handler for the specified interrupt.
-void IRQ_SetHandler(irq_index index, irq_vector function);
+EXPORT_API void IRQ_SetHandler(irq_index index, irq_vector function);
 
 // Enable the specified interrupt.
-void IRQ_Enable(irq_index index);
+EXPORT_API void IRQ_Enable(irq_index index);
 
 // Disable the specified interrupt.
-void IRQ_Disable(irq_index index);
+EXPORT_API void IRQ_Disable(irq_index index);
 
 #endif // INTERRUPTS_H__

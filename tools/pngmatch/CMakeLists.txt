@@ -2,7 +2,17 @@
 #
 # Copyright (c) 2020 Antonio Niño Díaz
 
-add_executable(pngmatch pngmatch.c)
+cmake_minimum_required(VERSION 3.15)
+project(pngmatch)
+enable_language(C)
+
+set(C_STANDARD 11)
+set(C_EXTENSIONS OFF)
+set(C_STANDARD_REQUIRED ON)
+
+add_executable(pngmatch)
+
+target_sources(pngmatch PRIVATE pngmatch.c)
 
 # libpng is required
 

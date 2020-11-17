@@ -10,6 +10,10 @@ set(C_STANDARD 11)
 set(C_EXTENSIONS OFF)
 set(C_STANDARD_REQUIRED ON)
 
+# This makes GCC not export the symbols in a shared library by default. This is
+# the behaviour in MSVC, so this makes it behave the same way in both compilers.
+set(CMAKE_C_VISIBILITY_PRESET hidden)
+
 add_library(libgbaline SHARED)
 
 # Compiler-specific options
@@ -110,6 +114,7 @@ target_include_directories(libgbaline PUBLIC
 if(CMAKE_C_COMPILER_ID STREQUAL "MSVC")
     find_package(libpng REQUIRED 1.6)
     find_package(SDL2 REQUIRED)
+    include(FindLua)
     find_package(lua REQUIRED 5.2)
 
     target_link_libraries(libgbaline PRIVATE
@@ -124,14 +129,15 @@ else()
     target_include_directories(libgbaline PRIVATE
         ${PNG_INCLUDE_DIRS}
         ${SDL2_INCLUDE_DIRS}
-        ${LUA_INCLUDE_DIR}
     )
     target_link_libraries(libgbaline PRIVATE
         ${PNG_LIBRARIES}
         ${SDL2_LIBRARIES}
-        ${LUA_LIBRARIES}
     )
 endif()
+
+target_link_libraries(libgbaline PRIVATE ${LUA_LIBRARIES})
+target_include_directories(libgbaline PRIVATE ${LUA_INCLUDE_DIR})
 
 # OpenGL is optional. It can be used as library to output graphics.
 

@@ -19,4 +19,17 @@
 # define ALIGNED(x) __attribute__((aligned(x)))
 #endif
 
+// The library is built static for GBA and shared for PC
+#if defined(__GBA__)
+#  define EXPORT_API
+#else
+# if defined(_MSC_VER)
+#  define EXPORT_API __declspec(dllexport)
+# else
+#  define EXPORT_API __attribute__((visibility("default")))
+// TODO: Is this one below needed in MinGW?
+//#  define EXPORT_API __attribute__((dllexport))
+# endif
+#endif
+
 #endif // DEFINITIONS_H__

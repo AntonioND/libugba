@@ -441,7 +441,7 @@ typedef struct {
 #else
 # define GBA_RegisterUpdated(reg) \
          GBA_RegisterUpdatedOffset(((uintptr_t)&reg) - MEM_IO_ADDR)
-void GBA_RegisterUpdatedOffset(uint32_t offset);
+EXPORT_API void GBA_RegisterUpdatedOffset(uint32_t offset);
 #endif
 
 // Per-register fields definitions

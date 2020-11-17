@@ -5,6 +5,8 @@
 #ifndef OBJ_H__
 #define OBJ_H__
 
+#include "definitions.h"
+
 typedef enum {
     OBJ_MODE_NORMAL,
     OBJ_MODE_TRANSPARENT,
@@ -39,41 +41,42 @@ typedef enum {
 // Regular objects functions
 // -------------------------
 
-void OBJ_RegularInit(int index, int x, int y, oam_entry_size size,
-                     int colors256, int pal, int tile);
-void OBJ_RegularEnableSet(int index, int enable);
-void OBJ_RegularHFlipSet(int index, int enable);
-void OBJ_RegularVFlipSet(int index, int enable);
+EXPORT_API void OBJ_RegularInit(int index, int x, int y, oam_entry_size size,
+                                int colors256, int pal, int tile);
+EXPORT_API void OBJ_RegularEnableSet(int index, int enable);
+EXPORT_API void OBJ_RegularHFlipSet(int index, int enable);
+EXPORT_API void OBJ_RegularVFlipSet(int index, int enable);
 
 // Affine objects functions
 // ------------------------
 
-void OBJ_AffineInit(int index, int x, int y, oam_entry_size size, int matrix,
-                    int colors256, int pal, int tile, int doublesize);
-void OBJ_AffineMatrixSet(int index, int matrix_index);
-void OBJ_AffineDoubleSizeSet(int index, int enable);
+EXPORT_API void OBJ_AffineInit(int index, int x, int y, oam_entry_size size,
+                               int matrix, int colors256, int pal, int tile,
+                               int doublesize);
+EXPORT_API void OBJ_AffineMatrixSet(int index, int matrix_index);
+EXPORT_API void OBJ_AffineDoubleSizeSet(int index, int enable);
 
 // Common objects functions
 // ------------------------
 
-void OBJ_PositionSet(int index, int x, int y);
-void OBJ_PositionGet(int index, int *x, int *y);
+EXPORT_API void OBJ_PositionSet(int index, int x, int y);
+EXPORT_API void OBJ_PositionGet(int index, int *x, int *y);
 
-void OBJ_ModeSet(int index, oam_entry_mode mode);
+EXPORT_API void OBJ_ModeSet(int index, oam_entry_mode mode);
 
-void OBJ_GetShapeSize(oam_entry_size size,
-                      uint16_t *attr0_shape, uint16_t *attr1_size);
-oam_entry_size OBJ_GetSizeFromDimensions(int width, int height);
-void OBJ_SizeSet(int index, oam_entry_size size);
+EXPORT_API void OBJ_GetShapeSize(oam_entry_size size,
+                                 uint16_t *attr0_shape, uint16_t *attr1_size);
+EXPORT_API oam_entry_size OBJ_GetSizeFromDimensions(int width, int height);
+EXPORT_API void OBJ_SizeSet(int index, oam_entry_size size);
 
-void OBJ_MosaicSet(int index, int enable);
+EXPORT_API void OBJ_MosaicSet(int index, int enable);
 
 // Only for 16 color sprites
-void OBJ_Palette16Set(int index, int palette);
+EXPORT_API void OBJ_Palette16Set(int index, int palette);
 
-void OBJ_PrioritySet(int index, int priority);
+EXPORT_API void OBJ_PrioritySet(int index, int priority);
 
 // This function detects if the sprite is in 16 or 256 color mode
-void OBJ_TileSet(int index, int tile);
+EXPORT_API void OBJ_TileSet(int index, int tile);
 
 #endif // OBJ_H__
