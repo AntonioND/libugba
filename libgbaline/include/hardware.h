@@ -113,34 +113,60 @@ typedef struct {
 #define MEM_OAM_NUMBER_ENTRIES      (128)
 #define MEM_OAM_ENTRIES             ((oam_entry_t *)MEM_OAM)
 
+// Attribute 0
+
 #define ATTR0_Y(v)                  ((v) & 0xFF)
+#define ATTR0_Y_MASK                (0xFF)
+
 #define ATTR0_REGULAR               (0 << 8)
 #define ATTR0_AFFINE                (1 << 8)
+
 #define ATTR0_DOUBLE_SIZE           (1 << 9) // Affine objects
 #define ATTR0_DISABLE               (1 << 9) // Regular objects
+
+#define ATTR0_MODE_MASK             (3 << 10)
 #define ATTR0_MODE_NORMAL           (0 << 10)
 #define ATTR0_MODE_TRANSPARENT      (1 << 10)
 #define ATTR0_MODE_WINDOW           (2 << 10)
+
 #define ATTR0_MOSAIC                (1 << 12)
+
 #define ATTR0_16_COLORS             (0 << 13)
 #define ATTR0_256_COLORS            (1 << 13)
+
+#define ATTR0_SHAPE_MASK            (3 << 14)
 #define ATTR0_SHAPE_SQUARE          (0 << 14)
 #define ATTR0_SHAPE_HORIZONTAL      (1 << 14)
 #define ATTR0_SHAPE_VERTICAL        (2 << 14)
 
+// Attribute 1
+
 #define ATTR1_X(v)                  ((v) & 0xFF)
+#define ATTR1_X_MASK                (0xFF)
+
 #define ATTR1_AFFINE_MATRIX(v)      (((v) & 0x1F) << 9) // Affine objects
+#define ATTR1_AFFINE_MATRIX_MASK    (0x1F << 9) // Affine objects
+
 #define ATTR1_REGULAR_HFLIP         (1 << 12) // Regular objects
 #define ATTR1_REGULAR_VFLIP         (1 << 13) // Regular objects
+
+#define ATTR1_SIZE_MASK             (3 << 14)
 #define ATTR1_SIZE_0                (0 << 14)
 #define ATTR1_SIZE_1                (1 << 14)
 #define ATTR1_SIZE_2                (2 << 14)
 #define ATTR1_SIZE_3                (3 << 14)
 
+// Attribute 2
+
 #define ATTR2_16_COLOR_TILE(v)      ((v) & 0x3FF)
 #define ATTR2_256_COLOR_TILE(v)     (((v) & 0x1FF) << 1)
+#define ATTR2_TILE_MASK             (0x3FF)
+
 #define ATTR2_PRIORITY(v)           (((v) & 0x3) << 10)
+#define ATTR2_PRIORITY_MASK         (0x3 << 10)
+
 #define ATTR2_PALETTE(v)            (((v) & 0xF) << 12) // 16 color objects
+#define ATTR2_PALETTE_MASK          (0xf << 12)
 
 #pragma pack(push, 1)
 typedef struct {
