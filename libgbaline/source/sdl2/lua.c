@@ -40,10 +40,19 @@ void Script_FrameDrawn(void)
         // Wait here until the script thread lets the game thread continue
         is_waiting = 1;
 
+        int i = 0;
         while (is_waiting)
-            SDL_Delay(0);
-
-        // TODO: Exit after one second of inactivity, for example
+        {
+            SDL_Delay(1);
+            i++;
+            if (i == 2000)
+            {
+                // Exit after two seconds of inactivity in case the script
+                // forgot to finish the wait period.
+                Debug_Log("%s: Timeout", __func__);
+                break;
+            }
+        }
     }
 }
 
