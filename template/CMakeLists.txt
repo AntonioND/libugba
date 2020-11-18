@@ -31,3 +31,7 @@ target_sources(${EXECUTABLE_NAME} PRIVATE
 if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/graphics)
     add_grit_files(graphics ${EXECUTABLE_NAME})
 endif()
+
+if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/data)
+    add_data_files(data ${EXECUTABLE_NAME})
+endif()
