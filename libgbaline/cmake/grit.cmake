@@ -46,6 +46,7 @@ function(add_grit_files source_directory destination_target)
         add_custom_command(
             OUTPUT ${OUT_FILES}
             COMMAND ${GRIT_PATH} ${GFX_FILE} -ftc -o ${GFX_NAME}
+            COMMAND $<TARGET_FILE:toncfix> ${OUT_C_FILE}
             DEPENDS ${GRIT_FILE} ${GFX_FILE}
             WORKING_DIRECTORY ${OUT_DIR}
         )
