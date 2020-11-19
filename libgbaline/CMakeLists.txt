@@ -2,14 +2,6 @@
 #
 # Copyright (c) 2020 Antonio Niño Díaz
 
-cmake_minimum_required(VERSION 3.15)
-project(libgbaline)
-enable_language(C)
-
-set(C_STANDARD 11)
-set(C_EXTENSIONS OFF)
-set(C_STANDARD_REQUIRED ON)
-
 # This makes GCC not export the symbols in a shared library by default. This is
 # the behaviour in MSVC, so this makes it behave the same way in both compilers.
 set(CMAKE_C_VISIBILITY_PRESET hidden)
@@ -106,26 +98,18 @@ target_sources(libgbaline PRIVATE
 target_include_directories(libgbaline PUBLIC
     include
 )
+
 # Link with libraries and check build options
 # -------------------------------------------
 
 # libpng, SLD2 and Lua are required
 
 if(CMAKE_C_COMPILER_ID STREQUAL "MSVC")
-    find_package(libpng REQUIRED 1.6)
-    find_package(SDL2 REQUIRED)
-    include(FindLua)
-    find_package(lua REQUIRED 5.2)
-
     target_link_libraries(libgbaline PRIVATE
         png
         SDL2::SDL2 SDL2::SDL2main
     )
 else()
-    find_package(PNG REQUIRED 1.6)
-    find_package(SDL2 REQUIRED)
-    find_package(Lua REQUIRED 5.2)
-
     target_include_directories(libgbaline PRIVATE
         ${PNG_INCLUDE_DIRS}
         ${SDL2_INCLUDE_DIRS}
@@ -140,14 +124,6 @@ target_link_libraries(libgbaline PRIVATE ${LUA_LIBRARIES})
 target_include_directories(libgbaline PRIVATE ${LUA_INCLUDE_DIR})
 
 # OpenGL is optional. It can be used as library to output graphics.
-
-find_package(OpenGL)
-
-if(OPENGL_FOUND)
-    option(ENABLE_OPENGL "Compile with OpenGL" ON)
-else()
-    set(ENABLE_OPENGL OFF)
-endif()
 
 if(ENABLE_OPENGL)
     target_compile_definitions(libgbaline PRIVATE -DENABLE_OPENGL)

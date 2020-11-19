@@ -17,9 +17,8 @@ SDL2 port
 
 - Add debugger windows from GiiBiiAdvance.
 - Add helper to configure user input.
-- Add bin2o support to CMake.
 
 General
 -------
 
-- CI scripts for mGBA and PC.
+- CI scripts for GBA ROMs.
