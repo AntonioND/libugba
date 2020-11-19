@@ -59,7 +59,7 @@ void generate_transformed_name(const char *path)
 
     size_t start = 0;
 
-    for (ssize_t i = len - 1; i > 0; i--)
+    for (int i = len - 1; i > 0; i--)
     {
         if (path[i] == '/')
         {
@@ -125,7 +125,7 @@ int main(int argc, char **argv)
         "\n";
 
     fprintf(fc, "%s", c_header);
-    fprintf(fc, "const uint8_t %s[%zu] ALIGNED(8) =\n", base_array_name, size);
+    fprintf(fc, "ALIGNED(4) const uint8_t %s[%zu] =\n", base_array_name, size);
     fprintf(fc, "{\n", base_array_name);
 
     uint8_t *data = file;

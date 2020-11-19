@@ -7,9 +7,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-const char *search_string =
-    "__attribute__((aligned(4))) __attribute__((visibility(\"hidden\")))";
-
 #define MAX_PATH_LEN    2048
 
 char temp_path[MAX_PATH_LEN];
@@ -54,7 +51,7 @@ void file_foad(const char *path, void **buffer, size_t *size)
 
 void generate_temp_file(char *file, size_t size, const char *path)
 {
-    FILE *ftemp = fopen(path, "w");
+    FILE *ftemp = fopen(path, "wb");
     if (ftemp == NULL)
     {
         printf("Can't open %s\n", temp_path);
@@ -74,13 +71,36 @@ void generate_temp_file(char *file, size_t size, const char *path)
     // First, save the cross-platform header
     fprintf(ftemp, "%s", c_header);
 
+    const char *search_start =
+        "const unsigned";
+
+    const char *search_aligned =
+        "__attribute__((aligned(4)))";
+
+    const char *search_visibility =
+        "__attribute__((visibility(\"hidden\")))";
+
     while (size > 0)
     {
-        if (strncmp(file, search_string, strlen(search_string)) == 0)
+        if (strncmp(file, search_start, strlen(search_start)) == 0)
         {
-            fprintf(ftemp, "ALIGNED(4) ");
+            fprintf(ftemp, "ALIGNED(4) const unsigned");
 
-            size_t len = strlen(search_string);
+            size_t len = strlen(search_start);
+            file += len;
+            size -= len;
+        }
+
+        if (strncmp(file, search_aligned, strlen(search_aligned)) == 0)
+        {
+            size_t len = strlen(search_aligned);
+            file += len;
+            size -= len;
+        }
+
+        if (strncmp(file, search_visibility, strlen(search_visibility)) == 0)
+        {
+            size_t len = strlen(search_visibility);
             file += len;
             size -= len;
         }
