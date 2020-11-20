@@ -3,26 +3,29 @@
 // Copyright (c) 2020 Antonio Niño Díaz
 
 #ifdef __thumb__
-# define SWI(n) asm volatile("swi "#n "\n" :::  "r0", "r1", "r2", "r3")
+# define SWI_NUMBER(n) "swi "#n "\n"
 #else
-# define SWI(n) asm volatile("swi "#n " << 16\n" :::  "r0", "r1", "r2", "r3")
+# define SWI_NUMBER(n) "swi "#n " << 16\n"
 #endif
 
 void SWI_Halt(void)
 {
-    SWI(0x02);
+    asm volatile(SWI_NUMBER(0x02) :::
+                 "r0", "r1", "r2", "r3", "memory");
 }
 
 #if 0
 void SWI_IntrWait(uint32_t discard_old_flags, uint32_t wait_flags)
 {
-    SWI(0x04);
+    asm volatile(SWI_NUMBER(0x04) :::
+                 "r0", "r1", "r2", "r3", "memory");
 }
 #endif
 
 void SWI_VBlankIntrWait(void)
 {
-    SWI(0x05);
+    asm volatile(SWI_NUMBER(0x05) :::
+                 "r0", "r1", "r2", "r3", "memory");
 }
 
 #if 0
