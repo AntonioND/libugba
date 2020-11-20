@@ -3,7 +3,7 @@
 # Copyright (c) 2020 Antonio Niño Díaz
 
 add_subdirectory(framebuffer)
-add_subdirectory(sprite_16_colors_api)
-add_subdirectory(sprite_16_affine)
-add_subdirectory(sprite_16_colors_low_level)
-add_subdirectory(sprite_256_colors_low_level)
+add_subdirectory(sprite_affine_16col)
+add_subdirectory(sprite_lowlevel_16col)
+add_subdirectory(sprite_lowlevel_256col)
+add_subdirectory(sprite_regular_16col)
