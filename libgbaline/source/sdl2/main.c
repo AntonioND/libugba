@@ -10,7 +10,7 @@
 
 #include "debug_utils.h"
 #include "input_utils.h"
-#include "lua.h"
+#include "lua_handler.h"
 
 #include "core/video.h"
 #include "gui/win_main.h"
