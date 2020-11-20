@@ -35,8 +35,9 @@ GRAPHICS	:= graphics
 #---------------------------------------------------------------------------------
 ARCH	:=	-mthumb -mthumb-interwork
 
-CFLAGS	:=	-g -Wall -O2\
-		-mcpu=arm7tdmi -mtune=arm7tdmi\
+CFLAGS	:=	-g -Wall -O2 \
+		-ffunction-sections -fdata-sections -Wl,--gc-sections \
+		-mcpu=arm7tdmi -mtune=arm7tdmi \
 		$(ARCH)
 
 CFLAGS	+=	$(INCLUDE) -D__GBA__

@@ -19,7 +19,9 @@ ARCH	:=	-mthumb -mthumb-interwork
 #---------------------------------------------------------------------------------
 # options for code generation
 #---------------------------------------------------------------------------------
-CFLAGS	:=	-g -O3 -Wall -Wno-switch -Wno-multichar $(ARCH) $(INCLUDE) -D__GBA__
+CFLAGS	:=	-g -O3 -Wall -Wno-switch -Wno-multichar \
+		-ffunction-sections -fdata-sections -Wl,--gc-sections \
+		$(ARCH) $(INCLUDE) -D__GBA__
 ASFLAGS	:=	-g -Wa,--warn $(ARCH) -D__GBA__
 
 #---------------------------------------------------------------------------------
