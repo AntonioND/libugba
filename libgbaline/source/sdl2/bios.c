@@ -6,6 +6,7 @@
 
 #include <gbaline.h>
 
+#include "debug_utils.h"
 #include "input_utils.h"
 #include "lua_handler.h"
 
@@ -102,4 +103,40 @@ void SWI_VBlankIntrWait(void)
 
     while (current_vcount != 160)
         do_scanline_draw();
+}
+
+void SWI_ObjAffineSet(obj_affine_src_t *src, void *dst,
+                      uint32_t count, uint32_t increment)
+{
+    if (increment & 1)
+    {
+        Debug_Log("%s: Please, set increment to a multiple of 2", __func__);
+    }
+
+    int16_t *out = dst;
+
+    for (uint32_t i = 0; i < count; i++)
+    {
+        float sx = ((float)src->sx) / (float)(1 << 8);
+        float sy = ((float)src->sy) / (float)(1 << 8);
+        float angle = (float)2.0 * (float)M_PI
+                      * (((float)(uint8_t)(src->angle >> 8)) / (float)0xFF);
+        src++;
+
+        float sin_ = sin(angle);
+        float cos_ = cos(angle);
+        int16_t A = (int16_t)(cos_ * (float)(1 << 8) * sx);
+        int16_t B = (int16_t)(-sin_ * (float)(1 << 8) * sx);
+        int16_t C = (int16_t)(sin_ * (float)(1 << 8) * sy);
+        int16_t D = (int16_t)(cos_ * (float)(1 << 8) * sy);
+
+        *out = A;
+        out += increment / 2;
+        *out = B;
+        out += increment / 2;
+        *out = C;
+        out += increment / 2;
+        *out = D;
+        out += increment / 2;
+    }
 }

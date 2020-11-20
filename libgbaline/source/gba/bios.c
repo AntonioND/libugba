@@ -2,6 +2,8 @@
 //
 // Copyright (c) 2020 Antonio Niño Díaz
 
+#include <gbaline.h>
+
 #ifdef __thumb__
 # define SWI_NUMBER(n) "swi "#n "\n"
 #else
@@ -41,7 +43,21 @@ SWI_CpuSet
 SWI_CpuFastSet
 SWI_GetBiosChecksum
 SWI_BgAffineSet
-SWI_ObjAffineSet
+#endif
+
+void SWI_ObjAffineSet(obj_affine_src_t *src, void *dst,
+                      uint32_t count, uint32_t increment)
+{
+    asm volatile("mov r0, %0\n"
+                 "mov r1, %1\n"
+                 "mov r2, %2\n"
+                 "mov r3, %3\n"
+                 SWI_NUMBER(0x0F) ::
+                 "r" (src), "r" (dst), "r" (count), "r" (increment) :
+                 "r0", "r1", "r2", "r3", "memory");
+}
+
+#if 0
 SWI_BitUnPack
 SWI_LZ77UnCompWram8 // 8 bit version
 SWI_LZ77UnCompVram16 // 16 bit version
