@@ -102,11 +102,40 @@ void SWI_ObjAffineSet(const obj_affine_src_t *src, void *dst,
 
 #if 0
 SWI_BitUnPack
-SWI_LZ77UnCompWram8 // 8 bit version
-SWI_LZ77UnCompVram16 // 16 bit version
+#endif
+
+void SWI_LZ77UnCompReadNormalWrite8bit(const void *source, void *dest)
+{
+    // TODO: Verify arguments? Alignment?
+
+    register uint32_t source_ asm("r0") = (uint32_t)source;
+    register uint32_t dest_ asm("r1") = (uint32_t)dest;
+
+    asm volatile(
+        SWI_NUMBER(0x11) ::
+        "r"(source_), "r"(dest_) :
+        "r2", "r3", "memory"
+    );
+}
+
+void SWI_LZ77UnCompReadNormalWrite16bit(const void *source, void *dest)
+{
+    // TODO: Verify arguments? Alignment?
+
+    register uint32_t source_ asm("r0") = (uint32_t)source;
+    register uint32_t dest_ asm("r1") = (uint32_t)dest;
+
+    asm volatile(
+        SWI_NUMBER(0x12) ::
+        "r"(source_), "r"(dest_) :
+        "r2", "r3", "memory"
+    );
+}
+
+#if 0
 SWI_HuffUnComp
-SWI_RLUnCompWram8 // 8 bit version
-SWI_RLUnCompVram16 // 16 bit version
+SWI_RLUnCompWram
+SWI_RLUnCompVram
 SWI_Diff8bitUnFilterWram
 SWI_Diff8bitUnFilterVram
 SWI_Diff16bitUnFilter

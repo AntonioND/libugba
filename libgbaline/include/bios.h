@@ -42,4 +42,10 @@ EXPORT_API
 void SWI_ObjAffineSet(const obj_affine_src_t *src, void *dst,
                       uint32_t count, uint32_t increment);
 
+EXPORT_API
+void SWI_LZ77UnCompReadNormalWrite8bit(const void *source, void *dest);
+
+EXPORT_API
+void SWI_LZ77UnCompReadNormalWrite16bit(const void *source, void *dest);
+
 #endif // BIOS_H__
