@@ -10,6 +10,7 @@
 #include "debug.h"
 #include "definitions.h"
 #include "hardware.h"
+#include "input.h"
 #include "interrupts.h"
 #include "obj.h"
 #include "vram.h"
