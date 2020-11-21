@@ -1,0 +1,8 @@
+# Export tiles
+-gt
+
+# 16 Colors (bit depth = 4 bit per pixel)
+-gB4
+
+# Compress with LZ77
+-gzl

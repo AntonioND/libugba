@@ -161,7 +161,7 @@ soundbank.bin soundbank.h : $(AUDIOFILES)
 	@$(bin2o)
 
 #---------------------------------------------------------------------------------
-# This rule creates assembly source files using grit
+# This rule creates C source files using grit
 # grit takes an image file and a .grit describing how the file is to be processed
 # add additional rules like this for each image extension
 # you use in the graphics folders

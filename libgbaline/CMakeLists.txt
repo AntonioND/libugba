@@ -139,3 +139,7 @@ add_subdirectory(tools)
 
 include(cmake/bin2c.cmake)
 include(cmake/grit.cmake)
+
+# Add graphics to library, like the default font
+
+add_grit_files(graphics libgbaline)
