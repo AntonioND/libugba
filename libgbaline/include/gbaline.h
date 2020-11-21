@@ -12,6 +12,7 @@
 #include "hardware.h"
 #include "interrupts.h"
 #include "obj.h"
+#include "vram.h"
 
 // This function needs to be called at the start of main()
 EXPORT_API void GBALINE_Init(int *argc, char **argv[]);
