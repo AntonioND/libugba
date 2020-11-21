@@ -503,7 +503,7 @@ EXPORT_API void GBA_RegisterUpdatedOffset(uint32_t offset);
 #define BGCNT_BG_PRIORITY(n)            ((n) & BGCNT_BG_PRIORITY_MASK)
 
 // The base address is 0x06000000 + 0x4000 * x (0x06000000 to 0x0600C000)
-#define BGCNT_TILES_BASE(n) (((((n) - 0x06000000) / 0x4000) & 0x3) << 2)
+#define BGCNT_TILES_BASE(n) (((((n) - MEM_VRAM_ADDR) / 0x4000) & 0x3) << 2)
 
 #define BGCNT_MOSAIC_ENABLE             (1 << 6)
 
@@ -511,7 +511,7 @@ EXPORT_API void GBA_RegisterUpdatedOffset(uint32_t offset);
 #define BGCNT_256_COLORS                (1 << 7)
 
 // The base address is 0x06000000 + 0x800 * x (0x06000000 to 0x0600F800)
-#define BGCNT_MAP_BASE(n)   (((((n) - 0x06000000) / 0x800) & 0x1F) << 8)
+#define BGCNT_MAP_BASE(n)   (((((n) - MEM_VRAM_ADDR) / 0x800) & 0x1F) << 8)
 
 #define BGCNT_BG2_BG3_WRAP              (1 << 13) // For affine backgrounds
 
