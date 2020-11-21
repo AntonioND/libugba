@@ -52,31 +52,18 @@ int main(int argc, char *argv[])
     // Load the palettes
     // -----------------
 
-    // Calculate the base address of the sprite palette. There are 16 possible
-    // palettes of 16 colors each. The base address where they can be found is
-    // MEM_PALETTE_OBJ. The 16 palettes could be used together as one 256 color
-    // palette.
-
-    uint16_t *spr_pal;
-
-    spr_pal = MEM_PALETTE_OBJ + (BALL_RED_PALETTE * 16);
-    SWI_CpuSet_Copy16(ball_redPal, spr_pal, ball_redPalLen);
-
-    spr_pal = MEM_PALETTE_OBJ + (BALL_GREEN_PALETTE * 16);
-    SWI_CpuSet_Copy16(ball_greenPal, spr_pal, ball_greenPalLen);
+    VRAM_SpritePalette16Copy(ball_redPal, ball_redPalLen,
+                             BALL_RED_PALETTE);
+    VRAM_SpritePalette16Copy(ball_greenPal, ball_greenPalLen,
+                             BALL_GREEN_PALETTE);
 
     // Load the tiles
     // --------------
 
-    // 4 bits (16 colors), 8x8, transform from bits to bytes
-#define TILE_SIZE (4 * 8 * 8) / 8
-    uint8_t *spr_tiles;
-
-    spr_tiles = (uint8_t *)MEM_VRAM_OBJ + (BALL_RED_TILES_BASE * TILE_SIZE);
-    SWI_CpuFastSet_Copy32(ball_redTiles, spr_tiles, ball_redTilesLen);
-
-    spr_tiles = (uint8_t *)MEM_VRAM_OBJ + (BALL_GREEN_TILES_BASE * TILE_SIZE);
-    SWI_CpuFastSet_Copy32(ball_greenTiles, spr_tiles, ball_greenTilesLen);
+    VRAM_SpriteTiles16Copy(ball_redTiles, ball_redTilesLen,
+                           BALL_RED_TILES_BASE);
+    VRAM_SpriteTiles16Copy(ball_greenTiles, ball_greenTilesLen,
+                           BALL_GREEN_TILES_BASE);
 
     // Turn on the screen
     // ------------------
@@ -95,5 +82,3 @@ int main(int argc, char *argv[])
     while (1)
         SWI_VBlankIntrWait();
 }
-
-
