@@ -13,6 +13,22 @@
 EXPORT_API void SWI_Halt(void);
 EXPORT_API void SWI_VBlankIntrWait(void);
 
+// For SWI_CpuSet() and SWI_CpuFastSet()
+#define SWI_MODE_COPY   (0 << 24)
+#define SWI_MODE_FILL   (1 << 24)
+// For SWI_CpuSet() only
+#define SWI_MODE_16BIT  (0 << 26)
+#define SWI_MODE_32BIT  (1 << 26)
+
+// Source and destination must be aligned to 4 bytes for 32-bit copies, or 2
+// bytes for 16-bit copies. The length is expressed either in 32-bit or 16-bit
+// chunks (words or halfwords).
+EXPORT_API void SWI_CpuSet(const void *src, void *dst, uint32_t len_mode);
+
+// Source and destination must be aligned to 4 bytes. The length must be a
+// multiple of 8 bytes.
+EXPORT_API void SWI_CpuFastSet(const void *src, void *dst, uint32_t len_mode);
+
 #pragma pack(push, 1)
 typedef struct {
     int16_t sx;     // 8.8 fixed point

@@ -46,8 +46,39 @@ SWI_DivArm
 SWI_Sqrt
 SWI_ArcTan
 SWI_ArcTan2
-SWI_CpuSet
-SWI_CpuFastSet
+#endif
+
+void SWI_CpuSet(const void *src, void *dst, uint32_t len_mode)
+{
+    // TODO: Verify arguments? Alignment?
+
+    register uint32_t src_ asm("r0") = (uint32_t)src;
+    register uint32_t dst_ asm("r1") = (uint32_t)dst;
+    register uint32_t len_mode_ asm("r2") = len_mode;
+
+    asm volatile(
+        SWI_NUMBER(0x0B) ::
+        "r"(src_), "r"(dst_), "r"(len_mode_) :
+        "r3", "memory"
+    );
+}
+
+void SWI_CpuFastSet(const void *src, void *dst, uint32_t len_mode)
+{
+    // TODO: Verify arguments? Alignment?
+
+    register uint32_t src_ asm("r0") = (uint32_t)src;
+    register uint32_t dst_ asm("r1") = (uint32_t)dst;
+    register uint32_t len_mode_ asm("r2") = len_mode;
+
+    asm volatile(
+        SWI_NUMBER(0x0C) ::
+        "r"(src_), "r"(dst_), "r"(len_mode_) :
+        "r3", "memory"
+    );
+}
+
+#if 0
 SWI_GetBiosChecksum
 SWI_BgAffineSet
 #endif

@@ -105,6 +105,68 @@ void SWI_VBlankIntrWait(void)
         do_scanline_draw();
 }
 
+void SWI_CpuSet(const void *src, void *dst, uint32_t len_mode)
+{
+    int count = len_mode & 0x001FFFFF;
+    uint32_t mode = len_mode & ~0x001FFFFF;
+
+    if (mode & SWI_MODE_32BIT)
+    {
+        uint32_t *src_ = (uint32_t *)((uintptr_t)src & ~3);
+        uint32_t *dst_ = (uint32_t *)((uintptr_t)dst & ~3);
+
+        if (mode & SWI_MODE_FILL)
+        {
+            uint32_t fill = *src_;
+            while (count--)
+                *dst_++ = fill;
+        }
+        else // Copy
+        {
+            while (count--)
+                *dst_++ = *src_++;
+        }
+    }
+    else // 16 bit
+    {
+        uint16_t *src_ = (uint16_t *)((uintptr_t)src & ~1);
+        uint16_t *dst_ = (uint16_t *)((uintptr_t)dst & ~1);
+
+        if (mode & SWI_MODE_FILL)
+        {
+            uint16_t fill = *src_;
+            while (count--)
+                *dst_++ = fill;
+        }
+        else // Copy
+        {
+            while (count--)
+                *dst_++ = *src_++;
+        }
+    }
+}
+
+void SWI_CpuFastSet(const void *src, void *dst, uint32_t len_mode)
+{
+    int count = len_mode & 0x001FFFF8; // Must be a multiple of 8 words
+    uint32_t mode = len_mode & ~0x001FFFFF;
+
+    uint32_t *src_ = (uint32_t *)((uintptr_t)src & ~3);
+    uint32_t *dst_ = (uint32_t *)((uintptr_t)dst & ~3);
+
+    if (mode & SWI_MODE_FILL)
+    {
+        uint32_t fill = *src_;
+        while (count--)
+            *dst_++ = fill;
+    }
+    else // Copy
+    {
+        while (count--)
+            *dst_++ = *src_++;
+    }
+}
+
 void SWI_ObjAffineSet(const obj_affine_src_t *src, void *dst,
                       uint32_t count, uint32_t increment)
 {
