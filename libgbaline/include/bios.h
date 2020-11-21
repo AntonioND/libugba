@@ -23,10 +23,7 @@ typedef struct {
 #pragma pack(pop)
 
 EXPORT_API
-void SWI_ObjAffineSet(obj_affine_src_t *src, void *dst,
+void SWI_ObjAffineSet(const obj_affine_src_t *src, void *dst,
                       uint32_t count, uint32_t increment);
-EXPORT_API
-void SWI_ObjAffineSet_OAM(obj_affine_src_t *src, oam_matrix_entry_t *dst,
-                          uint32_t count);
 
 #endif // BIOS_H__

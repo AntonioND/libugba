@@ -4,7 +4,7 @@
 
 #include <gbaline.h>
 
-void SWI_ObjAffineSet_OAM(obj_affine_src_t *src, oam_matrix_entry_t *dst,
+void SWI_ObjAffineSet_OAM(const obj_affine_src_t *src, oam_matrix_entry_t *dst,
                           uint32_t count)
 {
     // Start writing at the right offset in the OAM entry

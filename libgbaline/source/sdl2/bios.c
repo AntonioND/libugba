@@ -105,7 +105,7 @@ void SWI_VBlankIntrWait(void)
         do_scanline_draw();
 }
 
-void SWI_ObjAffineSet(obj_affine_src_t *src, void *dst,
+void SWI_ObjAffineSet(const obj_affine_src_t *src, void *dst,
                       uint32_t count, uint32_t increment)
 {
     if (increment & 1)
