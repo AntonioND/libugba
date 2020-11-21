@@ -10,16 +10,18 @@ void VBLHandler(void)
 {
     b = 0;
 
-    r = ~REG_KEYINPUT & 0x1F;
+    uint16_t keys_held = KEYS_Held();
 
-    ((uint16_t *)MEM_PALETTE_ADDR)[0] = (b << 10) | (g << 5) | r;
+    r = keys_held & 0x1F;
+
+    MEM_BACKDROP_COLOR = (b << 10) | (g << 5) | r;
 }
 
 void HBLHandler(void)
 {
     g = REG_VCOUNT;
 
-    ((uint16_t *)MEM_PALETTE_ADDR)[0] = (b << 10) | (g << 5) | r;
+    MEM_BACKDROP_COLOR = (b << 10) | (g << 5) | r;
 }
 
 void VcountHandler(void)
@@ -45,6 +47,9 @@ int main(int argc, char *argv[])
     while (1)
     {
         SWI_VBlankIntrWait();
+
+        KEYS_Update();
+
 #if 0
         while (REG_VCOUNT < 160)
         {
