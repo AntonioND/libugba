@@ -5,3 +5,4 @@
 include(cmake/example.cmake)
 
 add_subdirectory(graphics)
+add_subdirectory(input)
