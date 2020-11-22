@@ -46,7 +46,8 @@ static void handle_vbl(void)
     // Render main window every frame
     Win_MainRender();
 
-    // Update input state
+    // Update input state. Do this before invoking the script handler, as the
+    // script can overwrite the input.
     Input_Update_GBA();
 
     // Update script handler

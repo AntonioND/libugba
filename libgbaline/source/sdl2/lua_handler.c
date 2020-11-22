@@ -129,6 +129,60 @@ static int lua_screenshot(lua_State *L)
     return 0;
 }
 
+uint16_t get_bit_from_key_name(const char *name)
+{
+    struct {
+        const char *name;
+        uint16_t mask;
+    } keyinfo[10] = {
+        { "A", KEY_A },
+        { "B", KEY_B },
+        { "SELECT", KEY_SELECT },
+        { "START", KEY_START },
+        { "RIGHT", KEY_RIGHT },
+        { "LEFT", KEY_LEFT },
+        { "UP", KEY_UP },
+        { "DOWN", KEY_DOWN },
+        { "R", KEY_R },
+        { "L", KEY_L },
+    };
+
+    for (int i = 0; i < 10; i++)
+    {
+        if (strcmp(keyinfo[i].name, name) == 0)
+            return keyinfo[i].mask;
+    }
+
+    Debug_Log("%s: Unknown name: %s", __func__, name);
+    return 0;
+}
+
+static int lua_set_input(lua_State *L)
+{
+    // Number of arguments
+    int narg = lua_gettop(L);
+
+    Debug_Log("%s()", __func__);
+
+    uint16_t pressed = 0;
+
+    for (int i = 0; i < narg; i++)
+    {
+        const char *name = lua_tostring(L, -1);
+
+        Debug_Log("    %s", name);
+
+        pressed |= get_bit_from_key_name(name);
+
+        lua_pop(L, 1);
+    }
+
+    REG_KEYINPUT = ~pressed;
+
+    // Number of results
+    return 0;
+}
+
 static int lua_exit(lua_State *L)
 {
     // Number of arguments
@@ -171,6 +225,7 @@ static int Script_Runner(void unused__ *ptr)
     lua_register(L, "run_frames_and_pause", lua_run_frames_and_pause);
     lua_register(L, "continue", lua_continue);
     lua_register(L, "screenshot", lua_screenshot);
+    lua_register(L, "set_input", lua_set_input);
     lua_register(L, "exit", lua_exit);
 
     // Run script with 0 arguments and expect one return value
