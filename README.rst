@@ -55,6 +55,7 @@ To generate GBA ROMs:
 To generate PC executables:
 
 - GCC, Clang, MSVC or another compiler supported by CMake.
+- CMake 3.15 or later
 - SDL2
 - libpng 1.6 or later
 - liblua 5.2 or later
