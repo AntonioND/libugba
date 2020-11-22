@@ -30,7 +30,7 @@ static Uint32 _fps_callback_function(Uint32 interval, unused__ void *param)
 
     char caption[60];
     snprintf(caption, sizeof(caption),
-             "libgbaine: %d fps - %.2f%%", WinMain_FPS,
+             "ugba: %d fps - %.2f%%", WinMain_FPS,
              (float)WinMain_FPS * 10.0f / 6.0f);
 
     WH_SetCaption(WinIDMain, caption);
@@ -185,7 +185,7 @@ int Win_MainCreate(void)
         return 1;
     }
 
-    WH_SetCaption(WinIDMain, "libgbaine");
+    WH_SetCaption(WinIDMain, "ugba");
 
     WH_SetEventCallback(WinIDMain, Win_MainEventCallback);
     WH_SetEventMainWindow(WinIDMain);
