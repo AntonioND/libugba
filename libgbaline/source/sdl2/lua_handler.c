@@ -105,15 +105,25 @@ static int lua_screenshot(lua_State *L)
 {
     // Number of arguments
     int narg = lua_gettop(L);
-    if (narg != 0)
+    if (narg == 0)
+    {
+        Debug_Log("%s()", __func__);
+        Debug_Screenshot(NULL);
+    }
+    else if (narg == 1)
+    {
+        const char *name = lua_tostring(L, -1);
+
+        Debug_Log("%s(%s)", __func__, name);
+        Debug_Screenshot(name);
+
+        lua_pop(L, 1);
+    }
+    else
     {
         Debug_Log("%s(): Invalid number of arguments: %d", __func__, narg);
         return 0;
     }
-
-    Debug_Log("%s()", __func__);
-
-    Debug_Screenshot();
 
     // Number of results
     return 0;

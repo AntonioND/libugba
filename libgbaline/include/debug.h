@@ -14,9 +14,9 @@
 #include "definitions.h"
 
 #ifdef __GBA__
-#define Debug_Screenshot()  do { } while (0)
+#define Debug_Screenshot(n)  do { } while (0)
 #else
-EXPORT_API void Debug_Screenshot(void);
+EXPORT_API void Debug_Screenshot(const char *name);
 #endif
 
 #endif // DEBUG_H__

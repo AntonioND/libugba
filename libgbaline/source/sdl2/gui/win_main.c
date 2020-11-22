@@ -242,7 +242,10 @@ void Win_MainLoopHandle(void)
 #endif
 }
 
-void Debug_Screenshot(void)
+void Debug_Screenshot(const char *name)
 {
-    Save_PNG("screenshot.png", &GBA_SCREEN[0], 240, 160, 0);
+    if (name == NULL)
+        name = "screenshot.png";
+
+    Save_PNG(name, &GBA_SCREEN[0], 240, 160, 0);
 }
