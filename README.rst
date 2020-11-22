@@ -68,11 +68,8 @@ Note: If you don't install devkitPro because you only want to build the PC
 executables, you still need to get Grit to convert the graphics into the right
 format for the GBA: https://github.com/devkitPro/grit/releases
 
-In the following steps, you will need to pass it to cmake like this:
-
-.. code:: bash
-
-   cmake -DGRIT_PATH=/path/to/grit
+You'll need to make sure that CMake can find it by adding it to your system's
+``PATH`` environment variable.
 
 4. Build PC library and examples on Linux
 -----------------------------------------

@@ -2,9 +2,13 @@
 #
 # Copyright (c) 2020 Antonio Niño Díaz
 
-# Default Grit path
-set(GRIT_PATH "$ENV{DEVKITPRO}/tools/bin/grit"
-    CACHE STRING "Path to the Grit executable")
+find_program(GRIT_PATH
+    NAMES
+        grit
+    HINTS
+        "$ENV{DEVKITPRO}/tools/bin/"
+    REQUIRED
+)
 
 function(add_grit_files source_directory destination_target)
 
