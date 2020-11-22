@@ -18,6 +18,8 @@ static char *script_path = NULL;
 static SDL_Thread *script_thread;
 static int script_running = 0;
 
+static uint16_t lua_keyinput = 0;
+
 // ----------------------------------------------------------------------------
 
 static volatile int remaining_frames = 0;
@@ -54,6 +56,9 @@ void Script_FrameDrawn(void)
             }
         }
     }
+
+    // Set input based on script state
+    REG_KEYINPUT = ~lua_keyinput;
 }
 
 // ----------------------------------------------------------------------------
@@ -157,14 +162,14 @@ uint16_t get_bit_from_key_name(const char *name)
     return 0;
 }
 
-static int lua_set_input(lua_State *L)
+static int lua_keys_hold(lua_State *L)
 {
-    // Number of arguments
-    int narg = lua_gettop(L);
+    uint16_t keys = 0;
 
     Debug_Log("%s()", __func__);
 
-    uint16_t pressed = 0;
+    // Number of arguments
+    int narg = lua_gettop(L);
 
     for (int i = 0; i < narg; i++)
     {
@@ -172,12 +177,38 @@ static int lua_set_input(lua_State *L)
 
         Debug_Log("    %s", name);
 
-        pressed |= get_bit_from_key_name(name);
+        keys |= get_bit_from_key_name(name);
 
         lua_pop(L, 1);
     }
 
-    REG_KEYINPUT = ~pressed;
+    lua_keyinput |= keys;
+
+    // Number of results
+    return 0;
+}
+
+static int lua_keys_release(lua_State *L)
+{
+    uint16_t keys = 0;
+
+    Debug_Log("%s()", __func__);
+
+    // Number of arguments
+    int narg = lua_gettop(L);
+
+    for (int i = 0; i < narg; i++)
+    {
+        const char *name = lua_tostring(L, -1);
+
+        Debug_Log("    %s", name);
+
+        keys |= get_bit_from_key_name(name);
+
+        lua_pop(L, 1);
+    }
+
+    lua_keyinput &= ~keys;
 
     // Number of results
     return 0;
@@ -225,7 +256,8 @@ static int Script_Runner(void unused__ *ptr)
     lua_register(L, "run_frames_and_pause", lua_run_frames_and_pause);
     lua_register(L, "continue", lua_continue);
     lua_register(L, "screenshot", lua_screenshot);
-    lua_register(L, "set_input", lua_set_input);
+    lua_register(L, "keys_hold", lua_keys_hold);
+    lua_register(L, "keys_release", lua_keys_release);
     lua_register(L, "exit", lua_exit);
 
     // Run script with 0 arguments and expect one return value

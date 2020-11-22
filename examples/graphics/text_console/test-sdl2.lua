@@ -4,14 +4,16 @@
 
 run_frames_and_pause(10)
 screenshot("screenshot-1.png")
-set_input("B")
+keys_hold("B")
 continue()
 
 run_frames_and_pause(3)
-set_input("SELECT")
+keys_release("B")
+keys_hold("SELECT")
 continue()
 
 run_frames_and_pause(3)
+keys_release("SELECT")
 screenshot("screenshot-2.png")
 continue()
 
