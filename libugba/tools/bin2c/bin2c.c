@@ -126,7 +126,7 @@ int main(int argc, char **argv)
 
     fprintf(fc, "%s", c_header);
     fprintf(fc, "ALIGNED(4) const uint8_t %s[%zu] =\n", base_array_name, size);
-    fprintf(fc, "{\n", base_array_name);
+    fprintf(fc, "{\n");
 
     uint8_t *data = file;
 
@@ -146,7 +146,7 @@ int main(int argc, char **argv)
             fprintf(fc, ", ");
     }
 
-    fprintf(fc, "};\n", base_array_name);
+    fprintf(fc, "};\n");
 
     fclose(fc);
 
