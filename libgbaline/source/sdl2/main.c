@@ -73,6 +73,8 @@ void GBALINE_Init(int *argc, char **argv[])
         }
     }
 
+    Input_Update_GBA();
+
     // Library initialization
 
     IRQ_Init();

@@ -4,8 +4,10 @@
 
 #include <gbaline.h>
 
-static uint16_t keys_held, keys_pressed, keys_released;
-static uint16_t keys_held_last;
+static uint16_t keys_held = 0;
+static uint16_t keys_pressed = 0;
+static uint16_t keys_released = 0;
+static uint16_t keys_held_last = 0;
 
 void KEYS_Update(void)
 {
