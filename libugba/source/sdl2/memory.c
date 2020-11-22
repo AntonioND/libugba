@@ -4,7 +4,7 @@
 
 #include <stdint.h>
 
-#include <gbaline.h>
+#include <ugba.h>
 
 #include "core/video.h"
 
@@ -18,47 +18,47 @@ uint64_t internal_oam[MEM_OAM_SIZE / sizeof(uint64_t)];
 uint64_t internal_rom[MEM_ROM_SIZE / sizeof(uint64_t)];
 uint64_t internal_sram[MEM_SRAM_SIZE / sizeof(uint64_t)];
 
-uintptr_t GBALINE_MemBIOS(void)
+uintptr_t UGBA_MemBIOS(void)
 {
     return (uintptr_t)(&internal_bios[0]);
 }
 
-uintptr_t GBALINE_MemEWRAM(void)
+uintptr_t UGBA_MemEWRAM(void)
 {
     return (uintptr_t)(&internal_ewram[0]);
 }
 
-uintptr_t GBALINE_MemIWRAM(void)
+uintptr_t UGBA_MemIWRAM(void)
 {
     return (uintptr_t)(&internal_iwram[0]);
 }
 
-uintptr_t GBALINE_MemIO(void)
+uintptr_t UGBA_MemIO(void)
 {
     return (uintptr_t)(&internal_io[0]);
 }
 
-uintptr_t GBALINE_MemPalette(void)
+uintptr_t UGBA_MemPalette(void)
 {
     return (uintptr_t)(&internal_palette[0]);
 }
 
-uintptr_t GBALINE_MemVRAM(void)
+uintptr_t UGBA_MemVRAM(void)
 {
     return (uintptr_t)(&internal_vram[0]);
 }
 
-uintptr_t GBALINE_MemOAM(void)
+uintptr_t UGBA_MemOAM(void)
 {
     return (uintptr_t)(&internal_oam[0]);
 }
 
-uintptr_t GBALINE_MemROM(void)
+uintptr_t UGBA_MemROM(void)
 {
     return (uintptr_t)(&internal_rom[0]);
 }
 
-uintptr_t GBALINE_MemSRAM(void)
+uintptr_t UGBA_MemSRAM(void)
 {
     return (uintptr_t)(&internal_sram[0]);
 }

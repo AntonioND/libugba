@@ -8,7 +8,7 @@
 #include <lualib.h>
 #include <lauxlib.h>
 
-#include <gbaline.h>
+#include <ugba.h>
 
 #include "debug_utils.h"
 

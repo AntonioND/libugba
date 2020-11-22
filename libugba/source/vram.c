@@ -2,7 +2,7 @@
 //
 // Copyright (c) 2020 Antonio Niño Díaz
 
-#include <gbaline.h>
+#include <ugba.h>
 
 void VRAM_SpriteTiles16Copy(const void *src, size_t size, uint32_t tile_index)
 {

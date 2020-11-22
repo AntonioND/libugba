@@ -28,7 +28,7 @@ ASFLAGS	:=	-g -Wa,--warn $(ARCH) -D__GBA__
 #---------------------------------------------------------------------------------
 ifneq ($(BUILD),$(notdir $(CURDIR)))
 
-export TARGET	:=	$(CURDIR)/lib/libgbaline.a
+export TARGET	:=	$(CURDIR)/lib/libugba.a
 
 export VPATH	:=	$(foreach dir,$(SOURCES),$(CURDIR)/$(dir)) \
 			$(foreach dir,$(DATA),$(CURDIR)/$(dir)) \

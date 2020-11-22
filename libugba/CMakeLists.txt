@@ -6,13 +6,13 @@
 # the behaviour in MSVC, so this makes it behave the same way in both compilers.
 set(CMAKE_C_VISIBILITY_PRESET hidden)
 
-add_library(libgbaline SHARED)
+add_library(libugba SHARED)
 
 # Compiler-specific options
 # -------------------------
 
 if(CMAKE_C_COMPILER_ID STREQUAL "GNU")
-    target_compile_options(libgbaline PRIVATE
+    target_compile_options(libugba PRIVATE
         # Force all integers to be 2's complement to prevent the compiler from
         # doing optimizations because of undefined behaviour.
         -fwrapv
@@ -27,7 +27,7 @@ if(CMAKE_C_COMPILER_ID STREQUAL "GNU")
         -Wformat-truncation=0
     )
     if(CMAKE_C_COMPILER_VERSION VERSION_GREATER_EQUAL 9.3)
-        target_compile_options(libgbaline PRIVATE
+        target_compile_options(libugba PRIVATE
             # Enable a bunch of warnings that aren't enabled with Wall or Wextra
             -Wformat-overflow=2 -Wformat=2 -Wno-format-nonliteral
             -Wundef -Wunused -Wuninitialized -Wunknown-pragmas -Wshadow
@@ -58,17 +58,17 @@ if(CMAKE_C_COMPILER_ID STREQUAL "GNU")
         option(ENABLE_UBSAN "Compile with UBSan support (GCC)" OFF)
 
         if(ENABLE_UBSAN)
-            target_compile_options(libgbaline PRIVATE -fsanitize=undefined)
-            target_link_options(libgbaline PRIVATE -fsanitize=undefined)
+            target_compile_options(libugba PRIVATE -fsanitize=undefined)
+            target_link_options(libugba PRIVATE -fsanitize=undefined)
         endif()
     endif()
 elseif(CMAKE_C_COMPILER_ID STREQUAL "MSVC")
-    target_compile_definitions(libgbaline PRIVATE
+    target_compile_definitions(libugba PRIVATE
         # Silence warnings
         -D_USE_MATH_DEFINES
         -D_CRT_SECURE_NO_WARNINGS
     )
-    target_compile_options(libgbaline PRIVATE
+    target_compile_options(libugba PRIVATE
         # Enable parallel compilation
         /MP
     )
@@ -88,14 +88,14 @@ search_source_files(source/sdl2 FILES_SOURCE_SDL2)
 search_source_files(source/sdl2/core FILES_SOURCE_SDL2_CORE)
 search_source_files(source/sdl2/gui FILES_SOURCE_SDL2_GUI)
 
-target_sources(libgbaline PRIVATE
+target_sources(libugba PRIVATE
     ${FILES_SOURCE}
     ${FILES_SOURCE_SDL2}
     ${FILES_SOURCE_SDL2_CORE}
     ${FILES_SOURCE_SDL2_GUI}
 )
 
-target_include_directories(libgbaline PUBLIC
+target_include_directories(libugba PUBLIC
     include
 )
 
@@ -105,33 +105,33 @@ target_include_directories(libgbaline PUBLIC
 # libpng, SLD2 and Lua are required
 
 if(CMAKE_C_COMPILER_ID STREQUAL "MSVC")
-    target_link_libraries(libgbaline PRIVATE
+    target_link_libraries(libugba PRIVATE
         png
         SDL2::SDL2 SDL2::SDL2main
     )
 else()
-    target_include_directories(libgbaline PRIVATE
+    target_include_directories(libugba PRIVATE
         ${PNG_INCLUDE_DIRS}
         ${SDL2_INCLUDE_DIRS}
     )
-    target_link_libraries(libgbaline PRIVATE
+    target_link_libraries(libugba PRIVATE
         ${PNG_LIBRARIES}
         ${SDL2_LIBRARIES}
     )
 endif()
 
-target_link_libraries(libgbaline PRIVATE ${LUA_LIBRARIES})
-target_include_directories(libgbaline PRIVATE ${LUA_INCLUDE_DIR})
+target_link_libraries(libugba PRIVATE ${LUA_LIBRARIES})
+target_include_directories(libugba PRIVATE ${LUA_INCLUDE_DIR})
 
 # OpenGL is optional. It can be used as library to output graphics.
 
 if(ENABLE_OPENGL)
-    target_compile_definitions(libgbaline PRIVATE -DENABLE_OPENGL)
-    target_include_directories(libgbaline PRIVATE ${OPENGL_INCLUDE_DIRS})
-    target_link_libraries(libgbaline PRIVATE ${OPENGL_LIBRARIES})
+    target_compile_definitions(libugba PRIVATE -DENABLE_OPENGL)
+    target_include_directories(libugba PRIVATE ${OPENGL_INCLUDE_DIRS})
+    target_link_libraries(libugba PRIVATE ${OPENGL_LIBRARIES})
 endif()
 
-# Add tools needed by libgbaline
+# Add tools needed by libugba
 
 add_subdirectory(tools)
 
@@ -142,4 +142,4 @@ include(cmake/grit.cmake)
 
 # Add graphics to library, like the default font
 
-add_grit_files(graphics libgbaline)
+add_grit_files(graphics libugba)

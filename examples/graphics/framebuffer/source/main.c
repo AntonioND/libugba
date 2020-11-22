@@ -2,11 +2,11 @@
 //
 // Copyright (c) 2020 Antonio Niño Díaz
 
-#include <gbaline.h>
+#include <ugba.h>
 
 int main(int argc, char *argv[])
 {
-    GBALINE_Init(&argc, &argv);
+    UGBA_Init(&argc, &argv);
 
     IRQ_Enable(IRQ_VBLANK);
 

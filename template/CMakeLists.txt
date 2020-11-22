@@ -11,7 +11,7 @@ project(${EXECUTABLE_NAME})
 
 add_executable(${EXECUTABLE_NAME})
 
-target_link_libraries(${EXECUTABLE_NAME} libgbaline)
+target_link_libraries(${EXECUTABLE_NAME} libugba)
 
 # Add source code files
 # ---------------------

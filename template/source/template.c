@@ -2,7 +2,7 @@
 //
 // Copyright (c) 2020 Antonio Niño Díaz
 
-#include <gbaline.h>
+#include <ugba.h>
 
 uint16_t r, g, b;
 
@@ -31,7 +31,7 @@ void VcountHandler(void)
 
 int main(int argc, char *argv[])
 {
-    GBALINE_Init(&argc, &argv);
+    UGBA_Init(&argc, &argv);
 
     IRQ_SetHandler(IRQ_VBLANK, VBLHandler);
     IRQ_SetHandler(IRQ_HBLANK, HBLHandler);

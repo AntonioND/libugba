@@ -2,7 +2,7 @@
 //
 // Copyright (c) 2020 Antonio Niño Díaz
 
-#include <gbaline.h>
+#include <ugba.h>
 
 void SWI_CpuSet_Copy16(const void *src, void *dst, size_t len)
 {

@@ -2,9 +2,9 @@
 //
 // Copyright (c) 2020 Antonio Niño Díaz
 
-#include <gbaline.h>
+#include <ugba.h>
 
-void GBALINE_Init(int *argc, char **argv[])
+void UGBA_Init(int *argc, char **argv[])
 {
     // Library initialization
 

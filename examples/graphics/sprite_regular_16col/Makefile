@@ -4,6 +4,6 @@
 
 EXAMPLE_PATH := $(dir $(realpath $(firstword $(MAKEFILE_LIST))))
 
-LIBGBALINE := $(EXAMPLE_PATH)/../../../libgbaline
+LIBUGBA := $(EXAMPLE_PATH)/../../../libugba
 
 include $(EXAMPLE_PATH)/../../common.mk

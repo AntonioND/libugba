@@ -6,7 +6,7 @@
 
 #include <SDL2/SDL.h>
 
-#include <gbaline.h>
+#include <ugba.h>
 
 #include "debug_utils.h"
 #include "input_utils.h"
@@ -39,7 +39,7 @@ static int Init(void)
     return 0;
 }
 
-void GBALINE_Init(int *argc, char **argv[])
+void UGBA_Init(int *argc, char **argv[])
 {
     // SDL2 port initialization
 

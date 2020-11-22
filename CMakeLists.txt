@@ -3,7 +3,7 @@
 # Copyright (c) 2020 Antonio Niño Díaz
 
 cmake_minimum_required(VERSION 3.15)
-project(gbaline)
+project(ugba)
 enable_language(C ASM)
 
 set(C_STANDARD 11)
@@ -39,7 +39,7 @@ endif()
 # Add subdirectories
 # ------------------
 
-add_subdirectory(libgbaline)
+add_subdirectory(libugba)
 
 # If this project is being used as a module within another project, don't add
 # examples, template or anything that isn't needed.

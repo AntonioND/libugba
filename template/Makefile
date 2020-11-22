@@ -27,7 +27,7 @@ INCLUDES	:= include
 DATA		:=
 MUSIC		:=
 GRAPHICS	:= graphics
-LIBGBALINE	:= $(CURDIR)/../libgbaline
+LIBUGBA		:= $(CURDIR)/../libugba
 
 #---------------------------------------------------------------------------------
 # options for code generation
@@ -48,14 +48,14 @@ LDFLAGS	=	-g $(ARCH) -Wl,-Map,$(notdir $*.map)
 #---------------------------------------------------------------------------------
 # any extra libraries we wish to link with the project
 #---------------------------------------------------------------------------------
-LIBS	:= -lmm -lgbaline
+LIBS	:= -lmm -lugba
 
 
 #---------------------------------------------------------------------------------
 # list of directories containing libraries, this must be the top level containing
 # include and lib
 #---------------------------------------------------------------------------------
-LIBDIRS	:=	$(LIBGBA) $(LIBGBALINE)
+LIBDIRS	:=	$(LIBGBA) $(LIBUGBA)
 
 #---------------------------------------------------------------------------------
 # no real need to edit anything past this point unless you need to add additional

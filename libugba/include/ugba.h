@@ -2,8 +2,8 @@
 //
 // Copyright (c) 2020 Antonio Niño Díaz
 
-#ifndef GBALINE_H__
-#define GBALINE_H__
+#ifndef UGBA_H__
+#define UGBA_H__
 
 #include "bios.h"
 #include "bios_wrappers.h"
@@ -17,6 +17,6 @@
 #include "vram.h"
 
 // This function needs to be called at the start of main()
-EXPORT_API void GBALINE_Init(int *argc, char **argv[]);
+EXPORT_API void UGBA_Init(int *argc, char **argv[]);
 
-#endif // GBALINE_H__
+#endif // UGBA_H__
