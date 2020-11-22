@@ -4,7 +4,7 @@
 
 #include <stdint.h>
 
-#include <ugba.h>
+#include <ugba/ugba.h>
 
 #include "core/video.h"
 

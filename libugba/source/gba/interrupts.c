@@ -2,7 +2,7 @@
 //
 // Copyright (c) 2020 Antonio Niño Díaz
 
-#include <ugba.h>
+#include <ugba/ugba.h>
 
 #define BIOS_GLOBAL_IRQ_HANDLER     *(irq_vector *)(0x03007FFC)
 

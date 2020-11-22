@@ -2,7 +2,7 @@
 //
 // Copyright (c) 2020 Antonio Niño Díaz
 
-#include <ugba.h>
+#include <ugba/ugba.h>
 
 void VRAM_OBJTiles16Copy(const void *src, size_t size, uint32_t tile_index)
 {

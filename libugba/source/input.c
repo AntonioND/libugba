@@ -2,7 +2,7 @@
 //
 // Copyright (c) 2020 Antonio Niño Díaz
 
-#include <ugba.h>
+#include <ugba/ugba.h>
 
 static uint16_t keys_held = 0;
 static uint16_t keys_pressed = 0;

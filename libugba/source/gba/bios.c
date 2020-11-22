@@ -2,7 +2,7 @@
 //
 // Copyright (c) 2020 Antonio Niño Díaz
 
-#include <ugba.h>
+#include <ugba/ugba.h>
 
 // The functions here access the BIOS services directly. Some of the calls have
 // awkward arguments, so the library has  wrappers for some of them.

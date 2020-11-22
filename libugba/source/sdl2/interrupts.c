@@ -4,7 +4,7 @@
 
 #include <stddef.h>
 
-#include <ugba.h>
+#include <ugba/ugba.h>
 
 static irq_vector IRQ_VectorTable[IRQ_NUMBER];
 

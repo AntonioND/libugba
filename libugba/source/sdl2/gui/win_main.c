@@ -4,7 +4,7 @@
 
 #include <SDL2/SDL.h>
 
-#include <ugba.h>
+#include <ugba/ugba.h>
 
 #include "win_main.h"
 #include "window_handler.h"

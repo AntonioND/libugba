@@ -2,7 +2,7 @@
 //
 // Copyright (c) 2020 Antonio Niño Díaz
 
-#include <ugba.h>
+#include <ugba/ugba.h>
 
 static void OBJ_TileSet_internal(oam_entry_t *e, int colors256, int tile)
 {

@@ -7,7 +7,7 @@
 
 #include <SDL2/SDL.h>
 
-#include <ugba.h>
+#include <ugba/ugba.h>
 
 #include "debug_utils.h"
 #include "input_utils.h"

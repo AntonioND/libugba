@@ -4,7 +4,7 @@
 
 #include <string.h>
 
-#include <ugba.h>
+#include <ugba/ugba.h>
 
 #include "video.h"
 
