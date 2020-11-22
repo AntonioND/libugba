@@ -42,12 +42,12 @@ int main(int argc, char *argv[])
     OBJ_AffineInit(2, 164, 88, OBJ_SIZE_32x32, 1,
                    0, BALL_GREEN_PALETTE, BALL_GREEN_TILES_BASE, 1);
 
-    obj_affine_src_t objsrc[] =
+    obj_affine_src_t objsrc_init[] =
     {
-        { 1 << 8, 1 << 8, 0 },
-        { 1 << 8, 1 << 8, 0 },
+        { 1 << 8, 1 << 8, 0, 0 },
+        { 1 << 8, 1 << 8, 0, 0 },
     };
-    SWI_ObjAffineSet_OAM(&objsrc[0], MEM_OAM, 2);
+    SWI_ObjAffineSet_OAM(&objsrc_init[0], MEM_OAM, 2);
 
     // Load the palettes
     // -----------------
@@ -96,8 +96,8 @@ int main(int argc, char *argv[])
 
         obj_affine_src_t objsrc[] =
         {
-            { 1 << 8, 1 << 8, angle << 8 },
-            { scale, scale, 0 },
+            { 1 << 8, 1 << 8, angle << 8, 0 },
+            { scale, scale, 0, 0 },
         };
         SWI_ObjAffineSet_OAM(&objsrc[0], MEM_OAM, 2);
 
