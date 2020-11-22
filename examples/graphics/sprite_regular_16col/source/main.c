@@ -52,18 +52,18 @@ int main(int argc, char *argv[])
     // Load the palettes
     // -----------------
 
-    VRAM_SpritePalette16Copy(ball_redPal, ball_redPalLen,
-                             BALL_RED_PALETTE);
-    VRAM_SpritePalette16Copy(ball_greenPal, ball_greenPalLen,
-                             BALL_GREEN_PALETTE);
+    VRAM_OBJPalette16Copy(ball_redPal, ball_redPalLen,
+                          BALL_RED_PALETTE);
+    VRAM_OBJPalette16Copy(ball_greenPal, ball_greenPalLen,
+                          BALL_GREEN_PALETTE);
 
     // Load the tiles
     // --------------
 
-    VRAM_SpriteTiles16Copy(ball_redTiles, ball_redTilesLen,
-                           BALL_RED_TILES_BASE);
-    VRAM_SpriteTiles16Copy(ball_greenTiles, ball_greenTilesLen,
-                           BALL_GREEN_TILES_BASE);
+    VRAM_OBJTiles16Copy(ball_redTiles, ball_redTilesLen,
+                        BALL_RED_TILES_BASE);
+    VRAM_OBJTiles16Copy(ball_greenTiles, ball_greenTilesLen,
+                        BALL_GREEN_TILES_BASE);
 
     // Turn on the screen
     // ------------------

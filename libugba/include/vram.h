@@ -11,15 +11,15 @@
 #include "definitions.h"
 
 EXPORT_API
-void VRAM_SpriteTiles16Copy(const void *src, size_t size, uint32_t tile_index);
+void VRAM_OBJTiles16Copy(const void *src, size_t size, uint32_t tile_index);
 
 EXPORT_API
-void VRAM_SpriteTiles256Copy(const void *src, size_t size, uint32_t tile_index);
+void VRAM_OBJTiles256Copy(const void *src, size_t size, uint32_t tile_index);
 
 EXPORT_API
-void VRAM_SpritePalette16Copy(const void *src, size_t size, uint32_t pal_index);
+void VRAM_OBJPalette16Copy(const void *src, size_t size, uint32_t pal_index);
 
 EXPORT_API
-void VRAM_SpritePalette256Copy(const void *src, size_t size);
+void VRAM_OBJPalette256Copy(const void *src, size_t size);
 
 #endif // VRAM_H__
