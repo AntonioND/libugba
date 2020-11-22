@@ -2,11 +2,13 @@
 #
 # Copyright (c) 2020 Antonio Niño Díaz
 
+set(LIBRARY_NAME libugba)
+
 # This makes GCC not export the symbols in a shared library by default. This is
 # the behaviour in MSVC, so this makes it behave the same way in both compilers.
 set(CMAKE_C_VISIBILITY_PRESET hidden)
 
-add_library(libugba SHARED)
+add_library(${LIBRARY_NAME} SHARED)
 
 # Add source code files
 # ---------------------
@@ -22,14 +24,14 @@ search_source_files(source/sdl2 FILES_SOURCE_SDL2)
 search_source_files(source/sdl2/core FILES_SOURCE_SDL2_CORE)
 search_source_files(source/sdl2/gui FILES_SOURCE_SDL2_GUI)
 
-target_sources(libugba PRIVATE
+target_sources(${LIBRARY_NAME} PRIVATE
     ${FILES_SOURCE}
     ${FILES_SOURCE_SDL2}
     ${FILES_SOURCE_SDL2_CORE}
     ${FILES_SOURCE_SDL2_GUI}
 )
 
-target_include_directories(libugba PUBLIC
+target_include_directories(${LIBRARY_NAME} PUBLIC
     include
 )
 
@@ -39,30 +41,30 @@ target_include_directories(libugba PUBLIC
 # libpng, SLD2 and Lua are required
 
 if(CMAKE_C_COMPILER_ID STREQUAL "MSVC")
-    target_link_libraries(libugba PRIVATE
+    target_link_libraries(${LIBRARY_NAME} PRIVATE
         png
         SDL2::SDL2 SDL2::SDL2main
     )
 else()
-    target_include_directories(libugba PRIVATE
+    target_include_directories(${LIBRARY_NAME} PRIVATE
         ${PNG_INCLUDE_DIRS}
         ${SDL2_INCLUDE_DIRS}
     )
-    target_link_libraries(libugba PRIVATE
+    target_link_libraries(${LIBRARY_NAME} PRIVATE
         ${PNG_LIBRARIES}
         ${SDL2_LIBRARIES}
     )
 endif()
 
-target_link_libraries(libugba PRIVATE ${LUA_LIBRARIES})
-target_include_directories(libugba PRIVATE ${LUA_INCLUDE_DIR})
+target_link_libraries(${LIBRARY_NAME} PRIVATE ${LUA_LIBRARIES})
+target_include_directories(${LIBRARY_NAME} PRIVATE ${LUA_INCLUDE_DIR})
 
 # OpenGL is optional. It can be used as library to output graphics.
 
 if(ENABLE_OPENGL)
-    target_compile_definitions(libugba PRIVATE -DENABLE_OPENGL)
-    target_include_directories(libugba PRIVATE ${OPENGL_INCLUDE_DIRS})
-    target_link_libraries(libugba PRIVATE ${OPENGL_LIBRARIES})
+    target_compile_definitions(${LIBRARY_NAME} PRIVATE -DENABLE_OPENGL)
+    target_include_directories(${LIBRARY_NAME} PRIVATE ${OPENGL_INCLUDE_DIRS})
+    target_link_libraries(${LIBRARY_NAME} PRIVATE ${OPENGL_LIBRARIES})
 endif()
 
 # Add tools needed by libugba
@@ -76,4 +78,4 @@ include(cmake/grit.cmake)
 
 # Add graphics to library, like the default font
 
-add_grit_files(graphics libugba)
+add_grit_files(graphics ${LIBRARY_NAME})
