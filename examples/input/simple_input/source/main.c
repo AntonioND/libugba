@@ -20,7 +20,8 @@ int main(int argc, char *argv[])
 
         KEYS_Update();
 
-        uint16_t keys = KEYS_Pressed();
+        uint16_t keys_pressed = KEYS_Pressed();
+        uint16_t keys_released = KEYS_Released();
 
         struct {
             const char *name;
@@ -40,10 +41,17 @@ int main(int argc, char *argv[])
 
         for (int i = 0; i < 10; i++)
         {
-            if (keys & keyinfo[i].mask)
+            if (keys_pressed & keyinfo[i].mask)
             {
+                CON_Print("\n");
                 CON_Print(keyinfo[i].name);
-                CON_Print(" ");
+                CON_Print(" pressed");
+            }
+            if (keys_released & keyinfo[i].mask)
+            {
+                CON_Print("\n");
+                CON_Print(keyinfo[i].name);
+                CON_Print(" released");
             }
         }
     }

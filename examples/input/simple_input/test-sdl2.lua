@@ -1,18 +1,30 @@
--- Press some keys, take screenshot, press more keys, take screenshot
+-- Press some keys, release keys, repeat... and take screenshot
 
-run_frames_and_pause(10)
-keys_hold("B", "START", "L", "DOWN", "RIGHT")
+run_frames_and_pause(3)
+keys_hold("B", "START")
 continue()
 
 run_frames_and_pause(3)
-screenshot("screenshot-1.png")
-keys_release("B", "START", "L", "DOWN", "RIGHT")
-keys_hold("A", "SELECT", "R", "UP", "LEFT")
+keys_hold("L", "DOWN", "RIGHT")
+keys_release("B", "START")
 continue()
 
 run_frames_and_pause(3)
-screenshot("screenshot-2.png")
-keys_release("A", "SELECT", "R", "UP", "LEFT")
+keys_hold("R", "UP", "LEFT")
+keys_release("L", "DOWN", "RIGHT")
+continue()
+
+run_frames_and_pause(3)
+keys_hold("A", "SELECT")
+keys_release("R", "UP", "LEFT")
+continue()
+
+run_frames_and_pause(3)
+keys_release("A", "SELECT")
+continue()
+
+run_frames_and_pause(3)
+screenshot()
 continue()
 
 exit()
