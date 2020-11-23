@@ -32,7 +32,8 @@ void BG_RegularInit(int index, bg_regular_size size, bg_color_mode colors,
         size_table[size] |
         (colors == BG_256_COLORS ? BGCNT_256_COLORS : BGCNT_16_COLORS) |
         BGCNT_BG_PRIORITY(index) | // Default priority = background index
-        BGCNT_TILES_BASE(tile_base_addr) | BGCNT_MAP_BASE(map_base_addr);
+        BGCNT_TILES_BLOCK_BASE(tile_base_addr) |
+        BGCNT_MAP_BLOCK_BASE(map_base_addr);
 
     *reg = value;
 }
@@ -84,7 +85,8 @@ void BG_AffineInit(int index, bg_affine_size size, bg_color_mode colors,
         size_table[size] |
         (colors == BG_256_COLORS ? BGCNT_256_COLORS : BGCNT_16_COLORS) |
         BGCNT_BG_PRIORITY(index) | // Default priority = background index
-        BGCNT_TILES_BASE(tile_base_addr) | BGCNT_MAP_BASE(map_base_addr) |
+        BGCNT_TILES_BLOCK_BASE(tile_base_addr) |
+        BGCNT_MAP_BLOCK_BASE(map_base_addr) |
         (wrap ? BGCNT_BG2_BG3_WRAP : 0);
 
     *reg = value;

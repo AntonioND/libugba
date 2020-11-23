@@ -35,28 +35,45 @@ static void CON_NewLine(void)
 
 void CON_InitDefault(void)
 {
+    // Set global console variables to initial values
+
     scroll_y = 0;
     con_x = 0;
     con_y = 0;
 
-    uint16_t *dst = MEM_VRAM_BG;
+    // Calculate base addresses of tileset and map
+
+    // The tileset size is 256 * (8 * 8 * 4) / 8 = 8 KB = 0x2000
+    // This means that the map has to be placed 4 blocks away from the tileset
+
+    uintptr_t tiles_block_base_addr = MEM_BG_TILES_BLOCK_ADDR(3);
+    uintptr_t map_block_base_addr = MEM_BG_MAP_BLOCK_ADDR((3 * 8) + 4);
+
+    // Save pointer so that other functions can use it
+
+    map_base = (uint16_t *)map_block_base_addr;
+
+    // Load font tileset and palette
+
+    uint16_t *dst = (uint16_t *)tiles_block_base_addr;
     SWI_LZ77UnCompReadNormalWrite16bit(fontTiles, dst);
 
     dst = MEM_PALETTE_BG + (15 * 16);
     SWI_CpuSet_Copy16(fontPal, dst, fontPalLen);
 
-    size_t tileset_size = 256 * (8 * 8 * 4) / 8;
-    map_base = (uint16_t *)(((uintptr_t)MEM_VRAM_BG) + tileset_size);
+    // Clear console map
 
     CON_Clear();
+
+    // Enable background
 
     REG_DISPCNT |= DISPCNT_BG0_ENABLE;
 
     REG_BG0CNT =
         BGCNT_BG_PRIORITY(0) |
-        BGCNT_TILES_BASE((uintptr_t)MEM_VRAM_BG) |
+        BGCNT_TILES_BLOCK_BASE(tiles_block_base_addr) |
         BGCNT_16_COLORS |
-        BGCNT_MAP_BASE((uintptr_t)map_base) |
+        BGCNT_MAP_BLOCK_BASE(map_block_base_addr) |
         BGCNT_REGULAR_256x256;
 }
 
