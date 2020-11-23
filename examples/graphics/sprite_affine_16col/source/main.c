@@ -111,5 +111,3 @@ int main(int argc, char *argv[])
             scale_v = -SPEED_SCALE;
     }
 }
-
-
