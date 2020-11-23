@@ -4,11 +4,12 @@
 
 #include <ugba/ugba.h>
 
-static void OBJ_TileSet_internal(oam_entry_t *e, int colors256, int tile)
+static void OBJ_TileSet_internal(oam_entry_t *e, oam_color_mode colors,
+                                 int tile)
 {
     e->attr2 &= ~ATTR2_TILE_MASK;
 
-    if (colors256)
+    if (colors == OBJ_256_COLORS)
         e->attr2 |= ATTR2_256_COLOR_TILE(tile);
     else
         e->attr2 |= ATTR2_16_COLOR_TILE(tile);
@@ -18,7 +19,7 @@ static void OBJ_TileSet_internal(oam_entry_t *e, int colors256, int tile)
 // -------------------------
 
 void OBJ_RegularInit(int index, int x, int y, oam_entry_size size,
-                     int colors256, int pal, int tile)
+                     oam_color_mode colors, int pal, int tile)
 {
     if (index >= MEM_OAM_NUMBER_ENTRIES)
         return;
@@ -29,14 +30,14 @@ void OBJ_RegularInit(int index, int x, int y, oam_entry_size size,
     oam_entry_t *e = &MEM_OAM_ENTRIES[index];
 
     e->attr0 = ATTR0_Y(y) | ATTR0_REGULAR | ATTR0_MODE_NORMAL |
-               (colors256 ? ATTR0_256_COLORS : ATTR0_16_COLORS) |
+               (colors == OBJ_256_COLORS ? ATTR0_256_COLORS : ATTR0_16_COLORS) |
                attr0_shape;
 
     e->attr1 = ATTR1_X(x) | attr1_size;
 
     e->attr2 = ATTR2_PRIORITY(0) | ATTR2_PALETTE(pal);
 
-    OBJ_TileSet_internal(e, colors256, tile);
+    OBJ_TileSet_internal(e, colors, tile);
 }
 
 void OBJ_RegularEnableSet(int index, int enable)
@@ -88,7 +89,7 @@ void OBJ_RegularVFlipSet(int index, int enable)
 // ------------------------
 
 void OBJ_AffineInit(int index, int x, int y, oam_entry_size size, int matrix,
-                    int colors256, int pal, int tile, int doublesize)
+                    oam_color_mode colors, int pal, int tile, int doublesize)
 {
     if (index >= MEM_OAM_NUMBER_ENTRIES)
         return;
@@ -99,7 +100,7 @@ void OBJ_AffineInit(int index, int x, int y, oam_entry_size size, int matrix,
     oam_entry_t *e = &MEM_OAM_ENTRIES[index];
 
     e->attr0 = ATTR0_Y(y) | ATTR0_AFFINE | ATTR0_MODE_NORMAL |
-               (colors256 ? ATTR0_256_COLORS : ATTR0_16_COLORS) |
+               (colors == OBJ_256_COLORS ? ATTR0_256_COLORS : ATTR0_16_COLORS) |
                (doublesize ? ATTR0_DOUBLE_SIZE : 0) |
                attr0_shape;
 
@@ -107,7 +108,7 @@ void OBJ_AffineInit(int index, int x, int y, oam_entry_size size, int matrix,
 
     e->attr2 = ATTR2_PRIORITY(0) | ATTR2_PALETTE(pal);
 
-    OBJ_TileSet_internal(e, colors256, tile);
+    OBJ_TileSet_internal(e, colors, tile);
 }
 
 void OBJ_AffineMatrixSet(int index, int matrix_index)
@@ -218,32 +219,39 @@ void OBJ_GetShapeSize(oam_entry_size size,
     *attr1_size = table[size][1];
 }
 
+static const int obj_size_table[OBJ_SIZE_NUMBER][2] = {
+    [OBJ_SIZE_8x8] = {8, 8},
+    [OBJ_SIZE_16x16] = {16, 16},
+    [OBJ_SIZE_32x32] = {32, 32},
+    [OBJ_SIZE_64x64] = {64, 64},
+
+    [OBJ_SIZE_16x8] = {16, 8},
+    [OBJ_SIZE_32x8] = {32, 8},
+    [OBJ_SIZE_32x16] = {32, 16},
+    [OBJ_SIZE_64x32] = {64, 32},
+
+    [OBJ_SIZE_8x16] = {8, 16},
+    [OBJ_SIZE_8x32] = {8, 32},
+    [OBJ_SIZE_16x32] = {16, 32},
+    [OBJ_SIZE_32x64] = {32, 64},
+};
+
 oam_entry_size OBJ_GetSizeFromDimensions(int width, int height)
 {
-    const int table[OBJ_SIZE_NUMBER][2] = {
-        [OBJ_SIZE_8x8] = {8, 8},
-        [OBJ_SIZE_16x16] = {16, 16},
-        [OBJ_SIZE_32x32] = {32, 32},
-        [OBJ_SIZE_64x64] = {64, 64},
-
-        [OBJ_SIZE_16x8] = {16, 8},
-        [OBJ_SIZE_32x8] = {32, 8},
-        [OBJ_SIZE_32x16] = {32, 16},
-        [OBJ_SIZE_64x32] = {64, 32},
-
-        [OBJ_SIZE_8x16] = {8, 16},
-        [OBJ_SIZE_8x32] = {8, 32},
-        [OBJ_SIZE_16x32] = {16, 32},
-        [OBJ_SIZE_32x64] = {32, 64},
-    };
-
     for (int i = 0; i < OBJ_SIZE_NUMBER; i++)
     {
-        if ((table[i][0] == width) && (table[i][1] == height))
+        if ((obj_size_table[i][0] == width) && (obj_size_table[i][1] == height))
             return i;
     }
 
     return OBJ_SIZE_INVALID;
+}
+
+EXPORT_API void OBJ_GetDimensionsFromSize(oam_entry_size size,
+                                          int *width, int *height)
+{
+    *width = obj_size_table[size][0];
+    *height = obj_size_table[size][1];
 }
 
 void OBJ_MosaicSet(int index, int enable)
@@ -290,7 +298,8 @@ void OBJ_TileSet(int index, int tile)
 
     oam_entry_t *e = &MEM_OAM_ENTRIES[index];
 
-    int colors256 = e->attr0 & ATTR0_256_COLORS;
+    oam_color_mode colors =
+        (e->attr0 & ATTR0_256_COLORS) ? OBJ_256_COLORS : OBJ_16_COLORS;
 
-    OBJ_TileSet_internal(e, colors256, tile);
+    OBJ_TileSet_internal(e, colors, tile);
 }
