@@ -5,9 +5,11 @@
 #ifndef UGBA_H__
 #define UGBA_H__
 
+#include "background.h"
 #include "bios.h"
 #include "bios_wrappers.h"
 #include "console.h"
+#include "display.h"
 #include "debug.h"
 #include "definitions.h"
 #include "hardware.h"

@@ -341,9 +341,11 @@ typedef struct {
 
 //------------------------------------------
 
-#define REG_8(r)    *((volatile uint8_t *)(MEM_IO_ADDR + (r)))
-#define REG_16(r)   *((volatile uint16_t *)(MEM_IO_ADDR + (r)))
-#define REG_32(r)   *((volatile uint32_t *)(MEM_IO_ADDR + (r)))
+#define REG_8(r)            *((volatile uint8_t *)(MEM_IO_ADDR + (r)))
+#define REG_16(r)           *((volatile uint16_t *)(MEM_IO_ADDR + (r)))
+#define REG_32(r)           *((volatile uint32_t *)(MEM_IO_ADDR + (r)))
+
+#define PTR_REG_16(r)       ((volatile uint16_t *)(MEM_IO_ADDR + (r)))
 
 //------------------------------------------
 
