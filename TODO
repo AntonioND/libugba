@@ -1,7 +1,7 @@
 Library
 -------
 
-- Interrupts (only VBL, HBL and VCOUNT are done): Keypad, etc.
+- Interrupts: VBL, HBL, VCOUNT and Keypad are done, the rest are missing.
 - Examples for interrupts.
 - Examples for input.
 - Examples for graphics.

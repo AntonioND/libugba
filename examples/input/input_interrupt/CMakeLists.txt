@@ -2,5 +2,5 @@
 #
 # Copyright (c) 2020 Antonio Niño Díaz
 
-add_subdirectory(input_interrupt)
-add_subdirectory(simple_input)
+define_example()
+unittest_screenshot()
