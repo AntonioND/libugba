@@ -80,8 +80,23 @@ void SWI_CpuFastSet(const void *src, void *dst, uint32_t len_mode)
 
 #if 0
 SWI_GetBiosChecksum
-SWI_BgAffineSet
 #endif
+
+void SWI_BgAffineSet(const bg_affine_src_t *src, bg_affine_dst_t *dst,
+                     uint32_t count)
+{
+    // TODO: Verify arguments? Alignment?
+
+    register uint32_t src_ asm("r0") = (uint32_t)src;
+    register uint32_t dst_ asm("r1") = (uint32_t)dst;
+    register uint32_t count_ asm("r2") = count;
+
+    asm volatile(
+        SWI_NUMBER(0x0E) ::
+        "r"(src_), "r"(dst_), "r"(count_) :
+        "r3", "memory"
+    );
+}
 
 void SWI_ObjAffineSet(const obj_affine_src_t *src, void *dst,
                       uint32_t count, uint32_t increment)

@@ -168,6 +168,37 @@ void SWI_CpuFastSet(const void *src, void *dst, uint32_t len_mode)
     }
 }
 
+void SWI_BgAffineSet(const bg_affine_src_t *src, bg_affine_dst_t *dst,
+                     uint32_t count)
+{
+    while (count--)
+    {
+        int32_t cx = src->bgx;
+        int32_t cy = src->bgy;
+        float dispx = (float)src->scrx;
+        float dispy = (float)src->scry;
+        float sx = ((float)src->scalex) / (float)(1 << 8);
+        float sy = ((float)src->scaley) / (float)(1 << 8);
+        float angle = (float)2.0 * (float)M_PI
+                      * (((float)(uint8_t)(src->angle >> 8)) / (float)0xFF);
+
+        float sin_ = sin(angle);
+        float cos_ = cos(angle);
+        dst->pa = cos_ * (float)(1 << 8) * sx;
+        dst->pb = -sin_ * (float)(1 << 8) * sx;
+        dst->pc = sin_ * (float)(1 << 8) * sy;
+        dst->pd = cos_ * (float)(1 << 8) * sy;
+
+        dst->xoff = cx - (int32_t)((cos_ * sx * dispx - sin_ * sx * dispy)
+                   * (float)(1 << 8));
+        dst->yoff = cy - (int32_t)((sin_ * sy * dispx + cos_ * sy * dispy)
+                   * (float)(1 << 8));
+
+        src++;
+        dst++;
+    }
+}
+
 void SWI_ObjAffineSet(const obj_affine_src_t *src, void *dst,
                       uint32_t count, uint32_t increment)
 {

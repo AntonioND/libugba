@@ -31,9 +31,36 @@ EXPORT_API void SWI_CpuFastSet(const void *src, void *dst, uint32_t len_mode);
 
 #pragma pack(push, 1)
 typedef struct {
-    int16_t sx;     // 8.8 fixed point
-    int16_t sy;     // 8.8 fixed point
-    uint16_t angle; // 8.8 fixed point. Range: 0 - 0xFFFF
+    int32_t bgx;        // 24.8 fixed point
+    int32_t bgy;        // 24.8 fixed point
+    int16_t scrx;
+    int16_t scry;
+    int16_t scalex;     // 8.8 fixed point
+    int16_t scaley;     // 8.8 fixed point
+    uint16_t angle;     // 8.8 fixed point. Range: 0 - 0xFFFF
+    uint16_t padding;
+} bg_affine_src_t;
+#pragma pack(pop)
+
+#pragma pack(push, 1)
+typedef struct {
+    int16_t pa;
+    int16_t pb;
+    int16_t pc;
+    int16_t pd;
+    int32_t xoff;
+    int32_t yoff;
+} bg_affine_dst_t;
+#pragma pack(pop)
+
+EXPORT_API void SWI_BgAffineSet(const bg_affine_src_t *src,
+                                bg_affine_dst_t *dst, uint32_t count);
+
+#pragma pack(push, 1)
+typedef struct {
+    int16_t sx;         // 8.8 fixed point
+    int16_t sy;         // 8.8 fixed point
+    uint16_t angle;     // 8.8 fixed point. Range: 0 - 0xFFFF
     uint16_t padding;
 } obj_affine_src_t;
 #pragma pack(pop)
