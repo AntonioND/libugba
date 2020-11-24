@@ -111,10 +111,8 @@ add_subdirectory(libugba)
 # examples, template or anything that isn't needed.
 get_directory_property(HAS_PARENT PARENT_DIRECTORY)
 if(NOT HAS_PARENT)
-    add_subdirectory(template)
-    add_subdirectory(tools)
-
     enable_testing()
 
     add_subdirectory(examples)
+    add_subdirectory(template)
 endif()

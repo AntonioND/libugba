@@ -2,6 +2,8 @@
 #
 # Copyright (c) 2020 Antonio Niño Díaz
 
+add_subdirectory(tools)
+
 include(cmake/example.cmake)
 
 add_subdirectory(graphics)
