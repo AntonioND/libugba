@@ -18,6 +18,28 @@ static int current_vcount = 0;
 
 void IRQ_Internal_CallHandler(irq_index index);
 
+static void Input_Handle_Interrupt(void)
+{
+    if (!(REG_KEYCNT & KEYCNT_IRQ_ENABLE))
+        return;
+
+    uint16_t keys = REG_KEYCNT & 0x03FF;
+    uint16_t keyspressed = (~REG_KEYINPUT) & 0x03FF;
+
+    if (REG_KEYCNT & KEYCNT_IRQ_CONDITION_AND)
+    {
+        if ((keys & keyspressed) == keys)
+        {
+            IRQ_Internal_CallHandler(IRQ_KEYPAD);
+        }
+    }
+    else // KEYCNT_IRQ_CONDITION_OR
+    {
+        if (keys & keyspressed)
+            IRQ_Internal_CallHandler(IRQ_KEYPAD);
+    }
+}
+
 static void handle_hbl(void)
 {
     // First, VCOUNT interrupt
@@ -52,6 +74,10 @@ static void handle_vbl(void)
 
     // Update script handler
     Script_FrameDrawn();
+
+    // Now that the user and the script input have been handled, check
+    // keypad interrupt
+    Input_Handle_Interrupt();
 
     // Synchronise video
     if (Input_Speedup_Enabled())

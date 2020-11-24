@@ -32,3 +32,18 @@ uint16_t KEYS_Released(void)
 {
     return keys_released;
 }
+
+void KEYS_IRQEnablePressedAll(uint16_t keys)
+{
+    REG_KEYCNT = KEYCNT_IRQ_ENABLE | KEYCNT_IRQ_CONDITION_AND | keys;
+}
+
+void KEYS_IRQEnablePressedAny(uint16_t keys)
+{
+    REG_KEYCNT = KEYCNT_IRQ_ENABLE | KEYCNT_IRQ_CONDITION_OR | keys;
+}
+
+void KEYS_IRQDisable(void)
+{
+    REG_KEYCNT = 0;
+}
