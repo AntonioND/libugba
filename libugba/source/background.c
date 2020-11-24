@@ -68,7 +68,7 @@ void BG_RegularScrollGet(int index, int *x, int *y)
     *y = scroll_y[index];
 }
 
-void BG_AffineInit(int index, bg_affine_size size, bg_color_mode colors,
+void BG_AffineInit(int index, bg_affine_size size,
                    uintptr_t tile_base_addr, uintptr_t map_base_addr,
                    int wrap)
 {
@@ -83,7 +83,6 @@ void BG_AffineInit(int index, bg_affine_size size, bg_color_mode colors,
 
     uint16_t value =
         size_table[size] |
-        (colors == BG_256_COLORS ? BGCNT_256_COLORS : BGCNT_16_COLORS) |
         BGCNT_BG_PRIORITY(index) | // Default priority = background index
         BGCNT_TILES_BLOCK_BASE(tile_base_addr) |
         BGCNT_MAP_BLOCK_BASE(map_base_addr) |

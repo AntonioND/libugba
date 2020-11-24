@@ -44,7 +44,7 @@ EXPORT_API void BG_RegularScrollSet(int index, int x, int y);
 EXPORT_API void BG_RegularScrollGet(int index, int *x, int *y);
 
 EXPORT_API
-void BG_AffineInit(int index, bg_affine_size size, bg_color_mode colors,
+void BG_AffineInit(int index, bg_affine_size size,
                    uintptr_t tile_base_addr, uintptr_t map_base_addr,
                    int wrap);
 
