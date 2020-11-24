@@ -722,9 +722,9 @@ EXPORT_API void GBA_RegisterUpdatedOffset(uint32_t offset);
 
 // KEYCNT (Use the definitions from KEYINPUT too)
 
-#define KEYINPUT_IRQ_ENABLE             (1 << 14)
-#define KEYINPUT_IRQ_CONDITION_OR       (0 << 15)
-#define KEYINPUT_IRQ_CONDITION_AND      (1 << 15)
+#define KEYCNT_IRQ_ENABLE               (1 << 14)
+#define KEYCNT_IRQ_CONDITION_OR         (0 << 15)
+#define KEYCNT_IRQ_CONDITION_AND        (1 << 15)
 
 // Serial Communication (2)
 // ------------------------
