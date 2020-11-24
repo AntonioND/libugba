@@ -91,6 +91,28 @@ void BG_AffineInit(int index, bg_affine_size size,
     *reg = value;
 }
 
+void BG_AffineTransformSet(int index, bg_affine_dst_t *tr)
+{
+    if (index == 2)
+    {
+        REG_BG2PA = tr->pa;
+        REG_BG2PB = tr->pb;
+        REG_BG2PC = tr->pc;
+        REG_BG2PD = tr->pd;
+        REG_BG2X = tr->xoff;
+        REG_BG2Y = tr->yoff;
+    }
+    else if (index == 3)
+    {
+        REG_BG3PA = tr->pa;
+        REG_BG3PB = tr->pb;
+        REG_BG3PC = tr->pc;
+        REG_BG3PD = tr->pd;
+        REG_BG3X = tr->xoff;
+        REG_BG3Y = tr->yoff;
+    }
+}
+
 void BG_PrioritySet(int index, int priority)
 {
     volatile uint16_t *reg = BG_ControlRegisterGet(index);

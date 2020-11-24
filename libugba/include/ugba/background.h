@@ -5,6 +5,7 @@
 #ifndef BACKGROUND_H__
 #define BACKGROUND_H__
 
+#include "bios.h"
 #include "hardware.h"
 
 typedef enum {
@@ -47,6 +48,9 @@ EXPORT_API
 void BG_AffineInit(int index, bg_affine_size size,
                    uintptr_t tile_base_addr, uintptr_t map_base_addr,
                    int wrap);
+
+EXPORT_API
+void BG_AffineTransformSet(int index, bg_affine_dst_t *tr);
 
 EXPORT_API
 void BG_PrioritySet(int index, int priority);
