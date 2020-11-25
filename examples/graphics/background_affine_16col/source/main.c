@@ -28,9 +28,9 @@ int main(int argc, char *argv[])
     SWI_CpuSet_Copy16(cityMap, (void *)CITY_MAP_BASE, cityMapLen);
 
     // Setup background
-    BG_AffineInit(2, BG_AFFINE_512x512, CITY_TILES_BASE, CITY_MAP_BASE, 0);
+    BG_AffineInit(2, BG_AFFINE_256x256, CITY_TILES_BASE, CITY_MAP_BASE, 0);
 
-    int x = 80, y = 120;
+    int x = 100, y = -7;
     int angle = 0x20;
 
     bg_affine_src_t bg_src_start = {

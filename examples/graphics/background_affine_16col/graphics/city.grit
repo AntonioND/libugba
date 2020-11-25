@@ -7,8 +7,8 @@
 # Start generating palettes at index 8
 -ps0
 
-# Optimize tileset
--mRtpf
+# Optimize tileset for affine map
+-mRa
 
 # Affine map layout
 -mLa

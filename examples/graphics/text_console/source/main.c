@@ -47,7 +47,6 @@ int main(int argc, char *argv[])
             CON_CursorSet(28, 19);
             CON_Print("@");
         }
-
     }
 
     return 0;
