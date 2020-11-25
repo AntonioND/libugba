@@ -30,6 +30,13 @@ function(define_example)
     if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/graphics)
         add_grit_files(graphics ${EXECUTABLE_NAME})
     endif()
+
+    # Add data files
+    # --------------
+
+    if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/data)
+        add_data_files(data ${EXECUTABLE_NAME})
+    endif()
 endfunction()
 
 
