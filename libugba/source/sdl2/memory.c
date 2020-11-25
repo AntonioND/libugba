@@ -7,6 +7,7 @@
 #include <ugba/ugba.h>
 
 #include "core/video.h"
+#include "core/dma.h"
 
 uint64_t internal_bios[MEM_BIOS_SIZE / sizeof(uint64_t)];
 uint64_t internal_ewram[MEM_EWRAM_SIZE / sizeof(uint64_t)];
@@ -67,6 +68,13 @@ void GBA_RegisterUpdatedOffset(uint32_t offset)
 {
     switch (offset)
     {
+        case OFFSET_DMA0CNT_H:
+        case OFFSET_DMA1CNT_H:
+        case OFFSET_DMA2CNT_H:
+        case OFFSET_DMA3CNT_H:
+            GBA_DMAUpdateRegister(offset);
+            break;
+
         case OFFSET_BG2X_L:
         case OFFSET_BG2X_H:
         case OFFSET_BG2Y_L:
@@ -81,4 +89,47 @@ void GBA_RegisterUpdatedOffset(uint32_t offset)
         default:
             break;
     }
+}
+
+static uintptr_t DMASAD[4];
+static uintptr_t DMADAD[4];
+
+uintptr_t *UGBA_RegDMA0SAD(void)
+{
+    return &(DMASAD[0]);
+}
+
+uintptr_t *UGBA_RegDMA0DAD(void)
+{
+    return &(DMADAD[0]);
+}
+
+uintptr_t *UGBA_RegDMA1SAD(void)
+{
+    return &(DMASAD[1]);
+}
+
+uintptr_t *UGBA_RegDMA1DAD(void)
+{
+    return &(DMADAD[1]);
+}
+
+uintptr_t *UGBA_RegDMA2SAD(void)
+{
+    return &(DMASAD[2]);
+}
+
+uintptr_t *UGBA_RegDMA2DAD(void)
+{
+    return &(DMADAD[2]);
+}
+
+uintptr_t *UGBA_RegDMA3SAD(void)
+{
+    return &(DMASAD[3]);
+}
+
+uintptr_t *UGBA_RegDMA3DAD(void)
+{
+    return &(DMADAD[3]);
 }

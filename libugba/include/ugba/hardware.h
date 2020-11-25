@@ -420,26 +420,53 @@ typedef struct {
 #define REG_WAVE_RAM        ((uint8_t *)(OFFSET_WAVE_RAM))
 #define REG_FIFO_A          REG_32(OFFSET_FIFO_A)
 #define REG_FIFO_B          REG_32(OFFSET_FIFO_B)
-#define REG_DMA0SAD         REG_32(OFFSET_DMA0SAD)
-#define REG_DMA0DAD         REG_32(OFFSET_DMA0DAD)
+
 #define REG_DMA0CNT_L       REG_16(OFFSET_DMA0CNT_L)
 #define REG_DMA0CNT_H       REG_16(OFFSET_DMA0CNT_H)
 #define REG_DMA0CNT         REG_32(OFFSET_DMA0CNT_L)
-#define REG_DMA1SAD         REG_32(OFFSET_DMA1SAD)
-#define REG_DMA1DAD         REG_32(OFFSET_DMA1DAD)
 #define REG_DMA1CNT_L       REG_16(OFFSET_DMA1CNT_L)
 #define REG_DMA1CNT_H       REG_16(OFFSET_DMA1CNT_H)
 #define REG_DMA1CNT         REG_32(OFFSET_DMA1CNT_L)
-#define REG_DMA2SAD         REG_32(OFFSET_DMA2SAD)
-#define REG_DMA2DAD         REG_32(OFFSET_DMA2DAD)
 #define REG_DMA2CNT_L       REG_16(OFFSET_DMA2CNT_L)
 #define REG_DMA2CNT_H       REG_16(OFFSET_DMA2CNT_H)
 #define REG_DMA2CNT         REG_32(OFFSET_DMA2CNT_L)
-#define REG_DMA3SAD         REG_32(OFFSET_DMA3SAD)
-#define REG_DMA3DAD         REG_32(OFFSET_DMA3DAD)
 #define REG_DMA3CNT_L       REG_16(OFFSET_DMA3CNT_L)
 #define REG_DMA3CNT_H       REG_16(OFFSET_DMA3CNT_H)
 #define REG_DMA3CNT         REG_32(OFFSET_DMA3CNT_L)
+
+#ifdef __GBA__
+
+# define REG_DMA0SAD        REG_32(OFFSET_DMA0SAD)
+# define REG_DMA0DAD        REG_32(OFFSET_DMA0DAD)
+# define REG_DMA1SAD        REG_32(OFFSET_DMA1SAD)
+# define REG_DMA1DAD        REG_32(OFFSET_DMA1DAD)
+# define REG_DMA2SAD        REG_32(OFFSET_DMA2SAD)
+# define REG_DMA2DAD        REG_32(OFFSET_DMA2DAD)
+# define REG_DMA3SAD        REG_32(OFFSET_DMA3SAD)
+# define REG_DMA3DAD        REG_32(OFFSET_DMA3DAD)
+
+#else // __GBA__
+
+EXPORT_API uintptr_t *UGBA_RegDMA0SAD(void);
+EXPORT_API uintptr_t *UGBA_RegDMA0DAD(void);
+EXPORT_API uintptr_t *UGBA_RegDMA1SAD(void);
+EXPORT_API uintptr_t *UGBA_RegDMA1DAD(void);
+EXPORT_API uintptr_t *UGBA_RegDMA2SAD(void);
+EXPORT_API uintptr_t *UGBA_RegDMA2DAD(void);
+EXPORT_API uintptr_t *UGBA_RegDMA3SAD(void);
+EXPORT_API uintptr_t *UGBA_RegDMA3DAD(void);
+
+# define REG_DMA0SAD        (*UGBA_RegDMA0SAD())
+# define REG_DMA0DAD        (*UGBA_RegDMA0DAD())
+# define REG_DMA1SAD        (*UGBA_RegDMA1SAD())
+# define REG_DMA1DAD        (*UGBA_RegDMA1DAD())
+# define REG_DMA2SAD        (*UGBA_RegDMA2SAD())
+# define REG_DMA2DAD        (*UGBA_RegDMA2DAD())
+# define REG_DMA3SAD        (*UGBA_RegDMA3SAD())
+# define REG_DMA3DAD        (*UGBA_RegDMA3DAD())
+
+#endif // __GBA__
+
 #define REG_TM0CNT_L        REG_16(OFFSET_TM0CNT_L)
 #define REG_TM0CNT_H        REG_16(OFFSET_TM0CNT_H)
 #define REG_TM1CNT_L        REG_16(OFFSET_TM1CNT_L)
@@ -480,6 +507,10 @@ typedef struct {
 //        REG_BG2Y_L, REG_BG2Y_H, REG_BG2Y
 //        REG_BG3X_L, REG_BG3X_H, REG_BG3X
 //        REG_BG3Y_L, REG_BG3Y_H, REG_BG3Y
+//
+// 2) When starting a DMA transfer by writing to:
+//
+//        REG_DMA0CNT_H, REG_DMA1CNT_H, REG_DMA2CNT_H, REG_DMA3CNT_H
 
 #ifdef __GBA__
 # define GBA_RegisterUpdated(reg) do { } while (0)
@@ -657,24 +688,33 @@ EXPORT_API void GBA_RegisterUpdatedOffset(uint32_t offset);
 // DMA Transfer Channels
 // ---------------------
 
-#if 0
-  40000B0h  4    W    DMA0SAD   DMA 0 Source Address
-  40000B4h  4    W    DMA0DAD   DMA 0 Destination Address
-  40000B8h  2    W    DMA0CNT_L DMA 0 Word Count
-  40000BAh  2    R/W  DMA0CNT_H DMA 0 Control
-  40000BCh  4    W    DMA1SAD   DMA 1 Source Address
-  40000C0h  4    W    DMA1DAD   DMA 1 Destination Address
-  40000C4h  2    W    DMA1CNT_L DMA 1 Word Count
-  40000C6h  2    R/W  DMA1CNT_H DMA 1 Control
-  40000C8h  4    W    DMA2SAD   DMA 2 Source Address
-  40000CCh  4    W    DMA2DAD   DMA 2 Destination Address
-  40000D0h  2    W    DMA2CNT_L DMA 2 Word Count
-  40000D2h  2    R/W  DMA2CNT_H DMA 2 Control
-  40000D4h  4    W    DMA3SAD   DMA 3 Source Address
-  40000D8h  4    W    DMA3DAD   DMA 3 Destination Address
-  40000DCh  2    W    DMA3CNT_L DMA 3 Word Count
-  40000DEh  2    R/W  DMA3CNT_H DMA 3 Control
-#endif
+// DMA0CNT_H, DMA1CNT_H, DMA2CNT_H, DMA3CNT_H
+
+#define DMACNT_DST_INCREMENT    (0 << 5)
+#define DMACNT_DST_DECREMENT    (1 << 5)
+#define DMACNT_DST_FIXED        (2 << 5)
+#define DMACNT_DST_RELOAD       (3 << 5)
+
+#define DMACNT_SRC_INCREMENT    (0 << 7)
+#define DMACNT_SRC_DECREMENT    (1 << 7)
+#define DMACNT_SRC_FIXED        (2 << 7)
+
+#define DMACNT_REPEAT_ON        (1 << 9)
+
+#define DMACNT_TRANSFER_16_BITS (0 << 10)
+#define DMACNT_TRANSFER_32_BITS (1 << 10)
+
+#define DMACNT_GAME_PAK_NORMAL  (0 << 11) // DMA3 only
+#define DMACNT_GAME_PAK_DRQ     (1 << 11) // DMA3 only
+
+#define DMACNT_START_NOW        (0 << 12)
+#define DMACNT_START_VBLANK     (1 << 12)
+#define DMACNT_START_HBLANK     (2 << 12)
+#define DMACNT_START_SPECIAL    (3 << 12) // DMA1, DMA2, DMA3
+
+#define DMACNT_IRQ_ENABLE       (1 << 14)
+
+#define DMACNT_DMA_ENABLE       (1 << 15)
 
 // Timer Registers
 // ---------------

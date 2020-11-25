@@ -9,6 +9,7 @@
 #include "bios.h"
 #include "bios_wrappers.h"
 #include "console.h"
+#include "dma.h"
 #include "display.h"
 #include "debug.h"
 #include "definitions.h"

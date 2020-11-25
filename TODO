@@ -17,8 +17,14 @@ SDL2 port
 
 - Add debugger windows from GiiBiiAdvance.
 - Add helper to configure user input.
+- Add build option to remove the Lua interpreter and screenshot functionality in
+  release builds.
 
 General
 -------
 
+- Public interface cleanup.
+- Documentation.
 - CI scripts for GBA ROMs.
+- Add Lua interpreter to GiiBiiAdvance.
+- Add GiiBiiAdvance as a submodule for easier dependency management.
