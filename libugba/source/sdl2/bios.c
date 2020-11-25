@@ -2,6 +2,8 @@
 //
 // Copyright (c) 2020 Antonio Niño Díaz
 
+#include <math.h>
+
 #include <SDL2/SDL.h>
 
 #include <ugba/ugba.h>
