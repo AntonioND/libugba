@@ -93,8 +93,8 @@ if(CMAKE_C_COMPILER_ID STREQUAL "GNU")
 elseif(CMAKE_C_COMPILER_ID STREQUAL "MSVC")
     add_compile_definitions(
         # Silence warnings
-        -D_USE_MATH_DEFINES
-        -D_CRT_SECURE_NO_WARNINGS
+        _USE_MATH_DEFINES
+        _CRT_SECURE_NO_WARNINGS
     )
     add_compile_options(
         # Enable parallel compilation
