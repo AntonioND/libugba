@@ -2,5 +2,5 @@
 #
 # Copyright (c) 2020 Antonio Niño Díaz
 
-add_subdirectory(hblank_irq_handler)
-add_subdirectory(vcount_irq_handler)
+define_example()
+unittest_screenshot()
