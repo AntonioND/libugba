@@ -7,8 +7,8 @@ Library
 - Examples for graphics.
 - Timers.
 - Examples for timers.
-- DMA.
-- Examples for DMA.
+- DMA (Sound, Special).
+- Examples for DMA (VBL-triggered DMA is missing).
 - BIOS services.
 - Examples for BIOS services.
 
