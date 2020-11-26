@@ -49,13 +49,25 @@ void DMA_Transfer(int channel, const void *src, void *dst, size_t size,
 void DMA_Stop(int channel)
 {
     if (channel == 0)
+    {
         REG_DMA0CNT_H = 0;
+        UGBA_RegisterUpdatedOffset(OFFSET_DMA0CNT_H);
+    }
     else if (channel == 1)
+    {
         REG_DMA1CNT_H = 0;
+        UGBA_RegisterUpdatedOffset(OFFSET_DMA1CNT_H);
+    }
     else if (channel == 2)
+    {
         REG_DMA2CNT_H = 0;
+        UGBA_RegisterUpdatedOffset(OFFSET_DMA2CNT_H);
+    }
     else if (channel == 3)
+    {
         REG_DMA3CNT_H = 0;
+        UGBA_RegisterUpdatedOffset(OFFSET_DMA3CNT_H);
+    }
 }
 
 void DMA_Copy16(int channel, const void *src, void *dst, size_t size)

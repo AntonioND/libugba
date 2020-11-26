@@ -688,31 +688,31 @@ EXPORT_API void UGBA_RegisterUpdatedOffset(uint32_t offset);
 
 // DMA0CNT_H, DMA1CNT_H, DMA2CNT_H, DMA3CNT_H
 
-#define DMACNT_DST_INCREMENT    (0 << 5)
-#define DMACNT_DST_DECREMENT    (1 << 5)
-#define DMACNT_DST_FIXED        (2 << 5)
-#define DMACNT_DST_RELOAD       (3 << 5)
+#define DMACNT_DST_INCREMENT            (0 << 5)
+#define DMACNT_DST_DECREMENT            (1 << 5)
+#define DMACNT_DST_FIXED                (2 << 5)
+#define DMACNT_DST_RELOAD               (3 << 5)
 
-#define DMACNT_SRC_INCREMENT    (0 << 7)
-#define DMACNT_SRC_DECREMENT    (1 << 7)
-#define DMACNT_SRC_FIXED        (2 << 7)
+#define DMACNT_SRC_INCREMENT            (0 << 7)
+#define DMACNT_SRC_DECREMENT            (1 << 7)
+#define DMACNT_SRC_FIXED                (2 << 7)
 
-#define DMACNT_REPEAT_ON        (1 << 9)
+#define DMACNT_REPEAT_ON                (1 << 9)
 
-#define DMACNT_TRANSFER_16_BITS (0 << 10)
-#define DMACNT_TRANSFER_32_BITS (1 << 10)
+#define DMACNT_TRANSFER_16_BITS         (0 << 10)
+#define DMACNT_TRANSFER_32_BITS         (1 << 10)
 
-#define DMACNT_GAME_PAK_NORMAL  (0 << 11) // DMA3 only
-#define DMACNT_GAME_PAK_DRQ     (1 << 11) // DMA3 only
+#define DMACNT_GAME_PAK_NORMAL          (0 << 11) // DMA3 only
+#define DMACNT_GAME_PAK_DRQ             (1 << 11) // DMA3 only
 
-#define DMACNT_START_NOW        (0 << 12)
-#define DMACNT_START_VBLANK     (1 << 12)
-#define DMACNT_START_HBLANK     (2 << 12)
-#define DMACNT_START_SPECIAL    (3 << 12) // DMA1, DMA2, DMA3
+#define DMACNT_START_NOW                (0 << 12)
+#define DMACNT_START_VBLANK             (1 << 12)
+#define DMACNT_START_HBLANK             (2 << 12)
+#define DMACNT_START_SPECIAL            (3 << 12) // DMA1, DMA2, DMA3
 
-#define DMACNT_IRQ_ENABLE       (1 << 14)
+#define DMACNT_IRQ_ENABLE               (1 << 14)
 
-#define DMACNT_DMA_ENABLE       (1 << 15)
+#define DMACNT_DMA_ENABLE               (1 << 15)
 
 // Timer Registers
 // ---------------
