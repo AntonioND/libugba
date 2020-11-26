@@ -89,16 +89,16 @@ void DMA_HBLCopy32(int channel, const void *src, void *dst, size_t size)
 void DMA_RepeatedHBLCopy16(int channel, const void *src, void *dst, size_t size)
 {
     DMA_Transfer(channel, src, dst, size,
-                 DMACNT_DST_INCREMENT | DMACNT_SRC_FIXED |
-                 DMACNT_TRANSFER_16_BITS | DMACNT_START_NOW |
+                 DMACNT_DST_FIXED | DMACNT_SRC_INCREMENT |
+                 DMACNT_TRANSFER_16_BITS | DMACNT_START_HBLANK |
                  DMACNT_REPEAT_ON);
 }
 
 void DMA_RepeatedHBLCopy32(int channel, const void *src, void *dst, size_t size)
 {
     DMA_Transfer(channel, src, dst, size,
-                 DMACNT_DST_INCREMENT | DMACNT_SRC_FIXED |
-                 DMACNT_TRANSFER_32_BITS | DMACNT_START_NOW |
+                 DMACNT_DST_FIXED | DMACNT_SRC_INCREMENT |
+                 DMACNT_TRANSFER_32_BITS | DMACNT_START_HBLANK |
                  DMACNT_REPEAT_ON);
 }
 
