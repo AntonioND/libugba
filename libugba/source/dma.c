@@ -18,7 +18,7 @@ void DMA_Transfer(int channel, const void *src, void *dst, size_t size,
         REG_DMA0DAD = dest;
         REG_DMA0CNT_L = nelem;
         REG_DMA0CNT_H = newflags;
-        UGBA_RegisterUpdated(REG_DMA0CNT_H);
+        UGBA_RegisterUpdatedOffset(OFFSET_DMA0CNT_H);
     }
     else if (channel == 1)
     {
@@ -26,7 +26,7 @@ void DMA_Transfer(int channel, const void *src, void *dst, size_t size,
         REG_DMA1DAD = dest;
         REG_DMA1CNT_L = nelem;
         REG_DMA1CNT_H = newflags;
-        UGBA_RegisterUpdated(REG_DMA1CNT_H);
+        UGBA_RegisterUpdatedOffset(OFFSET_DMA1CNT_H);
     }
     else if (channel == 2)
     {
@@ -34,7 +34,7 @@ void DMA_Transfer(int channel, const void *src, void *dst, size_t size,
         REG_DMA2DAD = dest;
         REG_DMA2CNT_L = nelem;
         REG_DMA2CNT_H = newflags;
-        UGBA_RegisterUpdated(REG_DMA2CNT_H);
+        UGBA_RegisterUpdatedOffset(OFFSET_DMA2CNT_H);
     }
     else if (channel == 3)
     {
@@ -42,7 +42,7 @@ void DMA_Transfer(int channel, const void *src, void *dst, size_t size,
         REG_DMA3DAD = dest;
         REG_DMA3CNT_L = nelem;
         REG_DMA3CNT_H = newflags;
-        UGBA_RegisterUpdated(REG_DMA3CNT_H);
+        UGBA_RegisterUpdatedOffset(OFFSET_DMA3CNT_H);
     }
 }
 

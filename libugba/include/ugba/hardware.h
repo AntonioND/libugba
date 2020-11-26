@@ -495,9 +495,9 @@ EXPORT_API uintptr_t *UGBA_RegDMA3DAD(void);
 #define REG_IF              REG_16(OFFSET_IF)
 #define REG_IME             REG_16(OFFSET_IME)
 
-// The GBA_RegisterUpdated() function must be called in some circumstances for
-// the values of the registers to be reflected immediately in the hardware
-// emulation.
+// The UGBA_RegisterUpdatedOffset() function must be called in some
+// circumstances for the values of the registers to be reflected immediately in
+// the hardware emulation.
 //
 // 1) When modifying the following registers dynamically during the screen
 //    redraw (in the HBL interrupt handler, for example). It isn't needed if the
@@ -513,10 +513,8 @@ EXPORT_API uintptr_t *UGBA_RegDMA3DAD(void);
 //        REG_DMA0CNT_H, REG_DMA1CNT_H, REG_DMA2CNT_H, REG_DMA3CNT_H
 
 #ifdef __GBA__
-# define UGBA_RegisterUpdated(reg) do { } while (0)
+# define UGBA_RegisterUpdatedOffset(offset) do { } while (0)
 #else
-# define UGBA_RegisterUpdated(reg) \
-         UGBA_RegisterUpdatedOffset(((uintptr_t)&reg) - MEM_IO_ADDR)
 EXPORT_API void UGBA_RegisterUpdatedOffset(uint32_t offset);
 #endif
 
