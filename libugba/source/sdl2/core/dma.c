@@ -145,7 +145,7 @@ static void GBA_DMAUpdateState(int channel)
             dma->num_chunks = 0x4000;
     }
 
-    dma->start_mode = (dmacnt & 3) << 12;
+    dma->start_mode = dmacnt & (3 << 12);
 
     if (dma->start_mode == DMACNT_START_NOW)
     {
@@ -179,10 +179,36 @@ void GBA_DMAUpdateRegister(uint32_t offset)
 
 void GBA_DMAHandleHBL(void)
 {
-    // TODO
+    for (int i = 0; i < 4; i++)
+    {
+        dma_channel_t *dma = &DMA[i];
+
+        if (dma->start_mode == DMACNT_START_HBLANK)
+        {
+            GBA_DMACopyNow(dma);
+
+            if (dma->repeat)
+                continue;
+
+            dma->enabled = 0;
+        }
+    }
 }
 
 void GBA_DMAHandleVBL(void)
 {
-    // TODO
+    for (int i = 0; i < 4; i++)
+    {
+        dma_channel_t *dma = &DMA[i];
+
+        if (dma->start_mode == DMACNT_START_VBLANK)
+        {
+            GBA_DMACopyNow(dma);
+
+            if (dma->repeat)
+                continue;
+
+            dma->enabled = 0;
+        }
+    }
 }

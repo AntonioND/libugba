@@ -6,5 +6,7 @@
 #define SDL2_CORE_DMA_H__
 
 void GBA_DMAUpdateRegister(uint32_t offset);
+void GBA_DMAHandleHBL(void);
+void GBA_DMAHandleVBL(void);
 
 #endif // SDL2_CORE_DMA_H__

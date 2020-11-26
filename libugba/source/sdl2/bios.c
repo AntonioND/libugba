@@ -12,6 +12,7 @@
 #include "input_utils.h"
 #include "lua_handler.h"
 
+#include "core/dma.h"
 #include "core/video.h"
 #include "gui/win_main.h"
 #include "gui/window_handler.h"
@@ -51,12 +52,19 @@ static void handle_hbl(void)
     // Then, draw
     GBA_DrawScanline(current_vcount);
 
+    // Handle DMA if active
+    GBA_DMAHandleHBL();
+
     // Finally, HBL interrupt
     IRQ_Internal_CallHandler(IRQ_HBLANK);
 }
 
 static void handle_vbl(void)
 {
+    // Handle DMA if active
+    GBA_DMAHandleVBL();
+
+    // Handle VBL interrupt
     IRQ_Internal_CallHandler(IRQ_VBLANK);
 
     // Handle GUI
