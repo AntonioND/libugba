@@ -513,11 +513,11 @@ EXPORT_API uintptr_t *UGBA_RegDMA3DAD(void);
 //        REG_DMA0CNT_H, REG_DMA1CNT_H, REG_DMA2CNT_H, REG_DMA3CNT_H
 
 #ifdef __GBA__
-# define GBA_RegisterUpdated(reg) do { } while (0)
+# define UGBA_RegisterUpdated(reg) do { } while (0)
 #else
-# define GBA_RegisterUpdated(reg) \
-         GBA_RegisterUpdatedOffset(((uintptr_t)&reg) - MEM_IO_ADDR)
-EXPORT_API void GBA_RegisterUpdatedOffset(uint32_t offset);
+# define UGBA_RegisterUpdated(reg) \
+         UGBA_RegisterUpdatedOffset(((uintptr_t)&reg) - MEM_IO_ADDR)
+EXPORT_API void UGBA_RegisterUpdatedOffset(uint32_t offset);
 #endif
 
 // Per-register fields definitions

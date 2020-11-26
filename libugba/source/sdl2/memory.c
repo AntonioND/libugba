@@ -64,7 +64,7 @@ uintptr_t UGBA_MemSRAM(void)
     return (uintptr_t)(&internal_sram[0]);
 }
 
-void GBA_RegisterUpdatedOffset(uint32_t offset)
+void UGBA_RegisterUpdatedOffset(uint32_t offset)
 {
     switch (offset)
     {
