@@ -105,7 +105,7 @@ interrupt_found:
 
     // Re-enable IME
     mov     r1, #1
-    str     r3, [r0, #OFFSET_IME]
+    str     r1, [r0, #OFFSET_IME]
 
     bx      lr
 
