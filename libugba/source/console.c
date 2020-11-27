@@ -79,6 +79,9 @@ void CON_InitDefault(void)
 
 void CON_PutChar(char c)
 {
+    if (map_base == NULL)
+        return;
+
     if (c == '\n')
     {
         CON_NewLine();
@@ -114,6 +117,9 @@ void CON_CursorSet(int x, int y)
 
 void CON_Clear(void)
 {
+    if (map_base == NULL)
+        return;
+
     for (int j = 0; j < 32; j++)
         for (int i = 0; i < 32; i++)
             map_base[j * 32 + i] = 0;
