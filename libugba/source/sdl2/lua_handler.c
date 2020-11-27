@@ -234,7 +234,7 @@ static int lua_exit(lua_State *L)
 
 // ----------------------------------------------------------------------------
 
-static int Script_Runner(void unused__ *ptr)
+static int Script_Runner(UNUSED void *ptr)
 {
     int ret = 1;
 

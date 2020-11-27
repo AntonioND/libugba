@@ -1525,7 +1525,7 @@ static void gba_bg3drawaffine(int32_t y)
 
 //------------------------------------------------------------------------------
 
-static void gba_bg2drawbitmapmode3(unused__ int32_t y)
+static void gba_bg2drawbitmapmode3(UNUSED int32_t y)
 {
     int32_t currx = BG2lastx;
     int32_t curry = BG2lasty;
@@ -1557,7 +1557,7 @@ static void gba_bg2drawbitmapmode3(unused__ int32_t y)
     }
 }
 
-static void gba_bg2drawbitmapmode4(unused__ int32_t y)
+static void gba_bg2drawbitmapmode4(UNUSED int32_t y)
 {
     int32_t currx = BG2lastx;
     int32_t curry = BG2lasty;
@@ -1589,7 +1589,7 @@ static void gba_bg2drawbitmapmode4(unused__ int32_t y)
     }
 }
 
-static void gba_bg2drawbitmapmode5(unused__ int32_t y)
+static void gba_bg2drawbitmapmode5(UNUSED int32_t y)
 {
     int32_t currx = BG2lastx;
     int32_t curry = BG2lasty;

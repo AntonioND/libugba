@@ -8,9 +8,9 @@
 #define BIT(n) (1 << (n))
 
 #if defined(_MSC_VER)
-# define unused__
+# define UNUSED
 #else
-# define unused__ __attribute__((unused))
+# define UNUSED __attribute__((unused))
 #endif
 
 #if defined(_MSC_VER)

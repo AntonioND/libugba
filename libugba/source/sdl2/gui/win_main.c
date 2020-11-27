@@ -23,7 +23,7 @@ static int WinMain_FPS;
 static int WinMain_frames_drawn = 0;
 static SDL_TimerID WinMain_FPS_timer;
 
-static Uint32 _fps_callback_function(Uint32 interval, unused__ void *param)
+static Uint32 _fps_callback_function(Uint32 interval, UNUSED void *param)
 {
     WinMain_FPS = WinMain_frames_drawn;
     WinMain_frames_drawn = 0;
