@@ -149,7 +149,9 @@ multiple threads by doing:
 6. Credits
 ----------
 
-- WinterMute for devkitPro.
+- Dave Murphy (WinterMute) for devkitPro.
 - Jasper Vijn (cearn) for Grit and Tonc.
+- Martin Korth (Nocash) for no$gba and GBATEK.
+- Vicki Pfau (endrift) for mGBA.
 
 .. _vcpkg: https://github.com/microsoft/vcpkg
