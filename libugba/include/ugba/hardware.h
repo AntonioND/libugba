@@ -517,7 +517,7 @@ EXPORT_API uintptr_t *UGBA_RegDMA3DAD(void);
 //        REG_TM0CNT_H, REG_TM1CNT_H, REG_TM2CNT_H, REG_TM3CNT_H
 
 #ifdef __GBA__
-# define UGBA_RegisterUpdatedOffset(offset) do { } while (0)
+# define UGBA_RegisterUpdatedOffset(offset) do { (void)(offset); } while (0)
 #else
 EXPORT_API void UGBA_RegisterUpdatedOffset(uint32_t offset);
 #endif
