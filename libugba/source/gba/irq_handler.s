@@ -97,12 +97,17 @@ interrupt_found:
     // Set CPU mode to system (like user, but privileged, so we can go back to
     // mode IRQ later)
     mrs     r2, cpsr
+    //bic     r2, r2, #MODE_MASK // Not needed for MODE_SYSTEM
     orr     r2, r2, #MODE_SYSTEM
     msr     cpsr, r2
 
     // Call interrupt handler
+    push    {lr}
+
     mov     lr, pc
     bx      r3
+
+    pop     {lr}
 
     // Set CPU mode to IRQ
     mrs     r2, cpsr
