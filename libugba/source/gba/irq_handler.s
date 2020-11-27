@@ -20,17 +20,6 @@ IRQ_GlobalInterruptHandler:
     ldr     r1, [r0, #OFFSET_IE]    // r1 = REG_IE | (REG_IF << 16)
     and     r1, r1, r1, lsr #16     // r1 = REG_IE & REG_IF
 
-    // Write bits to IF and the BIOS register to acknowledge the interrupt.
-    // The BIOS register is mirrored at 0x03FFFFF8
-
-    add     r3, r0, #(OFFSET_IF & 0xFF00)
-    orr     r3, r3, #(OFFSET_IF & 0xFF)
-    strh    r1, [r3]
-
-    ldrh    r2, [r0, #-8]
-    orr     r2, r2, r1
-    strh    r2, [r0, #-8]
-
     // Iterate from BIT(0) to BIT(13)
 
     .extern IRQ_VectorTable
@@ -49,13 +38,35 @@ iterate_interrupt_table:
         cmp     r2, #(1 << 14)
         bne     iterate_interrupt_table
 
-    // If the interrupt hasn't been found, exit
+    // If no interrupt handlers have to be called, clear all bits in the IF and
+    // BIOS flags register.
+
+    add     r3, r0, #(OFFSET_IF & 0xFF00)
+    orr     r3, r3, #(OFFSET_IF & 0xFF)
+    ldrh    r1, [r3]
+    strh    r1, [r3]
+
+    ldrh    r2, [r0, #-8] // The BIOS register is mirrored at 0x03FFFFF8
+    orr     r2, r2, r1
+    strh    r2, [r0, #-8]
+
     bx      lr
 
     // This point is reached if there is at least one bit set in IF & IE
 interrupt_found:
     // r0 = REG_BASE
+    // r2 = IRQ bit of the current vector
     // r3 = Pointer to vector to jump to
+
+    // Write bit to IF and the BIOS register to acknowledge this interrupt, but
+    // leave the others alone.
+    add     r1, r0, #(OFFSET_IF & 0xFF00)
+    orr     r1, r1, #(OFFSET_IF & 0xFF)
+    strh    r2, [r1]
+
+    ldrh    r1, [r0, #-8] // The BIOS register is mirrored at 0x03FFFFF8
+    orr     r1, r1, r2
+    strh    r1, [r0, #-8]
 
     // If the interrupt handler is null, exit handler
     ldr     r3, [r3]
