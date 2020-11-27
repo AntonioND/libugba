@@ -50,11 +50,11 @@ int main(int argc, char *argv[])
     // different prescaler value. The last one should fail to setup as the
     // period is too long for a single timer (it would be needed to use two
     // timers in cascade mode).
-    TM_TimerStartMs(0, 100, 0, 1);
-    TM_TimerStartMs(1, 500, 0, 1);
-    TM_TimerStartMs(2, 1000, 0, 1);
+    TM_TimerStartMs(0, 100, 1);
+    TM_TimerStartMs(1, 500, 1);
+    TM_TimerStartMs(2, 1000, 1);
 
-    if (TM_TimerStartMs(3, 5000, 0, 1) == 0)
+    if (TM_TimerStartMs(3, 5000, 1) == 0)
     {
         CON_Print("Timer 3 didn't fail to setup!");
 

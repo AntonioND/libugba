@@ -13,8 +13,9 @@
 #define PTR_REG_TM3CNT_L        PTR_REG_16(OFFSET_TM3CNT_L)
 #define PTR_REG_TM3CNT_H        PTR_REG_16(OFFSET_TM3CNT_H)
 
-void TM_TimerStart(int index, uint16_t reload_value, uint16_t prescaler,
-                   int cascade, int enable_irq)
+static void TM_TimerStartInternal(int index, uint16_t reload_value,
+                                  uint16_t prescaler, int cascade,
+                                  int enable_irq)
 {
     volatile uint16_t *tmcnt_l[4] = {
         PTR_REG_TM0CNT_L, PTR_REG_TM1CNT_L, PTR_REG_TM2CNT_L, PTR_REG_TM3CNT_L
@@ -37,7 +38,19 @@ void TM_TimerStart(int index, uint16_t reload_value, uint16_t prescaler,
     UGBA_RegisterUpdatedOffset(offsets[index]);
 }
 
-int TM_TimerStartMs(int index, uint32_t period_ms, int cascade, int enable_irq)
+void TM_TimerStart(int index, uint16_t reload_value, uint16_t prescaler,
+                   int enable_irq)
+{
+    TM_TimerStartInternal(index, reload_value, prescaler, 0, enable_irq);
+}
+
+void TM_TimerStartCascade(int index, uint16_t period_ticks, int enable_irq)
+{
+    uint16_t reload_value = (UINT16_MAX + 1) - period_ticks;
+    TM_TimerStartInternal(index, reload_value, 0, 1, enable_irq);
+}
+
+int TM_TimerStartMs(int index, uint32_t period_ms, int enable_irq)
 {
     // Look for a prescaler value that lets us fit the given period in ms
     // into the initial value for TMxCNT_L. Start with low prescaler values to
@@ -77,9 +90,9 @@ int TM_TimerStartMs(int index, uint32_t period_ms, int cascade, int enable_irq)
 
         if (ticks_per_period <= max_ticks_per_period)
         {
-            uint32_t reload_value = max_ticks_per_period - ticks_per_period;
+            uint16_t reload_value = max_ticks_per_period - ticks_per_period;
 
-            TM_TimerStart(index, reload_value, i, cascade, enable_irq);
+            TM_TimerStart(index, reload_value, i, enable_irq);
 
             return 0;
         }

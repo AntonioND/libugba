@@ -9,10 +9,13 @@
 
 EXPORT_API
 void TM_TimerStart(int index, uint16_t reload_value, uint16_t prescaler,
-                   int cascade, int enable_irq);
+                   int enable_irq);
 
 EXPORT_API
-int TM_TimerStartMs(int index, uint32_t period_ms, int cascade, int enable_irq);
+void TM_TimerStartCascade(int index, uint16_t period_ticks, int enable_irq);
+
+EXPORT_API
+int TM_TimerStartMs(int index, uint32_t period_ms, int enable_irq);
 
 EXPORT_API
 void TM_TimerStop(int index);
