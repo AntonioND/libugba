@@ -123,9 +123,9 @@ static void GBA_RefreshTimer(int index)
     ticks_per_period += 1;
     uint64_t clocks_per_period = ticks_per_period * prescaler;
 
-    const uint64_t clocks_per_second = 280896 * 60;
+    const uint64_t clocks_per_second = 1 << 24;
 
-    uint64_t delay_ms = clocks_per_period * 1000 / clocks_per_second;
+    uint64_t delay_ms = (clocks_per_period * 1000) / clocks_per_second;
 
     if (delay_ms == 0)
     {

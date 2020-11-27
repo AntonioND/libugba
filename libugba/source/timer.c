@@ -43,30 +43,36 @@ int TM_TimerStartMs(int index, uint32_t period_ms, int cascade, int enable_irq)
     // into the initial value for TMxCNT_L. Start with low prescaler values to
     // keep as much granularity as possible, and increase them as needed.
 
-    // clocks_per_frame = 280896
-    // clocks_per_second = 280896 * 60 = 16853760
-    // max_ticks_per_period = 65536 (Max reload value)
+    // GBA frequency is (1 << 24) Hz = 16777216 Hz (16.78 MHz)
+    //
+    // clocks_per_second = 1 << 24
+    //
+    // Translate period in milliseconds to clocks:
+    //
+    //                           period (ms) * clocks_per_second (clk/s)
+    // clocks_per_period (clk) = ---------------------------------------
+    //                                         1000 (ms/s)
 
-    const uint32_t prescaler_values[4] = {
-        1, 64, 256, 1024
+    //uint64_t clocks_per_period = ((uint64_t)period_ms << 24) / 1000;
+    uint64_t clocks_per_period = ((uint64_t)period_ms << 21) / 125;
+
+    const uint32_t prescaler_shifts[4] = {
+        // 1, 64, 256, 1024
+        0, 6, 8, 10
     };
 
     for (int i = 0; i < 4; i++)
     {
-        // Translate milliseconds to clocks
-
-        uint64_t clocks_per_second = 16853760;
-        uint64_t clocks_per_period = ((uint64_t)period_ms * clocks_per_second)
-                                     / 1000;
-
         // Translate clocks to ticks + prescaler value
 
-        // ticks_per_period = clocks_per_period / prescaler
+        // max_ticks_per_period = 65536 (Max reload value)
+        //
+        // ticks_per_period = clocks_per_period / prescaler (clocks/ticks)
         // if ticks_per_period <= max_ticks_per_period
         //     reload_value = max_ticks_per_period - ticks_per_period
         //     return success
 
-        uint32_t ticks_per_period = clocks_per_period / prescaler_values[i];
+        uint32_t ticks_per_period = clocks_per_period >> prescaler_shifts[i];
         uint32_t max_ticks_per_period = UINT16_MAX + 1;
 
         if (ticks_per_period <= max_ticks_per_period)
