@@ -1,12 +1,11 @@
 Library
 -------
 
-- Interrupts: VBL, HBL, VCOUNT and Keypad are done, the rest are missing.
+- Interrupts: SERIAL, DMA0-3 and GAMEPAK are missing.
 - Examples for interrupts.
 - Examples for input.
 - Examples for graphics.
-- Timers.
-- Examples for timers.
+- Examples for timers in cascade mode.
 - DMA (Sound, Special).
 - Examples for DMA (VBL-triggered DMA is missing).
 - BIOS services.
