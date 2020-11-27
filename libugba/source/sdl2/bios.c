@@ -10,6 +10,7 @@
 
 #include "debug_utils.h"
 #include "input_utils.h"
+#include "interrupts.h"
 #include "lua_handler.h"
 
 #include "core/dma.h"
@@ -18,8 +19,6 @@
 #include "gui/window_handler.h"
 
 static int current_vcount = 0;
-
-void IRQ_Internal_CallHandler(irq_index index);
 
 static void Input_Handle_Interrupt(void)
 {
