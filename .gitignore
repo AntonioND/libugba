@@ -1,5 +1,9 @@
+# Build output
 *.elf
 *.gba
 *.sav
 build/
 lib/
+
+# Vim swap files
+*.swp
