@@ -511,6 +511,10 @@ EXPORT_API uintptr_t *UGBA_RegDMA3DAD(void);
 // 2) When starting a DMA transfer by writing to:
 //
 //        REG_DMA0CNT_H, REG_DMA1CNT_H, REG_DMA2CNT_H, REG_DMA3CNT_H
+//
+// 3) When starting a timer by writing to:
+//
+//        REG_TM0CNT_H, REG_TM1CNT_H, REG_TM2CNT_H, REG_TM3CNT_H
 
 #ifdef __GBA__
 # define UGBA_RegisterUpdatedOffset(offset) do { } while (0)
@@ -717,16 +721,21 @@ EXPORT_API void UGBA_RegisterUpdatedOffset(uint32_t offset);
 // Timer Registers
 // ---------------
 
-#if 0
-  4000100h  2    R/W  TM0CNT_L  Timer 0 Counter/Reload
-  4000102h  2    R/W  TM0CNT_H  Timer 0 Control
-  4000104h  2    R/W  TM1CNT_L  Timer 1 Counter/Reload
-  4000106h  2    R/W  TM1CNT_H  Timer 1 Control
-  4000108h  2    R/W  TM2CNT_L  Timer 2 Counter/Reload
-  400010Ah  2    R/W  TM2CNT_H  Timer 2 Control
-  400010Ch  2    R/W  TM3CNT_L  Timer 3 Counter/Reload
-  400010Eh  2    R/W  TM3CNT_H  Timer 3 Control
-#endif
+// TM0CNT_H, TM1CNT_H, TM2CNT_H, TM3CNT_H
+
+#define TMCNT_PRESCALER_F_DIV_1         (0 << 0)
+#define TMCNT_PRESCALER_F_DIV_64        (1 << 0)
+#define TMCNT_PRESCALER_F_DIV_256       (2 << 0)
+#define TMCNT_PRESCALER_F_DIV_1024      (3 << 0)
+
+#define TMCNT_STANDALONE                (0 << 2)
+#define TMCNT_CASCADE                   (1 << 2) // Not used in TM0CNT_H
+
+#define TMCNT_IRQ_DISABLE               (0 << 6)
+#define TMCNT_IRQ_ENABLE                (1 << 6)
+
+#define TMCNT_STOP                      (0 << 7)
+#define TMCNT_START                     (1 << 7)
 
 // Serial Communication (1)
 // ------------------------

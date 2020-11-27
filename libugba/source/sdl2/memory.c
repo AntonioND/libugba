@@ -6,8 +6,9 @@
 
 #include <ugba/ugba.h>
 
-#include "core/video.h"
 #include "core/dma.h"
+#include "core/timer.h"
+#include "core/video.h"
 
 uint64_t internal_bios[MEM_BIOS_SIZE / sizeof(uint64_t)];
 uint64_t internal_ewram[MEM_EWRAM_SIZE / sizeof(uint64_t)];
@@ -68,6 +69,13 @@ void UGBA_RegisterUpdatedOffset(uint32_t offset)
 {
     switch (offset)
     {
+        case OFFSET_TM0CNT_H:
+        case OFFSET_TM1CNT_H:
+        case OFFSET_TM2CNT_H:
+        case OFFSET_TM3CNT_H:
+            GBA_TimerUpdateRegister(offset);
+            break;
+
         case OFFSET_DMA0CNT_H:
         case OFFSET_DMA1CNT_H:
         case OFFSET_DMA2CNT_H:
