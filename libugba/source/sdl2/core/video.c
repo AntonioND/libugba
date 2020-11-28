@@ -1544,7 +1544,7 @@ static void gba_bg2drawbitmapmode3(UNUSED int32_t y)
     for (int i = 0; i < 240; i++)
     {
         uint32_t _x = (currx >> 8);
-        int32_t _y = (curry >> 8);
+        uint32_t _y = (curry >> 8);
         if (!((_x > 239) || (_y > 159)))
         {
             *fb = srcptr[_x + 240 * _y];
@@ -1576,7 +1576,7 @@ static void gba_bg2drawbitmapmode4(UNUSED int32_t y)
     for (int i = 0; i < 240; i++)
     {
         uint32_t _x = (currx >> 8);
-        int32_t _y = (curry >> 8);
+        uint32_t _y = (curry >> 8);
         if (!((_x > 239) || (_y > 159)))
         {
             *fb = ((uint16_t *)((uint8_t *)MEM_PALETTE_ADDR))[srcptr[_x + 240 * _y]];
@@ -1608,7 +1608,7 @@ static void gba_bg2drawbitmapmode5(UNUSED int32_t y)
     for (int i = 0; i < 240; i++)
     {
         uint32_t _x = (currx >> 8);
-        int32_t _y = (curry >> 8);
+        uint32_t _y = (curry >> 8);
         if (!((_x > 159) || (_y > 127)))
         {
             *fb = (uint16_t)srcptr[_x + 160 * _y];
