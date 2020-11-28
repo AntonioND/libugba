@@ -176,7 +176,7 @@ void BG_FramebufferSet(int backbuffer)
         REG_DISPCNT &= ~DISPCNT_USE_BACKBUFFER;
 }
 
-void BG_FramebuffersSwap(void)
+void BG_FramebufferSwap(void)
 {
     REG_DISPCNT ^= DISPCNT_USE_BACKBUFFER;
 }
