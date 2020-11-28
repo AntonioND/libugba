@@ -79,6 +79,7 @@ static int lua_run_frames_and_pause(lua_State *L)
 
     Debug_Log("%s(%lld)", __func__, y);
 
+    is_waiting = 0;
     remaining_frames = y;
 
     while (remaining_frames > 0)
@@ -226,6 +227,9 @@ static int lua_exit(lua_State *L)
 
     Debug_Log("%s()", __func__);
 
+    is_waiting = 0;
+    remaining_frames = 0;
+
     Win_MainExit();
 
     // Number of results
@@ -294,6 +298,8 @@ int Script_RunLua(const char *path)
 
     snprintf(script_path, len + 1, "%s", path);
 
+    is_waiting = 1;
+
     script_thread = SDL_CreateThread(Script_Runner, "Script Runner", NULL);
     if (script_thread == NULL)
     {
@@ -302,6 +308,9 @@ int Script_RunLua(const char *path)
     }
 
     script_running = 1;
+
+    while (is_waiting == 1)
+        SDL_Delay(0);
 
     return 0;
 }
