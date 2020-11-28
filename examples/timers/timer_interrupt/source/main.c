@@ -75,5 +75,32 @@ int main(int argc, char *argv[])
         frame_count[0]++;
         frame_count[1]++;
         frame_count[2]++;
+
+        KEYS_Update();
+
+        uint16_t keys = KEYS_Held();
+        if (keys & KEY_A)
+            break;
     }
+
+    CON_Clear();
+    CON_CursorSet(0, 0);
+
+    int range[3][2] = {
+        { 5, 7 },
+        { 29, 31 },
+        { 59, 61 },
+    };
+
+    for (int i = 0; i < 3; i++)
+    {
+        if ((frames_per_period[i] >= range[i][0]) &&
+            (frames_per_period[i] <= range[i][1]))
+            CON_Print("Success\n");
+        else
+            CON_Print("Failed\n");
+    }
+
+    while (1)
+        SWI_VBlankIntrWait();
 }
