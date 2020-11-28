@@ -47,7 +47,11 @@ void vbl_handler(void)
     // The first HBL copy is done after line 0 is drawn. It is needed to start
     // the copy from index 1 in the array, and to set the first offset
     // explicitly during VBL.
-    DMA_RepeatedHBLCopy16(0, &(horizontal_offsets[1]), PTR_REG_BG0HOFS, 2);
+    DMA_Transfer(0, &(horizontal_offsets[1]), PTR_REG_BG0HOFS, 2,
+                 DMACNT_DST_FIXED | DMACNT_SRC_INCREMENT |
+                 DMACNT_TRANSFER_16_BITS | DMACNT_START_HBLANK |
+                 DMACNT_REPEAT_ON);
+
     REG_BG0HOFS = horizontal_offsets[0];
 }
 

@@ -29,12 +29,6 @@ EXPORT_API
 void DMA_HBLCopy32(int channel, const void *src, void *dst, size_t size);
 
 EXPORT_API
-void DMA_RepeatedHBLCopy16(int channel, const void *src, void *dst, size_t size);
-
-EXPORT_API
-void DMA_RepeatedHBLCopy32(int channel, const void *src, void *dst, size_t size);
-
-EXPORT_API
 void DMA_VBLCopy16(int channel, const void *src, void *dst, size_t size);
 
 EXPORT_API
