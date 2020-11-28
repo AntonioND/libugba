@@ -17,7 +17,7 @@ int main(int argc, char *argv[])
     REG_BG2PC = 0 << 8;
     REG_BG2PD = 1 << 8;
 
-    uint16_t *vram = MEM_VRAM;
+    uint16_t *vram = BG_Mode3FramebufferGet();
 
     for (int j = 0; j < GBA_SCREEN_H; j++)
     {
