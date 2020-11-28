@@ -19,31 +19,15 @@ The GBA version of the library is a static library licensed under the MIT
 license. The PC version of the library is a dynamic library licensed under the
 LGPL-3.0 license.
 
+It comes with several examples of how to use each one of the subsystems of the
+library. All examples are also used as unit tests, and they are part of the
+automated regresion testing system of the library.
+
 2. Limitations
 --------------
 
-1. It is not possible to run GBA assembly code on your PC. Unless you're
-   building the game in something like a Raspberry Pi with support for the
-   32-bit Arm architecture, you can't build games that use assembly code. You
-   need to implement the same code in C and compile one file or the other
-   depending on your target. Because of this, libraries such as Maxmod or
-   libtonc aren't supported.
-
-2. It is not possible to detect writes to I/O registers. Usually this isn't a
-   problem, but it means that timers or DMA won't start right away after writing
-   to the registers. There are some helper macros to refresh the state of each
-   subsystem, and some high level functions to use this kind of hardware. The
-   helper macros do nothing on the GBA, as they aren't needed.
-
-3. All your code needs to use the macros provided by the library when writing
-   directly to I/O registers. On PC, they redirect to memory areas that are
-   known by the hardware emulation code.
-
-4. Interrupts can't be implemented as they are on the GBA. For the most part,
-   this shouldn't be a problem. All video-related interrupts (VBL, HBL, VCOUNT)
-   are emulated, but the timing is completely arbitrary. Of course, if you are
-   running your game on PC, your timings will be off anyway, so it doesn't
-   matter. Also, the timer interrupts are handled in a secondary thread.
+The PC version of the library behaves in a different way as the GBA version of
+it. Take a look at `here <docs/limitations.rst>`_ for more details.
 
 3. Dependencies
 ---------------

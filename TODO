@@ -10,6 +10,14 @@ Library
 - BIOS services.
 - Examples for BIOS services.
 
+Extended library functionality
+------------------------------
+
+- Nested IRQ handling.
+- "Infinite" maps with finite tileset.
+- "Infinite" maps with "infinite" tileset.
+- DLDI.
+
 SDL2 port
 ---------
 
