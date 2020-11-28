@@ -59,7 +59,7 @@ void generate_temp_file(char *file, size_t size, const char *path)
     }
 
     const char *c_header =
-        "// File exported by Grit and modified by toncfix. Do not edit.\n"
+        "// File exported by Grit and modified by gritfix. Do not edit.\n"
         "\n"
         "#if defined(_MSC_VER)\n"
         "# define ALIGNED(x) __declspec(align(x))\n"

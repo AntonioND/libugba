@@ -2,4 +2,4 @@
 #
 # Copyright (c) 2020 Antonio Niño Díaz
 
-add_executable(toncfix toncfix.c)
+add_executable(gritfix gritfix.c)
