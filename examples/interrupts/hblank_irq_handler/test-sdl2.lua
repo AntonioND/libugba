@@ -2,7 +2,6 @@
 
 run_frames_and_pause(10)
 screenshot()
-continue()
 exit()
 
 return 0

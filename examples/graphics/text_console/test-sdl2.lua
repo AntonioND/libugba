@@ -5,17 +5,16 @@
 run_frames_and_pause(10)
 screenshot("screenshot-1.png")
 keys_hold("B")
-continue()
 
 run_frames_and_pause(3)
 keys_release("B")
 keys_hold("SELECT")
-continue()
 
 run_frames_and_pause(3)
 keys_release("SELECT")
+
+run_frames_and_pause(3)
 screenshot("screenshot-2.png")
-continue()
 
 exit()
 
