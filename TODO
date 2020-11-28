@@ -5,8 +5,7 @@ Library
 - Examples for interrupts.
 - Examples for input.
 - Examples for graphics.
-- Examples for timers in cascade mode.
-- DMA (Sound, Special).
+- DMA (sound, special modes).
 - Examples for DMA (VBL-triggered DMA is missing).
 - BIOS services.
 - Examples for BIOS services.
