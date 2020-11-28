@@ -4,3 +4,4 @@
 
 add_subdirectory(basic_dma)
 add_subdirectory(hblank_dma)
+add_subdirectory(vblank_dma)

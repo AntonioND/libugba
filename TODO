@@ -6,7 +6,7 @@ Library
 - Examples for input.
 - Examples for graphics.
 - DMA (sound, special modes).
-- Examples for DMA (VBL-triggered DMA is missing).
+- Examples for DMA (non-repeated copies in HBL and VBL modes).
 - BIOS services.
 - Examples for BIOS services.
 
