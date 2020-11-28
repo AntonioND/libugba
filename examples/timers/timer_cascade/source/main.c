@@ -83,13 +83,18 @@ int main(int argc, char *argv[])
             break;
     }
 
+    TM_TimerStop(0);
+    TM_TimerStop(1);
+    TM_TimerStop(2);
+    TM_TimerStop(3);
+
     CON_Clear();
     CON_CursorSet(0, 0);
 
     int range[4][2] = {
         { 9, 10 },
         { 3, 3 },
-        { 19, 20 },
+        { 19, 21 },
         { 4, 5 }
     };
 
