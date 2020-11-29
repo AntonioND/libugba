@@ -21,11 +21,11 @@ typedef struct {
     int repeat;
 
     uint32_t start_mode;
-} dma_channel_t;
+} dma_channel;
 
-static dma_channel_t DMA[4];
+static dma_channel DMA[4];
 
-static void GBA_DMACopyNow(dma_channel_t *dma)
+static void GBA_DMACopyNow(dma_channel *dma)
 {
     // TODO: DMA 3 is the only one that can read from the ROM!
 
@@ -95,7 +95,7 @@ static void GBA_DMAUpdateState(int channel)
         return;
     }
 
-    dma_channel_t *dma = &DMA[channel];
+    dma_channel *dma = &DMA[channel];
 
     if (!(dmacnt & DMACNT_DMA_ENABLE))
     {
@@ -181,7 +181,7 @@ void GBA_DMAHandleHBL(void)
 {
     for (int i = 0; i < 4; i++)
     {
-        dma_channel_t *dma = &DMA[i];
+        dma_channel *dma = &DMA[i];
 
         if (dma->start_mode == DMACNT_START_HBLANK)
         {
@@ -199,7 +199,7 @@ void GBA_DMAHandleVBL(void)
 {
     for (int i = 0; i < 4; i++)
     {
-        dma_channel_t *dma = &DMA[i];
+        dma_channel *dma = &DMA[i];
 
         if (dma->start_mode == DMACNT_START_VBLANK)
         {

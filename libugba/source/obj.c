@@ -4,7 +4,7 @@
 
 #include <ugba/ugba.h>
 
-static void OBJ_TileSet_internal(oam_entry_t *e, oam_color_mode colors,
+static void OBJ_TileSet_internal(oam_entry *e, oam_color_mode colors,
                                  int tile)
 {
     e->attr2 &= ~ATTR2_TILE_MASK;
@@ -27,7 +27,7 @@ void OBJ_RegularInit(int index, int x, int y, oam_entry_size size,
     uint16_t attr0_shape, attr1_size;
     OBJ_GetShapeSize(size, &attr0_shape, &attr1_size);
 
-    oam_entry_t *e = &MEM_OAM_ENTRIES[index];
+    oam_entry *e = &MEM_OAM_ENTRIES[index];
 
     e->attr0 = ATTR0_Y(y) | ATTR0_REGULAR | ATTR0_MODE_NORMAL |
                (colors == OBJ_256_COLORS ? ATTR0_256_COLORS : ATTR0_16_COLORS) |
@@ -45,7 +45,7 @@ void OBJ_RegularEnableSet(int index, int enable)
     if (index >= MEM_OAM_NUMBER_ENTRIES)
         return;
 
-    oam_entry_t *e = &MEM_OAM_ENTRIES[index];
+    oam_entry *e = &MEM_OAM_ENTRIES[index];
 
     // TODO: Check sprite mode
 
@@ -60,7 +60,7 @@ void OBJ_RegularHFlipSet(int index, int enable)
     if (index >= MEM_OAM_NUMBER_ENTRIES)
         return;
 
-    oam_entry_t *e = &MEM_OAM_ENTRIES[index];
+    oam_entry *e = &MEM_OAM_ENTRIES[index];
 
     // TODO: Check sprite mode
 
@@ -75,7 +75,7 @@ void OBJ_RegularVFlipSet(int index, int enable)
     if (index >= MEM_OAM_NUMBER_ENTRIES)
         return;
 
-    oam_entry_t *e = &MEM_OAM_ENTRIES[index];
+    oam_entry *e = &MEM_OAM_ENTRIES[index];
 
     // TODO: Check sprite mode
 
@@ -97,7 +97,7 @@ void OBJ_AffineInit(int index, int x, int y, oam_entry_size size, int matrix,
     uint16_t attr0_shape, attr1_size;
     OBJ_GetShapeSize(size, &attr0_shape, &attr1_size);
 
-    oam_entry_t *e = &MEM_OAM_ENTRIES[index];
+    oam_entry *e = &MEM_OAM_ENTRIES[index];
 
     e->attr0 = ATTR0_Y(y) | ATTR0_AFFINE | ATTR0_MODE_NORMAL |
                (colors == OBJ_256_COLORS ? ATTR0_256_COLORS : ATTR0_16_COLORS) |
@@ -116,7 +116,7 @@ void OBJ_AffineMatrixSet(int index, int matrix_index)
     if (index >= MEM_OAM_NUMBER_ENTRIES)
         return;
 
-    oam_entry_t *e = &MEM_OAM_ENTRIES[index];
+    oam_entry *e = &MEM_OAM_ENTRIES[index];
 
     // TODO: Check sprite mode
 
@@ -129,7 +129,7 @@ void OBJ_AffineDoubleSizeSet(int index, int enable)
     if (index >= MEM_OAM_NUMBER_ENTRIES)
         return;
 
-    oam_entry_t *e = &MEM_OAM_ENTRIES[index];
+    oam_entry *e = &MEM_OAM_ENTRIES[index];
 
     // TODO: Check sprite mode
 
@@ -147,7 +147,7 @@ void OBJ_PositionSet(int index, int x, int y)
     if (index >= MEM_OAM_NUMBER_ENTRIES)
         return;
 
-    oam_entry_t *e = &MEM_OAM_ENTRIES[index];
+    oam_entry *e = &MEM_OAM_ENTRIES[index];
 
     e->attr0 &= ~ATTR0_Y_MASK;
     e->attr0 |= ATTR0_Y(y);
@@ -165,7 +165,7 @@ void OBJ_PositionGet(int index, int *x, int *y)
         return;
     }
 
-    oam_entry_t *e = &MEM_OAM_ENTRIES[index];
+    oam_entry *e = &MEM_OAM_ENTRIES[index];
 
     *y = e->attr0 & ATTR0_Y_MASK;
     *x = e->attr1 & ATTR1_X_MASK;
@@ -176,7 +176,7 @@ void OBJ_ModeSet(int index, oam_entry_mode mode)
      if (index >= MEM_OAM_NUMBER_ENTRIES)
         return;
 
-    oam_entry_t *e = &MEM_OAM_ENTRIES[index];
+    oam_entry *e = &MEM_OAM_ENTRIES[index];
 
     e->attr0 &= ~ATTR0_MODE_MASK;
 
@@ -259,7 +259,7 @@ void OBJ_MosaicSet(int index, int enable)
     if (index >= MEM_OAM_NUMBER_ENTRIES)
         return;
 
-    oam_entry_t *e = &MEM_OAM_ENTRIES[index];
+    oam_entry *e = &MEM_OAM_ENTRIES[index];
 
     if (enable)
         e->attr0 &= ~ATTR0_MOSAIC;
@@ -272,7 +272,7 @@ void OBJ_Palette16Set(int index, int palette)
     if (index >= MEM_OAM_NUMBER_ENTRIES)
         return;
 
-    oam_entry_t *e = &MEM_OAM_ENTRIES[index];
+    oam_entry *e = &MEM_OAM_ENTRIES[index];
 
     e->attr2 &= ~ATTR2_PALETTE_MASK;
     e->attr2 |= ATTR2_PALETTE(palette);
@@ -283,7 +283,7 @@ void OBJ_PrioritySet(int index, int priority)
     if (index >= MEM_OAM_NUMBER_ENTRIES)
         return;
 
-    oam_entry_t *e = &MEM_OAM_ENTRIES[index];
+    oam_entry *e = &MEM_OAM_ENTRIES[index];
 
     e->attr2 &= ~ATTR2_PRIORITY_MASK;
     e->attr2 |= ATTR2_PRIORITY(priority);
@@ -296,7 +296,7 @@ void OBJ_TileSet(int index, int tile)
 
     // This function detects if the sprite is in 16 or 256 colors mode
 
-    oam_entry_t *e = &MEM_OAM_ENTRIES[index];
+    oam_entry *e = &MEM_OAM_ENTRIES[index];
 
     oam_color_mode colors =
         (e->attr0 & ATTR0_256_COLORS) ? OBJ_256_COLORS : OBJ_16_COLORS;

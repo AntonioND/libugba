@@ -203,7 +203,7 @@ void SWI_CpuFastSet(const void *src, void *dst, uint32_t len_mode)
     }
 }
 
-void SWI_BgAffineSet(const bg_affine_src_t *src, bg_affine_dst_t *dst,
+void SWI_BgAffineSet(const bg_affine_src *src, bg_affine_dst *dst,
                      uint32_t count)
 {
     while (count--)
@@ -234,7 +234,7 @@ void SWI_BgAffineSet(const bg_affine_src_t *src, bg_affine_dst_t *dst,
     }
 }
 
-void SWI_ObjAffineSet(const obj_affine_src_t *src, void *dst,
+void SWI_ObjAffineSet(const obj_affine_src *src, void *dst,
                       uint32_t count, uint32_t increment)
 {
     if (increment & 1)

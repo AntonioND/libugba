@@ -45,18 +45,14 @@ EXPORT_API void BG_RegularScrollSet(int index, int x, int y);
 EXPORT_API void BG_RegularScrollGet(int index, int *x, int *y);
 
 EXPORT_API
-void BG_AffineInit(int index, bg_affine_size size,
-                   uintptr_t tile_base_addr, uintptr_t map_base_addr,
-                   int wrap);
+void BG_AffineInit(int index, bg_affine_size size, uintptr_t tile_base_addr,
+                   uintptr_t map_base_addr, int wrap);
 
-EXPORT_API
-void BG_AffineTransformSet(int index, bg_affine_dst_t *tr);
+EXPORT_API void BG_AffineTransformSet(int index, bg_affine_dst *tr);
 
-EXPORT_API
-void BG_PrioritySet(int index, int priority);
+EXPORT_API void BG_PrioritySet(int index, int priority);
 
-EXPORT_API
-void BG_MosaicEnable(int index, int enabled);
+EXPORT_API void BG_MosaicEnable(int index, int enabled);
 
 EXPORT_API uint16_t *BG_Mode3FramebufferGet(void);
 

@@ -91,7 +91,7 @@ void BG_AffineInit(int index, bg_affine_size size,
     *reg = value;
 }
 
-void BG_AffineTransformSet(int index, bg_affine_dst_t *tr)
+void BG_AffineTransformSet(int index, bg_affine_dst *tr)
 {
     if (index == 2)
     {

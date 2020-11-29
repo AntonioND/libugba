@@ -192,7 +192,7 @@ static const int spr_size[4][4][2] = { // Inputs = [Shape][Size][{x, y}]
 
 static void gba_sprites_draw_mode012(int32_t ly)
 {
-    oam_entry_t *spr = (oam_entry_t *)((uint8_t *)MEM_OAM_ADDR);
+    oam_entry *spr = (oam_entry *)((uint8_t *)MEM_OAM_ADDR);
 
     for (int i = 0; i < 128; i++)
     {
@@ -205,8 +205,8 @@ static void gba_sprites_draw_mode012(int32_t ly)
             uint16_t attr1 = spr->attr1;
             uint16_t attr2 = spr->attr2;
 
-            oam_matrix_entry_t *mat =
-                    &(((oam_matrix_entry_t *)((uint8_t *)MEM_OAM_ADDR))[(attr1 >> 9) & 0x1F]);
+            oam_matrix_entry *mat =
+                    &(((oam_matrix_entry *)((uint8_t *)MEM_OAM_ADDR))[(attr1 >> 9) & 0x1F]);
 
             uint16_t shape = attr0 >> 14;
             uint16_t size = attr1 >> 14;
@@ -562,7 +562,7 @@ static void gba_sprites_draw_mode012(int32_t ly)
 
 static void gba_sprites_draw_mode345(int32_t ly)
 {
-    oam_entry_t *spr = (oam_entry_t *)((uint8_t *)MEM_OAM_ADDR);
+    oam_entry *spr = (oam_entry *)((uint8_t *)MEM_OAM_ADDR);
 
     for (int i = 0; i < 128; i++)
     {
@@ -575,8 +575,8 @@ static void gba_sprites_draw_mode345(int32_t ly)
             uint16_t attr1 = spr->attr1;
             uint16_t attr2 = spr->attr2;
 
-            oam_matrix_entry_t *mat =
-                    &(((oam_matrix_entry_t *)((uint8_t *)MEM_OAM_ADDR))[(attr1 >> 9) & 0x1F]);
+            oam_matrix_entry *mat =
+                    &(((oam_matrix_entry *)((uint8_t *)MEM_OAM_ADDR))[(attr1 >> 9) & 0x1F]);
 
             uint16_t shape = attr0 >> 14;
             uint16_t size = attr1 >> 14;

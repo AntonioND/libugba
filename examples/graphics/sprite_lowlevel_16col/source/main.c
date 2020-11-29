@@ -27,7 +27,7 @@ int main(int argc, char *argv[])
 
     // Get pointer to the entry that describes the attributes of object 0. Each
     // entry is composed by fields organized in an arbitrary way.
-    oam_entry_t *obj = &MEM_OAM_ENTRIES[0];
+    oam_entry *obj = &MEM_OAM_ENTRIES[0];
 
     obj->attr0 =
         // Y coordinate

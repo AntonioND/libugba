@@ -39,7 +39,7 @@ typedef struct {
     int16_t scaley;     // 8.8 fixed point
     uint16_t angle;     // 8.8 fixed point. Range: 0 - 0xFFFF
     uint16_t padding;
-} bg_affine_src_t;
+} bg_affine_src;
 #pragma pack(pop)
 
 #pragma pack(push, 1)
@@ -50,11 +50,11 @@ typedef struct {
     int16_t pd;
     int32_t xoff;
     int32_t yoff;
-} bg_affine_dst_t;
+} bg_affine_dst;
 #pragma pack(pop)
 
-EXPORT_API void SWI_BgAffineSet(const bg_affine_src_t *src,
-                                bg_affine_dst_t *dst, uint32_t count);
+EXPORT_API void SWI_BgAffineSet(const bg_affine_src *src,
+                                bg_affine_dst *dst, uint32_t count);
 
 #pragma pack(push, 1)
 typedef struct {
@@ -62,11 +62,11 @@ typedef struct {
     int16_t sy;         // 8.8 fixed point
     uint16_t angle;     // 8.8 fixed point. Range: 0 - 0xFFFF
     uint16_t padding;
-} obj_affine_src_t;
+} obj_affine_src;
 #pragma pack(pop)
 
 EXPORT_API
-void SWI_ObjAffineSet(const obj_affine_src_t *src, void *dst,
+void SWI_ObjAffineSet(const obj_affine_src *src, void *dst,
                       uint32_t count, uint32_t increment);
 
 EXPORT_API

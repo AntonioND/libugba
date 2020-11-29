@@ -33,7 +33,7 @@ int main(int argc, char *argv[])
     int x = 100, y = -7;
     int angle = 0x20;
 
-    bg_affine_src_t bg_src_start = {
+    bg_affine_src bg_src_start = {
         x << 8, y << 8,
         0, 0,
         1 << 8, 1 << 8,
@@ -41,7 +41,7 @@ int main(int argc, char *argv[])
         0
     };
 
-    bg_affine_dst_t bg_dst;
+    bg_affine_dst bg_dst;
 
     SWI_BgAffineSet(&bg_src_start, &bg_dst, 1);
 
@@ -73,7 +73,7 @@ int main(int argc, char *argv[])
         else if (keys & KEY_R)
             angle--;
 
-        bg_affine_src_t bg_src = {
+        bg_affine_src bg_src = {
             x << 8, y << 8,
             0, 0,
             1 << 8, 1 << 8,

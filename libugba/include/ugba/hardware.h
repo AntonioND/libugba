@@ -150,11 +150,11 @@ typedef struct {
     uint16_t attr1;
     uint16_t attr2;
     uint16_t padding;
-} oam_entry_t;
+} oam_entry;
 #pragma pack(pop)
 
 #define MEM_OAM_NUMBER_ENTRIES      (128)
-#define MEM_OAM_ENTRIES             ((oam_entry_t *)MEM_OAM)
+#define MEM_OAM_ENTRIES             ((oam_entry *)MEM_OAM)
 
 // Attribute 0
 
@@ -221,11 +221,11 @@ typedef struct {
     int16_t pc;
     uint16_t padding3[3];
     int16_t pd;
-} oam_matrix_entry_t;
+} oam_matrix_entry;
 #pragma pack(pop)
 
 #define MEM_OAM_NUMBER_MATRICES     (32)
-#define MEM_OAM_MATRICES            ((oam_matrix_entry_t *)MEM_OAM)
+#define MEM_OAM_MATRICES            ((oam_matrix_entry *)MEM_OAM)
 
 // I/O Registers Definitions
 // =========================
