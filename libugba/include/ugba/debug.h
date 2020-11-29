@@ -13,8 +13,10 @@
 
 #include "definitions.h"
 
+// Take a screenshot. If the specified name is NULL, it defaults to
+// "screenshot.png".
 #ifdef __GBA__
-#define Debug_Screenshot(n)  do { } while (0)
+#define Debug_Screenshot(n)  do { (void)(n); } while (0)
 #else
 EXPORT_API void Debug_Screenshot(const char *name);
 #endif

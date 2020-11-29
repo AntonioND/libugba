@@ -7,6 +7,7 @@
 
 #define BIT(n) (1 << (n))
 
+// For functions with unused arguments, for example
 #if defined(_MSC_VER)
 # define UNUSED
 #else

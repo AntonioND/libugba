@@ -34,5 +34,4 @@ void VRAM_BGPalette16Copy(const void *src, size_t size, uint32_t pal_index);
 EXPORT_API
 void VRAM_BGPalette256Copy(const void *src, size_t size);
 
-
 #endif // VRAM_H__

@@ -8,9 +8,12 @@
 #include "definitions.h"
 #include "hardware.h"
 
-// Names taken from GBATEK
+// Note: Names taken from GBATEK
 
+// Wait until an interrupt happens.
 EXPORT_API void SWI_Halt(void);
+
+// Wait until the VBlank interrupt happens.
 EXPORT_API void SWI_VBlankIntrWait(void);
 
 // For SWI_CpuSet() and SWI_CpuFastSet()
@@ -29,6 +32,7 @@ EXPORT_API void SWI_CpuSet(const void *src, void *dst, uint32_t len_mode);
 // multiple of 8 bytes.
 EXPORT_API void SWI_CpuFastSet(const void *src, void *dst, uint32_t len_mode);
 
+// Struct that holds the input to SWI_BgAffineSet()
 #pragma pack(push, 1)
 typedef struct {
     int32_t bgx;        // 24.8 fixed point
@@ -42,6 +46,8 @@ typedef struct {
 } bg_affine_src;
 #pragma pack(pop)
 
+// Struct that holds the state of a background affine transformation. It is used
+// as container of the output of SWI_BgAffineSet()
 #pragma pack(push, 1)
 typedef struct {
     int16_t pa;
@@ -53,9 +59,13 @@ typedef struct {
 } bg_affine_dst;
 #pragma pack(pop)
 
-EXPORT_API void SWI_BgAffineSet(const bg_affine_src *src,
-                                bg_affine_dst *dst, uint32_t count);
+// This function gets a list of background transformations and outputs the
+// correct affine matrices for the GBA hardware.
+EXPORT_API
+void SWI_BgAffineSet(const bg_affine_src *src, bg_affine_dst *dst,
+                     uint32_t count);
 
+// Struct that holds the input to SWI_ObjAffineSet()
 #pragma pack(push, 1)
 typedef struct {
     int16_t sx;         // 8.8 fixed point
@@ -65,13 +75,20 @@ typedef struct {
 } obj_affine_src;
 #pragma pack(pop)
 
+// This function gets a list of objects transformations and outputs the correct
+// affine matrices for the GBA hardware.
 EXPORT_API
 void SWI_ObjAffineSet(const obj_affine_src *src, void *dst,
                       uint32_t count, uint32_t increment);
 
+// Decompresses LZ77 data from the source and writes the result to the
+// destination using 8-bit writes. It can't be used to decompress directly to
+// VRAM, as it only accepts 16 and 32-bit accesses.
 EXPORT_API
 void SWI_LZ77UnCompReadNormalWrite8bit(const void *source, void *dest);
 
+// Decompresses LZ77 data from the source and writes the result to the
+// destination using 16-bit writes. VRAM can be used as destination.
 EXPORT_API
 void SWI_LZ77UnCompReadNormalWrite16bit(const void *source, void *dest);
 
