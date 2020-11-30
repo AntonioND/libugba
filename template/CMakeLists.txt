@@ -11,6 +11,20 @@ project(${EXECUTABLE_NAME})
 
 add_executable(${EXECUTABLE_NAME})
 
+# Link with libugba
+# -----------------
+
+# Get absolute path to default libugba folder
+if("${LIBUGBA_PATH}" STREQUAL "")
+    get_filename_component(LIBUGBA_PATH ../libugba ABSOLUTE)
+endif()
+
+if(EXISTS ${LIBUGBA_PATH})
+    add_subdirectory(${LIBUGBA_PATH} libugba)
+else()
+    message(FATAL_ERROR "libugba folder not found")
+endif()
+
 target_link_libraries(${EXECUTABLE_NAME} libugba)
 
 # Add source code files
@@ -27,6 +41,9 @@ search_source_files(source FILES_SOURCE)
 target_sources(${EXECUTABLE_NAME} PRIVATE
     ${FILES_SOURCE}
 )
+
+# Add additional data files
+# -------------------------
 
 if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/graphics)
     add_grit_files(graphics ${EXECUTABLE_NAME})

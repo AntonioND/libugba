@@ -145,5 +145,4 @@ if(NOT LIBUGBA_ONLY)
     enable_testing()
 
     add_subdirectory(examples)
-    add_subdirectory(template)
 endif()
