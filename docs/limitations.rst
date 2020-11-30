@@ -1,7 +1,9 @@
-ugba limitations
+UGBA limitations
 ================
 
 1. There is no support for sound or the serial port.
+
+   Eventually sound will be supported. I'm not so sure about the serial port.
 
 2. It is not possible to run GBA assembly code when building for PC.
 
@@ -36,11 +38,12 @@ ugba limitations
 4. When writing to memory or I/O registers, use the provided definitions.
 
    Instead of manually using addresses of VRAM or I/O registers, use the
-   definitions provided by the library. On the GBA they (ARE NUMBERS ON PC THEY
-   ARE SOMETHING ELSE)
-   All your code needs to use the macros provided by the library when writing
-   directly to I/O registers. On PC, they redirect to memory areas that are
-   known by the hardware emulation code.
+   definitions provided by the library. On the GBA they are just numbers that
+   correspond to the right address. On PC they are function calls that return
+   memory regions allocated by libugba to simulate the GBA regions.
+
+   Note that on PC there is no point in using the EWRAM, IWRAM or ROM regions,
+   as the code and variables aren't located there.
 
 5. Interrupts can't be implemented as they are on the GBA.
 
@@ -68,7 +71,7 @@ ugba limitations
      frequently. Also note that the OS may get in the way and the interrupt
      handler may be called fewer times than expected.
 
-    - KEYPAD: On PC, the keypad state is refreshed inside SWI_VBlankIntrWait(),
-      so that's when the interrupt handler may be called.
+  - KEYPAD: On PC, the keypad state is refreshed inside SWI_VBlankIntrWait(),
+    so that's when the interrupt handler may be called.
 
-    - SERIAL, DMA, GAMEPAK: Not supported yet.
+  - SERIAL, DMA, GAMEPAK: Not supported yet.
