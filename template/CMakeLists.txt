@@ -14,15 +14,27 @@ add_executable(${EXECUTABLE_NAME})
 # Link with libugba
 # -----------------
 
-# Get absolute path to default libugba folder
-if("${LIBUGBA_PATH}" STREQUAL "")
-    get_filename_component(LIBUGBA_PATH ../libugba ABSOLUTE)
-endif()
+# Feel free to remove the option of the two provided that you don't need.
 
-if(EXISTS ${LIBUGBA_PATH})
-    add_subdirectory(${LIBUGBA_PATH} libugba)
+if(TRUE)
+    # 1) This code is used in case libugba is in an arbitrary location on your
+    #    hard drive.
+
+    # Get absolute path to default libugba folder
+    if("${LIBUGBA_PATH}" STREQUAL "")
+        get_filename_component(LIBUGBA_PATH ../libugba ABSOLUTE)
+    endif()
+
+    if(EXISTS ${LIBUGBA_PATH})
+        add_subdirectory(${LIBUGBA_PATH} libugba)
+    else()
+        message(FATAL_ERROR "libugba folder not found")
+    endif()
 else()
-    message(FATAL_ERROR "libugba folder not found")
+    # 2) This code is used in case the ugba repository is added as a submodule
+    #    of your repository.
+
+    add_subdirectory(ugba/libugba)
 endif()
 
 target_link_libraries(${EXECUTABLE_NAME} libugba)
