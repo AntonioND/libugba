@@ -76,14 +76,15 @@ EXPORT_API void OBJ_GetDimensionsFromSize(oam_entry_size size,
                                           int *width, int *height);
 EXPORT_API void OBJ_SizeSet(int index, oam_entry_size size);
 
+// Enable or disable mosaic effect.
 EXPORT_API void OBJ_MosaicSet(int index, int enable);
 
-// Only for 16 color objects
+// Set palette of the object. Only for 16 color objects.
 EXPORT_API void OBJ_Palette16Set(int index, int palette);
 
 EXPORT_API void OBJ_PrioritySet(int index, int priority);
 
-// This function detects if the object is in 16 or 256 color mode
+// This function automatically detects if the object is in 16 or 256 color mode
 EXPORT_API void OBJ_TileSet(int index, int tile);
 
 #endif // OBJ_H__

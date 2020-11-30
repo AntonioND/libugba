@@ -47,7 +47,7 @@ void OBJ_RegularEnableSet(int index, int enable)
 
     oam_entry *e = &MEM_OAM_ENTRIES[index];
 
-    // TODO: Check sprite mode
+    // TODO: Check object mode
 
     if (enable)
         e->attr0 &= ~ATTR0_DISABLE;
@@ -62,7 +62,7 @@ void OBJ_RegularHFlipSet(int index, int enable)
 
     oam_entry *e = &MEM_OAM_ENTRIES[index];
 
-    // TODO: Check sprite mode
+    // TODO: Check object mode
 
     if (enable)
         e->attr1 &= ~ATTR1_REGULAR_HFLIP;
@@ -77,7 +77,7 @@ void OBJ_RegularVFlipSet(int index, int enable)
 
     oam_entry *e = &MEM_OAM_ENTRIES[index];
 
-    // TODO: Check sprite mode
+    // TODO: Check object mode
 
     if (enable)
         e->attr1 &= ~ATTR1_REGULAR_VFLIP;
@@ -118,7 +118,7 @@ void OBJ_AffineMatrixSet(int index, int matrix_index)
 
     oam_entry *e = &MEM_OAM_ENTRIES[index];
 
-    // TODO: Check sprite mode
+    // TODO: Check object mode
 
     e->attr1 &= ~ATTR1_AFFINE_MATRIX_MASK;
     e->attr1 |= ~ATTR1_AFFINE_MATRIX(matrix_index);
@@ -131,7 +131,7 @@ void OBJ_AffineDoubleSizeSet(int index, int enable)
 
     oam_entry *e = &MEM_OAM_ENTRIES[index];
 
-    // TODO: Check sprite mode
+    // TODO: Check object mode
 
     if (enable)
         e->attr0 &= ~ATTR0_DOUBLE_SIZE;
@@ -294,7 +294,7 @@ void OBJ_TileSet(int index, int tile)
     if (index >= MEM_OAM_NUMBER_ENTRIES)
         return;
 
-    // This function detects if the sprite is in 16 or 256 colors mode
+    // This function detects if the object is in 16 or 256 colors mode
 
     oam_entry *e = &MEM_OAM_ENTRIES[index];
 
