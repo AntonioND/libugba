@@ -1,5 +1,5 @@
-Universal GBA Library
-=====================
+Universal GBA Library v0.1.0
+============================
 
 1. Introduction
 ---------------
@@ -34,7 +34,11 @@ LGPL-3.0 license.
 --------------
 
 The PC version of the library behaves in a different way as the GBA version of
-it. Take a look at `here <docs/limitations.rst>`_ for more details.
+it. Take a look at `here <docs/limitations.rst>`_ for more details. For now, the
+biggest limitation is the lack of support for sound, which is planned to be
+implemented.
+
+For a list of planned features, check `this link <docs/to-do.rst>`_.
 
 3. Dependencies
 ---------------
