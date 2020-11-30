@@ -41,11 +41,20 @@ target_include_directories(${LIBRARY_NAME} PUBLIC
 # libpng, SLD2 and Lua are required
 
 if(CMAKE_C_COMPILER_ID STREQUAL "MSVC")
+    find_package(libpng REQUIRED 1.6)
+    find_package(SDL2 REQUIRED)
+    include(FindLua)
+    find_package(lua REQUIRED 5.2)
+
     target_link_libraries(${LIBRARY_NAME} PRIVATE
         png
         SDL2::SDL2 SDL2::SDL2main
     )
 else()
+    find_package(PNG REQUIRED 1.6)
+    find_package(SDL2 REQUIRED)
+    find_package(Lua REQUIRED 5.2)
+
     target_include_directories(${LIBRARY_NAME} PRIVATE
         ${PNG_INCLUDE_DIRS}
         ${SDL2_INCLUDE_DIRS}
@@ -60,6 +69,14 @@ target_link_libraries(${LIBRARY_NAME} PRIVATE ${LUA_LIBRARIES})
 target_include_directories(${LIBRARY_NAME} PRIVATE ${LUA_INCLUDE_DIR})
 
 # OpenGL is optional. It can be used as library to output graphics.
+
+find_package(OpenGL)
+
+if(OPENGL_FOUND)
+    option(ENABLE_OPENGL "Compile with OpenGL" ON)
+else()
+    set(ENABLE_OPENGL OFF)
+endif()
 
 if(ENABLE_OPENGL)
     target_compile_definitions(${LIBRARY_NAME} PRIVATE -DENABLE_OPENGL)
