@@ -21,7 +21,10 @@ automated regresion testing system of the library.
 
 The PC builds of the tests are simply run on the host by passing the program a
 Lua script with instructions. The GBA builds are run on `GiiBiiAdvance`_, which
-has basic support for Lua scripts as well.
+has basic support for Lua scripts as well. Ideally, it would test on other
+emulators. The PC builds have some parts of the emulator inside them to simulate
+the GBA hardware, and it would be a good idea to test the code against a
+different emulator to have a second opinion.
 
 The GBA version of the library is a static library licensed under the MIT
 license. The PC version of the library is a dynamic library licensed under the
