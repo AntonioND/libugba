@@ -44,7 +44,7 @@ if(CMAKE_C_COMPILER_ID STREQUAL "MSVC")
     find_package(libpng REQUIRED 1.6)
     find_package(SDL2 REQUIRED)
     include(FindLua)
-    find_package(lua REQUIRED 5.2)
+    find_package(Lua REQUIRED 5.2)
 
     target_link_libraries(${LIBRARY_NAME} PRIVATE
         png
