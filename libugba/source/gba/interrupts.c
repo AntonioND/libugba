@@ -12,14 +12,18 @@ irq_vector IRQ_VectorTable[IRQ_NUMBER];
 
 void IRQ_Init(void)
 {
+    REG_IME = 0;
+
     for (int i = 0; i < IRQ_NUMBER; i ++)
         IRQ_VectorTable[i] = NULL;
 
     BIOS_GLOBAL_IRQ_HANDLER = IRQ_GlobalInterruptHandler;
 
-    REG_IME = 1;
     REG_IE = 0;
     REG_IF = 0x3FFF; // Clear IF
+
+    // Enable interrupts after clearing the flags
+    REG_IME = 1;
 }
 
 void IRQ_SetHandler(irq_index index, irq_vector function)
