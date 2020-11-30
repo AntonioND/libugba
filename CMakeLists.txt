@@ -10,6 +10,18 @@ set(C_STANDARD 11)
 set(C_EXTENSIONS OFF)
 set(C_STANDARD_REQUIRED ON)
 
+# Detect if this project is a submodule
+# -------------------------------------
+
+# If this project is being used as a module within another project, remove all
+# testing and examples from the build.
+get_directory_property(HAS_PARENT PARENT_DIRECTORY)
+if(HAS_PARENT)
+    set(LIBUGBA_ONLY ON)
+else()
+    set(LIBUGBA_ONLY OFF)
+endif()
+
 # Find dependencies
 # -----------------
 
@@ -107,10 +119,7 @@ endif()
 
 add_subdirectory(libugba)
 
-# If this project is being used as a module within another project, don't add
-# examples, template or anything that isn't needed.
-get_directory_property(HAS_PARENT PARENT_DIRECTORY)
-if(NOT HAS_PARENT)
+if(NOT LIBUGBA_ONLY)
     enable_testing()
 
     add_subdirectory(examples)
