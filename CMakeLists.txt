@@ -13,19 +13,13 @@ set(C_STANDARD_REQUIRED ON)
 # Detect if this project is a submodule
 # -------------------------------------
 
-# If this project is being used as a module within another project, remove all
-# testing and examples from the build.
-get_directory_property(HAS_PARENT PARENT_DIRECTORY)
-if(HAS_PARENT)
-    set(LIBUGBA_ONLY ON)
-else()
-    set(LIBUGBA_ONLY OFF)
-endif()
+get_directory_property(PROJECT_HAS_PARENT PARENT_DIRECTORY)
+set(PROJECT_IS_SUBMODULE ${PROJECT_HAS_PARENT})
 
 # Build options
 # -------------
 
-option(BUILD_GBA "Build GBA binaries for testing in addition to PC" OFF)
+option(BUILD_GBA "Build GBA binaries in addition to PC binaries" OFF)
 
 # Global compiler-specific options
 # --------------------------------
@@ -37,7 +31,9 @@ include(cmake/compiler_flags.cmake)
 
 add_subdirectory(libugba)
 
-if(NOT LIBUGBA_ONLY)
+# If this project is being used as a module within another project, remove all
+# testing and examples from the build.
+if(NOT PROJECT_IS_SUBMODULE)
     enable_testing()
 
     add_subdirectory(examples)
