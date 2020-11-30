@@ -64,7 +64,7 @@ function(unittest_two_screenshots)
 
     set(CMD1 "$<TARGET_FILE:${EXECUTABLE_NAME}> --lua ${CMAKE_CURRENT_SOURCE_DIR}/test-sdl2.lua")
     set(CMD2 "$<TARGET_FILE:pngmatch> ${CMAKE_CURRENT_SOURCE_DIR}/reference-1-sdl2.png screenshot-1.png")
-    set(CMD2 "$<TARGET_FILE:pngmatch> ${CMAKE_CURRENT_SOURCE_DIR}/reference-2-sdl2.png screenshot-2.png")
+    set(CMD3 "$<TARGET_FILE:pngmatch> ${CMAKE_CURRENT_SOURCE_DIR}/reference-2-sdl2.png screenshot-2.png")
 
     add_test(NAME ${EXECUTABLE_NAME}_test
         COMMAND ${CMAKE_COMMAND}
