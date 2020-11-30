@@ -2,7 +2,7 @@
 -- button to swap the framebuffers and other keys to move and rotate the
 -- background, and takes another screenshot.
 
-run_frames_and_pause(10)
+run_frames_and_pause(30)
 screenshot("screenshot-1.png")
 keys_hold("A", "L", "RIGHT", "DOWN")
 

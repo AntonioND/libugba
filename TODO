@@ -31,6 +31,3 @@ General
 
 - Public interface cleanup.
 - Documentation.
-- CI scripts for GBA ROMs.
-- Add Lua interpreter to GiiBiiAdvance.
-- Add GiiBiiAdvance as a submodule for easier dependency management.

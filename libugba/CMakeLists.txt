@@ -79,3 +79,18 @@ include(cmake/grit.cmake)
 # Add graphics to library, like the default font
 
 add_grit_files(graphics ${LIBRARY_NAME})
+
+# Build GBA version if requested
+
+if(BUILD_GBA)
+    add_custom_command(
+        OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/lib/libugba.a
+        BYPRODUCTS ${CMAKE_CURRENT_SOURCE_DIR}/build
+        COMMAND make -j`nproc`
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+    )
+
+    add_custom_target(libugba_gba ALL
+        DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/lib/libugba.a
+    )
+endif()

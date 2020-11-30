@@ -22,8 +22,30 @@ else()
     set(LIBUGBA_ONLY OFF)
 endif()
 
+# Build options
+# -------------
+
+option(BUILD_GBA "Build GBA binaries in addition to PC binaries" OFF)
+
 # Find dependencies
 # -----------------
+
+# GiiBiiAdvance is needed for unit tests
+
+if(NOT LIBUGBA_ONLY)
+    if(BUILD_GBA)
+        # Get absolute path to default folder
+        if("${GIIBIIADVANCE_PATH}" STREQUAL "")
+            get_filename_component(GIIBIIADVANCE_PATH ../giibiiadvance ABSOLUTE)
+        endif()
+
+        if(EXISTS ${GIIBIIADVANCE_PATH})
+            add_subdirectory(${GIIBIIADVANCE_PATH} giibiiadvance)
+        else()
+            message(FATAL_ERROR "GiiBiiAdvance repository not found")
+        endif()
+    endif()
+endif()
 
 # libpng, SLD2 and Lua are required
 

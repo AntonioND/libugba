@@ -34,7 +34,8 @@ it. Take a look at `here <docs/limitations.rst>`_ for more details.
 
 To generate GBA ROMs:
 
-- devkitPro
+- `devkitPro_`
+- `GiiBiiAdvance_`: To run the GBA ROM version of the unit tests.
 
 To generate PC executables:
 
@@ -124,11 +125,19 @@ extension, that you can run in an emulator or copy to a flashcart to run on real
 hardware.
 
 Note: In order to make the compilation process faster you can run make in
-multiple threads by doing:
+multiple threads by doing ``make -j`nproc``.
+
+If you want to run the unit tests, you need to use the CMake build system. It is
+needed to have a clone of the repository of `GiiBiiAdvance`_. By default, the
+build system will look for it in the parent directory of the ugba directory.
 
 .. code:: bash
 
+    mkdir build
+    cd build
+    cmake .. -DBUILD_GBA=ON
     make -j`nproc`
+    ctest
 
 6. Credits
 ----------
@@ -138,4 +147,6 @@ multiple threads by doing:
 - Martin Korth (Nocash) for no$gba and GBATEK.
 - Vicki Pfau (endrift) for mGBA.
 
+.. _devkitPro: https://devkitpro.org/
 .. _vcpkg: https://github.com/microsoft/vcpkg
+.. _GiiBiiAdvance: https://github.com/AntonioND/giibiiadvance

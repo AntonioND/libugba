@@ -5,6 +5,8 @@
 function(define_example)
 
     # Get name of the folder we are in
+    # --------------------------------
+
     get_filename_component(EXECUTABLE_NAME ${CMAKE_CURRENT_SOURCE_DIR} NAME)
 
     add_executable(${EXECUTABLE_NAME})
@@ -37,13 +39,37 @@ function(define_example)
     if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/data)
         add_data_files(data ${EXECUTABLE_NAME})
     endif()
+
+    # Build GBA version if requested
+    # ------------------------------
+
+    if(BUILD_GBA)
+        add_custom_command(
+            OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/${EXECUTABLE_NAME}.gba
+            BYPRODUCTS ${CMAKE_CURRENT_SOURCE_DIR}/build
+            COMMAND make -j`nproc`
+            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+        )
+
+        add_custom_target(${EXECUTABLE_NAME}_gba ALL
+            DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${EXECUTABLE_NAME}.gba
+        )
+
+        add_dependencies(${EXECUTABLE_NAME}_gba libugba_gba)
+    endif()
+
 endfunction()
 
 
 function(unittest_screenshot)
 
     # Get name of the folder we are in
+    # --------------------------------
+
     get_filename_component(EXECUTABLE_NAME ${CMAKE_CURRENT_SOURCE_DIR} NAME)
+
+    # SDL2 test
+    # ---------
 
     set(CMD1 "$<TARGET_FILE:${EXECUTABLE_NAME}> --lua ${CMAKE_CURRENT_SOURCE_DIR}/test-sdl2.lua")
     set(CMD2 "$<TARGET_FILE:pngmatch> ${CMAKE_CURRENT_SOURCE_DIR}/reference-sdl2.png screenshot.png")
@@ -55,6 +81,23 @@ function(unittest_screenshot)
                     -P ${CMAKE_SOURCE_DIR}/examples/cmake/runcommands.cmake
         WORKING_DIRECTORY ${CMAKE_CURRENT_BUILD_DIR}
     )
+
+    # Emulator test
+    # -------------
+
+    if(BUILD_GBA)
+        set(CMD1 "$<TARGET_FILE:giibiiadvance> --lua ${CMAKE_CURRENT_SOURCE_DIR}/test-sdl2.lua ${CMAKE_CURRENT_SOURCE_DIR}/${EXECUTABLE_NAME}.gba")
+        set(CMD2 "$<TARGET_FILE:pngmatch> ${CMAKE_CURRENT_SOURCE_DIR}/reference-sdl2.png screenshot.png")
+
+        add_test(NAME ${EXECUTABLE_NAME}_gba_test
+            COMMAND ${CMAKE_COMMAND}
+                        -DCMD1=${CMD1}
+                        -DCMD2=${CMD2}
+                        -P ${CMAKE_SOURCE_DIR}/examples/cmake/runcommands.cmake
+            WORKING_DIRECTORY ${CMAKE_CURRENT_BUILD_DIR}
+        )
+    endif()
+
 endfunction()
 
 function(unittest_two_screenshots)
@@ -74,4 +117,22 @@ function(unittest_two_screenshots)
                     -P ${CMAKE_SOURCE_DIR}/examples/cmake/runcommands.cmake
         WORKING_DIRECTORY ${CMAKE_CURRENT_BUILD_DIR}
     )
+
+    # Emulator test
+    # -------------
+
+    if(BUILD_GBA)
+        set(CMD1 "$<TARGET_FILE:giibiiadvance> --lua ${CMAKE_CURRENT_SOURCE_DIR}/test-sdl2.lua ${CMAKE_CURRENT_SOURCE_DIR}/${EXECUTABLE_NAME}.gba")
+        set(CMD2 "$<TARGET_FILE:pngmatch> ${CMAKE_CURRENT_SOURCE_DIR}/reference-1-sdl2.png screenshot-1.png")
+        set(CMD3 "$<TARGET_FILE:pngmatch> ${CMAKE_CURRENT_SOURCE_DIR}/reference-2-sdl2.png screenshot-2.png")
+
+        add_test(NAME ${EXECUTABLE_NAME}_gba_test
+            COMMAND ${CMAKE_COMMAND}
+                        -DCMD1=${CMD1}
+                        -DCMD2=${CMD2}
+                        -P ${CMAKE_SOURCE_DIR}/examples/cmake/runcommands.cmake
+            WORKING_DIRECTORY ${CMAKE_CURRENT_BUILD_DIR}
+        )
+    endif()
+
 endfunction()
