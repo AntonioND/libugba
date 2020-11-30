@@ -26,6 +26,9 @@ emulators. The PC builds have some parts of the emulator inside them to simulate
 the GBA hardware, and it would be a good idea to test the code against a
 different emulator to have a second opinion.
 
+Note that this is still a very early version of the library. The public
+interface is likely to change. Expect breaking changes every now and then.
+
 The GBA version of the library is a static library licensed under the MIT
 license. The PC version of the library is a dynamic library licensed under the
 LGPL-3.0 license.
