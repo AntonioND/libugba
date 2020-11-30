@@ -71,8 +71,18 @@ function(unittest_screenshot)
     # SDL2 test
     # ---------
 
-    set(CMD1 "$<TARGET_FILE:${EXECUTABLE_NAME}> --lua ${CMAKE_CURRENT_SOURCE_DIR}/test-sdl2.lua")
-    set(CMD2 "$<TARGET_FILE:pngmatch> ${CMAKE_CURRENT_SOURCE_DIR}/reference-sdl2.png screenshot.png")
+    set(TEST_SCRIPT "${CMAKE_CURRENT_SOURCE_DIR}/test-sdl2.lua")
+    if(NOT EXISTS ${TEST_SCRIPT})
+        set(TEST_SCRIPT "${CMAKE_CURRENT_SOURCE_DIR}/test.lua")
+    endif()
+
+    set(REF_PNG "${CMAKE_CURRENT_SOURCE_DIR}/reference-sdl2.png")
+    if(NOT EXISTS ${REF_PNG})
+        set(REF_PNG "${CMAKE_CURRENT_SOURCE_DIR}/reference.png")
+    endif()
+
+    set(CMD1 "$<TARGET_FILE:${EXECUTABLE_NAME}> --lua ${TEST_SCRIPT}")
+    set(CMD2 "$<TARGET_FILE:pngmatch> ${REF_PNG} screenshot.png")
 
     add_test(NAME ${EXECUTABLE_NAME}_test
         COMMAND ${CMAKE_COMMAND}
@@ -86,8 +96,20 @@ function(unittest_screenshot)
     # -------------
 
     if(BUILD_GBA)
-        set(CMD1 "$<TARGET_FILE:giibiiadvance> --lua ${CMAKE_CURRENT_SOURCE_DIR}/test-sdl2.lua ${CMAKE_CURRENT_SOURCE_DIR}/${EXECUTABLE_NAME}.gba")
-        set(CMD2 "$<TARGET_FILE:pngmatch> ${CMAKE_CURRENT_SOURCE_DIR}/reference-sdl2.png screenshot.png")
+        set(TEST_SCRIPT "${CMAKE_CURRENT_SOURCE_DIR}/test-gba.lua")
+        if(NOT EXISTS ${TEST_SCRIPT})
+            set(TEST_SCRIPT "${CMAKE_CURRENT_SOURCE_DIR}/test.lua")
+        endif()
+
+        set(REF_PNG "${CMAKE_CURRENT_SOURCE_DIR}/reference-gba.png")
+        if(NOT EXISTS ${REF_PNG})
+            set(REF_PNG "${CMAKE_CURRENT_SOURCE_DIR}/reference.png")
+        endif()
+
+        set(GBA_ROM "${CMAKE_CURRENT_SOURCE_DIR}/${EXECUTABLE_NAME}.gba")
+
+        set(CMD1 "$<TARGET_FILE:giibiiadvance> --lua ${TEST_SCRIPT} ${GBA_ROM}")
+        set(CMD2 "$<TARGET_FILE:pngmatch> ${REF_PNG} screenshot.png")
 
         add_test(NAME ${EXECUTABLE_NAME}_gba_test
             COMMAND ${CMAKE_COMMAND}
@@ -105,9 +127,24 @@ function(unittest_two_screenshots)
     # Get name of the folder we are in
     get_filename_component(EXECUTABLE_NAME ${CMAKE_CURRENT_SOURCE_DIR} NAME)
 
-    set(CMD1 "$<TARGET_FILE:${EXECUTABLE_NAME}> --lua ${CMAKE_CURRENT_SOURCE_DIR}/test-sdl2.lua")
-    set(CMD2 "$<TARGET_FILE:pngmatch> ${CMAKE_CURRENT_SOURCE_DIR}/reference-1-sdl2.png screenshot-1.png")
-    set(CMD3 "$<TARGET_FILE:pngmatch> ${CMAKE_CURRENT_SOURCE_DIR}/reference-2-sdl2.png screenshot-2.png")
+    set(TEST_SCRIPT "${CMAKE_CURRENT_SOURCE_DIR}/test-sdl2.lua")
+    if(NOT EXISTS ${TEST_SCRIPT})
+        set(TEST_SCRIPT "${CMAKE_CURRENT_SOURCE_DIR}/test.lua")
+    endif()
+
+    set(REF_1_PNG "${CMAKE_CURRENT_SOURCE_DIR}/reference-1-sdl2.png")
+    if(NOT EXISTS ${REF_1_PNG})
+        set(REF_1_PNG "${CMAKE_CURRENT_SOURCE_DIR}/reference-1.png")
+    endif()
+
+    set(REF_2_PNG "${CMAKE_CURRENT_SOURCE_DIR}/reference-2-sdl2.png")
+    if(NOT EXISTS ${REF_2_PNG})
+        set(REF_2_PNG "${CMAKE_CURRENT_SOURCE_DIR}/reference-2.png")
+    endif()
+
+    set(CMD1 "$<TARGET_FILE:${EXECUTABLE_NAME}> --lua ${TEST_SCRIPT}")
+    set(CMD2 "$<TARGET_FILE:pngmatch> ${REF_1_PNG} screenshot-1.png")
+    set(CMD3 "$<TARGET_FILE:pngmatch> ${REF_2_PNG} screenshot-2.png")
 
     add_test(NAME ${EXECUTABLE_NAME}_test
         COMMAND ${CMAKE_COMMAND}
@@ -122,9 +159,26 @@ function(unittest_two_screenshots)
     # -------------
 
     if(BUILD_GBA)
-        set(CMD1 "$<TARGET_FILE:giibiiadvance> --lua ${CMAKE_CURRENT_SOURCE_DIR}/test-sdl2.lua ${CMAKE_CURRENT_SOURCE_DIR}/${EXECUTABLE_NAME}.gba")
-        set(CMD2 "$<TARGET_FILE:pngmatch> ${CMAKE_CURRENT_SOURCE_DIR}/reference-1-sdl2.png screenshot-1.png")
-        set(CMD3 "$<TARGET_FILE:pngmatch> ${CMAKE_CURRENT_SOURCE_DIR}/reference-2-sdl2.png screenshot-2.png")
+        set(TEST_SCRIPT "${CMAKE_CURRENT_SOURCE_DIR}/test-gba.lua")
+        if(NOT EXISTS ${TEST_SCRIPT})
+            set(TEST_SCRIPT "${CMAKE_CURRENT_SOURCE_DIR}/test.lua")
+        endif()
+
+        set(REF_1_PNG "${CMAKE_CURRENT_SOURCE_DIR}/reference-1-gba.png")
+        if(NOT EXISTS ${REF_1_PNG})
+            set(REF_1_PNG "${CMAKE_CURRENT_SOURCE_DIR}/reference-1.png")
+        endif()
+
+        set(REF_2_PNG "${CMAKE_CURRENT_SOURCE_DIR}/reference-2-gba.png")
+        if(NOT EXISTS ${REF_2_PNG})
+            set(REF_2_PNG "${CMAKE_CURRENT_SOURCE_DIR}/reference-2.png")
+        endif()
+
+        set(GBA_ROM "${CMAKE_CURRENT_SOURCE_DIR}/${EXECUTABLE_NAME}.gba")
+
+        set(CMD1 "$<TARGET_FILE:giibiiadvance> --lua ${TEST_SCRIPT} ${GBA_ROM}")
+        set(CMD2 "$<TARGET_FILE:pngmatch> ${REF_1_PNG} screenshot-1.png")
+        set(CMD3 "$<TARGET_FILE:pngmatch> ${REF_2_PNG} screenshot-2.png")
 
         add_test(NAME ${EXECUTABLE_NAME}_gba_test
             COMMAND ${CMAKE_COMMAND}
