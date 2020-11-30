@@ -25,7 +25,8 @@ if(CMAKE_C_COMPILER_ID STREQUAL "GNU")
             -Wlogical-op -Wduplicated-cond -Wswitch-enum -Wfloat-equal
             -Wcast-align -Walloc-zero -Winline
             -Wstrict-overflow=5 -Wstringop-overflow=4
-            -Wstrict-prototypes -Wold-style-definition
+            $<$<COMPILE_LANGUAGE:C>:-Wstrict-prototypes>
+            $<$<COMPILE_LANGUAGE:C>:-Wold-style-definition>
 
             # Enable Wpedantic but disable warning about having strings that are
             # too long
