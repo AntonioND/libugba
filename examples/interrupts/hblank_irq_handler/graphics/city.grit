@@ -4,7 +4,7 @@
 # 16 Colors (bit depth = 4 bit per pixel)
 -gB4
 
-# Start generating palettes at index 8
+# Start generating palettes at index 0
 -ps0
 
 # Optimize tileset

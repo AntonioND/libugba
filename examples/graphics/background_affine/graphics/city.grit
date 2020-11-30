@@ -4,7 +4,7 @@
 # 256 Colors (bit depth = 8 bit per pixel)
 -gB8
 
-# Start generating palettes at index 8
+# Start generating palettes at index 0
 -ps0
 
 # Optimize tileset for affine map
