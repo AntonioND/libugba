@@ -15,13 +15,17 @@ This means you can do things like:
 - Build a Windows executable with MSVC and debug it using Visual Studio.
 - Easily implement unit tests for your game and run them on your PC.
 
-The GBA version of the library is a static library licensed under the MIT
-license. The PC version of the library is a dynamic library licensed under the
-LGPL-3.0 license.
-
 It comes with several examples of how to use each one of the subsystems of the
 library. All examples are also used as unit tests, and they are part of the
 automated regresion testing system of the library.
+
+The PC builds of the tests are simply run on the host by passing the program a
+Lua script with instructions. The GBA builds are run on `GiiBiiAdvance`_, which
+has basic support for Lua scripts as well.
+
+The GBA version of the library is a static library licensed under the MIT
+license. The PC version of the library is a dynamic library licensed under the
+LGPL-3.0 license.
 
 2. Limitations
 --------------
@@ -34,8 +38,7 @@ it. Take a look at `here <docs/limitations.rst>`_ for more details.
 
 To generate GBA ROMs:
 
-- `devkitPro_`
-- `GiiBiiAdvance_`: To run the GBA ROM version of the unit tests.
+- `devkitPro`_
 
 To generate PC executables:
 
@@ -45,8 +48,13 @@ To generate PC executables:
 - libpng 1.6 or later
 - liblua 5.2 or later
 
+To run all unit tests:
+
+- `GiiBiiAdvance`_: To run the GBA ROM version of the unit tests.
+
 You need to install devkitPro following the instructions in this link, then
 follow the instructions in the sections below.
+
 https://devkitpro.org/wiki/Getting_Started
 
 Note: If you don't install devkitPro because you only want to build the PC
@@ -77,13 +85,14 @@ examples, and run all the tests to verify it's working:
     make -j`nproc`
     ctest
 
-4. Build PC library and examples on Windows
+5. Build PC library and examples on Windows
 -------------------------------------------
 
-In order to build with MinGW or Cygwin, you should use the Linux instructions.
-The following instructions have been tested with Microsoft Visual C++ 2019.
+In order to build with **MinGW** or **Cygwin**, you should use the Linux
+instructions. The following instructions have been tested with Microsoft Visual
+C++ 2019.
 
-You need to install `vcpkg`_. In short, open a PowerShell window and do:
+You need to install `vcpkg`_. In short, open a **PowerShell** window and do:
 
 .. code:: bash
 
@@ -108,13 +117,13 @@ and examples:
     cmake .. -DCMAKE_TOOLCHAIN_FILE=C:\...\vcpkg\scripts\buildsystems\vcpkg.cmake -DVCPKG_TARGET_TRIPLET=x64-windows
     msbuild ugba.sln
 
-In order to get a Release build, do:
+In order to get a release build, do:
 
 .. code:: bash
 
     msbuild ugba.sln /property:Configuration=Release
 
-5. Build GBA library and examples
+6. Build GBA library and examples
 ---------------------------------
 
 First, build the library. Go to ``ugba/libugba`` and type ``make``.
@@ -139,7 +148,7 @@ build system will look for it in the parent directory of the ugba directory.
     make -j`nproc`
     ctest
 
-6. Credits
+7. Credits
 ----------
 
 - Dave Murphy (WinterMute) for devkitPro.
@@ -147,6 +156,6 @@ build system will look for it in the parent directory of the ugba directory.
 - Martin Korth (Nocash) for no$gba and GBATEK.
 - Vicki Pfau (endrift) for mGBA.
 
+.. _GiiBiiAdvance: https://github.com/AntonioND/giibiiadvance
 .. _devkitPro: https://devkitpro.org/
 .. _vcpkg: https://github.com/microsoft/vcpkg
-.. _GiiBiiAdvance: https://github.com/AntonioND/giibiiadvance
