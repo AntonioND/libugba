@@ -18,6 +18,7 @@
 #include "interrupts.h"
 #include "obj.h"
 #include "timer.h"
+#include "version.h"
 #include "vram.h"
 
 // This function needs to be called at the start of main()
