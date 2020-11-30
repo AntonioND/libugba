@@ -31,3 +31,4 @@ General
 
 - Public interface cleanup.
 - Documentation.
+- Turn some examples into unit tests, and add more unit tests.
