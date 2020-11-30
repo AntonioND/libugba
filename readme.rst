@@ -118,7 +118,7 @@ Then, install the dependencies (SDL2, libpng and liblua):
     .\vcpkg install SDL2 libpng liblua --triplet x64-windows
 
 Finally, go to the folder of **ugba**. The following will build the library,
-and examples:
+and examples, in **Developer Command Prompt for VS 2019**:
 
 .. code:: bash
 
