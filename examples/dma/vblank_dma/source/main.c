@@ -39,6 +39,8 @@ int main(int argc, char *argv[])
 
     load_bg();
 
+    // Transfer BG scroll values automatically during the VBL using DMA
+
     DMA_Transfer(0, &x, PTR_REG_BG0HOFS, 2,
                  DMACNT_DST_FIXED | DMACNT_SRC_FIXED | DMACNT_TRANSFER_16_BITS |
                  DMACNT_START_VBLANK | DMACNT_REPEAT_ON);
