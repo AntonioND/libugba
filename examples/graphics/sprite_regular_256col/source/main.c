@@ -22,7 +22,7 @@ int main(int argc, char *argv[])
     // ---------------------
 
     OBJ_RegularInit(0, 32, 32, OBJ_SIZE_32x32,
-                    1, 0, BALL_TILES_BASE);
+                    OBJ_256_COLORS, 0, BALL_TILES_BASE);
 
     // Load the palettes
     // -----------------

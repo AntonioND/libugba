@@ -30,17 +30,17 @@ int main(int argc, char *argv[])
 
     // Ball that rotates
 
-    OBJ_AffineInit(0, 44, 64, OBJ_SIZE_32x32, 0,
-                   0, BALL_RED_PALETTE, BALL_RED_TILES_BASE, 0);
+    OBJ_AffineInit(0, 44, 64, OBJ_SIZE_32x32, 0, OBJ_16_COLORS,
+                   BALL_RED_PALETTE, BALL_RED_TILES_BASE, 0);
 
     // Balls that grow and shrink. One with double size mode disabled, the other
     // one has it enabled.
 
-    OBJ_AffineInit(1, 164, 8, OBJ_SIZE_32x32, 1,
-                   0, BALL_GREEN_PALETTE, BALL_GREEN_TILES_BASE, 0);
+    OBJ_AffineInit(1, 164, 8, OBJ_SIZE_32x32, 1, OBJ_16_COLORS,
+                   BALL_GREEN_PALETTE, BALL_GREEN_TILES_BASE, 0);
 
-    OBJ_AffineInit(2, 164, 88, OBJ_SIZE_32x32, 1,
-                   0, BALL_GREEN_PALETTE, BALL_GREEN_TILES_BASE, 1);
+    OBJ_AffineInit(2, 164, 88, OBJ_SIZE_32x32, 1, OBJ_16_COLORS,
+                   BALL_GREEN_PALETTE, BALL_GREEN_TILES_BASE, 1);
 
     obj_affine_src objsrc_init[] =
     {

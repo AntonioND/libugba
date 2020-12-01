@@ -38,13 +38,13 @@ int main(int argc, char *argv[])
 
             if ((i ^ j) & 1)
             {
-                OBJ_RegularInit(index, x, y, OBJ_SIZE_32x32,
-                                0, BALL_RED_PALETTE, BALL_RED_TILES_BASE);
+                OBJ_RegularInit(index, x, y, OBJ_SIZE_32x32, OBJ_16_COLORS,
+                                BALL_RED_PALETTE, BALL_RED_TILES_BASE);
             }
             else
             {
-                OBJ_RegularInit(index, x, y, OBJ_SIZE_32x32,
-                                0, BALL_GREEN_PALETTE, BALL_GREEN_TILES_BASE);
+                OBJ_RegularInit(index, x, y, OBJ_SIZE_32x32, OBJ_16_COLORS,
+                                BALL_GREEN_PALETTE, BALL_GREEN_TILES_BASE);
             }
         }
     }
