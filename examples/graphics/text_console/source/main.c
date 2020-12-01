@@ -10,7 +10,7 @@ int main(int argc, char *argv[])
 
     IRQ_Enable(IRQ_VBLANK);
 
-    REG_DISPCNT = 0; // Mode 0
+    REG_DISPCNT = DISPCNT_BG_MODE(0);
 
     CON_InitDefault();
 
