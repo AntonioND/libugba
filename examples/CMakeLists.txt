@@ -16,6 +16,7 @@ if(NOT LIBUGBA_ONLY)
         endif()
 
         if(EXISTS ${GIIBIIADVANCE_PATH})
+            set(ENABLE_CAMERA OFF CACHE BOOL "")
             add_subdirectory(${GIIBIIADVANCE_PATH} giibiiadvance)
         else()
             message(FATAL_ERROR "GiiBiiAdvance repository not found")
