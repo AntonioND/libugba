@@ -25,4 +25,13 @@ EXPORT_API void DISPLAY_ForcedBlankEnable(int enable);
 // Enable 1D mapping or disable it (and use 2D mapping).
 EXPORT_API void DISPLAY_Object1DMappingEnable(int enable);
 
+// Setup window 0.
+EXPORT_API void WIN_SetupWin0(uint32_t left, uint32_t right,
+                              uint32_t top, uint32_t bottom);
+
+// Setup window 1.
+EXPORT_API void WIN_SetupWin1(uint32_t left, uint32_t right,
+                              uint32_t top, uint32_t bottom);
+
+
 #endif // DISPLAY_H__

@@ -67,3 +67,15 @@ void DISPLAY_Object1DMappingEnable(int enable)
     else
         REG_DISPCNT &= ~DISPCNT_OBJ_1D_MAPPING;
 }
+
+void WIN_SetupWin0(uint32_t left, uint32_t right, uint32_t top, uint32_t bottom)
+{
+    REG_WIN0H = WINH_SET(left, right);
+    REG_WIN0V = WINV_SET(top, bottom);
+}
+
+void WIN_SetupWin1(uint32_t left, uint32_t right, uint32_t top, uint32_t bottom)
+{
+    REG_WIN1H = WINH_SET(left, right);
+    REG_WIN1V = WINV_SET(top, bottom);
+}
