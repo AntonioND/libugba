@@ -6,8 +6,7 @@
 
 void DISPLAY_ModeSet(int mode)
 {
-    REG_DISPCNT &= ~DISPCNT_BG_MODE_MASK;
-    REG_DISPCNT |= DISPCNT_BG_MODE(mode);
+    REG_DISPCNT = DISPCNT_BG_MODE(mode);
 }
 
 void DISPLAY_LayersEnable(int bg0, int bg1, int bg2, int bg3, int obj)

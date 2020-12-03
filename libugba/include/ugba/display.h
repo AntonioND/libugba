@@ -7,7 +7,7 @@
 
 #include "hardware.h"
 
-// Set background display mode without affecting the other flags of REG_DISPCNT.
+// Set background display mode and set the other fields of the register to 0.
 EXPORT_API void DISPLAY_ModeSet(int mode);
 
 // Enable or disable screen layers.
