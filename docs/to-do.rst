@@ -3,7 +3,7 @@ Library
 
 - Interrupts: SERIAL, DMA0-3 and GAMEPAK are missing.
 - Examples for interrupts.
-- Examples for graphics
+- Examples for graphics (windows, blending, etc)
 - DMA (sound, special modes).
 - Examples for DMA (non-repeated copies in HBL and VBL modes).
 - BIOS services.
