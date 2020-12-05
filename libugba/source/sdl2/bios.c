@@ -203,6 +203,11 @@ void SWI_CpuFastSet(const void *src, void *dst, uint32_t len_mode)
     }
 }
 
+uint16_t SWI_Sqrt(uint32_t value)
+{
+    return (uint16_t)sqrt(value);
+}
+
 void SWI_BgAffineSet(const bg_affine_src *src, bg_affine_dst *dst,
                      uint32_t count)
 {

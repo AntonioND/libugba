@@ -32,6 +32,9 @@ EXPORT_API void SWI_CpuSet(const void *src, void *dst, uint32_t len_mode);
 // multiple of 8 bytes.
 EXPORT_API void SWI_CpuFastSet(const void *src, void *dst, uint32_t len_mode);
 
+// Calculate square root.
+EXPORT_API uint16_t SWI_Sqrt(uint32_t value);
+
 // Struct that holds the input to SWI_BgAffineSet()
 #pragma pack(push, 1)
 typedef struct {
