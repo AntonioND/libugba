@@ -26,6 +26,7 @@ endif()
 
 include(cmake/example.cmake)
 
+add_subdirectory(bios)
 add_subdirectory(dma)
 add_subdirectory(graphics)
 add_subdirectory(input)
