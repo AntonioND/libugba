@@ -43,7 +43,6 @@ SWI_RegisterRamReset 0x01
 SWI_Stop 0x03
 SWI_Div
 SWI_DivArm
-SWI_ArcTan2
 #endif
 
 uint16_t SWI_Sqrt(uint32_t value)
@@ -71,6 +70,22 @@ int16_t SWI_ArcTan(int16_t tan)
         "=r"(result) :
         "r"(tan_) :
         "r1", "r2", "r3", "memory"
+    );
+
+    return (int16_t)result;
+}
+
+int16_t SWI_ArcTan2(int16_t x, int16_t y)
+{
+    register uint32_t x_ asm("r0") = x;
+    register uint32_t y_ asm("r1") = y;
+    register uint32_t result;
+
+    asm volatile(
+        SWI_NUMBER(0x0A) :
+        "=r"(result) :
+        "r"(x_), "r"(y_) :
+        "r2", "r3", "memory"
     );
 
     return (int16_t)result;

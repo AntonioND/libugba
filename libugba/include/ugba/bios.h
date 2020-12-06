@@ -38,6 +38,9 @@ EXPORT_API uint16_t SWI_Sqrt(uint32_t value);
 // Calculate arc tangent
 EXPORT_API int16_t SWI_ArcTan(int16_t tan);
 
+// Calculate arc tangent 2
+EXPORT_API int16_t SWI_ArcTan2(int16_t x, int16_t y);
+
 // Struct that holds the input to SWI_BgAffineSet()
 #pragma pack(push, 1)
 typedef struct {

@@ -232,6 +232,65 @@ int16_t SWI_ArcTan(int16_t tan)
     //                         * ((float)0x4000 / M_PI_2));
 }
 
+int16_t SWI_ArcTan2(int16_t x, int16_t y)
+{
+    int32_t x_ = x;
+    int32_t y_ = y;
+
+    if (y_ == 0)
+    {
+        if (x_ < 0)
+            return (int16_t)0x8000;
+
+        return 0;
+    }
+
+    if (x_ == 0)
+    {
+        if (y_ < 0)
+            return (int16_t)0xC000;
+
+        return 0x4000;
+    }
+
+    if (y_ >= 0)
+    {
+        if (x_ >= 0)
+        {
+            if (x_ < y_)
+                return 0x4000 - SWI_ArcTan((x_ << 14) / y_);
+
+            return SWI_ArcTan((y_ << 14) / x_);
+        }
+
+        if (-x_ < y_)
+            return 0x4000 - SWI_ArcTan((x_ << 14) / y_);
+
+        return 0x8000 + SWI_ArcTan((y_ << 14) / x_);
+    }
+
+    if (x_ > 0)
+    {
+        if (x_ < -y_)
+            return 0xC000 - SWI_ArcTan((x_ << 14) / y_);
+
+        return 0x10000 + SWI_ArcTan((y_ << 14) / x_);
+    }
+
+    if (-x_ > -y_)
+        return 0x8000 + SWI_ArcTan((y_ << 14) / x_);
+
+    return 0xC000 - SWI_ArcTan((x_ << 14) / y_);
+
+    // Emulated: Accurate always
+    // float x_ = ((float)x) / (float)(1 << 14);
+    // float y_ = ((float)y) / (float)(1 << 14);
+    // Return: 0000h-FFFFh for 0 <= THETA < 2PI.
+    // int16_t result =
+    //             (int32_t)(atan2(y_, x_) * (((float)0xFFFF) / (2.0 * M_PI)));
+    // return result;
+}
+
 void SWI_BgAffineSet(const bg_affine_src *src, bg_affine_dst *dst,
                      uint32_t count)
 {
