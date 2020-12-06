@@ -13,6 +13,11 @@
 # define SWI_NUMBER(n) "swi "#n " << 16\n"
 #endif
 
+#if 0
+SWI_SoftReset 0x00
+SWI_RegisterRamReset 0x01
+#endif
+
 void SWI_Halt(void)
 {
     asm volatile(
@@ -20,6 +25,10 @@ void SWI_Halt(void)
         "r0", "r1", "r2", "r3", "memory"
     );
 }
+
+#if 0
+SWI_Stop 0x03
+#endif
 
 #if 0
 void SWI_IntrWait(uint32_t discard_old_flags, uint32_t wait_flags)
@@ -38,9 +47,6 @@ void SWI_VBlankIntrWait(void)
 }
 
 #if 0
-SWI_SoftReset 0x00
-SWI_RegisterRamReset 0x01
-SWI_Stop 0x03
 SWI_Div
 SWI_DivArm
 #endif
