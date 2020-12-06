@@ -41,6 +41,13 @@ EXPORT_API int16_t SWI_ArcTan(int16_t tan);
 // Calculate arc tangent 2
 EXPORT_API int16_t SWI_ArcTan2(int16_t x, int16_t y);
 
+// Known values that SWI_GetBiosChecksum() can return
+#define SWI_CHECKSUM_GBA    (0xBAAE187F) // GBA, GBA SP, GB Micro
+#define SWI_CHECKSUM_NDS    (0xBAAE1880) // NDS, 3DS in NDS mode
+
+// Returns checksum of the BIOS
+EXPORT_API uint32_t SWI_GetBiosChecksum(void);
+
 // Struct that holds the input to SWI_BgAffineSet()
 #pragma pack(push, 1)
 typedef struct {

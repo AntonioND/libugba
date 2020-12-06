@@ -9,6 +9,12 @@
 
 #include "debug_utils.h"
 
+uint32_t SWI_GetBiosChecksum(void)
+{
+    // Pretend the emulated system is a regular GBA
+    return SWI_CHECKSUM_GBA;
+}
+
 void SWI_CpuSet(const void *src, void *dst, uint32_t len_mode)
 {
     int count = len_mode & 0x001FFFFF;

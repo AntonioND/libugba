@@ -127,9 +127,18 @@ void SWI_CpuFastSet(const void *src, void *dst, uint32_t len_mode)
     );
 }
 
-#if 0
-SWI_GetBiosChecksum
-#endif
+uint32_t SWI_GetBiosChecksum(void)
+{
+    register uint32_t sum asm("r0");
+
+    asm volatile(
+        SWI_NUMBER(0x0D) :
+        "=r"(sum) ::
+        "r1", "r2", "r3", "memory"
+    );
+
+    return sum;
+}
 
 void SWI_BgAffineSet(const bg_affine_src *src, bg_affine_dst *dst,
                      uint32_t count)
