@@ -2,6 +2,8 @@
 //
 // Copyright (c) 2020 Antonio Niño Díaz
 
+// Example that shows how to set up the keypad interrupt
+
 #include <ugba/ugba.h>
 
 void keypad_handler_any(void);

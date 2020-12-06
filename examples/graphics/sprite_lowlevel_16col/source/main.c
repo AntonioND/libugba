@@ -2,7 +2,7 @@
 //
 // Copyright (c) 2020 Antonio Niño Díaz
 
-// Example of how to load a 16-color sprite
+// Example of how to load a 16-color sprite using low-level definitions
 
 #include <ugba/ugba.h>
 

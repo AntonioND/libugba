@@ -2,6 +2,8 @@
 //
 // Copyright (c) 2020 Antonio Niño Díaz
 
+// Example of how to use the framebuffer in video mode 3.
+
 #include <ugba/ugba.h>
 
 void update_affine_matrix(int x, int y, int angle)

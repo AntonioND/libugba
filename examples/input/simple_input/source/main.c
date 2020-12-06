@@ -2,6 +2,9 @@
 //
 // Copyright (c) 2020 Antonio Niño Díaz
 
+// Example that prints on the screen the keys that are pressed or released by
+// the user.
+
 #include <ugba/ugba.h>
 
 int main(int argc, char *argv[])

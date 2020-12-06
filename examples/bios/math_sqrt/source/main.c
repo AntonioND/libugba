@@ -2,7 +2,7 @@
 //
 // Copyright (c) 2020 Antonio Niño Díaz
 
-// Example that plots y = sqrt(x) scaled to match the screen size
+// Example that plots y = sqrt(x) scaled to match the screen size.
 
 #include <ugba/ugba.h>
 

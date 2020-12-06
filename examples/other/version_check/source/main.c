@@ -2,7 +2,8 @@
 //
 // Copyright (c) 2020 Antonio Niño Díaz
 
-// Example that shows how to setup timers in cascade mode
+// Example that shows how to check if the version of the shared library is
+// compatible with the one that the program was built against.
 
 #include <stdio.h>
 

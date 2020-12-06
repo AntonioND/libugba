@@ -2,6 +2,10 @@
 //
 // Copyright (c) 2020 Antonio Niño Díaz
 
+// Example that shows the behaviour of different key states. It is slowed down
+// to 1/10 of the regular refresh rate so that the "pressed" and "released"
+// states can be seen (if not they would only last for 1/60 of a second!).
+
 #include <ugba/ugba.h>
 
 int main(int argc, char *argv[])

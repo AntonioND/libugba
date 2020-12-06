@@ -2,7 +2,7 @@
 //
 // Copyright (c) 2020 Antonio Niño Díaz
 
-// Example of how to use DMA triggered by the VBL period
+// Example of how to use DMA triggered by the VBL period.
 
 #include <ugba/ugba.h>
 

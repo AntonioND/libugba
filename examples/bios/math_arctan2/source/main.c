@@ -2,8 +2,8 @@
 //
 // Copyright (c) 2020 Antonio Niño Díaz
 
-// Example that plots y = arctan2(x) scaled to match the screen size. The usable
-// part of the function is inside the green vertical lines. TODO TODO TODO
+// Example that plots angle = arctan2(x, y). It needs to use color to draw it as
+// it isn't practical to generate a 3D plot.
 
 #include <ugba/ugba.h>
 

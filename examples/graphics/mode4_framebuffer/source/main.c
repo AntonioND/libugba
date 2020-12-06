@@ -2,6 +2,9 @@
 //
 // Copyright (c) 2020 Antonio Niño Díaz
 
+// Example of how to use the framebuffer in mode 4 and switch between the
+// frontbuffer and backbuffer.
+
 #include <ugba/ugba.h>
 
 void update_affine_matrix(int x, int y, int angle)

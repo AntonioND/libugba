@@ -2,6 +2,8 @@
 //
 // Copyright (c) 2020 Antonio Niño Díaz
 
+// Test that checks that different copy functions work, including DMA and BIOS.
+
 #include <string.h>
 
 #include <ugba/ugba.h>
