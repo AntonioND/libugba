@@ -43,7 +43,6 @@ SWI_RegisterRamReset 0x01
 SWI_Stop 0x03
 SWI_Div
 SWI_DivArm
-SWI_ArcTan
 SWI_ArcTan2
 #endif
 
@@ -60,6 +59,21 @@ uint16_t SWI_Sqrt(uint32_t value)
     );
 
     return (uint16_t)result;
+}
+
+int16_t SWI_ArcTan(int16_t tan)
+{
+    register uint32_t tan_ asm("r0") = tan;
+    register uint32_t result;
+
+    asm volatile(
+        SWI_NUMBER(0x09) :
+        "=r"(result) :
+        "r"(tan_) :
+        "r1", "r2", "r3", "memory"
+    );
+
+    return (int16_t)result;
 }
 
 void SWI_CpuSet(const void *src, void *dst, uint32_t len_mode)

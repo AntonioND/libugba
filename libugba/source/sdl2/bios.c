@@ -208,6 +208,30 @@ uint16_t SWI_Sqrt(uint32_t value)
     return (uint16_t)sqrt(value);
 }
 
+int16_t SWI_ArcTan(int16_t tan)
+{
+    int32_t r0 = tan;
+
+    // This is what the BIOS does... Not accurate at the bounds.
+    int32_t r1 = -((r0 * r0) >> 14);
+    int32_t r3 = ((((int32_t)0xA9) * r1) >> 14) + 0x390;
+    r3 = ((r1 * r3) >> 14) + 0x91C;
+    r3 = ((r1 * r3) >> 14) + 0xFB6;
+    r3 = ((r1 * r3) >> 14) + 0x16AA;
+    r3 = ((r1 * r3) >> 14) + 0x2081;
+    r3 = ((r1 * r3) >> 14) + 0x3651;
+    r3 = ((r1 * r3) >> 14) + 0xA259;
+    int32_t result = (r0 * r3) >> 16;
+
+    return result;
+
+    // Emulated: Accurate always
+    // r0: Tan, 16bit: 1bit sign, 1bit integral part, 14bit decimal part
+    // Return: "-PI/2 < THETA < PI/2" in a range of C000h-4000h.
+    // result = (int32_t)(atan(((float)(int16_t)r0) / (float)(1 << 14))
+    //                         * ((float)0x4000 / M_PI_2));
+}
+
 void SWI_BgAffineSet(const bg_affine_src *src, bg_affine_dst *dst,
                      uint32_t count)
 {

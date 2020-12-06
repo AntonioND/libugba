@@ -35,6 +35,9 @@ EXPORT_API void SWI_CpuFastSet(const void *src, void *dst, uint32_t len_mode);
 // Calculate square root.
 EXPORT_API uint16_t SWI_Sqrt(uint32_t value);
 
+// Calculate arc tangent
+EXPORT_API int16_t SWI_ArcTan(int16_t tan);
+
 // Struct that holds the input to SWI_BgAffineSet()
 #pragma pack(push, 1)
 typedef struct {
