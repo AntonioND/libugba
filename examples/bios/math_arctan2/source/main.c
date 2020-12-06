@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
             int16_t xdelta = x - (GBA_SCREEN_W / 2);
             int16_t ydelta = y - (GBA_SCREEN_H / 2);
 
-            uint16_t val = SWI_ArcTan2(xdelta, ydelta);
+            uint16_t val = SWI_ArcTan2(xdelta, ydelta) >> 1;
 
             framebuffer[y * GBA_SCREEN_W + x] = val;
         }
