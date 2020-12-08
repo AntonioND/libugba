@@ -165,6 +165,64 @@ void SWI_LZ77UnCompReadNormalWrite16bit(const void *source, void *dest)
     SWI_UncompressLZ77(source, dest);
 }
 
+static void GBA_SWI_RLUnComp(const void *source, void *dest)
+{
+    const uint8_t *src = source;
+    uint8_t *dst = dest;
+
+    uint32_t header = *(uint32_t *)source;
+
+    src += 4;
+
+    // TODO: Check extra fields in header
+
+    int32_t size = (header >> 8) & 0x00FFFFFF;
+
+    while (size > 0)
+    {
+        uint8_t flag = *src++;
+
+        if (flag & BIT(7)) // Compressed - 1 byte repeated N times
+        {
+            int32_t len = (flag & 0x7F) + 3;
+            uint8_t data = *src++;
+
+            while (len)
+            {
+                *dst++ = data;
+                size--;
+                len--;
+            }
+        }
+        else // N uncompressed bytes
+        {
+            int32_t len = (flag & 0x7F) + 1;
+
+            while (len)
+            {
+                *dst++ = *src++;
+                size--;
+                len--;
+            }
+        }
+    }
+}
+
+void SWI_RLUnCompWram(const void *source, void *dest)
+{
+    // TODO: Check alignment of arguments
+
+    GBA_SWI_RLUnComp(source, dest);
+}
+
+void SWI_RLUnCompVram(const void *source, void *dest)
+{
+    // TODO: Check alignment of arguments
+    // TODO: Can the size be not a multiple of 2?
+
+    GBA_SWI_RLUnComp(source, dest);
+}
+
 static void GBA_Diff8bitUnFilter(const void *source, void *dest)
 {
     const uint8_t *src = source;
@@ -187,6 +245,7 @@ static void GBA_Diff8bitUnFilter(const void *source, void *dest)
         size--;
     }
 }
+
 void SWI_Diff8bitUnFilterWram(const void *source, void *dest)
 {
     // TODO: Check alignment of arguments

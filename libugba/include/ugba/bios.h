@@ -108,6 +108,15 @@ void SWI_LZ77UnCompReadNormalWrite8bit(const void *source, void *dest);
 EXPORT_API
 void SWI_LZ77UnCompReadNormalWrite16bit(const void *source, void *dest);
 
+// Decompresses Run-Length data from the source and writes the result to the
+// destination using 8-bit writes. It can't be used to decompress directly to
+// VRAM, as it only accepts 16 and 32-bit accesses.
+EXPORT_API void SWI_RLUnCompWram(const void *source, void *dest);
+
+// Decompresses Run-Length data from the source and writes the result to the
+// destination using 16-bit writes. VRAM can be used as destination.
+EXPORT_API void SWI_RLUnCompVram(const void *source, void *dest);
+
 // Convert data in diff format to original data. In this version, data elements
 // are 8 bits wide and the result is writen in 8-bit accesses.
 EXPORT_API void SWI_Diff8bitUnFilterWram(const void *source, void *dest);

@@ -207,9 +207,35 @@ void SWI_LZ77UnCompReadNormalWrite16bit(const void *source, void *dest)
 
 #if 0
 SWI_HuffUnComp
-SWI_RLUnCompWram
-SWI_RLUnCompVram
 #endif
+
+void SWI_RLUnCompWram(const void *source, void *dest)
+{
+    // TODO: Verify arguments? Alignment?
+
+    register uint32_t source_ asm("r0") = (uint32_t)source;
+    register uint32_t dest_ asm("r1") = (uint32_t)dest;
+
+    asm volatile(
+        SWI_NUMBER(0x14) ::
+        "r"(source_), "r"(dest_) :
+        "r2", "r3", "memory"
+    );
+}
+
+void SWI_RLUnCompVram(const void *source, void *dest)
+{
+    // TODO: Verify arguments? Alignment?
+
+    register uint32_t source_ asm("r0") = (uint32_t)source;
+    register uint32_t dest_ asm("r1") = (uint32_t)dest;
+
+    asm volatile(
+        SWI_NUMBER(0x15) ::
+        "r"(source_), "r"(dest_) :
+        "r2", "r3", "memory"
+    );
+}
 
 void SWI_Diff8bitUnFilterWram(const void *source, void *dest)
 {
