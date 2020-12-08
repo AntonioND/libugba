@@ -15,6 +15,7 @@
 #include "main_c_diff_8_bin.h"
 #include "main_c_lz77_8_bin.h"
 #include "main_c_lz77_16_bin.h"
+#include "main_c_rl_bin.h"
 
 // 16 K buffer aligned to 32 bit
 static uint32_t buffer[(16 * 1024) / sizeof(uint32_t)];
@@ -60,6 +61,16 @@ int main(int argc, char *argv[])
     CON_Print("LZ77UnCompWrite16bit(): ");
     memset(&(buffer[0]), 0, sizeof(buffer));
     SWI_LZ77UnCompReadNormalWrite16bit(&(main_c_lz77_16_bin[0]), &(buffer[0]));
+    verify_extract();
+
+    CON_Print("RLUnCompWram(): ");
+    memset(&(buffer[0]), 0, sizeof(buffer));
+    SWI_RLUnCompWram(&(main_c_rl_bin[0]), &(buffer[0]));
+    verify_extract();
+
+    CON_Print("RLUnCompVram(): ");
+    memset(&(buffer[0]), 0, sizeof(buffer));
+    SWI_RLUnCompVram(&(main_c_rl_bin[0]), &(buffer[0]));
     verify_extract();
 
     // TODO: Other formats
