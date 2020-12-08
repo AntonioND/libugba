@@ -71,7 +71,7 @@ int main(int argc, char *argv[])
     // --------------
 
     // 4 bits (16 colors), 8x8, transform from bits to bytes
-#define TILE_SIZE (4 * 8 * 8) / 8
+#define TILE_SIZE ((4 * 8 * 8) / 8)
     uint8_t *spr_tiles = (uint8_t *)MEM_VRAM_OBJ + (BALL_TILES_BASE * TILE_SIZE);
     SWI_CpuFastSet_Copy32(ballTiles, spr_tiles, ballTilesLen);
 
