@@ -3,6 +3,7 @@
 # Copyright (c) 2020 Antonio Niño Díaz
 
 add_subdirectory(bios_checksum)
+add_subdirectory(bios_decompress)
 add_subdirectory(math_arctan)
 add_subdirectory(math_arctan2)
 add_subdirectory(math_sqrt)
