@@ -164,3 +164,65 @@ void SWI_LZ77UnCompReadNormalWrite16bit(const void *source, void *dest)
 {
     SWI_UncompressLZ77(source, dest);
 }
+
+static void GBA_Diff8bitUnFilter(const void *source, void *dest)
+{
+    const uint8_t *src = source;
+    uint8_t *dst = dest;
+
+    uint32_t header = *(uint32_t *)source;
+
+    src += 4;
+
+    // TODO: Check extra fields in header
+
+    int32_t size = (header >> 8) & 0x00FFFFFF;
+
+    uint8_t value = 0;
+
+    while (size > 0)
+    {
+        value += *src++;
+        *dst++ = value;
+        size--;
+    }
+}
+void SWI_Diff8bitUnFilterWram(const void *source, void *dest)
+{
+    // TODO: Check alignment of arguments
+
+    GBA_Diff8bitUnFilter(source, dest);
+}
+
+void SWI_Diff8bitUnFilterVram(const void *source, void *dest)
+{
+    // TODO: Check alignment of arguments
+    // TODO: Can the size be not a multiple of 2?
+
+    GBA_Diff8bitUnFilter(source, dest);
+}
+
+void SWI_Diff16bitUnFilter(const void *source, void *dest)
+{
+    // TODO: Check alignment of arguments
+
+    const uint16_t *src = source;
+    uint16_t *dst = dest;
+
+    uint32_t header = *(uint32_t *)source;
+
+    src += 2;
+
+    // TODO: Check extra fields in header
+
+    int32_t size = (header >> 8) & 0x00FFFFFF;
+
+    uint16_t value = 0;
+
+    while (size > 0)
+    {
+        value += *src++;
+        *dst++ = value;
+        size -= 2;
+    }
+}

@@ -209,9 +209,51 @@ void SWI_LZ77UnCompReadNormalWrite16bit(const void *source, void *dest)
 SWI_HuffUnComp
 SWI_RLUnCompWram
 SWI_RLUnCompVram
-SWI_Diff8bitUnFilterWram
-SWI_Diff8bitUnFilterVram
-SWI_Diff16bitUnFilter
+#endif
+
+void SWI_Diff8bitUnFilterWram(const void *source, void *dest)
+{
+    // TODO: Verify arguments? Alignment?
+
+    register uint32_t source_ asm("r0") = (uint32_t)source;
+    register uint32_t dest_ asm("r1") = (uint32_t)dest;
+
+    asm volatile(
+        SWI_NUMBER(0x16) ::
+        "r"(source_), "r"(dest_) :
+        "r2", "r3", "memory"
+    );
+}
+
+void SWI_Diff8bitUnFilterVram(const void *source, void *dest)
+{
+    // TODO: Verify arguments? Alignment?
+
+    register uint32_t source_ asm("r0") = (uint32_t)source;
+    register uint32_t dest_ asm("r1") = (uint32_t)dest;
+
+    asm volatile(
+        SWI_NUMBER(0x17) ::
+        "r"(source_), "r"(dest_) :
+        "r2", "r3", "memory"
+    );
+}
+
+void SWI_Diff16bitUnFilter(const void *source, void *dest)
+{
+    // TODO: Verify arguments? Alignment?
+
+    register uint32_t source_ asm("r0") = (uint32_t)source;
+    register uint32_t dest_ asm("r1") = (uint32_t)dest;
+
+    asm volatile(
+        SWI_NUMBER(0x18) ::
+        "r"(source_), "r"(dest_) :
+        "r2", "r3", "memory"
+    );
+}
+
+#if 0
 SWI_MidiKey2Freq
 SWI_MultiBoot
 SWI_HardReset

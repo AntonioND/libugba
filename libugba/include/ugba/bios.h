@@ -108,4 +108,17 @@ void SWI_LZ77UnCompReadNormalWrite8bit(const void *source, void *dest);
 EXPORT_API
 void SWI_LZ77UnCompReadNormalWrite16bit(const void *source, void *dest);
 
+// Convert data in diff format to original data. In this version, data elements
+// are 8 bits wide and the result is writen in 8-bit accesses.
+EXPORT_API void SWI_Diff8bitUnFilterWram(const void *source, void *dest);
+
+// Convert data in diff format to original data. In this version, data elements
+// are 8 bits wide and the result is writen in 16-bit accesses. This means that
+// VRAM can be used as destination, as it doesn't accept 8-bit writes.
+EXPORT_API void SWI_Diff8bitUnFilterVram(const void *source, void *dest);
+
+// Convert data in diff format to original data. In this version, data elements
+// are 16 bits wide and the result is writen in 16-bit accesses.
+EXPORT_API void SWI_Diff16bitUnFilter(const void *source, void *dest);
+
 #endif // BIOS_H__
