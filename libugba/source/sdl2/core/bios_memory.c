@@ -7,7 +7,7 @@
 
 #include <ugba/ugba.h>
 
-#include "debug_utils.h"
+#include "../debug_utils.h"
 
 uint32_t SWI_GetBiosChecksum(void)
 {

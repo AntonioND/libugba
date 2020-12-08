@@ -6,7 +6,7 @@
 
 #include <ugba/ugba.h>
 
-#include "debug_utils.h"
+#include "../debug_utils.h"
 
 uint16_t SWI_Sqrt(uint32_t value)
 {

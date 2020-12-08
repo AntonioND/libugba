@@ -6,15 +6,16 @@
 
 #include <ugba/ugba.h>
 
-#include "debug_utils.h"
-#include "input_utils.h"
 #include "interrupts.h"
-#include "lua_handler.h"
+#include "dma.h"
+#include "video.h"
 
-#include "core/dma.h"
-#include "core/video.h"
-#include "gui/win_main.h"
-#include "gui/window_handler.h"
+#include "../debug_utils.h"
+#include "../input_utils.h"
+#include "../lua_handler.h"
+
+#include "../gui/win_main.h"
+#include "../gui/window_handler.h"
 
 static int current_vcount = 0;
 

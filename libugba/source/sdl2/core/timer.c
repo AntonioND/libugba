@@ -6,8 +6,9 @@
 
 #include <ugba/ugba.h>
 
+#include "interrupts.h"
+
 #include "../debug_utils.h"
-#include "../interrupts.h"
 
 static uint16_t curr_value[4];
 

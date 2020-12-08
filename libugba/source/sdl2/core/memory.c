@@ -6,9 +6,9 @@
 
 #include <ugba/ugba.h>
 
-#include "core/dma.h"
-#include "core/timer.h"
-#include "core/video.h"
+#include "dma.h"
+#include "timer.h"
+#include "video.h"
 
 uint64_t internal_bios[MEM_BIOS_SIZE / sizeof(uint64_t)];
 uint64_t internal_ewram[MEM_EWRAM_SIZE / sizeof(uint64_t)];
