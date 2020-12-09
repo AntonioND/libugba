@@ -21,7 +21,14 @@
 #include "version.h"
 #include "vram.h"
 
-// This function needs to be called at the start of main()
+// Initialize library. This function needs to be called at the start of main().
 EXPORT_API void UGBA_Init(int *argc, char **argv[]);
+
+#ifndef __GBA__
+// Initialize library with no video output (for testing). This function needs to
+// be called at the start of main(). Not implemented in GBA as it isn't usedul
+// there.
+EXPORT_API void UGBA_InitHeadless(int *argc, char **argv[]);
+#endif
 
 #endif // UGBA_H__

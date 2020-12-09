@@ -14,7 +14,7 @@ uint32_t get_bias_level(void)
 
 int main(int argc, char *argv[])
 {
-    UGBA_Init(&argc, &argv);
+    UGBA_InitHeadless(&argc, &argv);
 
     SWI_SoundBias(0);
     if (get_bias_level() != 0)

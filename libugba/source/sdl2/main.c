@@ -32,11 +32,44 @@ static int Init(void)
     // Init this before loading the configuration
     Input_InitSystem();
 
-    //Config_Load();
+    return 0;
+}
 
-    //Sound_Init();
+static int InitHeadless(void)
+{
+    // Initialize SDL
+    if (SDL_Init(SDL_INIT_TIMER | SDL_INIT_EVENTS) != 0)
+    {
+        Debug_Log("SDL could not initialize! SDL Error: %s\n", SDL_GetError());
+        return 1;
+    }
+    atexit(SDL_Quit);
+
+    // Init this before loading the configuration
+    Input_InitSystem();
 
     return 0;
+}
+
+static void UGBA_ParseArgs(int *argc, char **argv[])
+{
+    if ((argc != NULL) && (argv != NULL))
+    {
+        if (*argc > 2)
+        {
+            if (strcmp((*argv)[1], "--lua") == 0)
+            {
+                Script_RunLua((*argv)[2]);
+
+                // Remove argv[1] and argv[2]
+
+                for (int i = 1; i < *argc - 2; i++)
+                    (*argv)[i] = (*argv)[i + 2];
+
+                *argc = *argc - 2;
+            }
+        }
+    }
 }
 
 void UGBA_Init(int *argc, char **argv[])
@@ -55,23 +88,32 @@ void UGBA_Init(int *argc, char **argv[])
 
     // Detect arguments
 
-    if ((argc != NULL) && (argv != NULL))
-    {
-        if (*argc > 2)
-        {
-            if (strcmp((*argv)[1], "--lua") == 0)
-            {
-                Script_RunLua((*argv)[2]);
+    UGBA_ParseArgs(argc, argv);
 
-                // Remove argv[1] and argv[2]
+    // Update key input state
 
-                for (int i = 1; i < *argc - 2; i++)
-                    (*argv)[i] = (*argv)[i + 2];
+    Input_Update_GBA();
 
-                *argc = *argc - 2;
-            }
-        }
-    }
+    // Library initialization
+
+    IRQ_Init();
+}
+
+void UGBA_InitHeadless(int *argc, char **argv[])
+{
+    // SDL2 port initialization
+
+    Debug_Init();
+    atexit(Debug_End);
+
+    if (InitHeadless() != 0)
+        exit(1);
+
+    GBA_FillFadeTables();
+
+    // Detect arguments
+
+    UGBA_ParseArgs(argc, argv);
 
     Input_Update_GBA();
 
