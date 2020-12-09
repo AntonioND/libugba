@@ -13,8 +13,17 @@
 # define SWI_NUMBER(n) "swi "#n " << 16\n"
 #endif
 
+NORETURN void SWI_SoftReset(void)
+{
+    asm volatile(
+        SWI_NUMBER(0x00) :::
+        "r0", "r1", "r2", "r3", "memory"
+    );
+
+    while (1); // Trap execution just in case
+}
+
 #if 0
-SWI_SoftReset 0x00
 SWI_RegisterRamReset 0x01
 #endif
 
@@ -293,6 +302,18 @@ void SWI_Diff16bitUnFilter(const void *source, void *dest)
 #if 0
 SWI_MidiKey2Freq
 SWI_MultiBoot
-SWI_HardReset
+#endif
+
+NORETURN void SWI_HardReset(void)
+{
+    asm volatile(
+        SWI_NUMBER(0x26) :::
+        "r0", "r1", "r2", "r3", "memory"
+    );
+
+    while (1); // Trap execution just in case
+}
+
+#if 0
 SWI_CustomHalt
 #endif

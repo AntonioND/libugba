@@ -139,3 +139,21 @@ void SWI_VBlankIntrWait(void)
     while (current_vcount != 160)
         do_scanline_draw();
 }
+
+NORETURN void SWI_SoftReset(void)
+{
+    // TODO: Is there a way to implement this in a cross platform way?
+
+    Debug_Log("%s(): Not supported!\n");
+    WH_CloseAll();
+    exit(0);
+}
+
+NORETURN void SWI_HardReset(void)
+{
+    // TODO: Is there a way to implement this in a cross platform way?
+
+    Debug_Log("%s(): Not supported!\n");
+    WH_CloseAll();
+    exit(0);
+}

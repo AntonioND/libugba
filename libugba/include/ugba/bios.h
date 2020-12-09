@@ -10,6 +10,9 @@
 
 // Note: Names taken from GBATEK
 
+// Perform a soft reset. Not supported on the SDL2 port.
+EXPORT_API NORETURN void SWI_SoftReset(void);
+
 // Wait until an interrupt happens.
 EXPORT_API void SWI_Halt(void);
 
@@ -133,5 +136,8 @@ EXPORT_API void SWI_Diff8bitUnFilterVram(const void *source, void *dest);
 // Convert data in diff format to original data. In this version, data elements
 // are 16 bits wide and the result is writen in 16-bit accesses.
 EXPORT_API void SWI_Diff16bitUnFilter(const void *source, void *dest);
+
+// Perform a hard reset. Not supported on the SDL2 port.
+EXPORT_API NORETURN void SWI_HardReset(void);
 
 #endif // BIOS_H__

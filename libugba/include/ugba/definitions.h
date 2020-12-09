@@ -20,6 +20,12 @@
 # define ALIGNED(x) __attribute__((aligned(x)))
 #endif
 
+#if defined(_MSC_VER)
+# define NORETURN __declspec(noreturn)
+#else
+# define NORETURN __attribute__((noreturn))
+#endif
+
 // The library is built static for GBA and shared for PC
 #if defined(__GBA__)
 #  define EXPORT_API
