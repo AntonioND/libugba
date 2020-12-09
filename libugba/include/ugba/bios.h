@@ -108,6 +108,10 @@ void SWI_LZ77UnCompReadNormalWrite8bit(const void *source, void *dest);
 EXPORT_API
 void SWI_LZ77UnCompReadNormalWrite16bit(const void *source, void *dest);
 
+// Decompresses Huffman-encoded data from the source and writes the result to
+// the destination using 32-bit writes. VRAM can be used as destination.
+EXPORT_API void SWI_HuffUnComp(const void *source, void *dest);
+
 // Decompresses Run-Length data from the source and writes the result to the
 // destination using 8-bit writes. It can't be used to decompress directly to
 // VRAM, as it only accepts 16 and 32-bit accesses.

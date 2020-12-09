@@ -165,6 +165,95 @@ void SWI_LZ77UnCompReadNormalWrite16bit(const void *source, void *dest)
     SWI_UncompressLZ77(source, dest);
 }
 
+void SWI_HuffUnComp(const void *source, void *dest)
+{
+    const uint8_t *src = source;
+    uint8_t *dst = dest;
+
+    uint32_t header = *(uint32_t *)source;
+    src += 4;
+
+    // TODO: Check extra fields in header
+
+    int chunk_size = header & 0xF; // In bits
+    if ((chunk_size != 4) && (chunk_size != 8))
+    {
+        Debug_Log("%s(): Invalid chunk size: %d", chunk_size);
+        return;
+    }
+
+    int size = (header >> 8) & 0x00FFFFFF;
+
+    uint32_t treesize = (*src * 2) + 1;
+    src++;
+
+    const uint8_t *treetable = src;
+
+    src += treesize; // Point to the bitstream
+    uint32_t *bitstream = (uint32_t *)src;
+
+    int total = 0;
+    int bit4index = 0;
+
+    uint32_t bits = 0;
+    int bitsleft = 0;
+
+    while (1)
+    {
+        const uint8_t *nodeaddr = treetable;
+
+        while (1)
+        {
+            int searching = 1;
+
+            if (bitsleft == 0)
+            {
+                bits = *bitstream++;
+                bitsleft = 32;
+            }
+            int node = bits >> 31; // Get bit 31
+
+            bits <<= 1;
+            bitsleft--;
+
+            uint8_t nodeinfo = *nodeaddr;
+            if ((node == 1) && (nodeinfo & BIT(6)))
+                searching = 0;
+            if ((node == 0) && (nodeinfo & BIT(7)))
+                searching = 0;
+
+            uint32_t offset = ((uint32_t)(nodeinfo & 0x3F)) * 2 + 2 + node;
+            nodeaddr = (const uint8_t *)(((uintptr_t)nodeaddr & ~1) + offset);
+
+            if (searching == 0)
+                break;
+        }
+
+        if (chunk_size == 8)
+        {
+            *dst++ = *nodeaddr;
+            total++;
+        }
+        else // if (chunk_size == 4)
+        {
+            if (bit4index & 1)
+            {
+                *dst |= (*nodeaddr) << 4;
+                dst++;
+                total++;
+            }
+            else
+            {
+                *dst = *nodeaddr;
+            }
+            bit4index ^= 1;
+        }
+
+        if (total >= size)
+            break;
+    }
+}
+
 static void GBA_SWI_RLUnComp(const void *source, void *dest)
 {
     const uint8_t *src = source;
