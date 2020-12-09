@@ -37,4 +37,5 @@ if(NOT PROJECT_IS_SUBMODULE)
     enable_testing()
 
     add_subdirectory(examples)
+    add_subdirectory(unittests)
 endif()
