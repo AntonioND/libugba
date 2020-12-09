@@ -299,10 +299,16 @@ void SWI_Diff16bitUnFilter(const void *source, void *dest)
     );
 }
 
-#if 0
-SWI_MidiKey2Freq
-SWI_MultiBoot
-#endif
+void SWI_SoundBias(uint32_t level)
+{
+    register uint32_t level_ asm("r0") = level;
+
+    asm volatile(
+        SWI_NUMBER(0x19) ::
+        "r"(level_) :
+        "r1", "r2", "r3", "memory"
+    );
+}
 
 NORETURN void SWI_HardReset(void)
 {
@@ -313,7 +319,3 @@ NORETURN void SWI_HardReset(void)
 
     while (1); // Trap execution just in case
 }
-
-#if 0
-SWI_CustomHalt
-#endif

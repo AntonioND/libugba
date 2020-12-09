@@ -157,3 +157,13 @@ NORETURN void SWI_HardReset(void)
     WH_CloseAll();
     exit(0);
 }
+
+void SWI_SoundBias(uint32_t level)
+{
+    // This function ignores the delay
+
+    uint32_t value = level ? 0x100 : 0;
+
+    REG_SOUNDBIAS &= 0xFC00;
+    REG_SOUNDBIAS |= value << 1;
+}

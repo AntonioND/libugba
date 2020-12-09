@@ -137,6 +137,10 @@ EXPORT_API void SWI_Diff8bitUnFilterVram(const void *source, void *dest);
 // are 16 bits wide and the result is writen in 16-bit accesses.
 EXPORT_API void SWI_Diff16bitUnFilter(const void *source, void *dest);
 
+// Set the level of the SOUNDBIAS register by doing small changes. A level of 0
+// sets the BIAS level to 0, any other value sets it to 0x200.
+EXPORT_API void SWI_SoundBias(uint32_t level);
+
 // Perform a hard reset. Not supported on the SDL2 port.
 EXPORT_API NORETURN void SWI_HardReset(void);
 
