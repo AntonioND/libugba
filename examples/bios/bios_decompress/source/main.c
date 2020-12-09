@@ -13,6 +13,8 @@
 #include "main_c_bin.h"
 #include "main_c_diff_16_bin.h"
 #include "main_c_diff_8_bin.h"
+#include "main_c_huff_4_bin.h"
+#include "main_c_huff_8_bin.h"
 #include "main_c_lz77_8_bin.h"
 #include "main_c_lz77_16_bin.h"
 #include "main_c_rl_bin.h"
@@ -71,6 +73,16 @@ int main(int argc, char *argv[])
     CON_Print("RLUnCompVram(): ");
     memset(&(buffer[0]), 0, sizeof(buffer));
     SWI_RLUnCompVram(&(main_c_rl_bin[0]), &(buffer[0]));
+    verify_extract();
+
+    CON_Print("HuffUnComp(8 bit): ");
+    memset(&(buffer[0]), 0, sizeof(buffer));
+    SWI_HuffUnComp(&(main_c_huff_8_bin[0]), &(buffer[0]));
+    verify_extract();
+
+    CON_Print("HuffUnComp(4 bit): ");
+    memset(&(buffer[0]), 0, sizeof(buffer));
+    SWI_HuffUnComp(&(main_c_huff_4_bin[0]), &(buffer[0]));
     verify_extract();
 
     // TODO: Other formats
