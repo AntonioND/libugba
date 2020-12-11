@@ -77,6 +77,104 @@ void SWI_CpuFastSet(const void *src, void *dst, uint32_t len_mode)
     }
 }
 
+void SWI_BitUnPack(const void *source, void *dest, const bit_unpack_info *info)
+{
+    const uint8_t *src = source;
+    uint32_t *dst = dest;
+
+    int32_t srcsize = info->source_length;
+    uint32_t dataoffset = info->data_offset & ~SWI_BITUNPACK_OFFSET_ZERO;
+    int zerodataflag = info->data_offset & SWI_BITUNPACK_OFFSET_ZERO;
+
+    // Last data read from source and position of the next chunk of bits to
+    // extract from it.
+    uint8_t srcdata = 0;
+    int src_bitindex = 0;
+
+    // Data to write to the destination and position of the next chunk of bits
+    // to insert in it.
+    uint32_t dstdata = 0;
+    int dst_bitindex = 0;
+
+    while (1)
+    {
+        // Value being handled
+        uint32_t data = 0;
+
+        if (src_bitindex == 0)
+        {
+            if (srcsize == 0)
+                break;
+
+            srcdata = *src++;
+            srcsize--;
+        }
+
+        switch (info->source_width)
+        {
+            case 1:
+                data = srcdata & 0x1;
+                srcdata >>= 1;
+                src_bitindex++;
+                break;
+            case 2:
+                data = srcdata & 0x3;
+                srcdata >>= 2;
+                src_bitindex += 2;
+                break;
+            case 4:
+                data = srcdata & 0xF;
+                srcdata >>= 4;
+                src_bitindex += 4;
+                break;
+            case 8:
+                data = srcdata;
+                src_bitindex += 8;
+                break;
+            default:
+                Debug_Log("%s: Invalid source width: %d", __func__,
+                          info->source_width);
+                return;
+        }
+
+        if (src_bitindex == 8)
+            src_bitindex = 0;
+
+        // The offset is added always if data != 0, and it is added even in that
+        // case if the zero data flag is set.
+        if (data)
+            data += dataoffset;
+        else if (zerodataflag)
+            data += dataoffset;
+
+        if (dst_bitindex == 0)
+            dstdata = 0;
+
+        switch (info->dest_width)
+        {
+            case 1:
+            case 2:
+            case 4:
+            case 8:
+            case 16:
+            case 32:
+                dstdata |= data << dst_bitindex;
+                dst_bitindex += info->dest_width;
+                break;
+            default:
+                Debug_Log("%s: Invalid destination width: %d", __func__,
+                          info->dest_width);
+                return;
+        }
+        if (dst_bitindex == 32)
+        {
+            *dst++ = dstdata;
+            dst_bitindex = 0;
+            dstdata = 0;
+        }
+    }
+}
+
 // The only difference between LZ77UnCompReadNormalWrite8bit() and
 // LZ77UnCompReadNormalWrite16bit() is the width of the writes to the
 // destination. There is no difference in the emulated BIOS.

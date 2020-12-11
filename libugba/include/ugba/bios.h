@@ -100,6 +100,26 @@ EXPORT_API
 void SWI_ObjAffineSet(const obj_affine_src *src, void *dst,
                       uint32_t count, uint32_t increment);
 
+// Struct that holds information used by SWI_BitUnPack()
+#pragma pack(push, 1)
+typedef struct {
+    int16_t source_length;
+    uint8_t source_width;
+    uint8_t dest_width;
+    uint32_t data_offset;
+} bit_unpack_info;
+#pragma pack(pop)
+
+// Used in data_offset in bit_unpack_info.
+#define SWI_BITUNPACK_OFFSET_ZERO (1 << 31)
+
+// Unpack data of the specified width in source into the specified width in the
+// destination. Used to increase the color depth of images, for example. It
+// writes the result to the destination using 32-bit writes. VRAM can be used as
+// destination.
+EXPORT_API
+void SWI_BitUnPack(const void *source, void *dest, const bit_unpack_info *info);
+
 // Decompresses LZ77 data from the source and writes the result to the
 // destination using 8-bit writes. It can't be used to decompress directly to
 // VRAM, as it only accepts 16 and 32-bit accesses.

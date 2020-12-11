@@ -182,9 +182,20 @@ void SWI_ObjAffineSet(const obj_affine_src *src, void *dst,
     );
 }
 
-#if 0
-SWI_BitUnPack
-#endif
+void SWI_BitUnPack(const void *source, void *dest, const bit_unpack_info *info)
+{
+    // TODO: Verify arguments? Alignment?
+
+    register uint32_t source_ asm("r0") = (uint32_t)source;
+    register uint32_t dest_ asm("r1") = (uint32_t)dest;
+    register uint32_t info_ asm("r2") = (uint32_t)info;
+
+    asm volatile(
+        SWI_NUMBER(0x10) ::
+        "r"(source_), "r"(dest_), "r"(info_) :
+        "r3", "memory"
+    );
+}
 
 void SWI_LZ77UnCompReadNormalWrite8bit(const void *source, void *dest)
 {
