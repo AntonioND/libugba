@@ -23,9 +23,16 @@ NORETURN void SWI_SoftReset(void)
     while (1); // Trap execution just in case
 }
 
-#if 0
-SWI_RegisterRamReset 0x01
-#endif
+void SWI_RegisterRamReset(uint32_t flags)
+{
+    register uint32_t flags_ asm("r0") = flags;
+
+    asm volatile(
+        SWI_NUMBER(0x01) ::
+        "r"(flags_) :
+        "r1", "r2", "r3", "memory"
+    );
+}
 
 void SWI_Halt(void)
 {

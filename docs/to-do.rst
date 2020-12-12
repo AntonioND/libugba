@@ -8,6 +8,7 @@ Library
 - Examples for DMA (non-repeated copies in HBL and VBL modes).
 - BIOS services.
 - Examples for BIOS services.
+- Example of IWRAM code.
 
 Extended library functionality
 ------------------------------

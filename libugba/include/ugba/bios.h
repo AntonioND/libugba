@@ -13,6 +13,19 @@
 // Perform a soft reset. Not supported on the SDL2 port.
 EXPORT_API NORETURN void SWI_SoftReset(void);
 
+// Flags to use with SWI_RegisterRamReset()
+#define SWI_RAM_RESET_EWRAM     (1 << 0)
+#define SWI_RAM_RESET_IWRAM     (1 << 1) // Except for the last 0x200 bytes
+#define SWI_RAM_RESET_PALETTE   (1 << 2)
+#define SWI_RAM_RESET_VRAM      (1 << 3)
+#define SWI_RAM_RESET_OAM       (1 << 4)
+#define SWI_RAM_RESET_IO_SERIAL (1 << 5)
+#define SWI_RAM_RESET_IO_SOUND  (1 << 6)
+#define SWI_RAM_RESET_IO_OTHER  (1 << 7)
+
+// Clear different areas of memory and I/O registers
+EXPORT_API void SWI_RegisterRamReset(uint32_t flags);
+
 // Wait until an interrupt happens.
 EXPORT_API void SWI_Halt(void);
 

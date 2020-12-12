@@ -9,6 +9,136 @@
 
 #include "../debug_utils.h"
 
+void SWI_RegisterRamReset(uint32_t flags)
+{
+    // Note: LSB of SIODATA32 is always destroyed because of a bug
+    REG_SIODATA32 = REG_SIODATA32 & 0xFFFF0000;
+
+    if (flags & SWI_RAM_RESET_EWRAM)
+    {
+        // Right now there is no way to know which variables are in EWRAM
+        Debug_Log("%: EWRAM reset not supported", __func__);
+    }
+    if (flags & SWI_RAM_RESET_IWRAM)
+    {
+        // Right now there is no way to know which variables are in IWRAM
+        Debug_Log("%: IWRAM reset not supported", __func__);
+    }
+    if (flags & SWI_RAM_RESET_PALETTE)
+    {
+        memset(MEM_PALETTE, 0, MEM_PALETTE_SIZE);
+    }
+    if (flags & SWI_RAM_RESET_VRAM)
+    {
+        memset(MEM_VRAM, 0, MEM_VRAM_SIZE);
+    }
+    if (flags & SWI_RAM_RESET_OAM)
+    {
+        memset(MEM_OAM, 0 , MEM_OAM_SIZE);
+    }
+    if (flags & SWI_RAM_RESET_IO_SERIAL)
+    {
+        REG_SIODATA32 = 0;
+        REG_SIOMULTI2 = 0;
+        REG_SIOMULTI3 = 0;
+        REG_SIOCNT = 0;
+        REG_SIOMLT_SEND = 0;
+
+        REG_RCNT = 0;
+
+        REG_JOYCNT = 0;
+        REG_JOY_RECV = 0;
+        REG_JOY_TRANS = 0;
+        REG_JOYSTAT = 0;
+    }
+    if (flags & SWI_RAM_RESET_IO_SOUND)
+    {
+        REG_SOUND1CNT_L = 0;
+        REG_SOUND1CNT_H = 0;
+        REG_SOUND1CNT_X = 0;
+        REG_SOUND2CNT_L = 0;
+        REG_SOUND2CNT_H = 0;
+        REG_SOUND3CNT_L = 0;
+        REG_SOUND3CNT_H = 0;
+        REG_SOUND3CNT_X = 0;
+        REG_SOUND4CNT_L = 0;
+        REG_SOUND4CNT_H = 0;
+        REG_SOUNDCNT_L = 0;
+        REG_SOUNDCNT_H = 0x880E;
+        REG_SOUNDCNT_X = 0;
+
+        REG_SOUNDBIAS = 0;
+
+        // TODO: Clear FIFO buffer
+
+        // TODO: Fill channel 3 wave RAMs with this pattern: 0x00, 0xFF
+    }
+    if (flags & SWI_RAM_RESET_IO_OTHER)
+    {
+        REG_DISPCNT = 0;
+        REG_GREENSWAP = 0;
+        REG_DISPSTAT = 0;
+        REG_VCOUNT = 0;
+        REG_BG0CNT = 0;
+        REG_BG1CNT = 0;
+        REG_BG2CNT = 0;
+        REG_BG3CNT = 0;
+        REG_BG0HOFS = 0;
+        REG_BG0VOFS = 0;
+        REG_BG1HOFS = 0;
+        REG_BG1VOFS = 0;
+        REG_BG2HOFS = 0;
+        REG_BG2VOFS = 0;
+        REG_BG3HOFS = 0;
+        REG_BG3VOFS = 0;
+        REG_BG2PA = 1 << 8;
+        REG_BG2PB = 0;
+        REG_BG2PC = 0;
+        REG_BG2PD = 1 << 8;
+        REG_BG2X_L = 0;
+        REG_BG2Y_L = 0;
+        REG_BG3PA = 1 << 8;
+        REG_BG3PB = 0;
+        REG_BG3PC = 0;
+        REG_BG3PD = 1 << 8;
+        REG_BG3X_L = 0;
+        REG_BG3Y_L = 0;
+        REG_WIN0H = 0;
+        REG_WIN1H = 0;
+        REG_WIN0V = 0;
+        REG_WIN1V = 0;
+        REG_WININ = 0;
+        REG_WINOUT = 0;
+        REG_MOSAIC = 0;
+        REG_BLDCNT = 0;
+        REG_BLDALPHA = 0;
+        REG_BLDY = 0;
+        REG_DMA0SAD = 0;
+        REG_DMA0DAD = 0;
+        REG_DMA0CNT_L = 0;
+        REG_DMA1SAD = 0;
+        REG_DMA1DAD = 0;
+        REG_DMA1CNT_L = 0;
+        REG_DMA2SAD = 0;
+        REG_DMA2DAD = 0;
+        REG_DMA2CNT_L = 0;
+        REG_DMA3SAD = 0;
+        REG_DMA3DAD = 0;
+        REG_DMA3CNT_L = 0;
+        REG_TM0CNT_L = 0;
+        REG_TM1CNT_L = 0;
+        REG_TM2CNT_L = 0;
+        REG_TM3CNT_L = 0;
+        REG_KEYINPUT = 0;
+        REG_KEYCNT = 0;
+        REG_IE = 0;
+        REG_IF = 0;
+        REG_IME = 0;
+    }
+
+    REG_DISPCNT = 0x0080;
+}
+
 uint32_t SWI_GetBiosChecksum(void)
 {
     // Pretend the emulated system is a regular GBA
