@@ -5,6 +5,10 @@
 #ifndef UGBA_H__
 #define UGBA_H__
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "background.h"
 #include "bios.h"
 #include "bios_wrappers.h"
@@ -29,6 +33,10 @@ EXPORT_API void UGBA_Init(int *argc, char **argv[]);
 // be called at the start of main(). Not implemented in GBA as it isn't usedul
 // there.
 EXPORT_API void UGBA_InitHeadless(int *argc, char **argv[]);
+#endif
+
+#ifdef __cplusplus
+}
 #endif
 
 #endif // UGBA_H__
