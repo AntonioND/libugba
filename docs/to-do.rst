@@ -6,8 +6,8 @@ Library
 - Examples for graphics (windows, blending, etc)
 - DMA (sound, special modes).
 - Examples for DMA (non-repeated copies in HBL and VBL modes).
-- BIOS services.
-- Examples for BIOS services.
+- BIOS services (IRQ-related services left).
+- Examples for BIOS services (corner cases in decompress functions).
 - Example of IWRAM code.
 
 Extended library functionality
