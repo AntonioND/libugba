@@ -62,15 +62,48 @@ void SWI_VBlankIntrWait(void)
     );
 }
 
-#if 0
-SWI_Div
-SWI_DivArm
-#endif
+int32_t SWI_Div(int32_t num, int32_t div)
+{
+    if (div == 0)
+        return 0;
+
+    register int32_t num_ asm("r0") = num;
+    register int32_t div_ asm("r1") = div;
+    register int32_t result asm("r0");
+
+    asm volatile(
+        SWI_NUMBER(0x06) :
+        "=r"(result) :
+        "r"(num_), "r"(div_) :
+        "r2", "r3", "memory"
+    );
+
+    return result;
+}
+
+int32_t SWI_DivMod(int32_t num, int32_t div)
+{
+    if (div == 0)
+        return 0;
+
+    register int32_t num_ asm("r0") = num;
+    register int32_t div_ asm("r1") = div;
+    register int32_t result asm("r1");
+
+    asm volatile(
+        SWI_NUMBER(0x06) :
+        "=r"(result) :
+        "r"(num_), "r"(div_) :
+        "r2", "r3", "memory"
+    );
+
+    return result;
+}
 
 uint16_t SWI_Sqrt(uint32_t value)
 {
     register uint32_t value_ asm("r0") = value;
-    register uint32_t result;
+    register uint32_t result asm("r0");
 
     asm volatile(
         SWI_NUMBER(0x08) :
@@ -85,7 +118,7 @@ uint16_t SWI_Sqrt(uint32_t value)
 int16_t SWI_ArcTan(int16_t tan)
 {
     register uint32_t tan_ asm("r0") = tan;
-    register uint32_t result;
+    register uint32_t result asm("r0");
 
     asm volatile(
         SWI_NUMBER(0x09) :
@@ -101,7 +134,7 @@ int16_t SWI_ArcTan2(int16_t x, int16_t y)
 {
     register uint32_t x_ asm("r0") = x;
     register uint32_t y_ asm("r1") = y;
-    register uint32_t result;
+    register uint32_t result asm("r0");
 
     asm volatile(
         SWI_NUMBER(0x0A) :

@@ -8,6 +8,22 @@
 
 #include "../debug_utils.h"
 
+int32_t SWI_Div(int32_t num, int32_t div)
+{
+    if (div == 0)
+        return 0;
+
+    return num / div;
+}
+
+int32_t SWI_DivMod(int32_t num, int32_t div)
+{
+    if (div == 0)
+        return 0;
+
+    return num % div;
+}
+
 uint16_t SWI_Sqrt(uint32_t value)
 {
     return (uint16_t)sqrt(value);

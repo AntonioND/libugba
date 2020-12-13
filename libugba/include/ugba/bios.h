@@ -48,6 +48,10 @@ EXPORT_API void SWI_CpuSet(const void *src, void *dst, uint32_t len_mode);
 // multiple of 8 bytes.
 EXPORT_API void SWI_CpuFastSet(const void *src, void *dst, uint32_t len_mode);
 
+// Calculate result or modulus of dividing num by div.
+EXPORT_API int32_t SWI_Div(int32_t num, int32_t div);
+EXPORT_API int32_t SWI_DivMod(int32_t num, int32_t div);
+
 // Calculate square root.
 EXPORT_API uint16_t SWI_Sqrt(uint32_t value);
 
