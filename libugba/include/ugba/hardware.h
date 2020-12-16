@@ -678,14 +678,69 @@ EXPORT_API void UGBA_RegisterUpdatedOffset(uint32_t offset);
   4000074h  2  R/W  SOUND3CNT_X Channel 3 Frequency/Control    (NR33, NR34)
   4000078h  2  R/W  SOUND4CNT_L Channel 4 Length/Envelope      (NR41, NR42)
   400007Ch  2  R/W  SOUND4CNT_H Channel 4 Frequency/Control    (NR43, NR44)
-  4000080h  2  R/W  SOUNDCNT_L  Control Stereo/Volume/Enable   (NR50, NR51)
-  4000082h  2  R/W  SOUNDCNT_H  Control Mixing/DMA Control
-  4000084h  2  R/W  SOUNDCNT_X  Control Sound on/off           (NR52)
-  4000088h  2  BIOS SOUNDBIAS   Sound PWM Control
-  4000090h 2x10h R/W  WAVE_RAM  Channel 3 Wave Pattern RAM (2 banks!!)
-  40000A0h  4    W    FIFO_A    Channel A FIFO, Data 0-3
-  40000A4h  4    W    FIFO_B    Channel B FIFO, Data 0-3
 #endif
+
+// SOUNDCNT_L
+
+#define SOUNDCNT_L_PSG_VOL_RIGHT(v)     (((v) & 0x7) << 0)
+#define SOUNDCNT_L_PSG_VOL_LEFT(v)      (((v) & 0x7) << 4)
+
+#define SOUNDCNT_L_PSG_1_ENABLE_RIGHT   (1 << 8)
+#define SOUNDCNT_L_PSG_2_ENABLE_RIGHT   (1 << 9)
+#define SOUNDCNT_L_PSG_3_ENABLE_RIGHT   (1 << 10)
+#define SOUNDCNT_L_PSG_4_ENABLE_RIGHT   (1 << 11)
+
+#define SOUNDCNT_L_PSG_1_ENABLE_LEFT    (1 << 12)
+#define SOUNDCNT_L_PSG_2_ENABLE_LEFT    (1 << 13)
+#define SOUNDCNT_L_PSG_3_ENABLE_LEFT    (1 << 14)
+#define SOUNDCNT_L_PSG_4_ENABLE_LEFT    (1 << 15)
+
+// SOUNDCNT_H
+
+#define SOUNDCNT_H_PSG_VOLUME_25        (0 << 0)
+#define SOUNDCNT_H_PSG_VOLUME_50        (1 << 0)
+#define SOUNDCNT_H_PSG_VOLUME_100       (2 << 0)
+
+#define SOUNDCNT_H_DMA_A_VOLUME_50      (0 << 2)
+#define SOUNDCNT_H_DMA_A_VOLUME_100     (1 << 2)
+
+#define SOUNDCNT_H_DMA_B_VOLUME_50      (0 << 3)
+#define SOUNDCNT_H_DMA_B_VOLUME_100     (1 << 3)
+
+#define SOUNDCNT_H_DMA_A_ENABLE_RIGHT   (1 << 8)
+#define SOUNDCNT_H_DMA_A_ENABLE_LEFT    (1 << 9)
+
+#define SOUNDCNT_H_DMA_A_TIMER0         (0 << 10)
+#define SOUNDCNT_H_DMA_A_TIMER1         (1 << 10)
+
+#define SOUNDCNT_H_DMA_A_RESET          (1 << 11)
+
+#define SOUNDCNT_H_DMA_B_ENABLE_RIGHT   (1 << 12)
+#define SOUNDCNT_H_DMA_B_ENABLE_LEFT    (1 << 13)
+
+#define SOUNDCNT_H_DMA_B_TIMER0         (0 << 14)
+#define SOUNDCNT_H_DMA_B_TIMER1         (1 << 14)
+
+#define SOUNDCNT_H_DMA_B_RESET          (1 << 15)
+
+// SOUNDCNT_X
+
+#define SOUNDCNT_X_PSG_1_IS_ON          (1 << 0)
+#define SOUNDCNT_X_PSG_2_IS_ON          (1 << 1)
+#define SOUNDCNT_X_PSG_3_IS_ON          (1 << 2)
+#define SOUNDCNT_X_PSG_4_IS_ON          (1 << 3)
+
+#define SOUNDCNT_X_MASTER_ENABLE        (1 << 7)
+
+// SOUNDBIAS
+
+#define SOUNDBIAS_BIAS_LEVEL(v)         (((v) & 0x1FF) << 1)
+#define SOUNDBIAS_BIAS_MASK             (0x1FF << 1)
+
+#define SOUNDBIAS_SAMPLE_RATE_32KHZ     (0 << 14) // Best for DMA channels A,B
+#define SOUNDBIAS_SAMPLE_RATE_65KHZ     (1 << 14)
+#define SOUNDBIAS_SAMPLE_RATE_131KHZ    (2 << 14)
+#define SOUNDBIAS_SAMPLE_RATE_262KHZ    (3 << 14) // Best for PSG channels 1-4
 
 // DMA Transfer Channels
 // ---------------------
