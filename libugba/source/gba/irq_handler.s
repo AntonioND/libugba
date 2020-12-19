@@ -25,18 +25,77 @@ IRQ_GlobalInterruptHandler:
     .extern IRQ_VectorTable
 
     ldr     r3, =IRQ_VectorTable
-    mov     r2, #1
 
-iterate_interrupt_table:
-        tst     r1, r2
-        bne     interrupt_found
+    mov     r2, #(1 << 0) // VBLANK
+    tst     r1, r2
+    bne     interrupt_found
 
-        mov     r2, r2, lsl #1
-        add     r3, r3, #4
+    add     r3, r3, #4
+    mov     r2, #(1 << 1) // HBLANK
+    tst     r1, r2
+    bne     interrupt_found
 
-        // Check if we have reached the end of the table. If so, exit loop.
-        cmp     r2, #(1 << 14)
-        bne     iterate_interrupt_table
+    add     r3, r3, #4
+    mov     r2, #(1 << 2) // VCOUNT
+    tst     r1, r2
+    bne     interrupt_found
+
+    add     r3, r3, #4
+    mov     r2, #(1 << 3) // TIMER0
+    tst     r1, r2
+    bne     interrupt_found
+
+    add     r3, r3, #4
+    mov     r2, #(1 << 4) // TIMER1
+    tst     r1, r2
+    bne     interrupt_found
+
+    add     r3, r3, #4
+    mov     r2, #(1 << 5) // TIMER2
+    tst     r1, r2
+    bne     interrupt_found
+
+    add     r3, r3, #4
+    mov     r2, #(1 << 6) // TIMER3
+    tst     r1, r2
+    bne     interrupt_found
+
+    add     r3, r3, #4
+    mov     r2, #(1 << 7) // SERIAL
+    tst     r1, r2
+    bne     interrupt_found
+
+    add     r3, r3, #4
+    mov     r2, #(1 << 8) // DMA0
+    tst     r1, r2
+    bne     interrupt_found
+
+    add     r3, r3, #4
+    mov     r2, #(1 << 9) // DMA1
+    tst     r1, r2
+    bne     interrupt_found
+
+    add     r3, r3, #4
+    mov     r2, #(1 << 10) // DMA2
+    tst     r1, r2
+    bne     interrupt_found
+
+    add     r3, r3, #4
+    mov     r2, #(1 << 11) // DMA3
+    tst     r1, r2
+    bne     interrupt_found
+
+    add     r3, r3, #4
+    mov     r2, #(1 << 12) // KEYPAD
+    tst     r1, r2
+    bne     interrupt_found
+
+    add     r3, r3, #4
+    mov     r2, #(1 << 13) // GAMEPAK
+    tst     r1, r2
+    bne     interrupt_found
+
+    // If no interrupt flag is set, fall to the next section of code.
 
     // If no interrupt handlers have to be called, clear all bits in the IF and
     // BIOS flags register.
@@ -116,7 +175,7 @@ interrupt_found:
     msr     cpsr, r2
 
     // Restore preserved registers
-    ldmfd	sp!, {r0-r1, lr} // MEM_IO_ADDR, spsr, lr
+    ldmfd   sp!, {r0-r1, lr} // MEM_IO_ADDR, spsr, lr
     msr     spsr, r1
 
     // Re-enable IME
