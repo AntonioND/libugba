@@ -353,7 +353,9 @@ typedef struct {
 #define REG_16(r)           *((volatile uint16_t *)(MEM_IO_ADDR + (r)))
 #define REG_32(r)           *((volatile uint32_t *)(MEM_IO_ADDR + (r)))
 
+#define PTR_REG_8(r)        ((volatile uint8_t *)(MEM_IO_ADDR + (r)))
 #define PTR_REG_16(r)       ((volatile uint16_t *)(MEM_IO_ADDR + (r)))
+#define PTR_REG_32(r)       ((volatile uint32_t *)(MEM_IO_ADDR + (r)))
 
 //------------------------------------------
 
@@ -417,9 +419,9 @@ typedef struct {
 #define REG_SOUNDCNT_H      REG_16(OFFSET_SOUNDCNT_H)
 #define REG_SOUNDCNT_X      REG_16(OFFSET_SOUNDCNT_X)
 #define REG_SOUNDBIAS       REG_16(OFFSET_SOUNDBIAS)
-#define REG_WAVE_RAM        ((uint8_t *)(OFFSET_WAVE_RAM))
-#define REG_FIFO_A          REG_32(OFFSET_FIFO_A)
-#define REG_FIFO_B          REG_32(OFFSET_FIFO_B)
+#define REG_WAVE_RAM        PTR_REG_8(OFFSET_WAVE_RAM)
+#define REG_FIFO_A          PTR_REG_32(OFFSET_FIFO_A)
+#define REG_FIFO_B          PTR_REG_32(OFFSET_FIFO_B)
 
 #define REG_DMA0CNT_L       REG_16(OFFSET_DMA0CNT_L)
 #define REG_DMA0CNT_H       REG_16(OFFSET_DMA0CNT_H)
@@ -731,6 +733,7 @@ EXPORT_API void UGBA_RegisterUpdatedOffset(uint32_t offset);
 #define SOUNDCNT_X_PSG_4_IS_ON          (1 << 3)
 
 #define SOUNDCNT_X_MASTER_ENABLE        (1 << 7)
+#define SOUNDCNT_X_MASTER_DISABLE       (0 << 7)
 
 // SOUNDBIAS
 

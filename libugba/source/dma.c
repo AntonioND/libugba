@@ -111,3 +111,10 @@ void DMA_VBLCopy32(int channel, const void *src, void *dst, size_t size)
                  DMACNT_DST_INCREMENT | DMACNT_SRC_INCREMENT |
                  DMACNT_TRANSFER_32_BITS | DMACNT_START_VBLANK);
 }
+
+void DMA_StreamAudio(int channel, const void *src, void *dst)
+{
+    DMA_Transfer(channel, src, dst, 0,
+                 DMACNT_DST_FIXED | DMACNT_SRC_INCREMENT | DMACNT_REPEAT_ON |
+                 DMACNT_TRANSFER_32_BITS | DMACNT_START_SPECIAL);
+}

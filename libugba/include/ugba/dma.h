@@ -44,4 +44,7 @@ void DMA_VBLCopy16(int channel, const void *src, void *dst, size_t size);
 EXPORT_API
 void DMA_VBLCopy32(int channel, const void *src, void *dst, size_t size);
 
+EXPORT_API
+void DMA_StreamAudio(int channel, const void *src, void *dst);
+
 #endif // DMA_H__

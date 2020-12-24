@@ -9,4 +9,7 @@ void GBA_DMAUpdateRegister(uint32_t offset);
 void GBA_DMAHandleHBL(void);
 void GBA_DMAHandleVBL(void);
 
+uint32_t UGBA_DMA_SoundGetDataFifoA(void);
+uint32_t UGBA_DMA_SoundGetDataFifoB(void);
+
 #endif // SDL2_CORE_DMA_H__

@@ -21,6 +21,7 @@ extern "C" {
 #include "input.h"
 #include "interrupts.h"
 #include "obj.h"
+#include "sound.h"
 #include "timer.h"
 #include "version.h"
 #include "vram.h"

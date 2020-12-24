@@ -11,6 +11,7 @@
 #include "debug_utils.h"
 #include "input_utils.h"
 #include "lua_handler.h"
+#include "sound_utils.h"
 
 #include "core/video.h"
 #include "gui/win_main.h"
@@ -31,6 +32,9 @@ static int Init(void)
 
     // Init this before loading the configuration
     Input_InitSystem();
+
+    // Initialize audio
+    Sound_Init();
 
     return 0;
 }

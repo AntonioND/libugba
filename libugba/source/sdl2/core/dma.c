@@ -57,6 +57,72 @@ static void GBA_DMACopyNow(dma_channel *dma)
     }
 }
 
+static int UGBA_DMA_SoundGetChannelFifoA(void)
+{
+    if (DMA[1].dstaddr == (uintptr_t)REG_FIFO_A)
+    {
+        if (DMA[1].start_mode == DMACNT_START_SPECIAL)
+        {
+            return 1;
+        }
+    }
+
+    if (DMA[2].dstaddr == (uintptr_t)REG_FIFO_A)
+    {
+        if (DMA[2].start_mode == DMACNT_START_SPECIAL)
+        {
+            return 2;
+        }
+    }
+
+    return -1;
+}
+
+static int UGBA_DMA_SoundGetChannelFifoB(void)
+{
+    if (DMA[1].dstaddr == (uintptr_t)REG_FIFO_B)
+    {
+        if (DMA[1].start_mode == DMACNT_START_SPECIAL)
+        {
+            return 1;
+        }
+    }
+
+    if (DMA[2].dstaddr == (uintptr_t)REG_FIFO_B)
+    {
+        if (DMA[2].start_mode == DMACNT_START_SPECIAL)
+        {
+            return 2;
+        }
+    }
+
+    return -1;
+}
+
+uint32_t UGBA_DMA_SoundGetDataFifoA(void)
+{
+    int channel = UGBA_DMA_SoundGetChannelFifoA();
+    if (channel == -1)
+        return 0;
+
+    uint32_t *src = (uint32_t *)DMA[channel].srcaddr;
+    DMA[channel].srcaddr += 4;
+
+    return *src;
+}
+
+uint32_t UGBA_DMA_SoundGetDataFifoB(void)
+{
+    int channel = UGBA_DMA_SoundGetChannelFifoB();
+    if (channel == -1)
+        return 0;
+
+    uint32_t *src = (uint32_t *)DMA[channel].srcaddr;
+    DMA[channel].srcaddr += 4;
+
+    return *src;
+}
+
 static void GBA_DMAUpdateState(int channel)
 {
     uint16_t dmacnt, dmasize;

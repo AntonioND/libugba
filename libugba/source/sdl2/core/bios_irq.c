@@ -8,6 +8,7 @@
 
 #include "interrupts.h"
 #include "dma.h"
+#include "sound.h"
 #include "video.h"
 
 #include "../debug_utils.h"
@@ -61,6 +62,9 @@ static void handle_vbl(void)
 {
     // Handle DMA if active
     GBA_DMAHandleVBL();
+
+    // Handle sound before calling the VBL interrupt handler
+    Sound_Handle_VBL();
 
     // Handle VBL interrupt
     IRQ_Internal_CallHandler(IRQ_VBLANK);
