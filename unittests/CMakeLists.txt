@@ -5,3 +5,4 @@
 include(cmake/unittest.cmake)
 
 add_subdirectory(bios)
+add_subdirectory(maths)

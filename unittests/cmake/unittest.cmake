@@ -11,7 +11,14 @@ function(define_unittest)
 
     add_executable(${EXECUTABLE_NAME})
 
+    # Link with ugba and other system libraries
+    # -----------------------------------------
+
     target_link_libraries(${EXECUTABLE_NAME} libugba)
+
+    if(NOT WIN32)
+        target_link_libraries(${EXECUTABLE_NAME} -lm)
+    endif()
 
     # Add source code files
     # ---------------------
