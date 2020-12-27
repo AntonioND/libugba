@@ -45,3 +45,8 @@ ARM_CODE IWRAM_CODE int32_t FP_Sin(int32_t x)
 
     return result;
 }
+
+ARM_CODE IWRAM_CODE int32_t FP_Cos(int32_t x)
+{
+    return FP_Sin(x + FP_PI_2);
+}
