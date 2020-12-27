@@ -2,5 +2,5 @@
 #
 # Copyright (c) 2020 Antonio Niño Díaz
 
-add_subdirectory(maths_trig)
-add_subdirectory(version_check)
+define_example()
+unittest_screenshot()
