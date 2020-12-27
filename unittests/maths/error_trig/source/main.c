@@ -45,9 +45,17 @@ int main(int argc, char *argv[])
         int32_t real = sin_real(x);
         int32_t error = approx - real;
 
-        if ((error < -MAX_ABS_ERROR) || (MAX_ABS_ERROR < error))
+        // For x = 0, pi/2, pi, 3*pi/2, 2*pi, etc,  make sure that both
+        // functions give the same result.
+        int allowed_error;
+        if ((x & (FP_PI_2 - 1)) == 0)
+            allowed_error = 0;
+        else
+            allowed_error = MAX_ABS_ERROR;
+
+        if ((error < -allowed_error) || (allowed_error < error))
         {
-            printf("sin(%d): Approx = %08X | Real = %08X | Error = %d\n",
+            printf("sin(%X): Approx = %08X | Real = %08X | Error = %d\n",
                    x, approx, real, error);
             failed = 1;
         }
@@ -60,9 +68,17 @@ int main(int argc, char *argv[])
         int32_t real = cos_real(x);
         int32_t error = approx - real;
 
-        if ((error < -MAX_ABS_ERROR) || (MAX_ABS_ERROR < error))
+        // For x = 0, pi/2, pi, 3*pi/2, 2*pi, etc,  make sure that both
+        // functions give the same result.
+        int allowed_error;
+        if ((x & (FP_PI_2 - 1)) == 0)
+            allowed_error = 0;
+        else
+            allowed_error = MAX_ABS_ERROR;
+
+        if ((error < -allowed_error) || (allowed_error < error))
         {
-            printf("cos(%d): Approx = %08X | Real = %08X | Error = %d\n",
+            printf("cos(%X): Approx = %08X | Real = %08X | Error = %d\n",
                    x, approx, real, error);
             failed = 1;
         }
