@@ -17,6 +17,7 @@ extern "C" {
 #include "display.h"
 #include "debug.h"
 #include "definitions.h"
+#include "fp_math.h"
 #include "hardware.h"
 #include "input.h"
 #include "interrupts.h"
