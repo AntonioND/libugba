@@ -7,7 +7,8 @@
 
 #include "definitions.h"
 
-#define FP_PI       (0x4000)
+#define FP_PI       (0x8000)
+#define FP_PI_2     (FP_PI / 2)
 #define FP_2_PI     (2 * FP_PI)
 
 // Input: A full cirle is 0x10000 (PI = 0x8000)

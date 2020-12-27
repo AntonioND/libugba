@@ -12,14 +12,16 @@
 // Output: Between 1 << 16 and -1 << 16 (1.0 to -1.0)
 ARM_CODE IWRAM_CODE int32_t FP_Sin(int32_t x)
 {
+    // Inspired by: https://www.coranac.com/2009/07/sines/
+
     // Use symmetry to clamp to -pi/2 to +pi/2 (-0x4000 to 0x4000)
 
-    x &= 0xFFFF;
+    x &= FP_2_PI - 1;
 
     if (((x & 0x4000) << 1) ^ (x & 0x8000)) // pi/2 to 3*pi/2
-        x = 0x8000 - x;
+        x = FP_PI - x;
     else if ((x & 0xC000) == 0xC000) // 3*pi/2 to 2*pi
-        x = x - 0x10000;
+        x = x - FP_2_PI;
 
     // Calculate result
 
