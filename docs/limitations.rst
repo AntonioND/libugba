@@ -1,9 +1,16 @@
 UGBA limitations
 ================
 
-1. There is no support for sound or the serial port.
+1. Sound support is limited.
 
-   Eventually sound will be supported. I'm not so sure about the serial port.
+   The only valid way of using the DMA streaming channels is to have a double
+   sound buffer. Then, it is needed to set up a timer and start a DMA copy in
+   sound streaming mode, and to time it so that the VBL interrupt handler does
+   the buffer switch. It isn't possible to use timers to do the double buffer
+   switch. Most games do the switch during the VBL, though, so this shouldn't be
+   a problem.
+
+   PSG channels not supported yet.
 
 2. It is not possible to run GBA assembly code when building for PC.
 
@@ -45,7 +52,11 @@ UGBA limitations
    Note that on PC there is no point in using the EWRAM, IWRAM or ROM regions,
    as the code and variables aren't located there.
 
-5. Interrupts can't be implemented as they are on the GBA.
+5. Serial port is not supported
+
+   I'm not sure if it will be supported in the future.
+
+6. Interrupts can't be implemented as they are on the GBA.
 
    - VBLANK: It works mostly as expected. Just make sure that you call the
      function SWI_VBlankIntrWait() in your main game loop.
@@ -71,7 +82,7 @@ UGBA limitations
      frequently. Also note that the OS may get in the way and the interrupt
      handler may be called fewer times than expected.
 
-  - KEYPAD: On PC, the keypad state is refreshed inside SWI_VBlankIntrWait(),
-    so that's when the interrupt handler may be called.
+   - KEYPAD: On PC, the keypad state is refreshed inside SWI_VBlankIntrWait(),
+     so that's when the interrupt handler may be called.
 
-  - SERIAL, DMA, GAMEPAK: Not supported yet.
+   - SERIAL, DMA, GAMEPAK: Not supported yet.
