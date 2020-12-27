@@ -2,4 +2,4 @@
 #
 # Copyright (c) 2020 Antonio Niño Díaz
 
-add_subdirectory(error_sine)
+add_subdirectory(error_trig)
