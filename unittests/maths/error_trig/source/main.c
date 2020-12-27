@@ -10,7 +10,7 @@
 
 #include <ugba/ugba.h>
 
-#define MAX_ABS_ERROR   (27)
+#define MAX_ABS_ERROR   (13)
 
 int32_t sin_approx(int32_t x)
 {
@@ -19,7 +19,17 @@ int32_t sin_approx(int32_t x)
 
 int32_t sin_real(int32_t x)
 {
-    return 0x10000 * sin(x * 2 * M_PI / 0x10000);
+    double angle = x;
+
+    double result = 65536.0 * sin((angle * 2.0 * M_PI) / 65536.0);
+
+    // Round instead of clamping
+    if (result > 0.0)
+        result += 0.5;
+    else
+        result -= 0.5;
+
+    return result;
 }
 
 int32_t cos_approx(int32_t x)
@@ -29,7 +39,17 @@ int32_t cos_approx(int32_t x)
 
 int32_t cos_real(int32_t x)
 {
-    return 0x10000 * cos(x * 2 * M_PI / 0x10000);
+    double angle = x;
+
+    double result = 65536.0 * cos((angle * 2.0 * M_PI) / 65536.0);
+
+    // Round instead of clamping
+    if (result > 0.0)
+        result += 0.5;
+    else
+        result -= 0.5;
+
+    return result;
 }
 
 int main(int argc, char *argv[])
