@@ -20,7 +20,8 @@ ARM_CODE IWRAM_CODE int32_t FP_Sin(int32_t x)
     //     s5(x) = a * x + b * x^3 + c * x^5
     //     isin(x) = 65536 * sin(x * 2 * pi / 65536)
     //
-    //     Note:
+    //     In the transformed angles:
+    //
     //         pi / 2 = 16384
     //         2 * pi = 65536
     //
