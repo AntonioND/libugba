@@ -51,8 +51,23 @@ ARM_CODE IWRAM_CODE int32_t FP_Sin(int32_t x)
     //
     //     s5(x) = x * (A + (x^2) * (B + (x^2) * C / (2^30)) / (2^25))
     //
-    //     T1 = (x^2 * C) >> 30
-    //     T2 = (x^2 * (B + T1)) >> 25
+    // Modified so that the shifts are done by 32 and they are optimized.
+    // Registers are 32-bit wide, so shifting by 32 can be done by ignoring the
+    // low register. Any other value needs extra calculations:
+    //
+    //     (B         + (x^2) * C         / (2^30)) / (2^25)
+    //     (B         + (x^2) * C * (2^2) / (2^32)) / (2^25)
+    //     (B * (2^7) + (x^2) * C * (2^9) / (2^32)) / (2^32)
+    //
+    // New modified constants:
+    //
+    //     A = 2 * pi
+    //     B = (2^7) * 12 / pi - 1 - pi
+    //     C = (2^9) * 3 * (2 + pi - 16 / pi) // Multiplied by 4
+    //     s5(x) = x * (A + (x^2) * (B + (x^2) * C / (2^32)) / (2^32))
+    //
+    //     T1 = (x^2 * C) >> 32
+    //     T2 = (x^2 * (B + T1)) >> 32
     //     s5(x) = x * (A + T2)
 
     // First, use symmetry to clamp to -pi/2 to +pi/2 (-0x4000 to 0x4000)
@@ -69,24 +84,24 @@ ARM_CODE IWRAM_CODE int32_t FP_Sin(int32_t x)
     const double pi = 3.1415926535897932384626433832795;
 
     const int64_t A = ((2.0 * pi) * (1 << 24)); // 8.24
-    const int64_t B = ((12.0 / pi - 1.0 - pi) * (1 << 24)); // 0.24
-    const int64_t C = (3.0 * (2.0 + pi - 16.0 / pi) * (1 << 24)); // 0.24
+    const int64_t B = (1 << 7) * (12.0 / pi - 1.0 - pi) * (1 << 24); // 8.24
+    const int64_t C = (1 << 9) * 3.0 * (2.0 + pi - 16.0 / pi) * (1 << 24); // 8.24
 
     int64_t X2 = x; // 16.0
     X2 = X2 * X2; // 32.0
 
-    int64_t T1 = X2 * C; // 32.24
-    T1 >>= 30; // 2.24
+    int64_t T1 = X2 * C; // 40.24
+    T1 >>= 32; // 8.24
 
-    int64_t T2 = B + T1; // 2.24
-    T2 *= X2; // 34.24
-    T2 >>= 25; // 9.24
+    int64_t T2 = B + T1; // 8.24
+    T2 *= X2; // 40.24
+    T2 >>= 32; // 8.24
 
-    int64_t result = A + T2; // 9.24
-    result *= x; // 25.24
+    int64_t result = A + T2; // 8.24
+    result *= x; // 24.24
     // Add 0.5 to round up before the final shift
     result += (1 << 24) / 2; // 25.24
-    result >>= 24; // 25.0
+    result >>= 24; // 24.0
 
     return result;
 }
