@@ -95,12 +95,15 @@ ARM_CODE IWRAM_CODE int32_t FP_Sin(int32_t x)
     // ((32.0 + 32.0) * 8.24) >> 32 = (32.0 * 8.24) >> 32 = 40.24 >> 32 = 8.24
     int32_t T2 = ((B + T1) * X2) >> 32;
 
+    // Prepare X so that the final shift is by 32
+    x = x << 8; // 16.8
+
     int64_t result = A + T2; // 8.24
-    result *= x; // 24.24
+    result *= x; // 24.32
 
     // Add 0.5 to round up before the final shift
-    result += (1 << 24) / 2; // 24.24
-    result >>= 24; // 24.0
+    result += (1U << 31); // 24.32
+    result >>= 32; // 24.0
 
     return result;
 }
