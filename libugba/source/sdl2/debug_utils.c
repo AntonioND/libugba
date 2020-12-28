@@ -8,35 +8,43 @@
 
 #define LOG_PATH "log.txt"
 
-static FILE *f_log;
-static int log_file_opened = 0;
+static FILE *f_log = NULL;
+static int logging_allowed = 0;
 
 void Debug_End(void)
 {
-    if (log_file_opened)
+    if (f_log != NULL)
+    {
         fclose(f_log);
+        f_log = NULL;
+    }
 
-    log_file_opened = 0;
+    logging_allowed = 0;
 }
 
 void Debug_Init(void)
 {
-    log_file_opened = 0;
+    logging_allowed = 1;
+
     atexit(Debug_End);
 
+    // Remove previous log file if there was one
     remove(LOG_PATH);
 }
 
 void Debug_Log(const char *msg, ...)
 {
-    if (log_file_opened == 0)
+    if (logging_allowed == 0)
+        return;
+
+    // If the log file isn't open, try to open it.
+    if (f_log == NULL)
     {
         f_log = fopen(LOG_PATH, "w");
-        if (f_log)
-            log_file_opened = 1;
     }
 
-    if (log_file_opened)
+    // If the log file is open, write to it.
+    if (f_log != NULL)
     {
         va_list args;
         va_start(args, msg);
