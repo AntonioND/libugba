@@ -31,7 +31,7 @@ ARM_CODE IWRAM_CODE int32_t FP_Sin(int32_t x)
     // Conditions:
     //
     //     isin(16384) = 65536 = s5(16384)
-    //     isin'(0) = 2 * pi = s5'(16384)
+    //     isin'(0) = 2 * pi = s5'(0)
     //     area(s5(x)) = area(isin(x)) for x between 0 and 16384
     //
     // Solutions:
