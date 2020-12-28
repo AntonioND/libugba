@@ -42,7 +42,7 @@ target_include_directories(${LIBRARY_NAME} PUBLIC
 
 if(CMAKE_C_COMPILER_ID STREQUAL "MSVC")
     find_package(libpng REQUIRED 1.6)
-    find_package(SDL2 REQUIRED)
+    find_package(SDL2 REQUIRED 2.0.7)
     include(FindLua)
     find_package(Lua REQUIRED 5.2)
 
@@ -52,7 +52,7 @@ if(CMAKE_C_COMPILER_ID STREQUAL "MSVC")
     )
 else()
     find_package(PNG REQUIRED 1.6)
-    find_package(SDL2 REQUIRED)
+    find_package(SDL2 REQUIRED 2.0.7)
     find_package(Lua REQUIRED 5.2)
 
     target_include_directories(${LIBRARY_NAME} PRIVATE

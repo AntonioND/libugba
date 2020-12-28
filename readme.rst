@@ -54,9 +54,9 @@ To generate PC executables:
 
 - GCC, Clang, MSVC or another compiler supported by CMake.
 - CMake 3.15 or later
-- SDL2
-- libpng 1.6 or later
-- liblua 5.2 or later
+- SDL2 2.0.7 or later (AudioStream support)
+- libpng 1.6 or later (Simplified API support)
+- liblua 5.2 or later (Integer support)
 
 To run all unit tests:
 
