@@ -13,8 +13,6 @@
 #include "input_utils.h"
 #include "sound_utils.h"
 
-#define GBA_SAMPLERATE                  (32 * 1024)
-#define SDL_SAMPLERATE                  (44100)
 #define SDL_BUFFER_SAMPLES              (1024)
 
 // Number of samples to have as max in the SDL sound buffer.

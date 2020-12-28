@@ -7,6 +7,9 @@
 
 #include <stdint.h>
 
+#define GBA_SAMPLERATE      (32 * 1024)
+#define SDL_SAMPLERATE      (44100)
+
 void Sound_Init(void);
 
 void Sound_SendSamples(int16_t *buffer, int len);
