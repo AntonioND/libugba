@@ -59,10 +59,10 @@ ARM_CODE IWRAM_CODE int32_t FP_Sin(int32_t x)
 
     x &= FP_2_PI - 1;
 
-    if ((x > FP_PI_2) && (x < (3 * FP_PI_2))) // pi/2 to 3*pi/2
-        x = FP_PI - x;
-    else if (x >= (3 * FP_PI_2)) // 3*pi/2 to 2*pi
+    if (x >= (3 * FP_PI_2)) // 3*pi/2 to 2*pi
         x = x - FP_2_PI;
+    else if (x > FP_PI_2) // pi/2 to 3*pi/2
+        x = FP_PI - x;
 
     // Calculate result
 
