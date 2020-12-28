@@ -11,6 +11,8 @@
 #include <ugba/ugba.h>
 
 #include "debug_utils.h"
+#include "sound_utils.h"
+#include "wav_utils.h"
 
 #include "gui/win_main.h"
 
@@ -215,6 +217,52 @@ static int lua_keys_release(lua_State *L)
     return 0;
 }
 
+static int lua_wav_record_start(lua_State *L)
+{
+    // Number of arguments
+    int narg = lua_gettop(L);
+    if (narg == 0)
+    {
+        Debug_Log("%s()", __func__);
+        WAV_FileStart(NULL, GBA_SAMPLERATE);
+    }
+    else if (narg == 1)
+    {
+        const char *name = lua_tostring(L, -1);
+
+        Debug_Log("%s(%s)", __func__, name);
+        WAV_FileStart(name, GBA_SAMPLERATE);
+
+        lua_pop(L, 1);
+    }
+    else
+    {
+        Debug_Log("%s(): Invalid number of arguments: %d", __func__, narg);
+        return 0;
+    }
+
+    // Number of results
+    return 0;
+}
+
+static int lua_wav_record_end(lua_State *L)
+{
+    // Number of arguments
+    int narg = lua_gettop(L);
+    if (narg != 0)
+    {
+        Debug_Log("%s(): Invalid number of arguments: %d", __func__, narg);
+        return 0;
+    }
+
+    Debug_Log("%s()", __func__);
+
+    WAV_FileEnd();
+
+    // Number of results
+    return 0;
+}
+
 static int lua_exit(lua_State *L)
 {
     // Number of arguments
@@ -262,6 +310,8 @@ static int Script_Runner(UNUSED void *ptr)
     lua_register(L, "screenshot", lua_screenshot);
     lua_register(L, "keys_hold", lua_keys_hold);
     lua_register(L, "keys_release", lua_keys_release);
+    lua_register(L, "wav_record_start", lua_wav_record_start);
+    lua_register(L, "wav_record_end", lua_wav_record_end);
     lua_register(L, "exit", lua_exit);
 
     // Run script with 0 arguments and expect one return value

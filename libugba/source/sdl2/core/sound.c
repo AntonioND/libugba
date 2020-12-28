@@ -8,6 +8,7 @@
 
 #include "../debug_utils.h"
 #include "../sound_utils.h"
+#include "../wav_utils.h"
 
 // The simulation always runs at 60 FPS, but the GBA runs at a slightly
 // different rate.
@@ -257,12 +258,19 @@ static void Sound_MixBuffers_Empty(void)
 static void Sound_SendToStream(void)
 {
     int samples = mixed.write_ptr;
+    int size;
+
+    if (WAV_FileIsOpen())
+    {
+        size = samples * sizeof(int16_t);
+        WAV_FileStream(mixed.buffer, size);
+    }
 
     // If the sound buffer is too full, drop one left and one right sample
     if (Sound_IsBufferOverThreshold())
         samples -= 2;
 
-    int size = samples * sizeof(int16_t);
+    size = samples * sizeof(int16_t);
 
     Sound_SendSamples(mixed.buffer, size);
 }
