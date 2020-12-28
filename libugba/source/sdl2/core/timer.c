@@ -130,7 +130,9 @@ static void GBA_RefreshTimer(int index)
 
     if (delay_ms == 0)
     {
-        Debug_Log("Timer %d: Not enough accuracy in SDL_Timer", index);
+        Debug_Log("Timer %d: SDL_Timer not accurate enough. "
+                  "This is normal if using it for DMA audio streaming.",
+                  index);
         return;
     }
 
