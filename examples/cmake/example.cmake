@@ -60,7 +60,6 @@ function(define_example)
 
 endfunction()
 
-
 function(unittest_screenshot)
 
     # Get name of the folder we are in
@@ -188,5 +187,43 @@ function(unittest_two_screenshots)
             WORKING_DIRECTORY ${CMAKE_CURRENT_BUILD_DIR}
         )
     endif()
+
+endfunction()
+
+function(unittest_audio)
+
+    # Get name of the folder we are in
+    # --------------------------------
+
+    get_filename_component(EXECUTABLE_NAME ${CMAKE_CURRENT_SOURCE_DIR} NAME)
+
+    # SDL2 test
+    # ---------
+
+    set(TEST_SCRIPT "${CMAKE_CURRENT_SOURCE_DIR}/test-sdl2.lua")
+    if(NOT EXISTS ${TEST_SCRIPT})
+        set(TEST_SCRIPT "${CMAKE_CURRENT_SOURCE_DIR}/test.lua")
+    endif()
+
+    set(REF_WAV "${CMAKE_CURRENT_SOURCE_DIR}/reference-sdl2.wav")
+    if(NOT EXISTS ${REF_WAV})
+        set(REF_WAV "${CMAKE_CURRENT_SOURCE_DIR}/reference.wav")
+    endif()
+
+    set(CMD1 "$<TARGET_FILE:${EXECUTABLE_NAME}> --lua ${TEST_SCRIPT}")
+    set(CMD2 "${CMAKE_COMMAND} -E compare_files ${REF_WAV} audio.wav")
+
+    add_test(NAME ${EXECUTABLE_NAME}_test
+        COMMAND ${CMAKE_COMMAND}
+                    -DCMD1=${CMD1}
+                    -DCMD2=${CMD2}
+                    -P ${CMAKE_SOURCE_DIR}/examples/cmake/runcommands.cmake
+        WORKING_DIRECTORY ${CMAKE_CURRENT_BUILD_DIR}
+    )
+
+    # Emulator test
+    # -------------
+
+    # TODO
 
 endfunction()
