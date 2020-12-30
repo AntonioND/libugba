@@ -4,12 +4,13 @@ Library
 - Interrupts: SERIAL, DMA0-3 and GAMEPAK are missing.
 - Examples for interrupts.
 - Examples for graphics (windows, blending, etc)
-- DMA (sound, special modes).
+- DMA3 Video Capture Mode
 - Examples for DMA (non-repeated copies in HBL and VBL modes).
 - BIOS services (IRQ-related services left).
 - Examples for BIOS services (corner cases in decompress functions).
 - Example of IWRAM code.
 - Register WAITCNT.
+- PSG sound channels.
 
 Extended library functionality
 ------------------------------
@@ -18,14 +19,16 @@ Extended library functionality
 - "Infinite" maps with finite tileset.
 - "Infinite" maps with "infinite" tileset.
 - DLDI.
+- Port Maxmod to C.
+- libgba support.
 
 SDL2 port
 ---------
 
 - Add debugger windows from GiiBiiAdvance.
 - Add helper to configure user input.
-- Add build option to remove the Lua interpreter and screenshot functionality in
-  release builds.
+- Add build option to remove the Lua interpreter, screenshot and wav recording
+  functionality in release builds.
 
 General
 -------
