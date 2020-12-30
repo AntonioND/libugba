@@ -224,6 +224,29 @@ function(unittest_audio)
     # Emulator test
     # -------------
 
-    # TODO
+    if(BUILD_GBA)
+        set(TEST_SCRIPT "${CMAKE_CURRENT_SOURCE_DIR}/test-gba.lua")
+        if(NOT EXISTS ${TEST_SCRIPT})
+            set(TEST_SCRIPT "${CMAKE_CURRENT_SOURCE_DIR}/test.lua")
+        endif()
+
+        set(REF_WAV "${CMAKE_CURRENT_SOURCE_DIR}/reference-gba.wav")
+        if(NOT EXISTS ${REF_WAV})
+            set(REF_WAV "${CMAKE_CURRENT_SOURCE_DIR}/reference.wav")
+        endif()
+
+        set(GBA_ROM "${CMAKE_CURRENT_SOURCE_DIR}/${EXECUTABLE_NAME}.gba")
+
+        set(CMD1 "$<TARGET_FILE:giibiiadvance> --lua ${TEST_SCRIPT} ${GBA_ROM}")
+        set(CMD2 "${CMAKE_COMMAND} -E compare_files ${REF_WAV} audio.wav")
+
+        add_test(NAME ${EXECUTABLE_NAME}_gba_test
+            COMMAND ${CMAKE_COMMAND}
+                        -DCMD1=${CMD1}
+                        -DCMD2=${CMD2}
+                        -P ${CMAKE_SOURCE_DIR}/examples/cmake/runcommands.cmake
+            WORKING_DIRECTORY ${CMAKE_CURRENT_BUILD_DIR}
+        )
+    endif()
 
 endfunction()
