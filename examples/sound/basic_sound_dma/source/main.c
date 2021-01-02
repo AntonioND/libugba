@@ -96,8 +96,8 @@ int main(int argc, char *argv[])
     SOUND_DMA_Pan(1, 0, 0, 1); // DMA A to the left, DMA B to the right
 
     SOUND_DMA_TimerSetup(DMA_A_TIMER_INDEX, DMA_B_TIMER_INDEX);
-    TM_TimerStart(DMA_A_TIMER_INDEX, RELOAD_VALUE, TMCNT_PRESCALER_F_DIV_1, 0);
-    TM_TimerStart(DMA_B_TIMER_INDEX, RELOAD_VALUE, TMCNT_PRESCALER_F_DIV_1, 0);
+    TM_TimerStart(DMA_A_TIMER_INDEX, RELOAD_VALUE, 1, 0);
+    TM_TimerStart(DMA_B_TIMER_INDEX, RELOAD_VALUE, 1, 0);
 
     while (1)
         SWI_VBlankIntrWait();

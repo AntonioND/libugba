@@ -21,7 +21,7 @@ volatile uint32_t result;
 
 #define DO_TEST(fn_name, result_var_name)                   \
                                                             \
-    TM_TimerStart(0, 0, TMCNT_PRESCALER_F_DIV_256, 0);      \
+    TM_TimerStart(0, 0, 256, 0);                            \
                                                             \
     for (uint32_t a = 100; a < 200; a++)                    \
     {                                                       \

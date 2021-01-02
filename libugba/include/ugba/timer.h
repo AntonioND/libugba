@@ -7,10 +7,9 @@
 
 #include "definitions.h"
 
-// Start timer. The value passed to prescaler is one of the defines in
-// hardware.h: TMCNT_PRESCALER_F_DIV_xxx.
+// Start timer. The value passed to prescaler can be 1, 64, 256 or 1024.
 EXPORT_API
-void TM_TimerStart(int index, uint16_t reload_value, uint16_t prescaler,
+void TM_TimerStart(int index, uint16_t reload_value, int prescaler,
                    int enable_irq);
 
 // Start timer in cascade mode. Note that the prescaler value is ignored in this
