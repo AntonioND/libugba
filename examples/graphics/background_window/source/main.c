@@ -38,9 +38,9 @@ int main(int argc, char *argv[])
     // Set the display to mode 0 so that all backgrounds are in regular mode,
     // and turn on background 0, window 0 and window 1.
 
-    DISPLAY_ModeSet(0);
-    DISPLAY_LayersEnable(1, 0, 0, 0, 0);
-    DISPLAY_WindowsEnable(1, 1, 0);
+    DISP_ModeSet(0);
+    DISP_LayersEnable(1, 0, 0, 0, 0);
+    DISP_WindowsEnable(1, 1, 0);
 
     // Disable BG in WIN0, and enable it in WIN1. WIN0 has priority over WIN1,
     // which means that the inside of WIN1 will display the background while the

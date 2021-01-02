@@ -8,22 +8,22 @@
 #include "hardware.h"
 
 // Set background display mode and set the other fields of the register to 0.
-EXPORT_API void DISPLAY_ModeSet(int mode);
+EXPORT_API void DISP_ModeSet(int mode);
 
 // Enable or disable screen layers.
-EXPORT_API void DISPLAY_LayersEnable(int bg0, int bg1, int bg2, int bg3, int obj);
+EXPORT_API void DISP_LayersEnable(int bg0, int bg1, int bg2, int bg3, int obj);
 
 // Enable or disable windows.
-EXPORT_API void DISPLAY_WindowsEnable(int win0, int win1, int obj);
+EXPORT_API void DISP_WindowsEnable(int win0, int win1, int obj);
 
 // Enable or disable the HBL Interval Free mode.
-EXPORT_API void DISPLAY_HBLIntervalFreeEnable(int enable);
+EXPORT_API void DISP_HBLIntervalFreeEnable(int enable);
 
 // Enable or disable forced blank.
-EXPORT_API void DISPLAY_ForcedBlankEnable(int enable);
+EXPORT_API void DISP_ForcedBlankEnable(int enable);
 
 // Enable 1D mapping or disable it (and use 2D mapping).
-EXPORT_API void DISPLAY_Object1DMappingEnable(int enable);
+EXPORT_API void DISP_Object1DMappingEnable(int enable);
 
 // Setup window 0.
 EXPORT_API void WIN_SetupWin0(uint32_t left, uint32_t right,
@@ -32,6 +32,5 @@ EXPORT_API void WIN_SetupWin0(uint32_t left, uint32_t right,
 // Setup window 1.
 EXPORT_API void WIN_SetupWin1(uint32_t left, uint32_t right,
                               uint32_t top, uint32_t bottom);
-
 
 #endif // DISPLAY_H__

@@ -51,7 +51,7 @@ int main(int argc, char *argv[])
 
     IRQ_Enable(IRQ_VBLANK);
 
-    DISPLAY_ModeSet(0);
+    DISP_ModeSet(0);
 
     CON_InitDefault();
 

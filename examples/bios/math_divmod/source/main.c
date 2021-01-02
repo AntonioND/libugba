@@ -13,8 +13,8 @@ int main(int argc, char *argv[])
 
     IRQ_Enable(IRQ_VBLANK);
 
-    DISPLAY_ModeSet(3);
-    DISPLAY_LayersEnable(0, 0, 1, 0, 0);
+    DISP_ModeSet(3);
+    DISP_LayersEnable(0, 0, 1, 0, 0);
 
     REG_BG2PA = 1 << 8;
     REG_BG2PB = 0 << 8;
