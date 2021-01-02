@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: LGPL-3.0-only
 //
-// Copyright (c) 2011-2015, 2019-2020 Antonio Niño Díaz
+// Copyright (c) 2011-2015, 2019-2021 Antonio Niño Díaz
 
 #include <stdlib.h>
 
@@ -101,6 +101,8 @@ void UGBA_Init(int *argc, char **argv[])
     // Library initialization
 
     IRQ_Init();
+
+    REG_WAITCNT = WAITCNT_DEFAULT_STARTUP;
 }
 
 void UGBA_InitHeadless(int *argc, char **argv[])
@@ -124,4 +126,6 @@ void UGBA_InitHeadless(int *argc, char **argv[])
     // Library initialization
 
     IRQ_Init();
+
+    REG_WAITCNT = WAITCNT_DEFAULT_STARTUP;
 }
