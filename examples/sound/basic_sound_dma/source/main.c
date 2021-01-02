@@ -92,7 +92,7 @@ int main(int argc, char *argv[])
 
     // The sound hardware needs to be enabled to write to any other register.
     SOUND_MasterEnable(1);
-    SOUND_DMA_Volume(1, 1);
+    SOUND_DMA_Volume(100, 100);
     SOUND_DMA_Pan(1, 0, 0, 1); // DMA A to the left, DMA B to the right
 
     SOUND_DMA_TimerSetup(DMA_A_TIMER_INDEX, DMA_B_TIMER_INDEX);

@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 //
-// Copyright (c) 2020 Antonio Niño Díaz
+// Copyright (c) 2020-2021 Antonio Niño Díaz
 
 #ifndef SOUND_H__
 #define SOUND_H__
@@ -10,8 +10,9 @@
 EXPORT_API
 void SOUND_MasterEnable(int enable);
 
-EXPORT_API
-void SOUND_DMA_Volume(int dma_a_max, int dma_b_max);
+// Set volume of DMA channels. Valid values are 100 and 50. Any other value will
+// be treated as 50%.
+EXPORT_API void SOUND_DMA_Volume(int dma_a_max, int dma_b_max);
 
 EXPORT_API
 void SOUND_DMA_Pan(int dma_a_left, int dma_a_right,

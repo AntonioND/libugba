@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 //
-// Copyright (c) 2020 Antonio Niño Díaz
+// Copyright (c) 2020-2021 Antonio Niño Díaz
 
 #include <ugba/ugba.h>
 
@@ -17,10 +17,10 @@ void SOUND_DMA_Volume(int dma_a_max, int dma_b_max)
     uint16_t mask = SOUNDCNT_H_DMA_A_VOLUME_100 | SOUNDCNT_H_DMA_B_VOLUME_100;
     uint16_t value = REG_SOUNDCNT_H & ~mask;
 
-    if (dma_a_max)
+    if (dma_a_max == 100)
         value |= SOUNDCNT_H_DMA_A_VOLUME_100;
 
-    if (dma_b_max)
+    if (dma_b_max == 100)
         value |= SOUNDCNT_H_DMA_B_VOLUME_100;
 
     REG_SOUNDCNT_H = value;
