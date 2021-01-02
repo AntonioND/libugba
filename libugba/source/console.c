@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 //
-// Copyright (c) 2020 Antonio Niño Díaz
+// Copyright (c) 2020-2021 Antonio Niño Díaz
 
 #include <ugba/ugba.h>
 
@@ -123,4 +123,6 @@ void CON_Clear(void)
     for (int j = 0; j < 32; j++)
         for (int i = 0; i < 32; i++)
             map_base[j * 32 + i] = 0;
+
+    CON_CursorSet(0, 0);
 }
