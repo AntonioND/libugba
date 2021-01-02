@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 //
-// Copyright (c) 2020 Antonio Niño Díaz
+// Copyright (c) 2020-2021 Antonio Niño Díaz
 
 #ifndef HARDWARE_H__
 #define HARDWARE_H__
@@ -345,6 +345,7 @@ typedef struct {
 // Interrupt, Waitstate, and Power-Down Control
 #define OFFSET_IE           (0x200) // R/W
 #define OFFSET_IF           (0x202) // R/W
+#define OFFSET_WAITCNT      (0x204) // R/W
 #define OFFSET_IME          (0x208) // R/W
 
 //------------------------------------------
@@ -495,6 +496,7 @@ EXPORT_API uintptr_t *UGBA_RegDMA3DAD(void);
 #define REG_JOYSTAT         REG_16(OFFSET_JOYSTAT)
 #define REG_IE              REG_16(OFFSET_IE)
 #define REG_IF              REG_16(OFFSET_IF)
+#define REG_WAITCNT         REG_16(OFFSET_WAITCNT)
 #define REG_IME             REG_16(OFFSET_IME)
 
 // The UGBA_RegisterUpdatedOffset() function must be called in some
@@ -861,6 +863,45 @@ EXPORT_API void UGBA_RegisterUpdatedOffset(uint32_t offset);
 #define IRQF_DMA3                       (1 << 11)
 #define IRQF_KEYPAD                     (1 << 12)
 #define IRQF_GAMEPAK                    (1 << 13)
+
+// WAITCNT
+
+#define WAITCNT_SRAM_4                  (0 << 0)
+#define WAITCNT_SRAM_3                  (1 << 0)
+#define WAITCNT_SRAM_2                  (2 << 0)
+#define WAITCNT_SRAM_8                  (3 << 0)
+
+#define WAITCNT_WS0_1ST_4               (0 << 2)
+#define WAITCNT_WS0_1ST_3               (1 << 2)
+#define WAITCNT_WS0_1ST_2               (2 << 2)
+#define WAITCNT_WS0_1ST_8               (3 << 2)
+
+#define WAITCNT_WS0_2ST_2               (0 << 4)
+#define WAITCNT_WS0_2ST_1               (1 << 4)
+
+#define WAITCNT_WS1_1ST_4               (0 << 5)
+#define WAITCNT_WS1_1ST_3               (1 << 5)
+#define WAITCNT_WS1_1ST_2               (2 << 5)
+#define WAITCNT_WS1_1ST_8               (3 << 5)
+
+#define WAITCNT_WS1_2ST_4               (0 << 7)
+#define WAITCNT_WS1_2ST_1               (1 << 7)
+
+#define WAITCNT_WS2_1ST_4               (0 << 8)
+#define WAITCNT_WS2_1ST_3               (1 << 8)
+#define WAITCNT_WS2_1ST_2               (2 << 8)
+#define WAITCNT_WS2_1ST_8               (3 << 8)
+
+#define WAITCNT_WS2_2ST_8               (0 << 10)
+#define WAITCNT_WS2_2ST_1               (1 << 10)
+
+#define WAITCNT_PHI_DISABLE             (0 << 11)
+#define WAITCNT_PHI_4MHZ                (1 << 11)
+#define WAITCNT_PHI_8MHZ                (2 << 11)
+#define WAITCNT_PHI_16MHZ               (3 << 11)
+
+#define WAITCNT_PREFETCH_DISABLE        (0 << 14)
+#define WAITCNT_PREFETCH_ENABLE         (1 << 14)
 
 // IME
 
