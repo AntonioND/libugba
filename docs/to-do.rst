@@ -8,7 +8,6 @@ Library
 - Examples for DMA (non-repeated copies in HBL and VBL modes).
 - BIOS services (IRQ-related services left).
 - Examples for BIOS services (corner cases in decompress functions).
-- Example of IWRAM code.
 - Register WAITCNT.
 - PSG sound channels.
 
