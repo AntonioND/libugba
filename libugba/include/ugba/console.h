@@ -24,4 +24,3 @@ EXPORT_API void CON_CursorSet(int x, int y);
 EXPORT_API void CON_Clear(void);
 
 #endif // CONSOLE_H__
-
