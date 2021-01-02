@@ -105,7 +105,8 @@ export OFILES := $(addsuffix .o,$(BINFILES)) \
 				 $(PNGFILES:.png=.o) \
 				 $(CPPFILES:.cpp=.o) $(CFILES:.c=.o) $(SFILES:.s=.o)
 
-export HFILES := $(addsuffix .h,$(subst .,_,$(BINFILES)))
+export HFILES := $(addsuffix .h,$(subst .,_,$(BINFILES))) \
+				 $(PNGFILES:.png=.h)
 
 export INCLUDE	:=	$(foreach dir,$(INCLUDES),-iquote $(CURDIR)/$(dir)) \
 					$(foreach dir,$(LIBDIRS),-I$(dir)/include) \
@@ -169,7 +170,7 @@ soundbank.bin soundbank.h : $(AUDIOFILES)
 %.c %.h: %.png %.grit
 #---------------------------------------------------------------------------------
 	@echo "grit $<"
-	grit $< -ftc -o$*
+	@grit $< -ftc -o$*
 
 -include $(DEPSDIR)/*.d
 #---------------------------------------------------------------------------------------
