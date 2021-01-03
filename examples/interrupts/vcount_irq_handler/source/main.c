@@ -25,9 +25,7 @@ int main(int argc, char *argv[])
     IRQ_SetHandler(IRQ_VCOUNT, vcount_handler);
     IRQ_Enable(IRQ_VBLANK);
     IRQ_Enable(IRQ_VCOUNT);
-
-    REG_DISPSTAT &= ~DISPSTAT_VCOUNT_MASK;
-    REG_DISPSTAT |= DISPSTAT_VCOUNT(100);
+    IRQ_SetReferenceVCOUNT(100);
 
     DISP_ModeSet(0);
 
