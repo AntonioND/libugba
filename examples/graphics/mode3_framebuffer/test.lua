@@ -1,4 +1,4 @@
--- Test that runs a program for 10 frames, takes a screenshot, presses some
+-- Test that runs a program for 30 frames, takes a screenshot, presses some
 -- keys to move and rotate the background, and takes another screenshot.
 
 run_frames_and_pause(30)

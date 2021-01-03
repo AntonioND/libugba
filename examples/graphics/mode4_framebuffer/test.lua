@@ -1,4 +1,4 @@
--- Test that runs a program for 10 frames, takes a screenshot, presses the A
+-- Test that runs a program for 30 frames, takes a screenshot, presses the A
 -- button to swap the framebuffers and other keys to move and rotate the
 -- background, and takes another screenshot.
 
