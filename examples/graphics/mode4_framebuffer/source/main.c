@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 //
-// Copyright (c) 2020 Antonio Niño Díaz
+// Copyright (c) 2020-2021 Antonio Niño Díaz
 
 // Example of how to use the framebuffer in mode 4 and switch between the
 // frontbuffer and backbuffer.
@@ -30,7 +30,8 @@ int main(int argc, char *argv[])
 
     IRQ_Enable(IRQ_VBLANK);
 
-    REG_DISPCNT = DISPCNT_BG_MODE(4) | DISPCNT_BG2_ENABLE;
+    DISP_ModeSet(4);
+    DISP_LayersEnable(0, 0, 1, 0, 0);
 
     REG_BG2PA = 1 << 8;
     REG_BG2PB = 0 << 8;

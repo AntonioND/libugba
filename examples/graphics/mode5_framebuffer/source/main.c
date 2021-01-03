@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 //
-// Copyright (c) 2020 Antonio Niño Díaz
+// Copyright (c) 2020-2021 Antonio Niño Díaz
 
 // Example of how to use the framebuffer in mode 5 and switch between the
 // frontbuffer and backbuffer.
@@ -30,7 +30,8 @@ int main(int argc, char *argv[])
 
     IRQ_Enable(IRQ_VBLANK);
 
-    REG_DISPCNT = DISPCNT_BG_MODE(5) | DISPCNT_BG2_ENABLE;
+    DISP_ModeSet(5);
+    DISP_LayersEnable(0, 0, 1, 0, 0);
 
     uint16_t *vram_front = BG_Mode5FramebufferActiveGet();
 

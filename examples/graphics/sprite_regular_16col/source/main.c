@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 //
-// Copyright (c) 2020 Antonio Niño Díaz
+// Copyright (c) 2020-2021 Antonio Niño Díaz
 
 // Example of how to load 16-color sprites
 
@@ -68,16 +68,17 @@ int main(int argc, char *argv[])
     // Turn on the screen
     // ------------------
 
-    REG_DISPCNT =
-        // The mode doesn't matter here, it only affects the backgrounds. This
-        // is just an arbitrary value.
-        DISPCNT_BG_MODE(0) |
-        // Turn on the rendering of sprites.
-        DISPCNT_OBJ_ENABLE |
-        // Enable 1D mapping. Check "8.2.1. The sprite mapping mode" in the
-        // following link for more information:
-        //     https://www.coranac.com/tonc/text/regobj.htm#sec-tiles
-        DISPCNT_OBJ_1D_MAPPING;
+    // The mode doesn't matter here, it only affects the backgrounds. This is
+    // just an arbitrary value.
+    DISP_ModeSet(0);
+
+    // Turn on the rendering of sprites.
+    DISP_LayersEnable(0, 0, 0, 0, 1);
+
+    // Enable 1D mapping. Check "8.2.1. The sprite mapping mode" in the
+    // following link for more information:
+    //     https://www.coranac.com/tonc/text/regobj.htm#sec-tiles
+    DISP_Object1DMappingEnable(1);
 
     while (1)
         SWI_VBlankIntrWait();

@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 //
-// Copyright (c) 2020 Antonio Niño Díaz
+// Copyright (c) 2020-2021 Antonio Niño Díaz
 
 // Example of how to load an affine background
 
@@ -48,7 +48,8 @@ int main(int argc, char *argv[])
     BG_AffineTransformSet(2, &bg_dst);
 
     // Set the display to mode 2 so that background 2 is affine, and turn it on.
-    REG_DISPCNT = DISPCNT_BG_MODE(2) | DISPCNT_BG2_ENABLE;
+    DISP_ModeSet(2);
+    DISP_LayersEnable(0, 0, 1, 0, 0);
 
     while (1)
     {

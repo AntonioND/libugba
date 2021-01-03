@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 //
-// Copyright (c) 2020 Antonio Niño Díaz
+// Copyright (c) 2020-2021 Antonio Niño Díaz
 
 // Example that shows how to use the HBLANK interrupt to create visual effects.
 
@@ -65,7 +65,8 @@ int main(int argc, char *argv[])
 
     // Set the display to mode 0 so that all backgrounds are in regular mode,
     // and turn on background 0.
-    REG_DISPCNT = DISPCNT_BG_MODE(0) | DISPCNT_BG0_ENABLE;
+    DISP_ModeSet(0);
+    DISP_LayersEnable(1, 0, 0, 0, 0);
 
     while (1)
     {

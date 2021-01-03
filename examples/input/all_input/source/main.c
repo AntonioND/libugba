@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 //
-// Copyright (c) 2020 Antonio Niño Díaz
+// Copyright (c) 2020-2021 Antonio Niño Díaz
 
 // Example that shows the behaviour of different key states. It is slowed down
 // to 1/10 of the regular refresh rate so that the "pressed" and "released"
@@ -14,7 +14,7 @@ int main(int argc, char *argv[])
 
     IRQ_Enable(IRQ_VBLANK);
 
-    REG_DISPCNT = DISPCNT_BG_MODE(0);
+    DISP_ModeSet(0);
 
     CON_InitDefault();
 

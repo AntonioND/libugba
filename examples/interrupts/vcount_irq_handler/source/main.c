@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 //
-// Copyright (c) 2020 Antonio Niño Díaz
+// Copyright (c) 2020-2021 Antonio Niño Díaz
 
 // Example that shows how to use the VCOUNT interrupt.
 
@@ -29,7 +29,7 @@ int main(int argc, char *argv[])
     REG_DISPSTAT &= ~DISPSTAT_VCOUNT_MASK;
     REG_DISPSTAT |= DISPSTAT_VCOUNT(100);
 
-    REG_DISPCNT = DISPCNT_BG_MODE(0);
+    DISP_ModeSet(0);
 
     while (1)
         SWI_VBlankIntrWait();

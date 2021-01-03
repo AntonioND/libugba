@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 //
-// Copyright (c) 2020 Antonio Niño Díaz
+// Copyright (c) 2020-2021 Antonio Niño Díaz
 
 // Example that shows how to setup standalone timers
 
@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
 
     IRQ_Enable(IRQ_VBLANK);
 
-    REG_DISPCNT = DISPCNT_BG_MODE(0);
+    DISP_ModeSet(0);
 
     CON_InitDefault();
 

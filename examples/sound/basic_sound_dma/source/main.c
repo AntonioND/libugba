@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 //
-// Copyright (c) 2020 Antonio Niño Díaz
+// Copyright (c) 2020-2021 Antonio Niño Díaz
 
 // Example of sound streaming with double buffer and DMA. It sets up both DMA
 // channels, and sends the values of DMA A to the left speaker and DMA B to the
@@ -80,7 +80,7 @@ int main(int argc, char *argv[])
     IRQ_SetHandler(IRQ_VBLANK, vbl_handler);
     IRQ_Enable(IRQ_VBLANK);
 
-    REG_DISPCNT = DISPCNT_BG_MODE(0);
+    DISP_ModeSet(0);
 
     CON_InitDefault();
 
