@@ -77,8 +77,9 @@ typedef struct {
     int16_t scry;
     int16_t scalex;     // 8.8 fixed point
     int16_t scaley;     // 8.8 fixed point
-    uint16_t angle;     // 8.8 fixed point. Range: 0 - 0xFFFF
-    uint16_t padding;
+    uint32_t angle;     // 8.8 fixed point. Low 8 bits ignored.
+    // The angle is a 32 bit integer instead of adding a padding field for
+    // conveniency. Only bits 8-15 are actually used.
 } bg_affine_src;
 #pragma pack(pop)
 

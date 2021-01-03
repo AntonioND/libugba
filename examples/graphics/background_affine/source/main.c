@@ -37,8 +37,7 @@ int main(int argc, char *argv[])
         x << 8, y << 8,
         0, 0,
         1 << 8, 1 << 8,
-        angle << 8,
-        0
+        angle << 8
     };
 
     bg_affine_dst bg_dst;
