@@ -2,14 +2,22 @@ Library
 -------
 
 - Interrupts: SERIAL, DMA0-3 and GAMEPAK are missing.
-- Examples for interrupts.
-- Examples for graphics (windows, blending, etc)
 - DMA3 Video Capture Mode
-- Examples for DMA (non-repeated copies in HBL and VBL modes).
 - BIOS services (IRQ-related services left).
-- Examples for BIOS services (corner cases in decompress functions).
-- Register WAITCNT.
+- Set register WAITCNT to the right values depending on the device.
 - PSG sound channels.
+- Interfaces for mosaic, bg/spr priorities, blending and fade in/out.
+
+Examples
+--------
+
+- Interrupts.
+- DMA: Non-repeated copies in HBL and VBL modes, DMA 3 special mode.
+- Graphics: Windows, blending, bg/spr priorities, fade in/out, mosaic.
+- BIOS services (corner cases in decompress functions).
+- PSG sound channels.
+- WAITCNT.
+- All timers in cascade mode.
 
 Extended library functionality
 ------------------------------
