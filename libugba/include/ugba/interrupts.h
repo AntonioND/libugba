@@ -36,10 +36,14 @@ EXPORT_API void IRQ_Init(void);
 // Set interrupt handler for the specified interrupt.
 EXPORT_API void IRQ_SetHandler(irq_index index, irq_vector function);
 
-// Enable the specified interrupt.
+// Enable the specified interrupt. For VBLANK, HBLANK and VCOUNT, this function
+// also sets the corresponding flags in DISPSTAT automatically.
 EXPORT_API void IRQ_Enable(irq_index index);
 
 // Disable the specified interrupt.
 EXPORT_API void IRQ_Disable(irq_index index);
+
+// Set the reference VCOUNT that triggers the VCOUNT interrupt.
+EXPORT_API void IRQ_SetReferenceVCOUNT(uint32_t y);
 
 #endif // INTERRUPTS_H__
