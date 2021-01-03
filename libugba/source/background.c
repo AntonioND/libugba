@@ -113,6 +113,16 @@ void BG_AffineTransformSet(int index, bg_affine_dst *tr)
     }
 }
 
+void BG_AffineWrapEnable(int index, int wrap)
+{
+    volatile uint16_t *reg = BG_ControlRegisterGet(index);
+
+    uint16_t value = *reg & ~BGCNT_BG2_BG3_WRAP;
+    value |= wrap ? BGCNT_BG2_BG3_WRAP : 0;
+
+    *reg = value;
+}
+
 void BG_PrioritySet(int index, int priority)
 {
     volatile uint16_t *reg = BG_ControlRegisterGet(index);
