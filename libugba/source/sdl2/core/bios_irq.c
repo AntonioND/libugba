@@ -45,7 +45,11 @@ static void Input_Handle_Interrupt(void)
 static void handle_hbl(void)
 {
     // First, VCOUNT interrupt
-    if (current_vcount == (REG_DISPSTAT >> 8))
+
+    uint16_t dispstat_vcount = REG_DISPSTAT & DISPSTAT_VCOUNT_MASK;
+    dispstat_vcount >>= DISPSTAT_VCOUNT_SHIFT;
+
+    if (current_vcount == dispstat_vcount)
         IRQ_Internal_CallHandler(IRQ_VCOUNT);
 
     // Then, draw
