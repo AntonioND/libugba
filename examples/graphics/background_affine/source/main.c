@@ -74,6 +74,11 @@ int main(int argc, char *argv[])
         else if (keys & KEY_R)
             angle--;
 
+        if (keys & KEY_A)
+            BG_AffineWrapEnable(2, 1);
+        else if (keys & KEY_B)
+            BG_AffineWrapEnable(2, 0);
+
         bg_affine_src bg_src = {
             x << 8, y << 8,
             0, 0,
