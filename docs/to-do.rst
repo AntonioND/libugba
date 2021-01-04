@@ -17,7 +17,6 @@ Examples
 - BIOS services (corner cases in decompress functions).
 - PSG sound channels.
 - WAITCNT.
-- All timers in cascade mode.
 
 Extended library functionality
 ------------------------------
