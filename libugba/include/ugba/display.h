@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 //
-// Copyright (c) 2020 Antonio Niño Díaz
+// Copyright (c) 2020-2021 Antonio Niño Díaz
 
 #ifndef DISPLAY_H__
 #define DISPLAY_H__
@@ -32,5 +32,9 @@ EXPORT_API void WIN_SetupWin0(uint32_t left, uint32_t right,
 // Setup window 1.
 EXPORT_API void WIN_SetupWin1(uint32_t left, uint32_t right,
                               uint32_t top, uint32_t bottom);
+
+// Setup mosaic for background and objects.
+EXPORT_API void DISP_MosaicSet(uint32_t bgh, uint32_t bgw,
+                               uint32_t objh, uint32_t objw);
 
 #endif // DISPLAY_H__

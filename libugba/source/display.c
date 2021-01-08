@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 //
-// Copyright (c) 2020 Antonio Niño Díaz
+// Copyright (c) 2020-2021 Antonio Niño Díaz
 
 #include <ugba/ugba.h>
 
@@ -78,4 +78,9 @@ void WIN_SetupWin1(uint32_t left, uint32_t right, uint32_t top, uint32_t bottom)
 {
     REG_WIN1H = WINH_SET(left, right);
     REG_WIN1V = WINV_SET(top, bottom);
+}
+
+void DISP_MosaicSet(uint32_t bgh, uint32_t bgw, uint32_t objh, uint32_t objw)
+{
+    REG_MOSAIC = MOSAIC_BG_SIZE(bgh, bgw) | MOSAIC_OBJ_SIZE(objh, objw);
 }
