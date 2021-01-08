@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 //
-// Copyright (c) 2020 Antonio Niño Díaz
+// Copyright (c) 2020-2021 Antonio Niño Díaz
 
 #include <ugba/ugba.h>
 
@@ -262,9 +262,9 @@ void OBJ_MosaicSet(int index, int enable)
     oam_entry *e = &MEM_OAM_ENTRIES[index];
 
     if (enable)
-        e->attr0 &= ~ATTR0_MOSAIC;
-    else
         e->attr0 |= ATTR0_MOSAIC;
+    else
+        e->attr0 &= ~ATTR0_MOSAIC;
 }
 
 void OBJ_Palette16Set(int index, int palette)
