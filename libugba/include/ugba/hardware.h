@@ -903,11 +903,11 @@ EXPORT_API void UGBA_RegisterUpdatedOffset(uint32_t offset);
 #define WAITCNT_PREFETCH_DISABLE        (0 << 14)
 #define WAITCNT_PREFETCH_ENABLE         (1 << 14)
 
-// The value used by most games is 0x4317, but the SuperCard SD needs 0x4313.
-// Use the SCSD one, as it is more conservative.
+// The value used by most games is 0x4317 (WS0 3.1), but the SuperCard SD needs
+// 0x4303 (WS0 4.2). Use the SCSD one, as it is more conservative.
 #define WAITCNT_DEFAULT_STARTUP                                     \
                 (WAITCNT_SRAM_8 |                                   \
-                 WAITCNT_WS0_1ST_4 | WAITCNT_WS0_2ST_1 |            \
+                 WAITCNT_WS0_1ST_4 | WAITCNT_WS0_2ST_2 |            \
                  WAITCNT_WS1_1ST_4 | WAITCNT_WS1_2ST_4 |            \
                  WAITCNT_WS2_1ST_8 | WAITCNT_WS2_2ST_8 |            \
                  WAITCNT_PHI_DISABLE | WAITCNT_PREFETCH_ENABLE)
