@@ -1,19 +1,20 @@
 Library
 -------
 
-- Interrupts: SERIAL, DMA0-3 and GAMEPAK are missing.
-- DMA3 Video Capture Mode
+- Interrupts: SERIAL, DMA 0-3 and GAMEPAK are missing.
+- DMA 3 Video Capture Mode
 - BIOS services (IRQ-related services left).
 - Set register WAITCNT to the right values depending on the device.
 - PSG sound channels.
-- Interfaces for mosaic, bg/spr priorities, blending and fade in/out.
+- Interfaces for bg/spr priorities, blending and fade in/out.
+- Add warnings for trying to copy from ROM with DMA different than 3.
 
 Examples
 --------
 
 - Interrupts.
-- DMA: Non-repeated copies in HBL and VBL modes, DMA 3 special mode.
-- Graphics: Windows, blending, bg/spr priorities, fade in/out, mosaic.
+- DMA 3 Video Capture Mode
+- Graphics: Windows, blending, bg/spr priorities, fade in/out.
 - BIOS services (corner cases in decompress functions).
 - PSG sound channels.
 - WAITCNT.
@@ -49,3 +50,4 @@ Bugs
 - ``graphics/mode4_framebuffer``: For some reason, the output of the GBA and the
   SDL2 port are different. This is likely to be a bug, as they are using the
   same rendering code.
+- Mosaic effect is broken, it doesn't work like on hardware.
