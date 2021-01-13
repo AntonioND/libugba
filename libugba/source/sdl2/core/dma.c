@@ -202,7 +202,12 @@ static void GBA_DMAUpdateState(int channel)
     dma->srcaddr = dmasad;
     dma->dstaddr = dmadad;
 
-    dma->num_chunks = ((size_t)dmasize) & 0x3FFF;
+    dma->num_chunks = (size_t)dmasize;
+
+    // For channels 0-2, the top 2 bits are ignored
+    if (channel != 3)
+        dma->num_chunks &= 0x3FFF;
+
     if (dma->num_chunks == 0)
     {
         if (channel == 3)
