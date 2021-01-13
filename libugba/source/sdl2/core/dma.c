@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: LGPL-3.0-only
 //
-// Copyright (c) 2011-2015, 2019-2020 Antonio Niño Díaz
+// Copyright (c) 2011-2015, 2019-2021 Antonio Niño Díaz
 
 #include <string.h>
 
@@ -219,6 +219,11 @@ static void GBA_DMAUpdateState(int channel)
         GBA_DMACopyNow(dma);
         dma->enabled = 0;
     }
+    else
+    {
+        // Leave DMA enabled
+        dma->enabled = 1;
+    }
 }
 
 void GBA_DMAUpdateRegister(uint32_t offset)
@@ -243,21 +248,39 @@ void GBA_DMAUpdateRegister(uint32_t offset)
     }
 }
 
+static void GBA_DMAStop(int channel)
+{
+    dma_channel *dma = &DMA[channel];
+
+    dma->enabled = 0;
+
+    // Clear enable bit
+    if (channel == 0)
+        REG_DMA0CNT_H &= ~DMACNT_DMA_ENABLE;
+    else if (channel == 1)
+        REG_DMA1CNT_H &= ~DMACNT_DMA_ENABLE;
+    else if (channel == 2)
+        REG_DMA2CNT_H &= ~DMACNT_DMA_ENABLE;
+    else if (channel == 3)
+        REG_DMA3CNT_H &= ~DMACNT_DMA_ENABLE;
+}
+
 void GBA_DMAHandleHBL(void)
 {
     for (int i = 0; i < 4; i++)
     {
         dma_channel *dma = &DMA[i];
 
-        if (dma->start_mode == DMACNT_START_HBLANK)
-        {
-            GBA_DMACopyNow(dma);
+        if (dma->enabled == 0)
+            continue;
 
-            if (dma->repeat)
-                continue;
+        if (dma->start_mode != DMACNT_START_HBLANK)
+            continue;
 
-            dma->enabled = 0;
-        }
+        GBA_DMACopyNow(dma);
+
+        if (dma->repeat == 0)
+            GBA_DMAStop(i);
     }
 }
 
@@ -267,14 +290,15 @@ void GBA_DMAHandleVBL(void)
     {
         dma_channel *dma = &DMA[i];
 
-        if (dma->start_mode == DMACNT_START_VBLANK)
-        {
-            GBA_DMACopyNow(dma);
+        if (dma->enabled == 0)
+            continue;
 
-            if (dma->repeat)
-                continue;
+        if (dma->start_mode != DMACNT_START_VBLANK)
+            continue;
 
-            dma->enabled = 0;
-        }
+        GBA_DMACopyNow(dma);
+
+        if (dma->repeat == 0)
+            GBA_DMAStop(i);
     }
 }
