@@ -62,6 +62,22 @@ static void handle_hbl(void)
     IRQ_Internal_CallHandler(IRQ_HBLANK);
 }
 
+static void handle_hbl_during_vbl(void)
+{
+    // First, VCOUNT interrupt
+
+    uint16_t dispstat_vcount = REG_DISPSTAT & DISPSTAT_VCOUNT_MASK;
+    dispstat_vcount >>= DISPSTAT_VCOUNT_SHIFT;
+
+    if (current_vcount == dispstat_vcount)
+        IRQ_Internal_CallHandler(IRQ_VCOUNT);
+
+    // In this case, there is nothing to draw, and DMA isn't triggered.
+
+    // Finally, HBL interrupt
+    IRQ_Internal_CallHandler(IRQ_HBLANK);
+}
+
 static void handle_vbl(void)
 {
     // Handle DMA if active
@@ -122,9 +138,18 @@ static void handle_vbl(void)
 static void do_scanline_draw(void)
 {
     if (current_vcount < 160)
+    {
         handle_hbl();
+    }
     else if (current_vcount == 160)
+    {
         handle_vbl();
+        handle_hbl_during_vbl();
+    }
+    else
+    {
+        handle_hbl_during_vbl();
+    }
 
     current_vcount++;
 

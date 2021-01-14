@@ -18,6 +18,7 @@ Examples
 - BIOS services (corner cases in decompress functions).
 - PSG sound channels.
 - WAITCNT.
+- Test to make sure HBL DMA isn't triggered during VBL.
 
 Extended library functionality
 ------------------------------
