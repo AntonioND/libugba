@@ -46,7 +46,10 @@ void vbl_handler(void)
 
 void hbl_handler(void)
 {
-    REG_BG0HOFS = horizontal_offsets[REG_VCOUNT + 1];
+    uint16_t vcount = REG_VCOUNT;
+
+    if (vcount < 160)
+        REG_BG0HOFS = horizontal_offsets[vcount + 1];
 }
 
 int main(int argc, char *argv[])
