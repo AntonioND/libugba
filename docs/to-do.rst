@@ -8,6 +8,7 @@ Library
 - PSG sound channels.
 - Interfaces for bg/spr priorities, blending and fade in/out.
 - Add warnings for trying to copy from ROM with DMA different than 3.
+- Repeat bit is ignored in immediate DMA mode.
 
 Examples
 --------
