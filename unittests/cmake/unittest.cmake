@@ -52,7 +52,7 @@ function(define_unittest)
 
     add_test(NAME ${EXECUTABLE_NAME}_unittest
         COMMAND ${EXECUTABLE_NAME}
-        WORKING_DIRECTORY ${CMAKE_CURRENT_BUILD_DIR}
+        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
     )
 
 endfunction()
