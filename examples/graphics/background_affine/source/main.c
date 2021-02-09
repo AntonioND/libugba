@@ -82,8 +82,7 @@ int main(int argc, char *argv[])
             x << 8, y << 8,
             0, 0,
             1 << 8, 1 << 8,
-            angle << 8,
-            0
+            angle << 8
         };
 
         SWI_BgAffineSet(&bg_src, &bg_dst, 1);
