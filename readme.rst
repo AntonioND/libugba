@@ -158,10 +158,10 @@ build system will look for it in the parent directory of the ugba directory.
     make -j`nproc`
     ctest
 
-7. Credits
-----------
+7. Acknowledgements
+-------------------
 
-- Dave Murphy (WinterMute) for devkitPro.
+- Dave Murphy (WinterMute) (and others) for devkitPro and devkitARM.
 - Jasper Vijn (cearn) for Grit and Tonc.
 - Martin Korth (Nocash) for no$gba and GBATEK.
 - Vicki Pfau (endrift) for mGBA.
