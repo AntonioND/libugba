@@ -23,7 +23,7 @@
 #define RELOAD_VALUE        (65536 - TICKS_PER_RELOAD)
 #define BUFFER_SIZE         (CLOCKS_PER_FRAME / TICKS_PER_RELOAD)
 
-#define DMA_A_TIMER_INDEX   0 // Timer 1 controls the transfer rate of DMA B
+#define DMA_A_TIMER_INDEX   0 // Timer 0 controls the transfer rate of DMA A
 #define DMA_B_TIMER_INDEX   1 // Timer 1 controls the transfer rate of DMA B
 
 static int current_buffer = 0;
