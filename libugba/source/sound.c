@@ -50,18 +50,83 @@ void SOUND_DMA_Pan(int dma_a_left, int dma_a_right,
 
 void SOUND_DMA_Stream_A(const void *source)
 {
-    volatile uint32_t *ptr = REG_FIFO_A;
+    uintptr_t dest = (uintptr_t)REG_FIFO_A;
 
-    DMA_Stop(1);
-    DMA_StreamAudio(1, source, (uint32_t *)ptr);
+    uint16_t flags = DMACNT_DST_FIXED | DMACNT_SRC_INCREMENT |
+                     DMACNT_REPEAT_ON | DMACNT_TRANSFER_32_BITS |
+                     DMACNT_START_SPECIAL | DMACNT_DMA_ENABLE;
+
+    REG_DMA1SAD = (uintptr_t)source;
+    REG_DMA1DAD = dest;
+    REG_DMA1CNT_L = 0;
+
+    // Stop it first
+    REG_DMA1CNT_H = 0;
+    UGBA_RegisterUpdatedOffset(OFFSET_DMA1CNT_H);
+
+    REG_DMA1CNT_H = flags;
+    UGBA_RegisterUpdatedOffset(OFFSET_DMA1CNT_H);
 }
 
 void SOUND_DMA_Stream_B(const void *source)
 {
-    volatile uint32_t *ptr = REG_FIFO_B;
+    uintptr_t dest = (uintptr_t)REG_FIFO_B;
 
-    DMA_Stop(2);
-    DMA_StreamAudio(2, source, (uint32_t *)ptr);
+    uint16_t flags = DMACNT_DST_FIXED | DMACNT_SRC_INCREMENT |
+                     DMACNT_REPEAT_ON | DMACNT_TRANSFER_32_BITS |
+                     DMACNT_START_SPECIAL | DMACNT_DMA_ENABLE;
+
+    REG_DMA2SAD = (uintptr_t)source;
+    REG_DMA2DAD = dest;
+    REG_DMA2CNT_L = 0;
+
+    // Stop it first
+    REG_DMA2CNT_H = 0;
+    UGBA_RegisterUpdatedOffset(OFFSET_DMA2CNT_H);
+
+    REG_DMA2CNT_H = flags;
+    UGBA_RegisterUpdatedOffset(OFFSET_DMA2CNT_H);
+}
+
+void SOUND_DMA_Setup_AB(const void *source_a, const void *source_b)
+{
+    // Stop the channels first
+    REG_DMA1CNT_H = 0;
+    UGBA_RegisterUpdatedOffset(OFFSET_DMA1CNT_H);
+
+    REG_DMA2CNT_H = 0;
+    UGBA_RegisterUpdatedOffset(OFFSET_DMA2CNT_H);
+
+    REG_DMA1SAD = (uintptr_t)source_a;
+    REG_DMA1DAD = (uintptr_t)REG_FIFO_A;
+    REG_DMA1CNT_L = 0;
+
+    REG_DMA2SAD = (uintptr_t)source_b;
+    REG_DMA2DAD = (uintptr_t)REG_FIFO_B;
+    REG_DMA2CNT_L = 0;
+}
+
+void SOUND_DMA_Retrigger_AB(void)
+{
+    uint16_t flags = DMACNT_DST_FIXED | DMACNT_SRC_INCREMENT |
+                     DMACNT_REPEAT_ON | DMACNT_TRANSFER_32_BITS |
+                     DMACNT_START_SPECIAL | DMACNT_DMA_ENABLE;
+
+    // Stop the channels first
+
+    REG_DMA1CNT_H = 0;
+    UGBA_RegisterUpdatedOffset(OFFSET_DMA1CNT_H);
+
+    REG_DMA2CNT_H = 0;
+    UGBA_RegisterUpdatedOffset(OFFSET_DMA2CNT_H);
+
+    // Enable them again
+
+    REG_DMA1CNT_H = flags;
+    UGBA_RegisterUpdatedOffset(OFFSET_DMA1CNT_H);
+
+    REG_DMA2CNT_H = flags;
+    UGBA_RegisterUpdatedOffset(OFFSET_DMA2CNT_H);
 }
 
 void SOUND_DMA_TimerSetup(int dma_a_timer, int dma_b_timer)

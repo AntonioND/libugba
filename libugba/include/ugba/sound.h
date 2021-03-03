@@ -28,6 +28,13 @@ EXPORT_API void SOUND_DMA_Stream_A(const void *source);
 // aligned to 32 bits.
 EXPORT_API void SOUND_DMA_Stream_B(const void *source);
 
+// Set buffers that will be streamed to DMA channels A and B. The buffers need
+// to be aligned to 32 bits.
+EXPORT_API void SOUND_DMA_Setup_AB(const void *source_a, const void *source_b);
+
+// Restart DMA transfer used for audio.
+EXPORT_API void SOUND_DMA_Retrigger_AB(void);
+
 // Specify which timer is assigned to each one of the DMA channels. Only timers
 // 0 and 1 are valid.
 EXPORT_API void SOUND_DMA_TimerSetup(int dma_a_timer, int dma_b_timer);
