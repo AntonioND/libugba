@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: MIT
 #
-# Copyright (c) 2020 Antonio Niño Díaz
+# Copyright (c) 2020-2021 Antonio Niño Díaz
 
 function(define_example)
 
@@ -38,6 +38,16 @@ function(define_example)
 
     if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/data)
         add_data_files(data ${EXECUTABLE_NAME})
+    endif()
+
+    # Add audio files
+    # ---------------
+
+    if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/audio)
+        target_link_libraries(${EXECUTABLE_NAME} umod_player)
+        add_umod_player_files(audio ${EXECUTABLE_NAME}
+            umod_pack.bin umod_pack_info.h
+        )
     endif()
 
     # Build GBA version if requested

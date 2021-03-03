@@ -1,12 +1,13 @@
 # SPDX-License-Identifier: MIT
 #
-# Copyright (c) 2020 Antonio Niño Díaz
+# Copyright (c) 2020-2021 Antonio Niño Díaz
 
 add_subdirectory(tools)
 
-# GiiBiiAdvance is needed for unit tests
-
 if(NOT LIBUGBA_ONLY)
+
+    # GiiBiiAdvance is needed for unit tests
+
     if(BUILD_GBA)
         # Get absolute path to default folder
         if("${GIIBIIADVANCE_PATH}" STREQUAL "")
@@ -22,6 +23,21 @@ if(NOT LIBUGBA_ONLY)
             message(FATAL_ERROR "GiiBiiAdvance repository not found")
         endif()
     endif()
+
+    # UMOD Player
+
+    if("${UMOD_PLAYER_PATH}" STREQUAL "")
+        get_filename_component(UMOD_PLAYER_PATH
+            ../../umod-player ABSOLUTE
+        )
+    endif()
+
+    if(EXISTS ${UMOD_PLAYER_PATH})
+        add_subdirectory(${UMOD_PLAYER_PATH} umod_player)
+    else()
+        message(FATAL_ERROR "UMOD Player repository not found")
+    endif()
+
 endif()
 
 include(cmake/example.cmake)

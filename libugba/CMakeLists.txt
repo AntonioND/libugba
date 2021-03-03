@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: MIT
 #
-# Copyright (c) 2020 Antonio Niño Díaz
+# Copyright (c) 2020-2021 Antonio Niño Díaz
 
 set(LIBRARY_NAME libugba)
 
@@ -92,6 +92,7 @@ add_subdirectory(tools)
 
 include(cmake/bin2c.cmake)
 include(cmake/grit.cmake)
+include(cmake/umod-player.cmake)
 
 # Add graphics to library, like the default font
 
