@@ -17,6 +17,7 @@ include $(DEVKITARM)/gba_rules
 # INCLUDES is a list of directories containing extra header files
 # DATA is a list of directories containing binary data
 # GRAPHICS is a list of directories containing files to be processed by grit
+# AUDIO is a folder containing files to be packed by UMOD Player
 #
 # All directories are specified relative to the project directory where
 # the makefile is found
@@ -27,8 +28,8 @@ BUILD		:= build
 SOURCES		:= source
 INCLUDES	:= include
 DATA		:= data
-MUSIC		:=
 GRAPHICS	:= graphics
+AUDIO		:= audio
 
 #---------------------------------------------------------------------------------
 # options for code generation
@@ -50,14 +51,14 @@ LDFLAGS	=	-g $(ARCH) -Wl,-Map,$(notdir $*.map)
 #---------------------------------------------------------------------------------
 # any extra libraries we wish to link with the project
 #---------------------------------------------------------------------------------
-LIBS	:= -lugba # -lmm
+LIBS	:= -lugba -lumod
 
 
 #---------------------------------------------------------------------------------
 # list of directories containing libraries, this must be the top level containing
 # include and lib
 #---------------------------------------------------------------------------------
-LIBDIRS	:=	$(LIBUGBA)
+LIBDIRS	:=	$(LIBUGBA) $(UMOD_PLAYER)
 
 #---------------------------------------------------------------------------------
 # no real need to edit anything past this point unless you need to add additional
@@ -82,9 +83,9 @@ SFILES		:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.s)))
 PNGFILES	:=	$(foreach dir,$(GRAPHICS),$(notdir $(wildcard $(dir)/*.png)))
 BINFILES	:=	$(foreach dir,$(DATA),$(notdir $(wildcard $(dir)/*.*)))
 
-ifneq ($(strip $(MUSIC)),)
-	export AUDIOFILES	:=	$(foreach dir,$(notdir $(wildcard $(MUSIC)/*.*)),$(CURDIR)/$(MUSIC)/$(dir))
-	BINFILES += soundbank.bin
+ifneq ($(strip $(AUDIO)),)
+	export AUDIOFILES	:=	$(foreach dir,$(notdir $(wildcard $(AUDIO)/*.*)),$(CURDIR)/$(AUDIO)/$(dir))
+	BINFILES += umod_pack.bin
 endif
 
 #---------------------------------------------------------------------------------
@@ -147,11 +148,11 @@ $(OFILES_SOURCES) : $(HFILES)
 #---------------------------------------------------------------------------------
 
 #---------------------------------------------------------------------------------
-# rule to build soundbank from music files
+# rule to build pack file from music files
 #---------------------------------------------------------------------------------
-soundbank.bin soundbank.h : $(AUDIOFILES)
+umod_pack.bin umod_pack_info.h : $(AUDIOFILES)
 #---------------------------------------------------------------------------------
-	@mmutil $^ -osoundbank.bin -hsoundbank.h
+	$(UMOD_PACKER) umod_pack.bin umod_pack_info.h $^
 
 #---------------------------------------------------------------------------------
 # This rule links in binary data with the .bin extension

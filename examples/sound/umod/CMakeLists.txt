@@ -2,5 +2,4 @@
 #
 # Copyright (c) 2020 Antonio Niño Díaz
 
-add_subdirectory(basic_sound_dma)
-add_subdirectory(umod)
+define_example()
