@@ -51,8 +51,10 @@ LDFLAGS	=	-g $(ARCH) -Wl,-Map,$(notdir $*.map)
 #---------------------------------------------------------------------------------
 # any extra libraries we wish to link with the project
 #---------------------------------------------------------------------------------
-LIBS	:= -lugba -lumod
-
+LIBS	:= -lugba
+ifneq ($(strip $(AUDIO)),)
+    LIBS += -lumod
+endif
 
 #---------------------------------------------------------------------------------
 # list of directories containing libraries, this must be the top level containing
@@ -84,8 +86,10 @@ PNGFILES	:=	$(foreach dir,$(GRAPHICS),$(notdir $(wildcard $(dir)/*.png)))
 BINFILES	:=	$(foreach dir,$(DATA),$(notdir $(wildcard $(dir)/*.*)))
 
 ifneq ($(strip $(AUDIO)),)
-	export AUDIOFILES	:=	$(foreach dir,$(notdir $(wildcard $(AUDIO)/*.*)),$(CURDIR)/$(AUDIO)/$(dir))
-	BINFILES += umod_pack.bin
+    export AUDIOFILES := $(foreach dir,$(AUDIO),$(wildcard $(CURDIR)/$(dir)/**.*))
+    ifneq ($(strip $(AUDIOFILES)),)
+        BINFILES += umod_pack.bin
+    endif
 endif
 
 #---------------------------------------------------------------------------------
@@ -102,12 +106,15 @@ else
 endif
 #---------------------------------------------------------------------------------
 
+HFILES := $(addsuffix .h,$(subst .,_,$(BINFILES))) $(PNGFILES:.png=.h)
+ifneq ($(strip $(AUDIOFILES)),)
+    HFILES += umod_pack_info.h
+endif
+export HFILES
+
 export OFILES := $(addsuffix .o,$(BINFILES)) \
 				 $(PNGFILES:.png=.o) \
 				 $(CPPFILES:.cpp=.o) $(CFILES:.c=.o) $(SFILES:.s=.o)
-
-export HFILES := $(addsuffix .h,$(subst .,_,$(BINFILES))) \
-				 $(PNGFILES:.png=.h)
 
 export INCLUDE	:=	$(foreach dir,$(INCLUDES),-iquote $(CURDIR)/$(dir)) \
 					$(foreach dir,$(LIBDIRS),-I$(dir)/include) \
@@ -146,12 +153,14 @@ $(OFILES_SOURCES) : $(HFILES)
 # for each extension used in the data directories
 #---------------------------------------------------------------------------------
 
+ifneq ($(strip $(AUDIOFILES)),)
 #---------------------------------------------------------------------------------
 # rule to build pack file from music files
 #---------------------------------------------------------------------------------
 umod_pack.bin umod_pack_info.h : $(AUDIOFILES)
 #---------------------------------------------------------------------------------
-	$(UMOD_PACKER) umod_pack.bin umod_pack_info.h $^
+	$(UMOD_PACKER) umod_pack.bin umod_pack_info.h $(AUDIOFILES)
+endif
 
 #---------------------------------------------------------------------------------
 # This rule links in binary data with the .bin extension
