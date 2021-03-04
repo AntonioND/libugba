@@ -15,6 +15,7 @@ include $(DEVKITARM)/gba_rules
 # INCLUDES is a list of directories containing extra header files
 # DATA is a list of directories containing binary data
 # GRAPHICS is a list of directories containing files to be processed by grit
+# AUDIO is a folder containing files to be packed by UMOD Player
 #
 # All directories are specified relative to the project directory where
 # the makefile is found
@@ -23,11 +24,13 @@ include $(DEVKITARM)/gba_rules
 TARGET		:= $(notdir $(CURDIR))
 BUILD		:= build
 SOURCES		:= source
-INCLUDES	:= include
-DATA		:=
-MUSIC		:=
-GRAPHICS	:= graphics
+INCLUDES	:= include  # This may be left empty
+DATA		:= data     # This may be left empty
+GRAPHICS	:= graphics # This may be left empty
+AUDIO		:= audio    # This may be left empty
 LIBUGBA		:= $(CURDIR)/../libugba
+UMOD_PLAYER	:= $(CURDIR)/../../umod-player/player
+UMOD_PACKER	:= $(CURDIR)/../../../umod-player/build/packer/umod_packer
 
 #---------------------------------------------------------------------------------
 # options for code generation
@@ -48,14 +51,16 @@ LDFLAGS	=	-g $(ARCH) -Wl,-Map,$(notdir $*.map)
 #---------------------------------------------------------------------------------
 # any extra libraries we wish to link with the project
 #---------------------------------------------------------------------------------
-LIBS	:= -lmm -lugba
-
+LIBS	:= -lugba
+ifneq ($(strip $(AUDIO)),)
+    LIBS += -lumod
+endif
 
 #---------------------------------------------------------------------------------
 # list of directories containing libraries, this must be the top level containing
 # include and lib
 #---------------------------------------------------------------------------------
-LIBDIRS	:=	$(LIBGBA) $(LIBUGBA)
+LIBDIRS	:=	$(LIBUGBA) $(UMOD_PLAYER)
 
 #---------------------------------------------------------------------------------
 # no real need to edit anything past this point unless you need to add additional
@@ -80,9 +85,11 @@ SFILES		:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.s)))
 PNGFILES	:=	$(foreach dir,$(GRAPHICS),$(notdir $(wildcard $(dir)/*.png)))
 BINFILES	:=	$(foreach dir,$(DATA),$(notdir $(wildcard $(dir)/*.*)))
 
-ifneq ($(strip $(MUSIC)),)
-	export AUDIOFILES	:=	$(foreach dir,$(notdir $(wildcard $(MUSIC)/*.*)),$(CURDIR)/$(MUSIC)/$(dir))
-	BINFILES += soundbank.bin
+ifneq ($(strip $(AUDIO)),)
+    export AUDIOFILES := $(foreach dir,$(AUDIO),$(wildcard $(CURDIR)/$(dir)/**.*))
+    ifneq ($(strip $(AUDIOFILES)),)
+        BINFILES += umod_pack.bin
+    endif
 endif
 
 #---------------------------------------------------------------------------------
@@ -99,11 +106,10 @@ else
 endif
 #---------------------------------------------------------------------------------
 
+
 export OFILES := $(addsuffix .o,$(BINFILES)) \
 				 $(PNGFILES:.png=.o) \
 				 $(CPPFILES:.cpp=.o) $(CFILES:.c=.o) $(SFILES:.s=.o)
-
-export HFILES := $(addsuffix .h,$(subst .,_,$(BINFILES)))
 
 export INCLUDE	:=	$(foreach dir,$(INCLUDES),-iquote $(CURDIR)/$(dir)) \
 					$(foreach dir,$(LIBDIRS),-I$(dir)/include) \
@@ -142,12 +148,14 @@ $(OFILES_SOURCES) : $(HFILES)
 # for each extension used in the data directories
 #---------------------------------------------------------------------------------
 
+ifneq ($(strip $(AUDIOFILES)),)
 #---------------------------------------------------------------------------------
-# rule to build soundbank from music files
+# rule to build pack file from music files
 #---------------------------------------------------------------------------------
-soundbank.bin soundbank.h : $(AUDIOFILES)
+umod_pack.bin umod_pack_info.h : $(AUDIOFILES)
 #---------------------------------------------------------------------------------
-	@mmutil $^ -osoundbank.bin -hsoundbank.h
+	$(UMOD_PACKER) umod_pack.bin umod_pack_info.h $(AUDIOFILES)
+endif
 
 #---------------------------------------------------------------------------------
 # This rule links in binary data with the .bin extension
@@ -166,7 +174,7 @@ soundbank.bin soundbank.h : $(AUDIOFILES)
 %.s %.h: %.png %.grit
 #---------------------------------------------------------------------------------
 	@echo "grit $<"
-	grit $< -fts -o$*
+	@grit $< -fts -o$*
 
 -include $(DEPSDIR)/*.d
 #---------------------------------------------------------------------------------------

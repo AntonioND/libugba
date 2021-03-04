@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: MIT
 #
-# Copyright (c) 2020 Antonio Niño Díaz
+# Copyright (c) 2020-2021 Antonio Niño Díaz
 
 cmake_minimum_required(VERSION 3.15)
 
@@ -17,27 +17,57 @@ add_executable(${EXECUTABLE_NAME})
 # Feel free to remove the option of the two provided that you don't need.
 
 if(TRUE)
-    # 1) This code is used in case libugba is in an arbitrary location on your
+    # 1) This code is used in case ugba is in an arbitrary location on your
     #    hard drive.
 
     # Get absolute path to default libugba folder
-    if("${LIBUGBA_PATH}" STREQUAL "")
-        get_filename_component(LIBUGBA_PATH ../libugba ABSOLUTE)
+    if("${UGBA_PATH}" STREQUAL "")
+        get_filename_component(UGBA_PATH .. ABSOLUTE)
     endif()
 
-    if(EXISTS ${LIBUGBA_PATH})
-        add_subdirectory(${LIBUGBA_PATH} libugba)
+    if(EXISTS ${UGBA_PATH})
+        add_subdirectory(${UGBA_PATH} libugba)
     else()
-        message(FATAL_ERROR "libugba folder not found")
+        message(FATAL_ERROR "ugba folder not found")
     endif()
 else()
     # 2) This code is used in case the ugba repository is added as a submodule
     #    of your repository.
 
-    add_subdirectory(ugba/libugba)
+    add_subdirectory(ugba)
 endif()
 
 target_link_libraries(${EXECUTABLE_NAME} libugba)
+
+# Link with UMOD Player
+# ---------------------
+
+# Feel free to remove the option of the two provided that you don't need.
+
+if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/audio)
+    if(TRUE)
+        # 1) This code is used in case libugba is in an arbitrary location on
+        #    your hard drive.
+
+        if("${UMOD_PLAYER_PATH}" STREQUAL "")
+            get_filename_component(UMOD_PLAYER_PATH ../../umod-player ABSOLUTE)
+        endif()
+
+        if(EXISTS ${UMOD_PLAYER_PATH})
+            add_subdirectory(${UMOD_PLAYER_PATH} umod_player)
+        else()
+            message(FATAL_ERROR "UMOD Player repository not found")
+        endif()
+
+    else()
+        # 2) This code is used in case the UMOD Player repository is added as a
+        #    submodule of your repository.
+
+        add_subdirectory(umod-player)
+    endif()
+
+    target_link_libraries(${EXECUTABLE_NAME} umod_player)
+endif()
 
 # Add source code files
 # ---------------------
@@ -63,4 +93,10 @@ endif()
 
 if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/data)
     add_data_files(data ${EXECUTABLE_NAME})
+endif()
+
+if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/audio)
+    add_umod_player_files(audio ${EXECUTABLE_NAME}
+        umod_pack.bin umod_pack_info.h
+    )
 endif()
