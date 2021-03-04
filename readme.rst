@@ -37,14 +37,16 @@ LGPL-3.0 license.
 --------------
 
 The PC version of the library behaves in a different way as the GBA version of
-it. Take a look at `here <docs/limitations.rst>`_ for more details. For now, the
-biggest limitation is the lack of support for sound, which is planned to be
-implemented.
+it. Take a look at `here <docs/limitations.rst>`_ for more details.
 
 For a list of planned features, check `this link <docs/to-do.rst>`_.
 
 3. Dependencies
 ---------------
+
+To build all the examples:
+
+- `UMOD Player`_
 
 To generate GBA ROMs:
 
@@ -166,6 +168,7 @@ build system will look for it in the parent directory of the ugba directory.
 - Martin Korth (Nocash) for no$gba and GBATEK.
 - Vicki Pfau (endrift) for mGBA.
 
+.. _UMOD Player: https://github.com/AntonioND/umod-player
 .. _GiiBiiAdvance: https://github.com/AntonioND/giibiiadvance
 .. _devkitPro: https://devkitpro.org/
 .. _vcpkg: https://github.com/microsoft/vcpkg

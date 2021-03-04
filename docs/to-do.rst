@@ -28,7 +28,6 @@ Extended library functionality
 - "Infinite" maps with finite tileset.
 - "Infinite" maps with "infinite" tileset.
 - DLDI.
-- Port Maxmod to C.
 - libgba support.
 
 SDL2 port
