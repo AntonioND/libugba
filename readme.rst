@@ -31,7 +31,9 @@ interface is likely to change. Expect breaking changes every now and then.
 
 The GBA version of the library is a static library licensed under the MIT
 license. The PC version of the library is a dynamic library licensed under the
-LGPL-3.0 license.
+LGPL-3.0 license. The other license files of the repository correspond to some
+resources used in the examples (like music and sound effects), but don't affect
+the library itself.
 
 2. Limitations
 --------------
@@ -44,24 +46,21 @@ For a list of planned features, check `this link <docs/to-do.rst>`_.
 3. Dependencies
 ---------------
 
-To build all the examples:
+To generate PC executables:
 
-- `UMOD Player`_
+- GCC, Clang, MSVC or another compiler supported by CMake.
+- CMake 3.15 or later
+- SDL2 2.0.7 or later (AudioStream support needed)
+- libpng 1.6 or later (Simplified API support needed)
+- liblua 5.2 or later (Integer support needed) [Optional, needed for unit tests]
 
 To generate GBA ROMs:
 
 - `devkitPro`_
 
-To generate PC executables:
+To build all the examples and run all unit tests:
 
-- GCC, Clang, MSVC or another compiler supported by CMake.
-- CMake 3.15 or later
-- SDL2 2.0.7 or later (AudioStream support)
-- libpng 1.6 or later (Simplified API support)
-- liblua 5.2 or later (Integer support)
-
-To run all unit tests:
-
+- `UMOD Player`_: For some audio tests
 - `GiiBiiAdvance`_: To run the GBA ROM version of the unit tests.
 
 You need to install devkitPro following the instructions in this link, then
@@ -85,6 +84,14 @@ the dependencies using your package manager. For example, in Debian or Ubuntu:
 .. code:: bash
 
     sudo apt install libsdl2-dev liblua5.4-dev libpng-dev
+
+Clone `UMOD Player`_ and keep the folder in the same place as the **ugba**
+directory. This extra repository is needed for some examples:
+
+.. code:: bash
+
+    git clone https://github.com/AntonioND/ugba
+    git clone https://github.com/AntonioND/umod-player
 
 Finally, go to the folder of **ugba**. The following will build the library,
 examples, and run all the tests to verify it's working:
@@ -119,6 +126,13 @@ Then, install the dependencies (SDL2, libpng and liblua):
 
     .\vcpkg install SDL2 libpng liblua --triplet x64-windows
 
+It is also needed to download `UMOD Player`_, as it is needed for one example.
+
+.. code:: bash
+
+    git clone https://github.com/AntonioND/ugba
+    git clone https://github.com/AntonioND/umod-player
+
 Finally, go to the folder of **ugba**. The following will build the library,
 and examples, in **Developer Command Prompt for VS 2019**:
 
@@ -138,9 +152,26 @@ In order to get a release build, do:
 6. Build GBA library and examples
 ---------------------------------
 
-First, build the library. Go to ``ugba/libugba`` and type ``make``.
+For some of the examples it is needed to use `UMOD Player`_.
 
-Then, go to any folder with an example inside ``examples``, or go to
+If you want to run the unit tests, you need to use the CMake build system. It is
+needed to have a clone of the repository of `GiiBiiAdvance`_. By default, the
+build system will look for it in the parent directory of the ugba directory.
+
+In short, you need to clone the following three repositories and keep them in
+the same folder:
+
+.. code:: bash
+
+    git clone https://github.com/AntonioND/ugba
+    git clone https://github.com/AntonioND/umod-player
+    git clone https://github.com/AntonioND/giibiiadvance
+
+First, build **libugba**. Go to ``ugba/libugba`` and type ``make``.
+
+Then, build the **UMOD Player**. Go to ``umod-player/player`` and type ``make``.
+
+Then, go to any folder with an example inside ``ugba/examples``, or go to
 ``template``, and type ``make`` again. That should generate a file with gba
 extension, that you can run in an emulator or copy to a flashcart to run on real
 hardware.
@@ -148,9 +179,8 @@ hardware.
 Note: In order to make the compilation process faster you can run make in
 multiple threads by doing ``make -j`nproc``.
 
-If you want to run the unit tests, you need to use the CMake build system. It is
-needed to have a clone of the repository of `GiiBiiAdvance`_. By default, the
-build system will look for it in the parent directory of the ugba directory.
+In order to build every one of the GBA examples and the PC examples, and run all
+the tests (both for PC and GBA), do:
 
 .. code:: bash
 
