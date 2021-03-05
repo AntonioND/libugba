@@ -2,6 +2,8 @@
 //
 // Copyright (c) 2020 Antonio Niño Díaz
 
+#ifdef LUA_INTERPRETER_ENABLED
+
 #include <SDL2/SDL.h>
 
 #include <lua.h>
@@ -137,7 +139,7 @@ static int lua_screenshot(lua_State *L)
     return 0;
 }
 
-uint16_t get_bit_from_key_name(const char *name)
+static uint16_t get_bit_from_key_name(const char *name)
 {
     struct {
         const char *name;
@@ -378,3 +380,5 @@ void Script_WaitEnd(void)
 
     script_running = 0;
 }
+
+#endif // LUA_INTERPRETER_ENABLED

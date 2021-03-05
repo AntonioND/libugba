@@ -5,6 +5,8 @@
 #ifndef SDL2_LUA_HANDLER_H__
 #define SDL2_LUA_HANDLER_H__
 
+#ifdef LUA_INTERPRETER_ENABLED
+
 // Called by the game thread whenever a frame is drawn and handled
 void Script_FrameDrawn(void);
 
@@ -13,5 +15,7 @@ int Script_RunLua(const char *path);
 
 // Wait until the script is finished
 void Script_WaitEnd(void);
+
+#endif // LUA_INTERPRETER_ENABLED
 
 #endif // SDL2_LUA_HANDLER_H__

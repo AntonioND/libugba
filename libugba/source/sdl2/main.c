@@ -63,7 +63,11 @@ static void UGBA_ParseArgs(int *argc, char **argv[])
         {
             if (strcmp((*argv)[1], "--lua") == 0)
             {
+#ifdef LUA_INTERPRETER_ENABLED
                 Script_RunLua((*argv)[2]);
+#else
+                Debug_Log("UGBA compiled without Lua support.\n");
+#endif
 
                 // Remove argv[1] and argv[2]
 

@@ -38,13 +38,11 @@ target_include_directories(${LIBRARY_NAME} PUBLIC
 # Link with libraries and check build options
 # -------------------------------------------
 
-# libpng, SLD2 and Lua are required
+# libpng and SLD2 are required
 
 if(CMAKE_C_COMPILER_ID STREQUAL "MSVC")
     find_package(libpng REQUIRED 1.6)
     find_package(SDL2 REQUIRED 2.0.7)
-    include(FindLua)
-    find_package(Lua REQUIRED 5.2)
 
     target_link_libraries(${LIBRARY_NAME} PRIVATE
         png
@@ -53,7 +51,6 @@ if(CMAKE_C_COMPILER_ID STREQUAL "MSVC")
 else()
     find_package(PNG REQUIRED 1.6)
     find_package(SDL2 REQUIRED 2.0.7)
-    find_package(Lua REQUIRED 5.2)
 
     target_include_directories(${LIBRARY_NAME} PRIVATE
         ${PNG_INCLUDE_DIRS}
@@ -65,8 +62,26 @@ else()
     )
 endif()
 
-target_link_libraries(${LIBRARY_NAME} PRIVATE ${LUA_LIBRARIES})
-target_include_directories(${LIBRARY_NAME} PRIVATE ${LUA_INCLUDE_DIR})
+# Lua is optional. It can be used to run automated scripts.
+
+if(CMAKE_C_COMPILER_ID STREQUAL "MSVC")
+    include(FindLua)
+    find_package(Lua 5.2)
+else()
+    find_package(Lua 5.2)
+endif()
+
+if (LUA_FOUND)
+    option(LUA_INTERPRETER_ENABLED "Enable Lua interpreter" ON)
+else()
+    set(LUA_INTERPRETER_ENABLED OFF)
+endif()
+
+if(LUA_INTERPRETER_ENABLED)
+    target_compile_definitions(${LIBRARY_NAME} PRIVATE -DLUA_INTERPRETER_ENABLED)
+    target_link_libraries(${LIBRARY_NAME} PRIVATE ${LUA_LIBRARIES})
+    target_include_directories(${LIBRARY_NAME} PRIVATE ${LUA_INCLUDE_DIR})
+endif()
 
 # OpenGL is optional. It can be used as library to output graphics.
 

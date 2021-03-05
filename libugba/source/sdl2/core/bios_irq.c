@@ -104,8 +104,10 @@ static void handle_vbl(void)
     // script can overwrite the input.
     Input_Update_GBA();
 
+#ifdef LUA_INTERPRETER_ENABLED
     // Update script handler
     Script_FrameDrawn();
+#endif
 
     // Now that the user and the script input have been handled, check
     // keypad interrupt
