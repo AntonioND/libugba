@@ -10,33 +10,6 @@ set(CMAKE_C_VISIBILITY_PRESET hidden)
 
 add_library(${LIBRARY_NAME} SHARED)
 
-# Add source code files
-# ---------------------
-
-# Macro that searches all the source files in the specified directory in 'dir'
-# and saves them in 'var'
-macro(search_source_files dir var)
-    file(GLOB ${var} CONFIGURE_DEPENDS ${dir}/*.c ${dir}/*.h)
-endmacro()
-
-search_source_files(source FILES_SOURCE)
-search_source_files(source/sdl2 FILES_SOURCE_SDL2)
-search_source_files(source/sdl2/core FILES_SOURCE_SDL2_CORE)
-search_source_files(source/sdl2/gui FILES_SOURCE_SDL2_GUI)
-search_source_files(source/sdl2/gui/debugger FILES_SOURCE_SDL2_GUI_DEBUGGER)
-
-target_sources(${LIBRARY_NAME} PRIVATE
-    ${FILES_SOURCE}
-    ${FILES_SOURCE_SDL2}
-    ${FILES_SOURCE_SDL2_CORE}
-    ${FILES_SOURCE_SDL2_GUI}
-    ${FILES_SOURCE_SDL2_GUI_DEBUGGER}
-)
-
-target_include_directories(${LIBRARY_NAME} PUBLIC
-    include
-)
-
 # Link with libraries and check build options
 # -------------------------------------------
 
@@ -102,6 +75,7 @@ if(ENABLE_OPENGL)
 endif()
 
 # Add tools needed by libugba
+# ---------------------------
 
 add_subdirectory(tools)
 
@@ -111,11 +85,39 @@ include(cmake/bin2c.cmake)
 include(cmake/grit.cmake)
 include(cmake/umod-player.cmake)
 
+# Add source code files
+# ---------------------
+
+# Macro that searches all the source files in the specified directory in 'dir'
+# and saves them in 'var'
+macro(search_source_files dir var)
+    file(GLOB ${var} CONFIGURE_DEPENDS ${dir}/*.c ${dir}/*.h)
+endmacro()
+
+search_source_files(source FILES_SOURCE)
+search_source_files(source/sdl2 FILES_SOURCE_SDL2)
+search_source_files(source/sdl2/core FILES_SOURCE_SDL2_CORE)
+search_source_files(source/sdl2/gui FILES_SOURCE_SDL2_GUI)
+search_source_files(source/sdl2/gui/debugger FILES_SOURCE_SDL2_GUI_DEBUGGER)
+
+target_sources(${LIBRARY_NAME} PRIVATE
+    ${FILES_SOURCE}
+    ${FILES_SOURCE_SDL2}
+    ${FILES_SOURCE_SDL2_CORE}
+    ${FILES_SOURCE_SDL2_GUI}
+    ${FILES_SOURCE_SDL2_GUI_DEBUGGER}
+)
+
+target_include_directories(${LIBRARY_NAME} PUBLIC
+    include
+)
+
 # Add graphics to library, like the default font
 
 add_grit_files(graphics ${LIBRARY_NAME})
 
 # Build GBA version if requested
+# ------------------------------
 
 if(BUILD_GBA)
     add_custom_command(
