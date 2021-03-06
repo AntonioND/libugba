@@ -2,9 +2,9 @@
 //
 // Copyright (c) 2020 Antonio Niño Díaz
 
-#ifdef LUA_INTERPRETER_ENABLED
-
 #include <SDL2/SDL.h>
+
+#ifdef LUA_INTERPRETER_ENABLED
 
 #include <lua.h>
 #include <lualib.h>

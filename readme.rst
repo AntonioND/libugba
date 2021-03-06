@@ -48,17 +48,24 @@ For a list of planned features, check `this link <docs/to-do.rst>`_.
 
 To generate PC executables:
 
-- GCC, Clang, MSVC or another compiler supported by CMake.
-- CMake 3.15 or later
-- SDL2 2.0.7 or later (AudioStream support needed)
-- libpng 1.6 or later (Simplified API support needed)
-- liblua 5.2 or later (Integer support needed) [Optional, needed for unit tests]
+* Required:
+
+  - **GCC**, **Clang**, **MSVC** or another compiler supported by CMake.
+  - **CMake 3.15** or later
+  - **SDL2 2.0.7** or later (AudioStream support needed)
+
+* Optional:
+
+  - **libpng 1.6** or later (Simplified API support needed): Needed to save PNGs
+    like screenshots and dumps from VRAM debugger windows.
+  - **liblua 5.2** or later (Integer support needed): Needed for the Lua
+    interpreter used for the unit tests.
 
 To generate GBA ROMs:
 
 - `devkitPro`_
 
-To build all the examples and run all unit tests:
+To build all the examples and run all unit tests (optional dependencies):
 
 - `UMOD Player`_: For some audio tests
 - `GiiBiiAdvance`_: To run the GBA ROM version of the unit tests.

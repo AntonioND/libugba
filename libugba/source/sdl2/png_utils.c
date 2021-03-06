@@ -5,6 +5,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#ifdef ENABLE_LIBPNG
+
 #include <png.h>
 
 #include "debug_utils.h"
@@ -86,3 +88,5 @@ int Read_PNG(const char *filename, unsigned char **_buffer,
 
     return 0;
 }
+
+#endif // ENABLE_LIBPNG

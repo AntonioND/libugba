@@ -156,9 +156,13 @@ static int Win_MainEventCallback(SDL_Event *e)
 
 #endif // ENABLE_DEBUGGER
 
+#ifdef ENABLE_SCREENSHOTS
+
             case SDLK_F12:
                 //GBA_Screenshot(); // TODO
                 break;
+
+#endif // ENABLE_SCREENSHOTS
 
             case SDLK_c:
                 if (SDL_GetModState() & KMOD_CTRL)
@@ -280,6 +284,8 @@ void Win_MainLoopHandle(void)
 #endif // ENABLE_DEBUGGER
 }
 
+#ifdef ENABLE_SCREENSHOTS
+
 void Debug_Screenshot(const char *name)
 {
     if (name == NULL)
@@ -287,3 +293,5 @@ void Debug_Screenshot(const char *name)
 
     Save_PNG(name, &GBA_SCREEN[0], 240, 160, 0);
 }
+
+#endif // ENABLE_SCREENSHOTS

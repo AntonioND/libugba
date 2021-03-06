@@ -10,36 +10,21 @@ set(CMAKE_C_VISIBILITY_PRESET hidden)
 
 add_library(${LIBRARY_NAME} SHARED)
 
-# Define user options
-# -------------------
-
-option(ENABLE_DEBUGGER "Support debugger windows (I/O registers, VRAM)" ON)
-
 # Link with libraries and check build options
 # -------------------------------------------
 
-# libpng and SLD2 are required
+# Option to enable the debugger windows. It requires libpng to dump images.
 
-if(CMAKE_C_COMPILER_ID STREQUAL "MSVC")
-    find_package(libpng REQUIRED 1.6)
-    find_package(SDL2 REQUIRED 2.0.7)
+option(ENABLE_DEBUGGER "Support debugger windows (I/O registers, VRAM)" ON)
+if(ENABLE_DEBUGGER)
+    target_compile_definitions(${LIBRARY_NAME} PRIVATE -DENABLE_DEBUGGER)
+endif()
 
-    target_link_libraries(${LIBRARY_NAME} PRIVATE
-        png
-        SDL2::SDL2 SDL2::SDL2main
-    )
-else()
-    find_package(PNG REQUIRED 1.6)
-    find_package(SDL2 REQUIRED 2.0.7)
+# Option to enable screenshots. It requires libpng.
 
-    target_include_directories(${LIBRARY_NAME} PRIVATE
-        ${PNG_INCLUDE_DIRS}
-        ${SDL2_INCLUDE_DIRS}
-    )
-    target_link_libraries(${LIBRARY_NAME} PRIVATE
-        ${PNG_LIBRARIES}
-        ${SDL2_LIBRARIES}
-    )
+option(ENABLE_SCREENSHOTS "Support taking screenshots" ON)
+if(ENABLE_SCREENSHOTS)
+    target_compile_definitions(${LIBRARY_NAME} PRIVATE -DENABLE_SCREENSHOTS)
 endif()
 
 # Lua is optional. It can be used to run automated scripts.
@@ -51,6 +36,8 @@ else()
     find_package(Lua 5.2)
 endif()
 
+# Option to enable the Lua interpreter. Requires screenshot support.
+
 if (LUA_FOUND)
     option(LUA_INTERPRETER_ENABLED "Enable Lua interpreter" ON)
 else()
@@ -61,6 +48,35 @@ if(LUA_INTERPRETER_ENABLED)
     target_compile_definitions(${LIBRARY_NAME} PRIVATE -DLUA_INTERPRETER_ENABLED)
     target_link_libraries(${LIBRARY_NAME} PRIVATE ${LUA_LIBRARIES})
     target_include_directories(${LIBRARY_NAME} PRIVATE ${LUA_INCLUDE_DIR})
+
+    if(NOT ENABLE_SCREENSHOTS)
+        message(FATAL_ERROR "ENABLE_SCREENSHOTS needed for LUA_INTERPRETER_ENABLED")
+    endif()
+endif()
+
+# libpng is optional. It is needed to take screenshots and dump VRAM data.
+
+if(ENABLE_SCREENSHOTS OR ENABLE_DEBUGGER OR LUA_INTERPRETER_ENABLED)
+    if(CMAKE_C_COMPILER_ID STREQUAL "MSVC")
+        find_package(libpng REQUIRED 1.6)
+        target_link_libraries(${LIBRARY_NAME} PRIVATE png)
+    else()
+        find_package(PNG REQUIRED 1.6)
+        target_include_directories(${LIBRARY_NAME} PRIVATE ${PNG_INCLUDE_DIRS})
+        target_link_libraries(${LIBRARY_NAME} PRIVATE ${PNG_LIBRARIES})
+    endif()
+    target_compile_definitions(${LIBRARY_NAME} PRIVATE -DENABLE_LIBPNG)
+endif()
+
+# SLD2 is always required
+
+if(CMAKE_C_COMPILER_ID STREQUAL "MSVC")
+    find_package(SDL2 REQUIRED 2.0.7)
+    target_link_libraries(${LIBRARY_NAME} PRIVATE SDL2::SDL2 SDL2::SDL2main)
+else()
+    find_package(SDL2 REQUIRED 2.0.7)
+    target_include_directories(${LIBRARY_NAME} PRIVATE ${SDL2_INCLUDE_DIRS})
+    target_link_libraries(${LIBRARY_NAME} PRIVATE ${SDL2_LIBRARIES})
 endif()
 
 # OpenGL is optional. It can be used as library to output graphics.
@@ -105,7 +121,6 @@ search_source_files(source/sdl2/core FILES_SOURCE_SDL2_CORE)
 search_source_files(source/sdl2/gui FILES_SOURCE_SDL2_GUI)
 if(ENABLE_DEBUGGER)
     search_source_files(source/sdl2/gui/debugger FILES_SOURCE_SDL2_GUI_DEBUGGER)
-    target_compile_definitions(${LIBRARY_NAME} PRIVATE -DENABLE_DEBUGGER)
 else()
     set(FILES_SOURCE_SDL2_GUI_DEBUGGER "")
 endif()
