@@ -34,7 +34,6 @@ SDL2 port
 ---------
 
 - Add helper to configure user input.
-- Add build option to remove wav recording functionality in release builds.
 
 General
 -------
