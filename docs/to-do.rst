@@ -33,10 +33,9 @@ Extended library functionality
 SDL2 port
 ---------
 
-- Add debugger windows from GiiBiiAdvance.
 - Add helper to configure user input.
-- Add build option to remove the screenshot and wav recording functionality in
-  release builds.
+- Add build option to remove the debugger, screenshot and wav recording
+  functionality in release builds.
 
 General
 -------

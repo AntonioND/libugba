@@ -13,6 +13,8 @@
 #include "../png_utils.h"
 #include "../core/video.h"
 
+#include "debugger/win_gba_debugger.h"
+
 //------------------------------------------------------------------
 
 static int WinIDMain = -1;
@@ -130,8 +132,28 @@ static int Win_MainEventCallback(SDL_Event *e)
     {
         switch (e->key.keysym.sym)
         {
+            case SDLK_F5:
+                Win_GBAIOViewerCreate();
+                break;
+
+            case SDLK_F6:
+                Win_GBATileViewerCreate();
+                break;
+
+            case SDLK_F7:
+                Win_GBAMapViewerCreate();
+                break;
+
+            case SDLK_F8:
+                Win_GBASprViewerCreate();
+                break;
+
+            case SDLK_F9:
+                Win_GBAPalViewerCreate();
+                break;
+
             case SDLK_F12:
-                //GBA_Screenshot();
+                //GBA_Screenshot(); // TODO
                 break;
 
             case SDLK_c:
@@ -240,6 +262,14 @@ void Win_MainLoopHandle(void)
         //Sound_Disable();
     }
 #endif
+
+    // Update debugger windows
+
+    Win_GBAIOViewerUpdate();
+    Win_GBAMapViewerUpdate();
+    Win_GBATileViewerUpdate();
+    Win_GBASprViewerUpdate();
+    Win_GBAPalViewerUpdate();
 }
 
 void Debug_Screenshot(const char *name)

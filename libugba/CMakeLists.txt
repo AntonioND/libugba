@@ -23,12 +23,14 @@ search_source_files(source FILES_SOURCE)
 search_source_files(source/sdl2 FILES_SOURCE_SDL2)
 search_source_files(source/sdl2/core FILES_SOURCE_SDL2_CORE)
 search_source_files(source/sdl2/gui FILES_SOURCE_SDL2_GUI)
+search_source_files(source/sdl2/gui/debugger FILES_SOURCE_SDL2_GUI_DEBUGGER)
 
 target_sources(${LIBRARY_NAME} PRIVATE
     ${FILES_SOURCE}
     ${FILES_SOURCE_SDL2}
     ${FILES_SOURCE_SDL2_CORE}
     ${FILES_SOURCE_SDL2_GUI}
+    ${FILES_SOURCE_SDL2_GUI_DEBUGGER}
 )
 
 target_include_directories(${LIBRARY_NAME} PUBLIC

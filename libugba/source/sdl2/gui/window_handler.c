@@ -18,7 +18,7 @@
 
 #include "../debug_utils.h"
 
-#define MAX_WINDOWS 2
+#define MAX_WINDOWS 10
 
 typedef struct
 {
