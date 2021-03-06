@@ -209,7 +209,7 @@ typedef struct {
 #define ATTR2_PRIORITY_MASK         (0x3 << 10)
 
 #define ATTR2_PALETTE(v)            (((v) & 0xF) << 12) // 16 color objects
-#define ATTR2_PALETTE_MASK          (0xf << 12)
+#define ATTR2_PALETTE_MASK          (0xF << 12)
 
 #pragma pack(push, 1)
 typedef struct {
