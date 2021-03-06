@@ -132,6 +132,8 @@ static int Win_MainEventCallback(SDL_Event *e)
     {
         switch (e->key.keysym.sym)
         {
+#ifdef ENABLE_DEBUGGER
+
             case SDLK_F5:
                 Win_GBAIOViewerCreate();
                 break;
@@ -151,6 +153,8 @@ static int Win_MainEventCallback(SDL_Event *e)
             case SDLK_F9:
                 Win_GBAPalViewerCreate();
                 break;
+
+#endif // ENABLE_DEBUGGER
 
             case SDLK_F12:
                 //GBA_Screenshot(); // TODO
@@ -263,6 +267,8 @@ void Win_MainLoopHandle(void)
     }
 #endif
 
+#ifdef ENABLE_DEBUGGER
+
     // Update debugger windows
 
     Win_GBAIOViewerUpdate();
@@ -270,6 +276,8 @@ void Win_MainLoopHandle(void)
     Win_GBATileViewerUpdate();
     Win_GBASprViewerUpdate();
     Win_GBAPalViewerUpdate();
+
+#endif // ENABLE_DEBUGGER
 }
 
 void Debug_Screenshot(const char *name)

@@ -10,6 +10,11 @@ set(CMAKE_C_VISIBILITY_PRESET hidden)
 
 add_library(${LIBRARY_NAME} SHARED)
 
+# Define user options
+# -------------------
+
+option(ENABLE_DEBUGGER "Support debugger windows (I/O registers, VRAM)" ON)
+
 # Link with libraries and check build options
 # -------------------------------------------
 
@@ -98,7 +103,12 @@ search_source_files(source FILES_SOURCE)
 search_source_files(source/sdl2 FILES_SOURCE_SDL2)
 search_source_files(source/sdl2/core FILES_SOURCE_SDL2_CORE)
 search_source_files(source/sdl2/gui FILES_SOURCE_SDL2_GUI)
-search_source_files(source/sdl2/gui/debugger FILES_SOURCE_SDL2_GUI_DEBUGGER)
+if(ENABLE_DEBUGGER)
+    search_source_files(source/sdl2/gui/debugger FILES_SOURCE_SDL2_GUI_DEBUGGER)
+    target_compile_definitions(${LIBRARY_NAME} PRIVATE -DENABLE_DEBUGGER)
+else()
+    set(FILES_SOURCE_SDL2_GUI_DEBUGGER "")
+endif()
 
 target_sources(${LIBRARY_NAME} PRIVATE
     ${FILES_SOURCE}
