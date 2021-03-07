@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 //
-// Copyright (c) 2020 Antonio Niño Díaz
+// Copyright (c) 2020-2021 Antonio Niño Díaz
 
 #ifndef DEBUG_H__
 #define DEBUG_H__
@@ -21,4 +21,15 @@
 EXPORT_API void Debug_Screenshot(const char *name);
 #endif
 
+// Custom assert() that works on GBA and PC.
+#ifndef UGBA_DEBUG
+# define UMOD_Assert(expr) ((void)0)
+#else
+# define UMOD_Assert(expr) \
+        ((expr) ? (void)0 : \
+                  UMOD_AssertFunction(__FILE__, __LINE__, __func__, #expr))
+#endif // UGBA_DEBUG
+
+EXPORT_API void UMOD_AssertFunction(const char *file, int line,
+                                    const char *func, const char *expr);
 #endif // DEBUG_H__

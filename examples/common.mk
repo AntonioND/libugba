@@ -36,12 +36,12 @@ AUDIO		:= audio
 #---------------------------------------------------------------------------------
 ARCH	:=	-mthumb -mthumb-interwork
 
+ALL_DEFINES	:=	-D__GBA__ $(DEFINES)
+
 CFLAGS	:=	-g -Wall -O2 \
 		-ffunction-sections -fdata-sections -Wl,--gc-sections \
 		-mcpu=arm7tdmi -mtune=arm7tdmi \
-		$(ARCH)
-
-CFLAGS	+=	$(INCLUDE) -D__GBA__
+		$(ARCH) $(INCLUDE) $(ALL_DEFINES)
 
 CXXFLAGS	:=	$(CFLAGS) -fno-rtti -fno-exceptions
 

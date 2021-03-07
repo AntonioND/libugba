@@ -15,15 +15,17 @@ INCLUDES	:=	include build
 DATA		:=	data
 GRAPHICS	:=	graphics
 
-ARCH	:=	-mthumb -mthumb-interwork
-
 #---------------------------------------------------------------------------------
 # options for code generation
 #---------------------------------------------------------------------------------
+ARCH	:=	-mthumb -mthumb-interwork
+
+DEFINES	:=	-D__GBA__ -DUGBA_DEBUG
+
 CFLAGS	:=	-g -O3 -Wall -Wno-switch -Wno-multichar \
 		-ffunction-sections -fdata-sections \
-		$(ARCH) $(INCLUDE) -D__GBA__
-ASFLAGS	:=	-g -Wa,--warn $(ARCH) -D__GBA__
+		$(ARCH) $(INCLUDE) $(DEFINES)
+ASFLAGS	:=	-g -Wa,--warn $(ARCH) $(DEFINES)
 
 #---------------------------------------------------------------------------------
 ifneq ($(BUILD),$(notdir $(CURDIR)))

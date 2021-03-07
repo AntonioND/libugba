@@ -2,6 +2,14 @@
 #
 # Copyright (c) 2020-2021 Antonio Niño Díaz
 
+function(enable_debug_example)
+
+    get_filename_component(EXECUTABLE_NAME ${CMAKE_CURRENT_SOURCE_DIR} NAME)
+
+    target_compile_definitions(${EXECUTABLE_NAME} PUBLIC -DUGBA_DEBUG)
+
+endfunction()
+
 function(define_example)
 
     # Get name of the folder we are in
