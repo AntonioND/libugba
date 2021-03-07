@@ -16,10 +16,13 @@ Examples
 - Interrupts.
 - DMA 3 Video Capture Mode
 - Graphics: Windows, blending, bg/spr priorities, fade in/out.
-- BIOS services (corner cases in decompress functions).
 - PSG sound channels.
 - WAITCNT.
-- Test to make sure HBL DMA isn't triggered during VBL.
+
+Unit tests
+----------
+
+- BIOS services (corner cases in decompress functions).
 
 Extended library functionality
 ------------------------------
