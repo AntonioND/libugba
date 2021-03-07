@@ -52,9 +52,6 @@ LDFLAGS	=	-g $(ARCH) -Wl,-Map,$(notdir $*.map)
 # any extra libraries we wish to link with the project
 #---------------------------------------------------------------------------------
 LIBS	:= -lugba
-ifneq ($(strip $(AUDIO)),)
-    LIBS += -lumod
-endif
 
 #---------------------------------------------------------------------------------
 # list of directories containing libraries, this must be the top level containing
@@ -180,3 +177,7 @@ endif
 #---------------------------------------------------------------------------------------
 endif
 #---------------------------------------------------------------------------------------
+
+ifneq ($(strip $(AUDIOFILES)),)
+    LIBS += -lumod
+endif
