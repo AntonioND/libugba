@@ -118,7 +118,7 @@ static int lua_screenshot(lua_State *L)
     if (narg == 0)
     {
         Debug_Log("%s()", __func__);
-        Debug_Screenshot(NULL);
+        Debug_Screenshot("screenshot.png");
     }
     else if (narg == 1)
     {
