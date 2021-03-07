@@ -1,6 +1,6 @@
 -- Press some keys, release keys, repeat... and take screenshot
 
-run_frames_and_pause(3)
+run_frames_and_pause(30)
 keys_hold("B", "START")
 
 run_frames_and_pause(3)
