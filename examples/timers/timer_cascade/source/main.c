@@ -30,6 +30,42 @@ void timer_3_handler(void)
     timer_count[3] += 1;
 }
 
+void int_to_str(int value, char *str)
+{
+    if (value >= 100)
+    {
+        int hundreds, tens, units, remainder;
+
+        hundreds = value / 100;
+        remainder = value % 100;
+
+        str[0] = '0' + hundreds;
+
+        tens = remainder / 10;
+        units = remainder % 10;
+
+        str[1] = '0' + tens;
+        str[2] = '0' + units;
+        str[3] = '\0';
+    }
+    else if (value >= 10)
+    {
+        int tens, units;
+
+        tens = value / 10;
+        units = value % 10;
+
+        str[0] = '0' + tens;
+        str[1] = '0' + units;
+        str[2] = '\0';
+    }
+    else
+    {
+        str[0] = '0' + value;
+        str[1] = '\0';
+    }
+}
+
 int main(int argc, char *argv[])
 {
     UGBA_Init(&argc, &argv);
@@ -65,14 +101,17 @@ int main(int argc, char *argv[])
     TM_TimerStartMs(2, 100, 1);
     TM_TimerStartCascade(3, 4, 1);
 
+    CON_Print("0:\n1:\n2:\n3:");
+
     while (1)
     {
-        char str[50];
-        snprintf(str, sizeof(str), "0: %d\n1: %d\n2: %d\n3: %d",
-                 timer_count[0], timer_count[1],
-                 timer_count[2], timer_count[3]);
-        CON_CursorSet(0, 0);
-        CON_Print(str);
+        for (int i = 0; i < 4; i++)
+        {
+            char str[4];
+            int_to_str(timer_count[i], str);
+            CON_CursorSet(3, i);
+            CON_Print(str);
+        }
 
         SWI_VBlankIntrWait();
 
@@ -94,7 +133,7 @@ int main(int argc, char *argv[])
     int range[4][2] = {
         { 9, 10 },
         { 3, 3 },
-        { 19, 21 },
+        { 18, 21 },
         { 4, 5 }
     };
 
