@@ -102,13 +102,20 @@ int main(int argc, char *argv[])
         };
         SWI_ObjAffineSet_OAM(&objsrc[0], MEM_OAM, 2);
 
-        angle++;
+        KEYS_Update();
 
-        scale += scale_v;
+        uint16_t keys_hold = KEYS_Held();
 
-        if (scale < MIN_SCALE)
-            scale_v = SPEED_SCALE;
-        else if (scale > MAX_SCALE)
-            scale_v = -SPEED_SCALE;
+        if (keys_hold & KEY_A)
+        {
+            angle++;
+
+            scale += scale_v;
+
+            if (scale < MIN_SCALE)
+                scale_v = SPEED_SCALE;
+            else if (scale > MAX_SCALE)
+                scale_v = -SPEED_SCALE;
+        }
     }
 }
