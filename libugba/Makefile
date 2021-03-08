@@ -14,13 +14,17 @@ SOURCES		:=	source source/gba
 INCLUDES	:=	include build
 DATA		:=	data
 GRAPHICS	:=	graphics
+ENABLE_DEBUG_CHECKS	:=	1
 
 #---------------------------------------------------------------------------------
 # options for code generation
 #---------------------------------------------------------------------------------
 ARCH	:=	-mthumb -mthumb-interwork
 
-DEFINES	:=	-D__GBA__ -DUGBA_DEBUG
+DEFINES	:=	-D__GBA__
+ifeq ($(ENABLE_DEBUG_CHECKS),1)
+    DEFINES	+=	-DUGBA_DEBUG
+endif
 
 CFLAGS	:=	-g -O3 -Wall -Wno-switch -Wno-multichar \
 		-ffunction-sections -fdata-sections \

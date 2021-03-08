@@ -13,6 +13,13 @@ add_library(${LIBRARY_NAME} SHARED)
 # Link with libraries and check build options
 # -------------------------------------------
 
+# Option to enable debug checks in the library.
+
+option(ENABLE_DEBUG_CHECKS "Enable debug checks in the library." ON)
+if(ENABLE_DEBUG_CHECKS)
+    target_compile_definitions(${LIBRARY_NAME} PRIVATE -DUGBA_DEBUG)
+endif()
+
 # Option to enable the debugger windows. It requires libpng to dump images.
 
 option(ENABLE_DEBUGGER "Support debugger windows (I/O registers, VRAM)" ON)
