@@ -28,6 +28,8 @@ static void verify_copy(void)
 
 int main(int argc, char *argv[])
 {
+    int ret;
+
     UGBA_Init(&argc, &argv);
 
     IRQ_Enable(IRQ_VBLANK);
@@ -51,22 +53,18 @@ int main(int argc, char *argv[])
     verify_copy();
 
     CON_Print("DMA_Copy16(3): ");
-    DMA_Copy16(3, &(random_bin[0]), &(buffer[0]), random_bin_size);
+    ret = DMA_Copy16(3, &(random_bin[0]), &(buffer[0]), random_bin_size);
+    if (ret != 0)
+        CON_Print("[***] ");
     memcpy(&(buffer[0]), &(random_bin[0]), random_bin_size);
     verify_copy();
 
     CON_Print("DMA_Copy32(3): ");
-    DMA_Copy16(3, &(random_bin[0]), &(buffer[0]), random_bin_size);
+    ret = DMA_Copy16(3, &(random_bin[0]), &(buffer[0]), random_bin_size);
+    if (ret != 0)
+        CON_Print("[***] ");
     memcpy(&(buffer[0]), &(random_bin[0]), random_bin_size);
     verify_copy();
-
-#if 0
-    // TODO: This test should fail as DMA0 can't read the ROM. Or not?
-    CON_Print("DMA_Copy32(0): ");
-    DMA_Copy16(0, &(random_bin[0]), &(buffer[0]), random_bin_size);
-    memcpy(&(buffer[0]), &(random_bin[0]), random_bin_size);
-    verify_copy();
-#endif
 
     while (1)
         SWI_VBlankIntrWait();

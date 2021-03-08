@@ -1,16 +1,32 @@
 // SPDX-License-Identifier: MIT
 //
-// Copyright (c) 2020 Antonio Niño Díaz
+// Copyright (c) 2020-2021 Antonio Niño Díaz
 
 #include <ugba/ugba.h>
 
-void DMA_Transfer(int channel, const void *src, void *dst, size_t size,
-                  uint16_t flags)
+int DMA_Transfer(int channel, const void *src, void *dst, size_t size,
+                 uint16_t flags)
 {
     uintptr_t source = (uintptr_t)src;
     uintptr_t dest = (uintptr_t)dst;
     uint16_t nelem = flags & DMACNT_TRANSFER_32_BITS ? (size / 4) : (size / 2);
     uint16_t newflags = flags | DMACNT_DMA_ENABLE;
+
+#ifdef __GBA__
+    // On GBA, DMA channels 0, 1 and 2 don't work when the source address is in
+    // the external cartridge. Unfortunately, this error check can't work on the
+    // SDL2 port, as all code, data and heap don't need to follow any placement
+    // rules like in GBA.
+    if (channel < 3)
+    {
+        // Try to show an error message to the developer.
+        UMOD_Assert(source < MEM_ROM_ADDR_WS0);
+
+        // If asserts are disabled, return an error code at least.
+        if (source >= MEM_ROM_ADDR_WS0)
+            return -1;
+    }
+#endif // __GBA__
 
     if (channel == 0)
     {
@@ -44,9 +60,15 @@ void DMA_Transfer(int channel, const void *src, void *dst, size_t size,
         REG_DMA3CNT_H = newflags;
         UGBA_RegisterUpdatedOffset(OFFSET_DMA3CNT_H);
     }
+    else
+    {
+        return -1;
+    }
+
+    return 0;
 }
 
-void DMA_Stop(int channel)
+int DMA_Stop(int channel)
 {
     if (channel == 0)
     {
@@ -68,46 +90,52 @@ void DMA_Stop(int channel)
         REG_DMA3CNT_H = 0;
         UGBA_RegisterUpdatedOffset(OFFSET_DMA3CNT_H);
     }
+    else
+    {
+        return -1;
+    }
+
+    return 0;
 }
 
-void DMA_Copy16(int channel, const void *src, void *dst, size_t size)
+int DMA_Copy16(int channel, const void *src, void *dst, size_t size)
 {
-    DMA_Transfer(channel, src, dst, size,
-                 DMACNT_DST_INCREMENT | DMACNT_SRC_INCREMENT |
-                 DMACNT_TRANSFER_16_BITS | DMACNT_START_NOW);
+    return DMA_Transfer(channel, src, dst, size,
+                        DMACNT_DST_INCREMENT | DMACNT_SRC_INCREMENT |
+                        DMACNT_TRANSFER_16_BITS | DMACNT_START_NOW);
 }
 
-void DMA_Copy32(int channel, const void *src, void *dst, size_t size)
+int DMA_Copy32(int channel, const void *src, void *dst, size_t size)
 {
-    DMA_Transfer(channel, src, dst, size,
-                 DMACNT_DST_INCREMENT | DMACNT_SRC_INCREMENT |
-                 DMACNT_TRANSFER_32_BITS | DMACNT_START_NOW);
+    return DMA_Transfer(channel, src, dst, size,
+                        DMACNT_DST_INCREMENT | DMACNT_SRC_INCREMENT |
+                        DMACNT_TRANSFER_32_BITS | DMACNT_START_NOW);
 }
 
-void DMA_HBLCopy16(int channel, const void *src, void *dst, size_t size)
+int DMA_HBLCopy16(int channel, const void *src, void *dst, size_t size)
 {
-    DMA_Transfer(channel, src, dst, size,
-                 DMACNT_DST_INCREMENT | DMACNT_SRC_INCREMENT |
-                 DMACNT_TRANSFER_16_BITS | DMACNT_START_HBLANK);
+    return DMA_Transfer(channel, src, dst, size,
+                        DMACNT_DST_INCREMENT | DMACNT_SRC_INCREMENT |
+                        DMACNT_TRANSFER_16_BITS | DMACNT_START_HBLANK);
 }
 
-void DMA_HBLCopy32(int channel, const void *src, void *dst, size_t size)
+int DMA_HBLCopy32(int channel, const void *src, void *dst, size_t size)
 {
-    DMA_Transfer(channel, src, dst, size,
-                 DMACNT_DST_INCREMENT | DMACNT_SRC_INCREMENT |
-                 DMACNT_TRANSFER_32_BITS | DMACNT_START_HBLANK);
+    return DMA_Transfer(channel, src, dst, size,
+                        DMACNT_DST_INCREMENT | DMACNT_SRC_INCREMENT |
+                        DMACNT_TRANSFER_32_BITS | DMACNT_START_HBLANK);
 }
 
-void DMA_VBLCopy16(int channel, const void *src, void *dst, size_t size)
+int DMA_VBLCopy16(int channel, const void *src, void *dst, size_t size)
 {
-    DMA_Transfer(channel, src, dst, size,
-                 DMACNT_DST_INCREMENT | DMACNT_SRC_INCREMENT |
-                 DMACNT_TRANSFER_16_BITS | DMACNT_START_VBLANK);
+    return DMA_Transfer(channel, src, dst, size,
+                        DMACNT_DST_INCREMENT | DMACNT_SRC_INCREMENT |
+                        DMACNT_TRANSFER_16_BITS | DMACNT_START_VBLANK);
 }
 
-void DMA_VBLCopy32(int channel, const void *src, void *dst, size_t size)
+int DMA_VBLCopy32(int channel, const void *src, void *dst, size_t size)
 {
-    DMA_Transfer(channel, src, dst, size,
-                 DMACNT_DST_INCREMENT | DMACNT_SRC_INCREMENT |
-                 DMACNT_TRANSFER_32_BITS | DMACNT_START_VBLANK);
+    return DMA_Transfer(channel, src, dst, size,
+                        DMACNT_DST_INCREMENT | DMACNT_SRC_INCREMENT |
+                        DMACNT_TRANSFER_32_BITS | DMACNT_START_VBLANK);
 }
