@@ -6,7 +6,7 @@ Library
 - BIOS services (IRQ-related services left).
 - Set register WAITCNT to the right values depending on the device.
 - PSG sound channels.
-- Interfaces for bg/spr priorities, blending and fade in/out.
+- Interfaces for blending and fade in/out.
 - Repeat bit should be ignored in immediate DMA mode.
 
 Examples
@@ -14,7 +14,7 @@ Examples
 
 - Interrupts.
 - DMA 3 Video Capture Mode
-- Graphics: Windows, blending, bg/spr priorities, fade in/out.
+- Graphics: Windows, blending, fade in/out.
 - PSG sound channels.
 - WAITCNT.
 
