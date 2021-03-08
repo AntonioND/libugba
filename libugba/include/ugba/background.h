@@ -71,8 +71,8 @@ EXPORT_API void BG_MosaicEnable(int index, int enabled);
 EXPORT_API uint16_t *BG_Mode3FramebufferGet(void);
 
 // Get a pointer to the active or non-active framebuffer (in mode 4).
-EXPORT_API uint8_t *BG_Mode4FramebufferActiveGet(void);
-EXPORT_API uint8_t *BG_Mode4FramebufferBackGet(void);
+EXPORT_API uint16_t *BG_Mode4FramebufferActiveGet(void);
+EXPORT_API uint16_t *BG_Mode4FramebufferBackGet(void);
 
 // Get a pointer to the active or non-active framebuffer (in mode 5).
 EXPORT_API uint16_t *BG_Mode5FramebufferActiveGet(void);

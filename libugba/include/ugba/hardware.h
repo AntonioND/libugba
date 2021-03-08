@@ -67,8 +67,8 @@ static inline uint16_t RGB15(uint16_t r, uint16_t g, uint16_t b)
 
 #define MEM_VRAM_MODE3_FB       ((uint16_t *)MEM_VRAM)
 
-#define MEM_VRAM_MODE4_FRAME0   ((uint8_t *)MEM_VRAM_ADDR)
-#define MEM_VRAM_MODE4_FRAME1   ((uint8_t *)(MEM_VRAM_ADDR + 40 * 1024))
+#define MEM_VRAM_MODE4_FRAME0   ((uint16_t *)MEM_VRAM_ADDR)
+#define MEM_VRAM_MODE4_FRAME1   ((uint16_t *)(MEM_VRAM_ADDR + 40 * 1024))
 
 #define MEM_VRAM_MODE5_FRAME0   ((uint16_t *)MEM_VRAM_ADDR)
 #define MEM_VRAM_MODE5_FRAME1   ((uint16_t *)(MEM_VRAM_ADDR + 40 * 1024))

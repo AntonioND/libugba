@@ -146,7 +146,7 @@ uint16_t *BG_Mode3FramebufferGet(void)
     return MEM_VRAM_MODE3_FB;
 }
 
-uint8_t *BG_Mode4FramebufferActiveGet(void)
+uint16_t *BG_Mode4FramebufferActiveGet(void)
 {
     if (REG_DISPCNT & DISPCNT_USE_BACKBUFFER)
         return MEM_VRAM_MODE4_FRAME1;
@@ -154,7 +154,7 @@ uint8_t *BG_Mode4FramebufferActiveGet(void)
         return MEM_VRAM_MODE4_FRAME0;
 }
 
-uint8_t *BG_Mode4FramebufferBackGet(void)
+uint16_t *BG_Mode4FramebufferBackGet(void)
 {
     if (!(REG_DISPCNT & DISPCNT_USE_BACKBUFFER))
         return MEM_VRAM_MODE4_FRAME1;

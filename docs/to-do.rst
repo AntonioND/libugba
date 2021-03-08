@@ -48,7 +48,4 @@ General
 Bugs
 ----
 
-- ``graphics/mode4_framebuffer``: For some reason, the output of the GBA and the
-  SDL2 port are different. This is likely to be a bug, as they are using the
-  same rendering code.
 - Mosaic effect is broken, it doesn't work like on hardware.

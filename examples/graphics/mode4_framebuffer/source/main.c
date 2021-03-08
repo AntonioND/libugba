@@ -48,27 +48,49 @@ int main(int argc, char *argv[])
         pal[i] = RGB15(r, g, b);
     }
 
-    uint8_t *vram_front = BG_Mode4FramebufferActiveGet();
+    uint16_t *vram_front = BG_Mode4FramebufferActiveGet();
+
+    uint16_t data;
+
+    int data_index = 0;
 
     for (int j = 0; j < GBA_SCREEN_H; j++)
     {
         for (int i = 0; i < GBA_SCREEN_W; i++)
         {
-            uint8_t index = (i + j) & 0x1F;
-
-            vram_front[240 * j + i] = index;
+            uint16_t index = (i + j) & 0x1F;
+            if (data_index == 0)
+            {
+                data = index;
+            }
+            else
+            {
+                data |= index << 8;
+                *vram_front++ = data;
+            }
+            data_index ^= 1;
         }
     }
 
-    uint8_t *vram_back = BG_Mode4FramebufferBackGet();
+    uint16_t *vram_back = BG_Mode4FramebufferBackGet();
+
+    data_index = 0;
 
     for (int j = 0; j < GBA_SCREEN_H; j++)
     {
         for (int i = 0; i < GBA_SCREEN_W; i++)
         {
-            uint8_t index = (i - j) & 0x1F;
-
-            vram_back[240 * j + i] = index;
+            uint16_t index = (i - j) & 0x1F;
+            if (data_index == 0)
+            {
+                data = index;
+            }
+            else
+            {
+                data |= index << 8;
+                *vram_back++ = data;
+            }
+            data_index ^= 1;
         }
     }
 
