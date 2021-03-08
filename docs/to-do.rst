@@ -7,7 +7,6 @@ Library
 - Set register WAITCNT to the right values depending on the device.
 - PSG sound channels.
 - Interfaces for blending and fade in/out.
-- Repeat bit should be ignored in immediate DMA mode.
 
 Examples
 --------
@@ -35,6 +34,7 @@ Extended library functionality
 SDL2 port
 ---------
 
+- Allow setting up screen size.
 - Add helper to configure user input.
 
 General

@@ -27,8 +27,6 @@ static dma_channel DMA[4];
 
 static void GBA_DMACopyNow(dma_channel *dma)
 {
-    // TODO: DMA 3 is the only one that can read from the ROM!
-
     if (dma->copywords)
     {
         for (size_t i = 0; i < dma->num_chunks; i++)
@@ -223,6 +221,8 @@ static void GBA_DMAUpdateState(int channel)
         // Do the copy now
         GBA_DMACopyNow(dma);
         dma->enabled = 0;
+
+        // The repeat bit is ignored in this case
     }
     else
     {
