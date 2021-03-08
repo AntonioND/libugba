@@ -20,7 +20,6 @@ GBA
 Common
 ------
 
-- Interfaces for blending and fade in/out.
 - "Infinite" maps with finite tileset.
 - "Infinite" maps with "infinite" tileset.
 - DLDI.

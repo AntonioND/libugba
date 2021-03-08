@@ -25,13 +25,29 @@ EXPORT_API void DISP_ForcedBlankEnable(int enable);
 // Enable 1D mapping or disable it (and use 2D mapping).
 EXPORT_API void DISP_Object1DMappingEnable(int enable);
 
-// Setup window 0.
-EXPORT_API void WIN_SetupWin0(uint32_t left, uint32_t right,
-                              uint32_t top, uint32_t bottom);
+// Setup window 0 dimensions.
+EXPORT_API void WIN_Win0SizeSet(uint32_t left, uint32_t right,
+                                uint32_t top, uint32_t bottom);
 
-// Setup window 1.
-EXPORT_API void WIN_SetupWin1(uint32_t left, uint32_t right,
-                              uint32_t top, uint32_t bottom);
+// Setup window 1 dimensions.
+EXPORT_API void WIN_Win1SizeSet(uint32_t left, uint32_t right,
+                                uint32_t top, uint32_t bottom);
+
+// Set the layers enabled for window 0.
+EXPORT_API void WIN_Win0LayersSet(uint16_t flags_in, uint16_t flags_out);
+
+// Set the layers enabled for window 1.
+EXPORT_API void WIN_Win1LayersSet(uint16_t flags_in, uint16_t flags_out);
+
+// Setup blending/brightness effect and layers affected.
+EXPORT_API void DISP_BlendSetup(uint16_t layers_1, uint16_t layers_2,
+                                uint16_t effect);
+
+// Set blending factors for BLDCNT_ALPHA_BLENDING.
+EXPORT_API void DISP_BlendAlphaSet(int eva, int evb);
+
+// Set blending factor for BLDCNT_BRIGTHNESS_INCRESE/DECREASE.
+EXPORT_API void DISP_BlendYSet(int evy);
 
 // Setup mosaic for background and objects.
 EXPORT_API void DISP_MosaicSet(uint32_t bgh, uint32_t bgw,

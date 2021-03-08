@@ -625,6 +625,7 @@ EXPORT_API void UGBA_RegisterUpdatedOffset(uint32_t offset);
 #define WIN0_BG3_ENABLE                 (1 << 3)
 #define WIN0_OBJ_ENABLE                 (1 << 4)
 #define WIN0_EFFECT_ENABLE              (1 << 5)
+#define WIN0_ALL_ENABLE                 (0x3F)
 
 #define WIN1_BG0_ENABLE                 (1 << 8)
 #define WIN1_BG1_ENABLE                 (1 << 9)
@@ -632,6 +633,7 @@ EXPORT_API void UGBA_RegisterUpdatedOffset(uint32_t offset);
 #define WIN1_BG3_ENABLE                 (1 << 11)
 #define WIN1_OBJ_ENABLE                 (1 << 12)
 #define WIN1_EFFECT_ENABLE              (1 << 13)
+#define WIN1_ALL_ENABLE                 (0x3F00)
 
 // MOSAIC
 
