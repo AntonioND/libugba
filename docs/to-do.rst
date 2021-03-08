@@ -30,7 +30,7 @@ Examples
 
 - Interrupts.
 - DMA 3 Video Capture Mode
-- Graphics: Windows, blending, fade in/out.
+- Graphics: OBJ window, blending, fade in/out.
 - PSG sound channels.
 - WAITCNT.
 
