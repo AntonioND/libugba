@@ -32,8 +32,6 @@ static void verify_copy(void)
 
 int main(int argc, char *argv[])
 {
-    int ret;
-
     UGBA_Init(&argc, &argv);
 
     IRQ_Enable(IRQ_VBLANK);
