@@ -19,6 +19,10 @@ int DMA_Transfer(int channel, const void *src, void *dst, size_t size,
     // rules like in GBA.
     if (channel < 3)
     {
+        // This directive helps with unit testing. Every build system deals
+        // differently with relative vs absolute paths. This makes this assert
+        // always print the same error message.
+#line 26 "source/dma.c"
         // Try to show an error message to the developer.
         UMOD_Assert(source < MEM_ROM_ADDR_WS0);
 

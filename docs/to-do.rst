@@ -7,7 +7,6 @@ Library
 - Set register WAITCNT to the right values depending on the device.
 - PSG sound channels.
 - Interfaces for bg/spr priorities, blending and fade in/out.
-- Add warnings for trying to copy from ROM with DMA different than 3.
 - Repeat bit should be ignored in immediate DMA mode.
 
 Examples
