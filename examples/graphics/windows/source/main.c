@@ -2,7 +2,7 @@
 //
 // Copyright (c) 2020-2021 Antonio Niño Díaz
 
-// Example of how to set priorities to backgrounds and sprites.
+// Example of how to setup and use all windows.
 
 #include <ugba/ugba.h>
 
@@ -13,6 +13,9 @@
 // This defines the tile index where the data of the ball is loaded in tile VRAM
 #define BALL_RED_TILES_BASE         (16)
 #define BALL_GREEN_TILES_BASE       (64)
+
+// OAM index of the sprite window
+#define WINDOW_BALL_INDEX           (64)
 
 // This is the palette index to be used for the sprite. There are 16 palettes of
 // 16 colors each available.
@@ -132,18 +135,46 @@ int main(int argc, char *argv[])
     //     https://www.coranac.com/tonc/text/regobj.htm#sec-tiles
     DISP_Object1DMappingEnable(1);
 
+    // Setup object to be used as object window
+    // ----------------------------------------
+
+    int x = 20, y = 20;
+
+    OBJ_RegularInit(WINDOW_BALL_INDEX, x, y, OBJ_SIZE_32x32, OBJ_16_COLORS,
+                    0, BALL_GREEN_TILES_BASE); // The palette doesn't matter
+    OBJ_ModeSet(WINDOW_BALL_INDEX, OBJ_MODE_WINDOW);
+
     // Setup windows
     // -------------
 
-    WIN_Win0SizeSet(50, 190, 50, 110);
-    WIN_Win1SizeSet(10, 230, 10, 150);
+    WIN_Win0SizeSet(60, 180, 60, 100);
+    WIN_Win1SizeSet(40, 200, 40, 120);
 
-    WIN_Win0LayersSet(WININ0_BG2_ENABLE | WININ0_OBJ_ENABLE);
+    WIN_Win0LayersSet(WININ0_BG2_ENABLE);
     WIN_Win1LayersSet(WININ1_BG0_ENABLE | WININ1_OBJ_ENABLE);
+    WIN_WinObjLayersSet(WINOBJ_OBJ_ENABLE);
     WIN_WinOutLayersSet(0);
 
-    DISP_WindowsEnable(1, 1, 0);
+    DISP_WindowsEnable(1, 1, 1);
 
     while (1)
+    {
         SWI_VBlankIntrWait();
+
+        KEYS_Update();
+
+        uint16_t keys = KEYS_Held();
+
+        if (keys & KEY_UP)
+            y--;
+        else if (keys & KEY_DOWN)
+            y++;
+
+        if (keys & KEY_RIGHT)
+            x++;
+        else if (keys & KEY_LEFT)
+            x--;
+
+        OBJ_PositionSet(WINDOW_BALL_INDEX, x, y);
+    }
 }
