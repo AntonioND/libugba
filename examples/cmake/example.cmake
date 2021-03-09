@@ -201,6 +201,7 @@ function(unittest_two_screenshots)
             COMMAND ${CMAKE_COMMAND}
                         -DCMD1=${CMD1}
                         -DCMD2=${CMD2}
+                        -DCMD3=${CMD3}
                         -P ${CMAKE_SOURCE_DIR}/examples/cmake/runcommands.cmake
             WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
         )
