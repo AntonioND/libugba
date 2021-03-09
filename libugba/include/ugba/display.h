@@ -34,10 +34,16 @@ EXPORT_API void WIN_Win1SizeSet(uint32_t left, uint32_t right,
                                 uint32_t top, uint32_t bottom);
 
 // Set the layers enabled for window 0.
-EXPORT_API void WIN_Win0LayersSet(uint16_t flags_in, uint16_t flags_out);
+EXPORT_API void WIN_Win0LayersSet(uint16_t flags);
 
-// Set the layers enabled for window 1.
-EXPORT_API void WIN_Win1LayersSet(uint16_t flags_in, uint16_t flags_out);
+// Set the layers enabled for window 1 and outside of window 0.
+EXPORT_API void WIN_Win1LayersSet(uint16_t flags);
+
+// Set the layers enabled outside of windows 0 and 1.
+EXPORT_API void WIN_WinOutLayersSet(uint16_t flags);
+
+// Set the layers enabled inside object windows.
+EXPORT_API void WIN_WinObjLayersSet(uint16_t flags);
 
 // Setup blending/brightness effect and layers affected.
 EXPORT_API void DISP_BlendSetup(uint16_t layers_1, uint16_t layers_2,

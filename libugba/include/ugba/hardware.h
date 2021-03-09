@@ -617,23 +617,41 @@ EXPORT_API void UGBA_RegisterUpdatedOffset(uint32_t offset);
 
 #define WINV_SET(top, bottom)   ((((top) & 0xFF) << 8) | ((bottom) & 0xFF))
 
-// WININ, WINOUT
+// WININ
 
-#define WIN0_BG0_ENABLE                 (1 << 0)
-#define WIN0_BG1_ENABLE                 (1 << 1)
-#define WIN0_BG2_ENABLE                 (1 << 2)
-#define WIN0_BG3_ENABLE                 (1 << 3)
-#define WIN0_OBJ_ENABLE                 (1 << 4)
-#define WIN0_EFFECT_ENABLE              (1 << 5)
-#define WIN0_ALL_ENABLE                 (0x3F)
+#define WININ0_BG0_ENABLE               (1 << 0)
+#define WININ0_BG1_ENABLE               (1 << 1)
+#define WININ0_BG2_ENABLE               (1 << 2)
+#define WININ0_BG3_ENABLE               (1 << 3)
+#define WININ0_OBJ_ENABLE               (1 << 4)
+#define WININ0_EFFECT_ENABLE            (1 << 5)
+#define WININ0_ALL_ENABLE               (0x3F)
 
-#define WIN1_BG0_ENABLE                 (1 << 8)
-#define WIN1_BG1_ENABLE                 (1 << 9)
-#define WIN1_BG2_ENABLE                 (1 << 10)
-#define WIN1_BG3_ENABLE                 (1 << 11)
-#define WIN1_OBJ_ENABLE                 (1 << 12)
-#define WIN1_EFFECT_ENABLE              (1 << 13)
-#define WIN1_ALL_ENABLE                 (0x3F00)
+#define WININ1_BG0_ENABLE               (1 << 8)
+#define WININ1_BG1_ENABLE               (1 << 9)
+#define WININ1_BG2_ENABLE               (1 << 10)
+#define WININ1_BG3_ENABLE               (1 << 11)
+#define WININ1_OBJ_ENABLE               (1 << 12)
+#define WININ1_EFFECT_ENABLE            (1 << 13)
+#define WININ1_ALL_ENABLE               (0x3F00)
+
+// WINOUT
+
+#define WINOUT_BG0_ENABLE               (1 << 0)
+#define WINOUT_BG1_ENABLE               (1 << 1)
+#define WINOUT_BG2_ENABLE               (1 << 2)
+#define WINOUT_BG3_ENABLE               (1 << 3)
+#define WINOUT_OBJ_ENABLE               (1 << 4)
+#define WINOUT_EFFECT_ENABLE            (1 << 5)
+#define WINOUT_ALL_ENABLE               (0x3F)
+
+#define WINOBJ_BG0_ENABLE               (1 << 8)
+#define WINOBJ_BG1_ENABLE               (1 << 9)
+#define WINOBJ_BG2_ENABLE               (1 << 10)
+#define WINOBJ_BG3_ENABLE               (1 << 11)
+#define WINOBJ_OBJ_ENABLE               (1 << 12)
+#define WINOBJ_EFFECT_ENABLE            (1 << 13)
+#define WINOBJ_ALL_ENABLE               (0x3F00)
 
 // MOSAIC
 

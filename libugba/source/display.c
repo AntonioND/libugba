@@ -80,22 +80,28 @@ void WIN_Win1SizeSet(uint32_t left, uint32_t right, uint32_t top, uint32_t botto
     REG_WIN1V = WINV_SET(top, bottom);
 }
 
-void WIN_Win0LayersSet(uint16_t flags_in, uint16_t flags_out)
+void WIN_Win0LayersSet(uint16_t flags)
 {
-    REG_WININ &= ~WIN0_ALL_ENABLE;
-    REG_WININ |= flags_in;
-
-    REG_WINOUT &= ~WIN0_ALL_ENABLE;
-    REG_WINOUT |= flags_out;
+    REG_WININ &= ~WININ0_ALL_ENABLE;
+    REG_WININ |= flags;
 }
 
-void WIN_Win1LayersSet(uint16_t flags_in, uint16_t flags_out)
+void WIN_Win1LayersSet(uint16_t flags)
 {
-    REG_WININ &= ~WIN1_ALL_ENABLE;
-    REG_WININ |= flags_in;
+    REG_WININ &= ~WININ1_ALL_ENABLE;
+    REG_WININ |= flags;
+}
 
-    REG_WINOUT &= ~WIN1_ALL_ENABLE;
-    REG_WINOUT |= flags_out;
+void WIN_WinOutLayersSet(uint16_t flags)
+{
+    REG_WINOUT &= ~WINOUT_ALL_ENABLE;
+    REG_WINOUT |= flags;
+}
+
+void WIN_WinObjLayersSet(uint16_t flags)
+{
+    REG_WINOUT &= ~WINOBJ_ALL_ENABLE;
+    REG_WINOUT |= flags;
 }
 
 void DISP_BlendSetup(uint16_t layers_1, uint16_t layers_2, uint16_t effect)

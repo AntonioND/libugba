@@ -138,8 +138,9 @@ int main(int argc, char *argv[])
     WIN_Win0SizeSet(50, 190, 50, 110);
     WIN_Win1SizeSet(10, 230, 10, 150);
 
-    WIN_Win0LayersSet(WIN0_BG2_ENABLE | WIN0_OBJ_ENABLE, 0);
-    WIN_Win1LayersSet(WIN1_BG0_ENABLE | WIN1_OBJ_ENABLE, 0);
+    WIN_Win0LayersSet(WININ0_BG2_ENABLE | WININ0_OBJ_ENABLE);
+    WIN_Win1LayersSet(WININ1_BG0_ENABLE | WININ1_OBJ_ENABLE);
+    WIN_WinOutLayersSet(0);
 
     DISP_WindowsEnable(1, 1, 0);
 
