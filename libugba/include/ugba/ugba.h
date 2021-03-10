@@ -37,6 +37,11 @@ EXPORT_API void UGBA_Init(int *argc, char **argv[]);
 EXPORT_API void UGBA_InitHeadless(int *argc, char **argv[]);
 #endif
 
+// This function tries to detect specific flashcarts with special needs and
+// returns a value to be written to REG_WAITCNT based on the flashcart. The best
+// possible returned value is WAITCNT_OPTIMIZED.
+EXPORT_API uint16_t UGBA_FlashcartOptimizedWaitstates(void);
+
 #ifdef __cplusplus
 }
 #endif
