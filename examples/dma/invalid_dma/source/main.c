@@ -32,8 +32,6 @@ static void verify_copy(void)
 
 int main(int argc, char *argv[])
 {
-    int ret;
-
     UGBA_Init(&argc, &argv);
 
     IRQ_Enable(IRQ_VBLANK);
@@ -43,6 +41,7 @@ int main(int argc, char *argv[])
     CON_InitDefault();
 
 #ifdef __GBA__
+    int ret;
 
     // The following tests should fail as only DMA3 can read the ROM. However,
     // the tests will pass on PC because it has no notion of ROM/EWRAM/IWRAM.
