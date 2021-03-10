@@ -19,6 +19,7 @@ GBA
 Common
 ------
 
+- PSG and serial registers definitions.
 - "Infinite" maps with finite tileset.
 - "Infinite" maps with "infinite" tileset.
 - DLDI.
