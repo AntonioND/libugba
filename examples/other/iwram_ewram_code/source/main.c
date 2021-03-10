@@ -6,6 +6,13 @@
 // than the same code in EWRAM. It also tests that a function in ARM is slower
 // than in Thumb because of being placed in EWRAM. EWRAM has a 16-bit bus, so
 // Thumb instructions can be read in one go, ARM instructions need two reads.
+//
+// This test doesn't work in the SDL2 port because there is no IWRAM, or EWRAM,
+// and code can't be built as ARM or Thumb either.
+//
+// It is simply built to make sure that the SDL2 port ignores the defines used to
+// place code in different locations works, as well as the macros to force code
+// to be compiled as ARM or Thumb.
 
 #include <inttypes.h>
 #include <stdio.h>
