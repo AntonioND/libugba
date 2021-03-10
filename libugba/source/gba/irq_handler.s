@@ -138,25 +138,32 @@ interrupt_found:
     // r3 = Vector to jump to
 
     // Clear IME so that we don't get any nested interrupt during the handler of
-    // the current one. It isn't needed to save the old value because there is
-    // no way to reach the global interrupt handler unless IME = 1.
+    // the current one. At the same time, the old value is preserved so that it
+    // can be restored after the end of the interrupt handler. Note that it is
+    // safe to access IME in 32-bit accesses.
     add     r2, r0, #(OFFSET_IME & 0xFF00)
     orr     r2, r2, #(OFFSET_IME & 0xFF)
     mov     r1, #0
-    strh    r1, [r2]
+    swp     r1, r1, [r2]
 
-    // Save r0, lr and spsr for later
-    mrs     r1, spsr
-    stmfd   sp!, {r0-r1, lr} // MEM_IO_ADDR, spsr, lr
+    // Get current spsr
+    mrs     r2, spsr
+
+    // Push old IME, spsr and lr
+    stmfd   sp!, {r1-r2, lr}
 
     .equ    MODE_IRQ, 0x12
     .equ    MODE_SYSTEM, 0x1F
     .equ    MODE_MASK, 0x1F
 
+    .equ    FLAG_IRQ_DISABLE, 1 << 7
+
     // Set CPU mode to system (like user, but privileged, so we can go back to
-    // mode IRQ later)
+    // mode IRQ later). Re-enable the master IRQ bit in CPSR so that the
+    // interrupt handler can re-enable interrupts by setting IME to 1.
     mrs     r2, cpsr
-    //bic     r2, r2, #MODE_MASK // Not needed for MODE_SYSTEM
+    //bic   r2, r2, #MODE_MASK // Not needed for MODE_SYSTEM
+    bic     r2, r2, #FLAG_IRQ_DISABLE
     orr     r2, r2, #MODE_SYSTEM
     msr     cpsr, r2
 
@@ -168,18 +175,24 @@ interrupt_found:
 
     pop     {lr}
 
-    // Set CPU mode to IRQ
+    // Disable interrupts while switching modes
+    mov     r0, #MEM_IO_ADDR
+    str     r0, [r0, #OFFSET_IME]
+
+    // Set CPU mode to IRQ. Disable interrupts so that setting IME to 1
+    // afterwards doesn't let the CPU jump to the interrupt handler.
     mrs     r2, cpsr
     bic     r2, r2, #MODE_MASK
-    orr     r2, r2, #MODE_IRQ
+    orr     r2, r2, #(MODE_IRQ | FLAG_IRQ_DISABLE)
     msr     cpsr, r2
 
-    // Restore preserved registers
-    ldmfd   sp!, {r0-r1, lr} // MEM_IO_ADDR, spsr, lr
-    msr     spsr, r1
+    // Pop old IME, spsr and lr
+    ldmfd   sp!, {r1-r2, lr}
 
-    // Re-enable IME
-    mov     r1, #1
+    // Restore spsr
+    msr     spsr, r2
+
+    // Restore old IME
     str     r1, [r0, #OFFSET_IME]
 
     bx      lr

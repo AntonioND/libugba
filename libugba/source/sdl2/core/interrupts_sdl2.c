@@ -69,6 +69,8 @@ void IRQ_Internal_CallHandler(irq_index index)
     if ((REG_IE & (1 << index)) == 0)
         return;
 
+    uint16_t old_ime = REG_IME;
+
     if (index == IRQ_VBLANK)
     {
         if ((REG_DISPSTAT & DISPSTAT_VBLANK_IRQ_ENABLE) == 0)
@@ -88,4 +90,6 @@ void IRQ_Internal_CallHandler(irq_index index)
     irq_vector vector = IRQ_VectorTable[index];
     if (vector)
         vector();
+
+    REG_IME = old_ime;
 }

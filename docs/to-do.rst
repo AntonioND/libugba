@@ -15,7 +15,6 @@ GBA
 ---
 
 - Set register WAITCNT to the right values depending on the device.
-- Nested IRQ handling.
 
 Common
 ------
