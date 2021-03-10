@@ -11,11 +11,6 @@ SDL2
 - BIOS services (IRQ-related services left).
 - PSG sound channels.
 
-GBA
----
-
-- Set register WAITCNT to the right values depending on the device.
-
 Common
 ------
 
