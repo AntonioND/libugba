@@ -26,7 +26,6 @@ Examples
 - Interrupts.
 - DMA 3 Video Capture Mode
 - PSG sound channels.
-- WAITCNT.
 
 Unit tests
 ==========
