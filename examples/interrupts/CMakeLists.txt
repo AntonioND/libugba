@@ -4,4 +4,6 @@
 
 add_subdirectory(hblank_irq_handler)
 add_subdirectory(hblank_vcount_lines)
+add_subdirectory(multiple_irqs)
+add_subdirectory(nested_irqs)
 add_subdirectory(vcount_irq_handler)
