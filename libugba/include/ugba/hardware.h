@@ -420,7 +420,7 @@ typedef struct {
 #define REG_SOUNDCNT_H      REG_16(OFFSET_SOUNDCNT_H)
 #define REG_SOUNDCNT_X      REG_16(OFFSET_SOUNDCNT_X)
 #define REG_SOUNDBIAS       REG_16(OFFSET_SOUNDBIAS)
-#define REG_WAVE_RAM        PTR_REG_8(OFFSET_WAVE_RAM)
+#define REG_WAVE_RAM        PTR_REG_16(OFFSET_WAVE_RAM)
 #define REG_FIFO_A          PTR_REG_32(OFFSET_FIFO_A)
 #define REG_FIFO_B          PTR_REG_32(OFFSET_FIFO_B)
 
@@ -691,18 +691,116 @@ EXPORT_API void UGBA_RegisterUpdatedOffset(uint32_t offset);
 // Sound Registers
 // ---------------
 
-#if 0
-  4000060h  2  R/W  SOUND1CNT_L Channel 1 Sweep register       (NR10)
-  4000062h  2  R/W  SOUND1CNT_H Channel 1 Duty/Length/Envelope (NR11, NR12)
-  4000064h  2  R/W  SOUND1CNT_X Channel 1 Frequency/Control    (NR13, NR14)
-  4000068h  2  R/W  SOUND2CNT_L Channel 2 Duty/Length/Envelope (NR21, NR22)
-  400006Ch  2  R/W  SOUND2CNT_H Channel 2 Frequency/Control    (NR23, NR24)
-  4000070h  2  R/W  SOUND3CNT_L Channel 3 Stop/Wave RAM select (NR30)
-  4000072h  2  R/W  SOUND3CNT_H Channel 3 Length/Volume        (NR31, NR32)
-  4000074h  2  R/W  SOUND3CNT_X Channel 3 Frequency/Control    (NR33, NR34)
-  4000078h  2  R/W  SOUND4CNT_L Channel 4 Length/Envelope      (NR41, NR42)
-  400007Ch  2  R/W  SOUND4CNT_H Channel 4 Frequency/Control    (NR43, NR44)
-#endif
+// SOUND1CNT_L (NR10)
+
+#define SOUND1CNT_L_SWEEP_SHIFT(n)      ((n) & 0x7)
+
+#define SOUND1CNT_L_SWEEP_DIR_INC       (0 << 3)
+#define SOUND1CNT_L_SWEEP_DIR_DEC       (1 << 3)
+
+#define SOUND1CNT_L_SWEEP_TIME(n)       (((n) & 0x7) << 4)
+
+// SOUND1CNT_H (NR11, NR12)
+
+#define SOUND1CNT_H_LENGTH(n)           ((n) & 0x3F)
+
+#define SOUND1CNT_H_WAVE_DUTY(n)        (((n) & 0x3) << 6)
+#define SOUND1CNT_H_WAVE_DUTY_12        (0 << 6)
+#define SOUND1CNT_H_WAVE_DUTY_25        (1 << 6)
+#define SOUND1CNT_H_WAVE_DUTY_50        (2 << 6)
+#define SOUND1CNT_H_WAVE_DUTY_75        (3 << 6)
+
+#define SOUND1CNT_H_ENV_STEP_TIME(n)    (((n) & 0x7) << 8)
+
+#define SOUND1CNT_H_ENV_DIR_DEC         (0 << 11)
+#define SOUND1CNT_H_ENV_DIR_INC         (1 << 11)
+
+#define SOUND1CNT_H_ENV_VOLUME(n)       (((n) & 0xF) << 12)
+
+// SOUND1CNT_X (NR13, NR14)
+
+#define SOUND1CNT_X_FREQUENCY(n)        ((n) & 0x7FF)
+
+#define SOUND1CNT_X_ONE_SHOT            (1 << 14)
+
+#define SOUND1CNT_X_RESTART             (1 << 15)
+
+// SOUND2CNT_L (NR21, NR22)
+
+#define SOUND2CNT_L_LENGTH(n)           ((n) & 0x3F)
+
+#define SOUND2CNT_L_WAVE_DUTY(n)        (((n) & 0x3) << 6)
+#define SOUND2CNT_L_WAVE_DUTY_12        (0 << 6)
+#define SOUND2CNT_L_WAVE_DUTY_25        (1 << 6)
+#define SOUND2CNT_L_WAVE_DUTY_50        (2 << 6)
+#define SOUND2CNT_L_WAVE_DUTY_75        (3 << 6)
+
+#define SOUND2CNT_L_ENV_STEP_TIME(n)    (((n) & 0x7) << 8)
+
+#define SOUND2CNT_L_ENV_DIR_DEC         (0 << 11)
+#define SOUND2CNT_L_ENV_DIR_INC         (1 << 11)
+
+#define SOUND2CNT_L_ENV_VOLUME(n)       (((n) & 0xF) << 12)
+
+// SOUND2CNT_H (NR23, NR24)
+
+#define SOUND2CNT_H_FREQUENCY(n)        ((n) & 0x7FF)
+
+#define SOUND2CNT_H_ONE_SHOT            (1 << 14)
+
+#define SOUND2CNT_H_RESTART             (1 << 15)
+
+// SOUND3CNT_L (NR30)
+
+#define SOUND3CNT_L_SIZE_32             (0 << 5)
+#define SOUND3CNT_L_SIZE_64             (1 << 5)
+
+#define SOUND3CNT_L_BANK(n)             (((n) & 1) << 6)
+
+#define SOUND3CNT_L_ENABLE              (1 << 7)
+#define SOUND3CNT_L_DISABLE             (0 << 7)
+
+// SOUND3CNT_H (NR31, NR32)
+
+#define SOUND3CNT_H_LENGTH(n)           ((n) & 0xFF)
+
+#define SOUND3CNT_H_VOLUME_0            (0x0 << 13)
+#define SOUND3CNT_H_VOLUME_25           (0x3 << 13)
+#define SOUND3CNT_H_VOLUME_50           (0x2 << 13)
+#define SOUND3CNT_H_VOLUME_75           (0x4 << 13)
+#define SOUND3CNT_H_VOLUME_100          (0x1 << 13)
+
+// SOUND3CNT_X (NR33, NR34)
+
+#define SOUND3CNT_X_SAMPLE_RATE(n)      ((n) & 0x7FF)
+
+#define SOUND3CNT_X_ONE_SHOT            (1 << 14)
+
+#define SOUND3CNT_X_RESTART             (1 << 15)
+
+// SOUND4CNT_L (NR41, NR42)
+
+#define SOUND4CNT_L_LENGTH(n)           ((n) & 0x3F)
+
+#define SOUND4CNT_L_ENV_STEP_TIME(n)    (((n) & 0x7) << 8)
+
+#define SOUND4CNT_L_ENV_DIR_DEC         (0 << 11)
+#define SOUND4CNT_L_ENV_DIR_INC         (1 << 11)
+
+#define SOUND4CNT_L_ENV_VOLUME(n)       (((n) & 0xF) << 12)
+
+// SOUND4CNT_H (NR43, NR44)
+
+#define SOUND4CNT_H_DIV_RATIO(n)        ((n) & 0x3)
+
+#define SOUND4CNT_H_WIDTH_15_BITS       (0 << 3)
+#define SOUND4CNT_H_WIDTH_7_BITS        (1 << 3)
+
+#define SOUND4CNT_H_FREQUENCY(n)        (((n) & 0xF) << 4)
+
+#define SOUND4CNT_H_ONE_SHOT            (1 << 14)
+
+#define SOUND4CNT_H_RESTART             (1 << 15)
 
 // SOUNDCNT_L
 

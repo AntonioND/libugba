@@ -14,7 +14,7 @@ SDL2
 Common
 ------
 
-- PSG and serial registers definitions.
+- Definitions for serial registers.
 - "Infinite" maps with finite tileset.
 - "Infinite" maps with "infinite" tileset.
 - DLDI.
