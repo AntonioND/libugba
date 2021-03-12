@@ -6,7 +6,7 @@ SDL2
 
 - Allow setting up screen size.
 - Add helper to configure user input.
-- Interrupts: SERIAL, DMA 0-3 and GAMEPAK are missing.
+- Interrupts: SERIAL and GAMEPAK are missing.
 - DMA 3 Video Capture Mode
 - BIOS services (IRQ-related services left).
 - PSG sound channels.

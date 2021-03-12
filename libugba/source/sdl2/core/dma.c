@@ -2,6 +2,7 @@
 //
 // Copyright (c) 2011-2015, 2019-2021 Antonio Niño Díaz
 
+#include <assert.h>
 #include <string.h>
 
 #include <ugba/ugba.h>
@@ -222,6 +223,12 @@ static void GBA_DMAUpdateState(int channel)
         GBA_DMACopyNow(dma);
         dma->enabled = 0;
 
+        // Call interrupt handler
+        static_assert(IRQ_DMA1 == IRQ_DMA0 + 1, "Invalid constants");
+        static_assert(IRQ_DMA2 == IRQ_DMA1 + 1, "Invalid constants");
+        static_assert(IRQ_DMA3 == IRQ_DMA2 + 1, "Invalid constants");
+        IRQ_Internal_CallHandler(IRQ_DMA0 + channel);
+
         // The repeat bit is ignored in this case
     }
     else
@@ -286,6 +293,12 @@ void GBA_DMAHandleHBL(void)
 
         if (dma->repeat == 0)
             GBA_DMAStop(i);
+
+        // Call interrupt handler
+        static_assert(IRQ_DMA1 == IRQ_DMA0 + 1, "Invalid constants");
+        static_assert(IRQ_DMA2 == IRQ_DMA1 + 1, "Invalid constants");
+        static_assert(IRQ_DMA3 == IRQ_DMA2 + 1, "Invalid constants");
+        IRQ_Internal_CallHandler(IRQ_DMA0 + i);
     }
 }
 
@@ -305,5 +318,11 @@ void GBA_DMAHandleVBL(void)
 
         if (dma->repeat == 0)
             GBA_DMAStop(i);
+
+        // Call interrupt handler
+        static_assert(IRQ_DMA1 == IRQ_DMA0 + 1, "Invalid constants");
+        static_assert(IRQ_DMA2 == IRQ_DMA1 + 1, "Invalid constants");
+        static_assert(IRQ_DMA3 == IRQ_DMA2 + 1, "Invalid constants");
+        IRQ_Internal_CallHandler(IRQ_DMA0 + i);
     }
 }
