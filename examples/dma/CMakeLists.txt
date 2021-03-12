@@ -3,6 +3,7 @@
 # Copyright (c) 2020-2021 Antonio Niño Díaz
 
 add_subdirectory(basic_dma)
+add_subdirectory(dma_interrupts)
 add_subdirectory(hblank_dma_repeat)
 add_subdirectory(hblank_no_during_vblank)
 add_subdirectory(invalid_dma)
