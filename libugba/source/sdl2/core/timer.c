@@ -14,16 +14,14 @@ static uint16_t curr_value[4];
 
 static Uint32 Timer_3_Callback(Uint32 interval, UNUSED void *param)
 {
-    if (REG_IME == 1)
-        IRQ_Internal_CallHandler(IRQ_TIMER3);
+    IRQ_Internal_CallHandler(IRQ_TIMER3);
 
     return interval;
 }
 
 static Uint32 Timer_2_Callback(Uint32 interval, UNUSED void *param)
 {
-    if (REG_IME == 1)
-        IRQ_Internal_CallHandler(IRQ_TIMER2);
+    IRQ_Internal_CallHandler(IRQ_TIMER2);
 
     if (REG_TM3CNT_H & TMCNT_CASCADE)
     {
@@ -40,8 +38,7 @@ static Uint32 Timer_2_Callback(Uint32 interval, UNUSED void *param)
 
 static Uint32 Timer_1_Callback(Uint32 interval, UNUSED void *param)
 {
-    if (REG_IME == 1)
-        IRQ_Internal_CallHandler(IRQ_TIMER1);
+    IRQ_Internal_CallHandler(IRQ_TIMER1);
 
     if (REG_TM2CNT_H & TMCNT_CASCADE)
     {
@@ -58,8 +55,7 @@ static Uint32 Timer_1_Callback(Uint32 interval, UNUSED void *param)
 
 static Uint32 Timer_0_Callback(Uint32 interval, UNUSED void *param)
 {
-    if (REG_IME == 1)
-        IRQ_Internal_CallHandler(IRQ_TIMER0);
+    IRQ_Internal_CallHandler(IRQ_TIMER0);
 
     if (REG_TM1CNT_H & TMCNT_CASCADE)
     {
