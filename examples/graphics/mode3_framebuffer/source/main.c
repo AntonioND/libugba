@@ -75,6 +75,13 @@ int main(int argc, char *argv[])
         else if (keys & KEY_R)
             angle--;
 
+        if (keys & KEY_START)
+        {
+            angle = 30;
+            x = 30;
+            y = 30;
+        }
+
         update_affine_matrix(x, y, angle);
     }
 }

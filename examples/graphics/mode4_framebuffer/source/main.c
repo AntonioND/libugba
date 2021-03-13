@@ -127,6 +127,14 @@ int main(int argc, char *argv[])
         if (keys_pressed & KEY_A)
             BG_FramebufferSwap();
 
+        if (keys & KEY_START)
+        {
+            BG_FramebufferSet(1);
+            angle = 30;
+            x = 30;
+            y = 30;
+        }
+
         update_affine_matrix(x, y, angle);
     }
 }

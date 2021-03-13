@@ -78,6 +78,14 @@ int main(int argc, char *argv[])
         else if (keys & KEY_B)
             BG_AffineWrapEnable(2, 0);
 
+        if (keys & KEY_START)
+        {
+            BG_AffineWrapEnable(2, 1);
+            angle = 50;
+            x = 130;
+            y = 25;
+        }
+
         bg_affine_src bg_src = {
             x << 8, y << 8,
             0, 0,
