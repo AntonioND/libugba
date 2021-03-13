@@ -7,6 +7,8 @@
 
 #include <ugba/ugba.h>
 
+#include "interrupts.h"
+
 #include "../debug_utils.h"
 
 typedef struct {
