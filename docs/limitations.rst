@@ -75,14 +75,22 @@ UGBA limitations
 
    - TIMER: The interrupt handlers are passed as callbacks to the interfaces in
      SDL to create timers. This means that, unlike the other interrupts, in the
-     PC port this one happens in parallel to the game logic. In the GBA, the CPU
-     would switch to interrupt handling mode and return to the main program
-     thread after it is done. Note that the resolution of timers in SDL is 1 ms,
-     it is not possible to setup a timer that triggers an interrupt more
-     frequently. Also note that the OS may get in the way and the interrupt
-     handler may be called fewer times than expected.
+     PC port this one happens in parallel to the game logic.
+
+     In the GBA, the CPU would switch to interrupt handling mode and return to
+     the main program thread after it is done. Note that the resolution of
+     timers in SDL is 1 ms, it is not possible to setup a timer that triggers an
+     interrupt more frequently. Also note that the OS may get in the way and the
+     interrupt handler may be called fewer times than expected.
+
+     Additionally, all SDL timers are handled in the same thread. This means
+     that a timer can't interrupt the interrupt handler of another timer. It is
+     still possible to interrupt VBL or HBL handlers as they run in the main
+     thread.
 
    - KEYPAD: On PC, the keypad state is refreshed inside SWI_VBlankIntrWait(),
      so that's when the interrupt handler may be called.
 
-   - SERIAL, DMA, GAMEPAK: Not supported yet.
+   - DMA: Works as expected.
+
+   - SERIAL, GAMEPAK: Not supported yet.
