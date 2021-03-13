@@ -13,12 +13,13 @@ void IRQ_Init(void)
     for (int i = 0; i < IRQ_NUMBER; i ++)
         IRQ_VectorTable[i] = NULL;
 
-    REG_IME = 1;
     REG_IE = 0;
 
     // The emulated register IF doesn't work like in the GBA. In the GBA, when a
     // bit is written, it is set to 0.
     REG_IF = 0;
+
+    REG_IME = 1;
 }
 
 void IRQ_SetHandler(irq_index index, irq_vector function)
