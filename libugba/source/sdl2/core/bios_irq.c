@@ -166,13 +166,48 @@ void SWI_Halt(void)
     do_scanline_draw();
 }
 
+void SWI_IntrWait(uint32_t discard_old_flags, uint16_t wait_flags)
+{
+    uint16_t invalid_flags = IRQF_SERIAL | IRQF_GAMEPAK;
+    if (wait_flags & invalid_flags)
+    {
+        Debug_Log("%s(): Some invalid flags selected. Ignored.", __func__);
+        wait_flags &= ~invalid_flags;
+    }
+
+    if (wait_flags == 0)
+    {
+        Debug_Log("%s(): No flags selected: Infinite loop. Skipped.", __func__);
+        return;
+    }
+
+    if (discard_old_flags != 0)
+    {
+        BIOS_INTR_FLAGS &= ~wait_flags;
+        REG_IME = 1;
+    }
+
+    int exit = 0;
+
+    while (exit == 0)
+    {
+        SWI_Halt();
+
+        REG_IME = 0;
+
+        if (BIOS_INTR_FLAGS & wait_flags)
+        {
+            BIOS_INTR_FLAGS &= ~wait_flags;
+            exit = 1;
+        }
+
+        REG_IME = 1;
+    }
+}
+
 void SWI_VBlankIntrWait(void)
 {
-    if (current_vcount == 160)
-        do_scanline_draw();
-
-    while (current_vcount != 160)
-        do_scanline_draw();
+    SWI_IntrWait(1, IRQF_VBLANK);
 }
 
 NORETURN void SWI_SoftReset(void)

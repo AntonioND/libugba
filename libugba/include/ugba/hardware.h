@@ -35,6 +35,8 @@ static inline uint16_t RGB15(uint16_t r, uint16_t g, uint16_t b)
 #define MEM_IWRAM_SIZE          (0x00008000)
 #define MEM_IWRAM               ((void *)MEM_IWRAM_ADDR)
 
+#define BIOS_INTR_FLAGS         *((volatile uint16_t *)(MEM_IWRAM_ADDR + 0x7FF8))
+
 // I/O Registers
 #define MEM_IO_SIZE             (0x00000400)
 #define MEM_IO                  ((void *)MEM_IO_ADDR)

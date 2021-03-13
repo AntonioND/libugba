@@ -46,13 +46,21 @@ void SWI_Halt(void)
 SWI_Stop 0x03
 #endif
 
-#if 0
-void SWI_IntrWait(uint32_t discard_old_flags, uint32_t wait_flags)
+void SWI_IntrWait(uint32_t discard_old_flags, uint16_t wait_flags)
 {
-    asm volatile(SWI_NUMBER(0x04) :::
-                 "r0", "r1", "r2", "r3", "memory");
+    // TODO: Print error message
+    if (wait_flags == 0)
+        return;
+
+    register uint32_t discard_ asm("r0") = discard_old_flags;
+    register uint32_t flags_ asm("r1") = wait_flags;
+
+    asm volatile(
+        SWI_NUMBER(0x04) ::
+        "r"(discard_), "r"(flags_) :
+        "r2", "r3", "memory"
+    );
 }
-#endif
 
 void SWI_VBlankIntrWait(void)
 {

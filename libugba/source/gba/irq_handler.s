@@ -123,7 +123,8 @@ interrupt_found:
     orr     r1, r1, #(OFFSET_IF & 0xFF)
     strh    r2, [r1]
 
-    ldrh    r1, [r0, #-8] // The BIOS register is mirrored at 0x03FFFFF8
+    // The BIOS register (BIOS_INTR_FLAGS) is mirrored at 0x03FFFFF8
+    ldrh    r1, [r0, #-8]
     orr     r1, r1, r2
     strh    r1, [r0, #-8]
 

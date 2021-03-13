@@ -58,7 +58,10 @@ void IRQ_Disable(irq_index index)
     REG_IE &= ~(1 << index);
 }
 
-// For internal library use
+// For internal library use. This is called whenever an event happens that could
+// trigger an interrupt (even if IME is disabled, or the IE bit is disabled).
+// This function checks if the interrupt vector has to be called before calling
+// it.
 void IRQ_Internal_CallHandler(irq_index index)
 {
     if (index >= IRQ_NUMBER)
@@ -87,6 +90,8 @@ void IRQ_Internal_CallHandler(irq_index index)
         if ((REG_DISPSTAT & DISPSTAT_VCOUNT_IRQ_ENABLE) == 0)
             return;
     }
+
+    BIOS_INTR_FLAGS |= (1 << index);
 
     irq_vector vector = IRQ_VectorTable[index];
     if (vector)

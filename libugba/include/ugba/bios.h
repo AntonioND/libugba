@@ -32,6 +32,15 @@ EXPORT_API void SWI_Halt(void);
 // Wait until the VBlank interrupt happens.
 EXPORT_API void SWI_VBlankIntrWait(void);
 
+// Wait for any of the interrupts in the flags specified. If an interrupt has
+// already happened, it is possible to discard it by setting the argument to 1.
+// If it is set to 0, and the interrupt has happened already, this function will
+// return right away.
+//
+// Note that if no flags are passed the CPU will stay in an infinite loop inside
+// this function.
+EXPORT_API void SWI_IntrWait(uint32_t discard_old_flags, uint16_t wait_flags);
+
 // For SWI_CpuSet() and SWI_CpuFastSet()
 #define SWI_MODE_COPY   (0 << 24)
 #define SWI_MODE_FILL   (1 << 24)
