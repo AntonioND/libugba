@@ -8,8 +8,8 @@ SDL2
 - Add helper to configure user input.
 - Interrupts: SERIAL and GAMEPAK are missing.
 - DMA 3 Video Capture Mode
-- BIOS services (IRQ-related services left).
 - PSG sound channels.
+- SRAM battery saves.
 
 Common
 ------
@@ -25,6 +25,7 @@ Examples
 
 - DMA 3 Video Capture Mode
 - PSG sound channels.
+- SRAM battery saves.
 
 Unit tests
 ==========
