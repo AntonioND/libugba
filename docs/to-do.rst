@@ -23,7 +23,6 @@ Common
 Examples
 ========
 
-- Interrupts.
 - DMA 3 Video Capture Mode
 - PSG sound channels.
 
