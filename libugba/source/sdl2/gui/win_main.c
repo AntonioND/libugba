@@ -21,29 +21,22 @@ static int WinIDMain = -1;
 
 //------------------------------------------------------------------
 
-static int WinMain_FPS;
-static int WinMain_frames_drawn = 0;
-static SDL_TimerID WinMain_FPS_timer;
+static int current_fps, old_fps;
+static int frames_drawn = 0;
+static SDL_TimerID fps_timer;
 
-static Uint32 _fps_callback_function(Uint32 interval, UNUSED void *param)
+static Uint32 fps_callback_function(Uint32 interval, UNUSED void *param)
 {
-    WinMain_FPS = WinMain_frames_drawn;
-    WinMain_frames_drawn = 0;
-
-    char caption[60];
-    snprintf(caption, sizeof(caption),
-             "ugba: %d fps - %.2f%%", WinMain_FPS,
-             (float)WinMain_FPS * 10.0f / 6.0f);
-
-    WH_SetCaption(WinIDMain, caption);
+    current_fps = frames_drawn;
+    frames_drawn = 0;
 
     return interval;
 }
 
 static void FPS_TimerInit(void)
 {
-    WinMain_FPS_timer = SDL_AddTimer(1000, _fps_callback_function, NULL);
-    if (WinMain_FPS_timer == 0)
+    fps_timer = SDL_AddTimer(1000, fps_callback_function, NULL);
+    if (fps_timer == 0)
     {
         Debug_Log("%s(): SDL_AddTimer() failed: %s", __func__, SDL_GetError());
     }
@@ -51,7 +44,7 @@ static void FPS_TimerInit(void)
 
 static void FPS_TimerEnd(void)
 {
-    SDL_RemoveTimer(WinMain_FPS_timer);
+    SDL_RemoveTimer(fps_timer);
 }
 
 //------------------------------------------------------------------
@@ -241,35 +234,27 @@ void Win_MainLoopHandle(void)
         exit(0);
     }
 
-#if 0
-    if (WH_HasKeyboardFocus(WinIDMain))
+    GBA_ConvertScreenBufferTo24RGB(GBA_SCREEN);
+
+    ScaleImage24RGB(WIN_MAIN_CONFIG_ZOOM, GBA_SCREEN,
+                    240, 160, WIN_MAIN_GAME_SCREEN_BUFFER,
+                    240 * WIN_MAIN_CONFIG_ZOOM,
+                    160 * WIN_MAIN_CONFIG_ZOOM);
+
+    frames_drawn++;
+
+    // Update window caption
+
+    if (old_fps != current_fps)
     {
-        Sound_Enable();
+        char caption[60];
+        snprintf(caption, sizeof(caption), "ugba: %d fps - %.2f%%",
+                current_fps, (float)current_fps * 10.0f / 6.0f);
 
-        if (speedup)
-            GBA_SoundResetBufferPointers();
+        WH_SetCaption(WinIDMain, caption);
 
-        Input_Update_GBA();
-#endif
-        GBA_ConvertScreenBufferTo24RGB(GBA_SCREEN);
-
-        //GBA_SCREEN[(240 * 20 + 20) * 3] = 0xFF;
-        //GBA_SCREEN[(240 * 140 + 220) * 3] = 0xFF;
-        //GBA_SCREEN[239 * 159 * 3] = 0xFF;
-
-        ScaleImage24RGB(WIN_MAIN_CONFIG_ZOOM, GBA_SCREEN,
-                        240, 160, WIN_MAIN_GAME_SCREEN_BUFFER,
-                        240 * WIN_MAIN_CONFIG_ZOOM,
-                        160 * WIN_MAIN_CONFIG_ZOOM);
-
-        WinMain_frames_drawn++;
-#if 0
+        old_fps = current_fps;
     }
-    else
-    {
-        //Sound_Disable();
-    }
-#endif
 
 #ifdef ENABLE_DEBUGGER
 
