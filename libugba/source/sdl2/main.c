@@ -11,6 +11,7 @@
 #include "debug_utils.h"
 #include "input_utils.h"
 #include "lua_handler.h"
+#include "save_file.h"
 #include "sound_utils.h"
 
 #include "core/video.h"
@@ -25,7 +26,7 @@ static int Init(void)
     if (SDL_Init(SDL_INIT_TIMER | SDL_INIT_AUDIO | SDL_INIT_VIDEO |
                  SDL_INIT_EVENTS) != 0)
     {
-        Debug_Log("SDL could not initialize! SDL Error: %s\n", SDL_GetError());
+        Debug_Log("SDL could not initialize! SDL Error: %s", SDL_GetError());
         return 1;
     }
     atexit(SDL_Quit);
@@ -44,7 +45,7 @@ static int InitHeadless(void)
     // Initialize SDL
     if (SDL_Init(SDL_INIT_TIMER | SDL_INIT_EVENTS) != 0)
     {
-        Debug_Log("SDL could not initialize! SDL Error: %s\n", SDL_GetError());
+        Debug_Log("SDL could not initialize! SDL Error: %s", SDL_GetError());
         return 1;
     }
     atexit(SDL_Quit);
@@ -59,6 +60,49 @@ static void UGBA_ParseArgs(int *argc, char **argv[])
 {
     if ((argc != NULL) && (argv != NULL))
     {
+        // Use argv[0] to find the saved data
+        if (*argc > 0)
+        {
+            size_t len = strlen(*argv[0]);
+
+            char *sav_path = malloc(len + 1 + strlen(".sav"));
+
+            if (sav_path == NULL)
+            {
+                Debug_Log("%s: Cant't allocate memory.", __func__);
+            }
+            else
+            {
+                snprintf(sav_path, len + 1, "%s", *argv[0]);
+
+                size_t dot_pos = len;
+                while (dot_pos > 0)
+                {
+                    char c = sav_path[dot_pos];
+
+                    if ((c == '.') || (c == '\\') || (c == '/'))
+                        break;
+
+                    dot_pos--;
+                }
+
+                if (sav_path[dot_pos] != '.')
+                {
+                    dot_pos = len;
+                }
+
+                sav_path[dot_pos + 0] = '.';
+                sav_path[dot_pos + 1] = 's';
+                sav_path[dot_pos + 2] = 'a';
+                sav_path[dot_pos + 3] = 'v';
+                sav_path[dot_pos + 4] = '\0';
+
+                UGBA_SaveFileOpen(sav_path);
+
+                free(sav_path);
+            }
+        }
+
         if (*argc > 2)
         {
             if (strcmp((*argv)[1], "--lua") == 0)
@@ -66,7 +110,7 @@ static void UGBA_ParseArgs(int *argc, char **argv[])
 #ifdef LUA_INTERPRETER_ENABLED
                 Script_RunLua((*argv)[2]);
 #else
-                Debug_Log("UGBA compiled without Lua support.\n");
+                Debug_Log("UGBA compiled without Lua support.");
 #endif
 
                 // Remove argv[1] and argv[2]

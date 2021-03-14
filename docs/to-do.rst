@@ -9,7 +9,7 @@ SDL2
 - Interrupts: SERIAL and GAMEPAK are missing.
 - DMA 3 Video Capture Mode
 - PSG sound channels.
-- SRAM battery saves.
+- Save SRAM to file every few seconds?
 
 Common
 ------
