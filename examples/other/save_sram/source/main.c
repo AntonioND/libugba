@@ -40,6 +40,9 @@ int main(int argc, char *argv[])
         if (keys_pressed & KEY_DOWN)
             sram[0]--;
 
+        if (keys_pressed & KEY_START)
+            sram[0] = 0;
+
         SWI_VBlankIntrWait();
     }
 }

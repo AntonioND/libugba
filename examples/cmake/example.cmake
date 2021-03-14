@@ -356,3 +356,52 @@ function(unittest_audio)
     endif()
 
 endfunction()
+
+function(unittest_sram)
+
+    # Get name of the folder we are in
+    # --------------------------------
+
+    get_filename_component(EXECUTABLE_NAME ${CMAKE_CURRENT_SOURCE_DIR} NAME)
+
+    # SDL2 test
+    # ---------
+
+    set(TEST_SCRIPT_1 "${CMAKE_CURRENT_SOURCE_DIR}/test-1.lua")
+    set(TEST_SCRIPT_2 "${CMAKE_CURRENT_SOURCE_DIR}/test-2.lua")
+    set(REF_PNG "${CMAKE_CURRENT_SOURCE_DIR}/reference.png")
+
+    set(CMD1 "$<TARGET_FILE:${EXECUTABLE_NAME}> --lua ${TEST_SCRIPT_1}")
+    set(CMD2 "$<TARGET_FILE:${EXECUTABLE_NAME}> --lua ${TEST_SCRIPT_2}")
+    set(CMD3 "$<TARGET_FILE:pngmatch> ${REF_PNG} screenshot.png")
+
+    add_test(NAME ${EXECUTABLE_NAME}_test
+        COMMAND ${CMAKE_COMMAND}
+                    -DCMD1=${CMD1}
+                    -DCMD2=${CMD2}
+                    -DCMD3=${CMD3}
+                    -P ${CMAKE_SOURCE_DIR}/examples/cmake/runcommands.cmake
+        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+    )
+
+    # Emulator test
+    # -------------
+
+    if(BUILD_GBA)
+        set(GBA_ROM "${CMAKE_CURRENT_SOURCE_DIR}/${EXECUTABLE_NAME}.gba")
+
+        set(CMD1 "$<TARGET_FILE:giibiiadvance> --lua ${TEST_SCRIPT_1} ${GBA_ROM}")
+        set(CMD2 "$<TARGET_FILE:giibiiadvance> --lua ${TEST_SCRIPT_2} ${GBA_ROM}")
+        set(CMD3 "$<TARGET_FILE:pngmatch> ${REF_PNG} screenshot.png")
+
+        add_test(NAME ${EXECUTABLE_NAME}_gba_test
+            COMMAND ${CMAKE_COMMAND}
+                        -DCMD1=${CMD1}
+                        -DCMD2=${CMD2}
+                        -DCMD3=${CMD3}
+                        -P ${CMAKE_SOURCE_DIR}/examples/cmake/runcommands.cmake
+            WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+        )
+    endif()
+
+endfunction()
