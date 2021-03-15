@@ -8,7 +8,7 @@
 
 #include <ugba/ugba.h>
 
-int timer_count[4];
+volatile int timer_count[4];
 
 void timer_0_handler(void)
 {
@@ -77,31 +77,30 @@ int main(int argc, char *argv[])
 
         SWI_VBlankIntrWait();
 
-        KEYS_Update();
+        if (timer_count[0] == 20)
+        {
+            TM_TimerStop(0);
 
-        uint16_t keys = KEYS_Held();
-        if (keys & KEY_A)
-            break;
+            KEYS_Update();
+
+            uint16_t keys = KEYS_Held();
+            if (keys & KEY_A)
+                break;
+        }
     }
 
     TM_TimerStop(0);
-    TM_TimerStop(1);
-    TM_TimerStop(2);
-    TM_TimerStop(3);
 
     CON_Clear();
     CON_CursorSet(0, 0);
 
-    int range[4][2] = {
-        { 38, 41 },
-        { 18, 21 },
-        { 5, 7 },
-        { 2, 4 }
+    int reference[4] = {
+        20, 10, 3, 1
     };
 
     for (int i = 0; i < 4; i++)
     {
-        if ((timer_count[i] >= range[i][0]) && (timer_count[i] <= range[i][1]))
+        if (timer_count[i] == reference[i])
             CON_Print("Success\n");
         else
             CON_Print("Failed\n");
