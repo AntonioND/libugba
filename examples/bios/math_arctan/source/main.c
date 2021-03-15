@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 //
-// Copyright (c) 2020 Antonio Niño Díaz
+// Copyright (c) 2020-2021 Antonio Niño Díaz
 
 // Example that plots y = arctan(x) scaled to match the screen size. The usable
 // part of the function is inside the green vertical lines.
@@ -41,6 +41,10 @@ int main(int argc, char *argv[])
         tan = (tan << 14) / (GBA_SCREEN_W / 2);
         tan *= 3; // This makes it so that the graph shows out-of-bounds values
         uint16_t y = (GBA_SCREEN_H / 2) + (SWI_ArcTan(tan) >> 7);
+
+        // Skip if out of bounds
+        if (y >= GBA_SCREEN_H)
+            continue;
 
         framebuffer[y * GBA_SCREEN_W + x] = RGB15(31, 0, 0);
     }
