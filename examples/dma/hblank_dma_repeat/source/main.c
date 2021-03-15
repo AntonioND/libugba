@@ -35,8 +35,21 @@ uint16_t horizontal_offsets[160];
 
 void fill_array(void)
 {
+    // The first HBL copy is done after line 0 is drawn. It is needed to offset
+    // the copy by one index. The last HBL copy happens right before the VBL, so
+    // it isn't seen until line 0, and the value copied during that HBL should
+    // be the corresponding one to line 0.
+
+    int dst = 159;
+
     for (int i = 0; i < 160; i++)
-        horizontal_offsets[i] = x + ((i & 16) ? (i & 15) : 15 - (i & 15));
+    {
+        horizontal_offsets[dst] = x + ((i & 16) ? (i & 15) : 15 - (i & 15));
+
+        dst++;
+        if (dst == 160)
+            dst = 0;
+    }
 }
 
 void vbl_handler(void)
@@ -44,15 +57,10 @@ void vbl_handler(void)
     // Stop the DMA copy already running
     DMA_Stop(0);
 
-    // The first HBL copy is done after line 0 is drawn. It is needed to start
-    // the copy from index 1 in the array, and to set the first offset
-    // explicitly during VBL.
-    DMA_Transfer(0, &(horizontal_offsets[1]), PTR_REG_BG0HOFS, 2,
+    DMA_Transfer(0, &(horizontal_offsets[0]), PTR_REG_BG0HOFS, 2,
                  DMACNT_DST_FIXED | DMACNT_SRC_INCREMENT |
                  DMACNT_TRANSFER_16_BITS | DMACNT_START_HBLANK |
                  DMACNT_REPEAT_ON);
-
-    REG_BG0HOFS = horizontal_offsets[0];
 }
 
 int main(int argc, char *argv[])
