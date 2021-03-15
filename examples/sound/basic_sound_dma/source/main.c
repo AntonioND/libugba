@@ -57,7 +57,7 @@ void generate_waves(void)
     for (size_t i = 0; i < sizeof(wave_a_0); i++)
     {
         int32_t pos = (i * FP_2_PI) / sizeof(wave_a_0);
-        int32_t value = (FP_Sin(10 * pos) * 127) >> 16;
+        int32_t value = (FP_Sin(10 * pos) * 127) >> 18;
 
         wave_a_0[i] = value;
         wave_a_1[i] = value;
@@ -66,7 +66,7 @@ void generate_waves(void)
     for (size_t i = 0; i < sizeof(wave_b_0); i++)
     {
         int32_t pos = (i * FP_2_PI) / sizeof(wave_b_0);
-        int32_t value = (FP_Sin(15 * pos) * 127) >> 16;
+        int32_t value = (FP_Sin(15 * pos) * 127) >> 18;
 
         wave_b_0[i] = value;
         wave_b_1[i] = value;
