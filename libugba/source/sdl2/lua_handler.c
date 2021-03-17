@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: LGPL-3.0-only
 //
-// Copyright (c) 2020 Antonio Niño Díaz
+// Copyright (c) 2020-2021 Antonio Niño Díaz
 
 #include <SDL2/SDL.h>
 
@@ -226,14 +226,14 @@ static int lua_wav_record_start(lua_State *L)
     if (narg == 0)
     {
         Debug_Log("%s()", __func__);
-        WAV_FileStart(NULL, GBA_SAMPLERATE);
+        WAV_FileStart(NULL, GBA_SAMPLES_60_FRAMES);
     }
     else if (narg == 1)
     {
         const char *name = lua_tostring(L, -1);
 
         Debug_Log("%s(%s)", __func__, name);
-        WAV_FileStart(name, GBA_SAMPLERATE);
+        WAV_FileStart(name, GBA_SAMPLES_60_FRAMES);
 
         lua_pop(L, 1);
     }

@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: LGPL-3.0-only
 //
-// Copyright (c) 2011-2015, 2019-2020 Antonio Niño Díaz
+// Copyright (c) 2011-2015, 2019-2021 Antonio Niño Díaz
 
 #include <stdlib.h>
 #include <string.h>
@@ -84,7 +84,7 @@ void Sound_Init(void)
 
     SDL_AudioSpec desired_spec;
 
-    desired_spec.freq = SDL_SAMPLERATE;
+    desired_spec.freq = SDL_SAMPLE_RATE;
     desired_spec.format = AUDIO_S16SYS;
     desired_spec.channels = 2;
     desired_spec.samples = SDL_BUFFER_SAMPLES;
@@ -105,9 +105,9 @@ void Sound_Init(void)
               obtained_spec.channels,
               obtained_spec.samples);
 
-    // Input format is int16_t, dual, 32 * 1024 Hz
+    // Input format is int16_t, dual, ~ 32 * 1024 Hz
     // Output format is whatever SDL_OpenAudio() returned
-    stream = SDL_NewAudioStream(AUDIO_S16, 2, GBA_SAMPLERATE,
+    stream = SDL_NewAudioStream(AUDIO_S16, 2, GBA_SAMPLES_60_FRAMES,
                                 obtained_spec.format, obtained_spec.channels,
                                 obtained_spec.freq);
     if (stream == NULL) {
