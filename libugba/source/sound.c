@@ -26,6 +26,32 @@ void SOUND_DMA_Volume(int dma_a_max, int dma_b_max)
     REG_SOUNDCNT_H = value;
 }
 
+void SOUND_PSG_MasterVolume(int volume)
+{
+    uint16_t mask = SOUNDCNT_H_PSG_VOLUME_100;
+    uint16_t value = REG_SOUNDCNT_H & ~mask;
+
+    if (volume == 100)
+        value |= SOUNDCNT_H_PSG_VOLUME_100;
+    else if (volume == 50)
+        value |= SOUNDCNT_H_PSG_VOLUME_50;
+    else
+        value |= SOUNDCNT_H_PSG_VOLUME_25;
+
+    REG_SOUNDCNT_H = value;
+}
+
+void SOUND_PSG_Volume(int volume_left, int volume_right)
+{
+    uint16_t mask = SOUNDCNT_L_PSG_VOL_RIGHT(7) | SOUNDCNT_L_PSG_VOL_LEFT(7);
+    uint16_t value = REG_SOUNDCNT_L & ~mask;
+
+    value |= SOUNDCNT_L_PSG_VOL_LEFT(volume_left)
+           | SOUNDCNT_L_PSG_VOL_RIGHT(volume_right);
+
+    REG_SOUNDCNT_L = value;
+}
+
 void SOUND_DMA_Pan(int dma_a_left, int dma_a_right,
                    int dma_b_left, int dma_b_right)
 {
@@ -46,6 +72,40 @@ void SOUND_DMA_Pan(int dma_a_left, int dma_a_right,
         value |= SOUNDCNT_H_DMA_B_ENABLE_RIGHT;
 
     REG_SOUNDCNT_H = value;
+}
+
+void SOUND_PSG_Pan(int left_1, int right_1, int left_2, int right_2,
+                   int left_3, int right_3, int left_4, int right_4)
+{
+    uint16_t mask = SOUNDCNT_L_PSG_1_ENABLE_RIGHT
+                  | SOUNDCNT_L_PSG_2_ENABLE_RIGHT
+                  | SOUNDCNT_L_PSG_3_ENABLE_RIGHT
+                  | SOUNDCNT_L_PSG_4_ENABLE_RIGHT
+                  | SOUNDCNT_L_PSG_1_ENABLE_LEFT
+                  | SOUNDCNT_L_PSG_2_ENABLE_LEFT
+                  | SOUNDCNT_L_PSG_3_ENABLE_LEFT
+                  | SOUNDCNT_L_PSG_4_ENABLE_LEFT;
+
+    uint16_t value = REG_SOUNDCNT_L & ~mask;
+
+    if (left_1)
+        value |= SOUNDCNT_L_PSG_1_ENABLE_LEFT;
+    if (right_1)
+        value |= SOUNDCNT_L_PSG_1_ENABLE_RIGHT;
+    if (left_2)
+        value |= SOUNDCNT_L_PSG_2_ENABLE_LEFT;
+    if (right_2)
+        value |= SOUNDCNT_L_PSG_2_ENABLE_RIGHT;
+    if (left_3)
+        value |= SOUNDCNT_L_PSG_3_ENABLE_LEFT;
+    if (right_3)
+        value |= SOUNDCNT_L_PSG_3_ENABLE_RIGHT;
+    if (left_4)
+        value |= SOUNDCNT_L_PSG_4_ENABLE_LEFT;
+    if (right_4)
+        value |= SOUNDCNT_L_PSG_4_ENABLE_RIGHT;
+
+    REG_SOUNDCNT_L = value;
 }
 
 void SOUND_DMA_Stream_A(const void *source)
