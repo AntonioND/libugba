@@ -43,11 +43,12 @@ void SOUND_PSG_MasterVolume(int volume)
 
 void SOUND_PSG_Volume(int volume_left, int volume_right)
 {
-    uint16_t mask = SOUNDCNT_L_PSG_VOL_RIGHT(7) | SOUNDCNT_L_PSG_VOL_LEFT(7);
+    uint16_t mask = SOUNDCNT_L_PSG_VOL_RIGHT_SET(7)
+                  | SOUNDCNT_L_PSG_VOL_LEFT_SET(7);
     uint16_t value = REG_SOUNDCNT_L & ~mask;
 
-    value |= SOUNDCNT_L_PSG_VOL_LEFT(volume_left)
-           | SOUNDCNT_L_PSG_VOL_RIGHT(volume_right);
+    value |= SOUNDCNT_L_PSG_VOL_LEFT_SET(volume_left)
+           | SOUNDCNT_L_PSG_VOL_RIGHT_SET(volume_right);
 
     REG_SOUNDCNT_L = value;
 }

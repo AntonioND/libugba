@@ -695,119 +695,140 @@ EXPORT_API void UGBA_RegisterUpdatedOffset(uint32_t offset);
 
 // SOUND1CNT_L (NR10)
 
-#define SOUND1CNT_L_SWEEP_SHIFT(n)      ((n) & 0x7)
+#define SOUND1CNT_L_SWEEP_SHIFT_SET(n)  ((n) & 0x7) // R/W
+#define SOUND1CNT_L_SWEEP_SHIFT_GET(n)  ((n) & 0x7)
 
-#define SOUND1CNT_L_SWEEP_DIR_INC       (0 << 3)
+#define SOUND1CNT_L_SWEEP_DIR_INC       (0 << 3) // R/W
 #define SOUND1CNT_L_SWEEP_DIR_DEC       (1 << 3)
 
-#define SOUND1CNT_L_SWEEP_TIME(n)       (((n) & 0x7) << 4)
+#define SOUND1CNT_L_SWEEP_TIME_SET(n)   (((n) & 0x7) << 4) // R/W
+#define SOUND1CNT_L_SWEEP_TIME_GET(n)   (((n) >> 4) & 0x7)
 
 // SOUND1CNT_H (NR11, NR12)
 
-#define SOUND1CNT_H_LENGTH(n)           ((n) & 0x3F)
+#define SOUND1CNT_H_LENGTH_SET(n)       ((n) & 0x3F) // WO
+#define SOUND1CNT_H_LENGTH_GET(n)       ((n) & 0x3F) // Internal use
 
-#define SOUND1CNT_H_WAVE_DUTY(n)        (((n) & 0x3) << 6)
+#define SOUND1CNT_H_WAVE_DUTY_GET(n)    (((n) >> 6) & 0x3) // R/W
 #define SOUND1CNT_H_WAVE_DUTY_12        (0 << 6)
 #define SOUND1CNT_H_WAVE_DUTY_25        (1 << 6)
 #define SOUND1CNT_H_WAVE_DUTY_50        (2 << 6)
 #define SOUND1CNT_H_WAVE_DUTY_75        (3 << 6)
 
-#define SOUND1CNT_H_ENV_STEP_TIME(n)    (((n) & 0x7) << 8)
+#define SOUND1CNT_H_ENV_STEP_TIME_SET(n) (((n) & 0x7) << 8) // R/W
+#define SOUND1CNT_H_ENV_STEP_TIME_GET(n) (((n) >> 8) & 0x7)
 
-#define SOUND1CNT_H_ENV_DIR_DEC         (0 << 11)
+#define SOUND1CNT_H_ENV_DIR_DEC         (0 << 11) // R/W
 #define SOUND1CNT_H_ENV_DIR_INC         (1 << 11)
 
-#define SOUND1CNT_H_ENV_VOLUME(n)       (((n) & 0xF) << 12)
+#define SOUND1CNT_H_ENV_VOLUME_SET(n)   (((n) & 0xF) << 12) // R/W
+#define SOUND1CNT_H_ENV_VOLUME_GET(n)   (((n) >> 12) & 0xF)
 
 // SOUND1CNT_X (NR13, NR14)
 
-#define SOUND1CNT_X_FREQUENCY(n)        ((n) & 0x7FF)
+#define SOUND1CNT_X_FREQUENCY_SET(n)    ((n) & 0x7FF) // WO
+#define SOUND1CNT_X_FREQUENCY_GET(n)    ((n) & 0x7FF) // Internal use
 
-#define SOUND1CNT_X_ONE_SHOT            (1 << 14)
+#define SOUND1CNT_X_ONE_SHOT            (1 << 14) // R/W
 
-#define SOUND1CNT_X_RESTART             (1 << 15)
+#define SOUND1CNT_X_RESTART             (1 << 15) // WO
 
 // SOUND2CNT_L (NR21, NR22)
 
-#define SOUND2CNT_L_LENGTH(n)           ((n) & 0x3F)
+#define SOUND2CNT_L_LENGTH_SET(n)       ((n) & 0x3F) // WO
+#define SOUND2CNT_L_LENGTH_GET(n)       ((n) & 0x3F) // Internal use
 
-#define SOUND2CNT_L_WAVE_DUTY(n)        (((n) & 0x3) << 6)
+#define SOUND2CNT_L_WAVE_DUTY_GET(n)    (((n) >> 6) & 0x3) // R/W
 #define SOUND2CNT_L_WAVE_DUTY_12        (0 << 6)
 #define SOUND2CNT_L_WAVE_DUTY_25        (1 << 6)
 #define SOUND2CNT_L_WAVE_DUTY_50        (2 << 6)
 #define SOUND2CNT_L_WAVE_DUTY_75        (3 << 6)
 
-#define SOUND2CNT_L_ENV_STEP_TIME(n)    (((n) & 0x7) << 8)
+#define SOUND2CNT_L_ENV_STEP_TIME_SET(n) (((n) & 0x7) << 8) // R/W
+#define SOUND2CNT_L_ENV_STEP_TIME_GET(n) (((n) >> 8) & 0x7)
 
-#define SOUND2CNT_L_ENV_DIR_DEC         (0 << 11)
+#define SOUND2CNT_L_ENV_DIR_DEC         (0 << 11) // R/W
 #define SOUND2CNT_L_ENV_DIR_INC         (1 << 11)
 
-#define SOUND2CNT_L_ENV_VOLUME(n)       (((n) & 0xF) << 12)
+#define SOUND2CNT_L_ENV_VOLUME_SET(n)   (((n) & 0xF) << 12) // R/W
+#define SOUND2CNT_L_ENV_VOLUME_GET(n)   (((n) >> 12) & 0xF)
 
 // SOUND2CNT_H (NR23, NR24)
 
-#define SOUND2CNT_H_FREQUENCY(n)        ((n) & 0x7FF)
+#define SOUND2CNT_H_FREQUENCY_SET(n)    ((n) & 0x7FF) // WO
+#define SOUND2CNT_H_FREQUENCY_GET(n)    ((n) & 0x7FF) // Internal use
 
-#define SOUND2CNT_H_ONE_SHOT            (1 << 14)
+#define SOUND2CNT_H_ONE_SHOT            (1 << 14) // R/W
 
-#define SOUND2CNT_H_RESTART             (1 << 15)
+#define SOUND2CNT_H_RESTART             (1 << 15) // WO
 
 // SOUND3CNT_L (NR30)
 
 #define SOUND3CNT_L_SIZE_32             (0 << 5)
 #define SOUND3CNT_L_SIZE_64             (1 << 5)
 
-#define SOUND3CNT_L_BANK(n)             (((n) & 1) << 6)
+#define SOUND3CNT_L_BANK_SET(n)         (((n) & 1) << 6)
+#define SOUND3CNT_L_BANK_GET(n)         (((n) >> 6) & 1)
 
 #define SOUND3CNT_L_ENABLE              (1 << 7)
 #define SOUND3CNT_L_DISABLE             (0 << 7)
 
 // SOUND3CNT_H (NR31, NR32)
 
-#define SOUND3CNT_H_LENGTH(n)           ((n) & 0xFF)
+#define SOUND3CNT_H_LENGTH_SET(n)       ((n) & 0xFF) // R/W
+#define SOUND3CNT_H_LENGTH_GET(n)       ((n) & 0xFF)
 
-#define SOUND3CNT_H_VOLUME_0            (0x0 << 13)
+#define SOUND3CNT_H_VOLUME_0            (0x0 << 13) // R/W
 #define SOUND3CNT_H_VOLUME_25           (0x3 << 13)
 #define SOUND3CNT_H_VOLUME_50           (0x2 << 13)
 #define SOUND3CNT_H_VOLUME_75           (0x4 << 13)
 #define SOUND3CNT_H_VOLUME_100          (0x1 << 13)
+#define SOUND3CNT_H_VOLUME_MASK         (0x7 << 13)
 
 // SOUND3CNT_X (NR33, NR34)
 
-#define SOUND3CNT_X_SAMPLE_RATE(n)      ((n) & 0x7FF)
+#define SOUND3CNT_X_SAMPLE_RATE_SET(n)  ((n) & 0x7FF) // WO
+#define SOUND3CNT_X_SAMPLE_RATE_GET(n)  ((n) & 0x7FF) // Internal use
 
-#define SOUND3CNT_X_ONE_SHOT            (1 << 14)
+#define SOUND3CNT_X_ONE_SHOT            (1 << 14) // R/W
 
-#define SOUND3CNT_X_RESTART             (1 << 15)
+#define SOUND3CNT_X_RESTART             (1 << 15) // WO
 
 // SOUND4CNT_L (NR41, NR42)
 
-#define SOUND4CNT_L_LENGTH(n)           ((n) & 0x3F)
+#define SOUND4CNT_L_LENGTH_SET(n)       ((n) & 0x3F) // WO
+#define SOUND4CNT_L_LENGTH_GET(n)       ((n) & 0x3F) // Internal use
 
-#define SOUND4CNT_L_ENV_STEP_TIME(n)    (((n) & 0x7) << 8)
+#define SOUND4CNT_L_ENV_STEP_TIME_SET(n) (((n) & 0x7) << 8) // R/W
+#define SOUND4CNT_L_ENV_STEP_TIME_GET(n) (((n) >> 8) & 0x7)
 
-#define SOUND4CNT_L_ENV_DIR_DEC         (0 << 11)
+#define SOUND4CNT_L_ENV_DIR_DEC         (0 << 11) // R/W
 #define SOUND4CNT_L_ENV_DIR_INC         (1 << 11)
 
-#define SOUND4CNT_L_ENV_VOLUME(n)       (((n) & 0xF) << 12)
+#define SOUND4CNT_L_ENV_VOLUME_SET(n)   (((n) & 0xF) << 12) // R/W
+#define SOUND4CNT_L_ENV_VOLUME_GET(n)   (((n) >> 12) & 0xF)
 
 // SOUND4CNT_H (NR43, NR44)
 
-#define SOUND4CNT_H_DIV_RATIO(n)        ((n) & 0x3)
+#define SOUND4CNT_H_DIV_RATIO_SET(n)    ((n) & 0x3) // R/W
+#define SOUND4CNT_H_DIV_RATIO_GET(n)    ((n) & 0x3)
 
-#define SOUND4CNT_H_WIDTH_15_BITS       (0 << 3)
+#define SOUND4CNT_H_WIDTH_15_BITS       (0 << 3) // R/W
 #define SOUND4CNT_H_WIDTH_7_BITS        (1 << 3)
 
-#define SOUND4CNT_H_FREQUENCY(n)        (((n) & 0xF) << 4)
+#define SOUND4CNT_H_FREQUENCY_SET(n)    (((n) & 0xF) << 4) // R/W
+#define SOUND4CNT_H_FREQUENCY_GET(n)    (((n) >> 4) & 0xF)
 
-#define SOUND4CNT_H_ONE_SHOT            (1 << 14)
+#define SOUND4CNT_H_ONE_SHOT            (1 << 14) // R/W
 
-#define SOUND4CNT_H_RESTART             (1 << 15)
+#define SOUND4CNT_H_RESTART             (1 << 15) // WO
 
 // SOUNDCNT_L
 
-#define SOUNDCNT_L_PSG_VOL_RIGHT(v)     (((v) & 0x7) << 0)
-#define SOUNDCNT_L_PSG_VOL_LEFT(v)      (((v) & 0x7) << 4)
+#define SOUNDCNT_L_PSG_VOL_RIGHT_SET(v) (((v) & 0x7) << 0)
+#define SOUNDCNT_L_PSG_VOL_RIGHT_GET(v) (((v) >> 0) & 0x7)
+#define SOUNDCNT_L_PSG_VOL_LEFT_SET(v)  (((v) & 0x7) << 4)
+#define SOUNDCNT_L_PSG_VOL_LEFT_GET(v)  (((v) >> 4) & 0x7)
 
 #define SOUNDCNT_L_PSG_1_ENABLE_RIGHT   (1 << 8)
 #define SOUNDCNT_L_PSG_2_ENABLE_RIGHT   (1 << 9)
@@ -824,6 +845,7 @@ EXPORT_API void UGBA_RegisterUpdatedOffset(uint32_t offset);
 #define SOUNDCNT_H_PSG_VOLUME_25        (0 << 0)
 #define SOUNDCNT_H_PSG_VOLUME_50        (1 << 0)
 #define SOUNDCNT_H_PSG_VOLUME_100       (2 << 0)
+#define SOUNDCNT_H_PSG_VOLUME_MASK      (3 << 0)
 
 #define SOUNDCNT_H_DMA_A_VOLUME_50      (0 << 2)
 #define SOUNDCNT_H_DMA_A_VOLUME_100     (1 << 2)
@@ -849,7 +871,7 @@ EXPORT_API void UGBA_RegisterUpdatedOffset(uint32_t offset);
 
 // SOUNDCNT_X
 
-#define SOUNDCNT_X_PSG_1_IS_ON          (1 << 0)
+#define SOUNDCNT_X_PSG_1_IS_ON          (1 << 0) // Read-only flags
 #define SOUNDCNT_X_PSG_2_IS_ON          (1 << 1)
 #define SOUNDCNT_X_PSG_3_IS_ON          (1 << 2)
 #define SOUNDCNT_X_PSG_4_IS_ON          (1 << 3)
