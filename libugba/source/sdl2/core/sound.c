@@ -12,10 +12,340 @@
 #include "../sound_utils.h"
 #include "../wav_utils.h"
 
+// PSG channels
+// ============
 
+static const int8_t GBA_SquareWave[4][32] = {
+    {
+        -128, -128, -128, -128, -128, -128, -128, -128,
+         127,  127, -128, -128, -128, -128, -128, -128,
+        -128, -128, -128, -128, -128, -128, -128, -128,
+         127,  127, -128, -128, -128, -128, -128, -128
+    },
+    {
+        -128, -128, -128, -128, -128, -128, -128, -128,
+         127,  127,  127,  127, -128, -128, -128, -128,
+        -128, -128, -128, -128, -128, -128, -128, -128,
+         127,  127,  127,  127, -128, -128, -128, -128
+    },
+    {
+        -128, -128, -128, -128,  127,  127,  127,  127,
+         127,  127,  127,  127, -128, -128, -128, -128,
+        -128, -128, -128, -128,  127,  127,  127,  127,
+         127,  127,  127,  127, -128, -128, -128, -128
+    },
+    {
+         127,  127,  127,  127,  127,  127,  127,  127,
+        -128, -128, -128, -128,  127,  127,  127,  127,
+         127,  127,  127,  127,  127,  127,  127,  127,
+        -128, -128, -128, -128,  127,  127,  127,  127
+    }
+};
 
+typedef struct
+{
+    struct // Tone
+    {
+        int frequency;
+        int sample_pointer;
+        int frequency_steps; // Elapsed steps out of 'frequency'
 
+        int duty_cycle;
 
+        int volume;
+
+        int env_active; // If != 0, activate
+        int env_increment; // Value to add to volume at every step
+        int env_steps_to_change; // Steps needed to change envelope value
+        int env_steps_left; // It counts from env_steps_to_change to 0.
+
+        // Steps to end the sound (if 0, continue forever). Each step is 1/256 s
+        int steps_total;
+        int steps_elapsed;
+
+        int running;
+
+        int current_value;
+    } ch2;
+
+    int8_t buffer[GBA_SAMPLES_PER_FRAME * 2];
+    int write_ptr;
+    int read_ptr;
+
+    int clocks_current_step; // Elapsed clocks of current step
+
+    int clocks_current_frequency; // Elapsed clocks of current frequency step
+
+    int clocks_current_sample; // Elapsed clocks of current PSG sample
+} sound_psg_info_t;
+
+static sound_psg_info_t sound_psg;
+
+static void UGBA_RefreshPSGState(void)
+{
+    // Channel 1
+
+    // TODO
+
+    // Channel 2
+
+    uint16_t sound2cnt_l = REG_SOUND2CNT_L;
+    uint16_t sound2cnt_h = REG_SOUND2CNT_H;
+
+    if (sound2cnt_h & SOUND2CNT_H_RESTART)
+    {
+        REG_SOUND2CNT_H &= ~SOUND2CNT_H_RESTART;
+
+        sound_psg.ch2.running = 1;
+
+        // Length
+
+        if (sound2cnt_h & SOUND2CNT_H_ONE_SHOT)
+        {
+            sound_psg.ch2.steps_total = 64 - SOUND2CNT_L_LENGTH_GET(sound2cnt_l);
+        }
+        else
+        {
+            sound_psg.ch2.steps_total = 0;
+        }
+
+        // Envelope
+
+        int step_time = SOUND2CNT_L_ENV_STEP_TIME_GET(sound2cnt_l);
+
+        if (step_time == 0)
+        {
+            sound_psg.ch2.env_active = 0;
+        }
+        else
+        {
+            sound_psg.ch2.env_active = 1;
+
+            if (sound2cnt_l & SOUND2CNT_L_ENV_DIR_INC)
+                sound_psg.ch2.env_increment = 1;
+            else
+                sound_psg.ch2.env_increment = -1;
+
+            sound_psg.ch2.env_steps_to_change = step_time;
+            sound_psg.ch2.env_steps_left = step_time;
+        }
+
+        sound_psg.ch2.volume = SOUND2CNT_L_ENV_VOLUME_GET(sound2cnt_l);
+
+        // Frequency
+
+        sound_psg.ch2.frequency = 2048 - SOUND2CNT_H_FREQUENCY_GET(sound2cnt_h);
+    }
+
+    sound_psg.ch2.duty_cycle = SOUND2CNT_L_WAVE_DUTY_GET(sound2cnt_l);
+
+    // Channel 3
+
+    // TODO
+
+    // Channel 4
+
+    // TODO
+}
+
+static void Sound_FillBuffers_VBL_PSG(void)
+{
+    uint16_t soundcnt_l = REG_SOUNDCNT_L;
+    uint16_t soundcnt_h = REG_SOUNDCNT_H;
+
+    uint32_t clocks_left = GBA_CLOCKS_PER_FRAME;
+
+    // 256 steps per second
+    const int clocks_per_step = GBA_CLOCKS_PER_SECOND / 256;
+
+    // The frequency goes through a full cycle 131072 times per second
+    const int clocks_per_frequency = GBA_CLOCKS_PER_SECOND / (131072 * 16);
+
+    const int clocks_per_sample = GBA_CLOCKS_PER_SAMPLE_60_FPS;
+
+    // Get master volume
+
+    int psg_vol = soundcnt_h & SOUNDCNT_H_PSG_VOLUME_MASK;
+
+    if (psg_vol == SOUNDCNT_H_PSG_VOLUME_100)
+        psg_vol = 4;
+    else if (psg_vol == SOUNDCNT_H_PSG_VOLUME_50)
+        psg_vol = 2;
+    else if (psg_vol == SOUNDCNT_H_PSG_VOLUME_25)
+        psg_vol = 1;
+    else
+        psg_vol = 0;
+
+    int psg_vol_left = SOUNDCNT_L_PSG_VOL_LEFT_GET(soundcnt_l) * psg_vol;
+    int psg_vol_right = SOUNDCNT_L_PSG_VOL_RIGHT_GET(soundcnt_l) * psg_vol;
+
+    // Get individual left and right volumes (master volume is included here)
+
+    int ch2_vol_left = 0;
+    int ch2_vol_right = 0;
+
+    if (soundcnt_l & SOUNDCNT_L_PSG_2_ENABLE_LEFT)
+        ch2_vol_left = sound_psg.ch2.volume * psg_vol_left;
+    if (soundcnt_l & SOUNDCNT_L_PSG_2_ENABLE_RIGHT)
+        ch2_vol_right = sound_psg.ch2.volume * psg_vol_right;
+
+    // Always reset pointer to the start of the buffer, as all the data is
+    // always sent to SDL.
+    sound_psg.write_ptr = 0;
+
+    while (clocks_left > 0)
+    {
+        sound_psg.clocks_current_step++;
+        if (sound_psg.clocks_current_step == clocks_per_step)
+        {
+            sound_psg.clocks_current_step = 0;
+
+            // Channel 1
+
+            // TODO
+
+            // Channel 2
+
+            if (sound_psg.ch2.running)
+            {
+                // Sound length
+
+                if (sound_psg.ch2.steps_total > 0)
+                {
+                    if (sound_psg.ch2.steps_total > sound_psg.ch2.steps_elapsed)
+                    {
+                        sound_psg.ch2.steps_elapsed++;
+                    }
+                    else
+                    {
+                        sound_psg.ch2.running = 0;
+                        sound_psg.ch2.env_active = 0;
+                    }
+                }
+
+                // Envelope
+
+                if (sound_psg.ch2.env_active)
+                {
+                    sound_psg.ch2.env_steps_left--;
+                    if (sound_psg.ch2.env_steps_left == 0)
+                    {
+                        sound_psg.ch2.env_steps_left =
+                            sound_psg.ch2.env_steps_to_change;
+
+                        sound_psg.ch2.volume += sound_psg.ch2.env_increment;
+
+                        if (sound_psg.ch2.volume < 0)
+                        {
+                            sound_psg.ch2.volume = 0;
+                            sound_psg.ch2.env_active = 0;
+                        }
+                        else if (sound_psg.ch2.volume > 7)
+                        {
+                            sound_psg.ch2.volume = 7;
+                            sound_psg.ch2.env_active = 0;
+                        }
+                    }
+
+                    if (soundcnt_l & SOUNDCNT_L_PSG_2_ENABLE_LEFT)
+                        ch2_vol_left = sound_psg.ch2.volume * psg_vol_left;
+                    if (soundcnt_l & SOUNDCNT_L_PSG_2_ENABLE_RIGHT)
+                        ch2_vol_right = sound_psg.ch2.volume * psg_vol_right;
+                }
+            }
+
+            // Channel 3
+
+            // TODO
+
+            // Channel 4
+
+            // TODO
+        }
+
+        sound_psg.clocks_current_frequency++;
+        if (sound_psg.clocks_current_frequency == clocks_per_frequency)
+        {
+            sound_psg.clocks_current_frequency = 0;
+
+            // Channel 1
+
+            // TODO
+
+            // Channel 2
+
+            if (sound_psg.ch2.running)
+            {
+                sound_psg.ch2.frequency_steps++;
+
+                if (sound_psg.ch2.frequency_steps >= sound_psg.ch2.frequency)
+                {
+                    sound_psg.ch2.frequency_steps = 0;
+
+                    int duty = sound_psg.ch2.duty_cycle;
+                    int pointer = sound_psg.ch2.sample_pointer;
+
+                    sound_psg.ch2.current_value = GBA_SquareWave[duty][pointer];
+
+                    sound_psg.ch2.sample_pointer++;
+                    sound_psg.ch2.sample_pointer &= 31;
+                }
+            }
+
+            // Channel 3
+
+            // TODO
+
+            // Channel 4
+
+            // TODO
+        }
+
+        sound_psg.clocks_current_sample++;
+        if (sound_psg.clocks_current_sample == clocks_per_sample)
+        {
+            sound_psg.clocks_current_sample = 0;
+
+            int sound_left = 0;
+            int sound_right = 0;
+
+            if (sound_psg.ch2.running)
+            {
+                sound_left = sound_psg.ch2.current_value * ch2_vol_left;
+                sound_right = sound_psg.ch2.current_value * ch2_vol_right;
+            }
+
+            // TODO
+
+            sound_left >>= 8;
+            if (sound_left > 127)
+                sound_left = 127;
+            if (sound_left < -128)
+                sound_left = -128;
+
+            sound_right >>= 8;
+            if (sound_right > 127)
+                sound_right = 127;
+            if (sound_right < -128)
+                sound_right = -128;
+
+            sound_psg.buffer[sound_psg.write_ptr++] = sound_left;
+            sound_psg.buffer[sound_psg.write_ptr++] = sound_right;
+        }
+
+        clocks_left--;
+    }
+
+    // Hack: Fill buffer with the last value if there are empty samples.
+    while (sound_psg.write_ptr < (GBA_SAMPLES_PER_FRAME * 2))
+    {
+        sound_psg.buffer[sound_psg.write_ptr + 0] =
+                sound_psg.buffer[sound_psg.write_ptr - 2];
+        sound_psg.buffer[sound_psg.write_ptr + 1] =
+                sound_psg.buffer[sound_psg.write_ptr - 1];
+        sound_psg.write_ptr += 2;
+    }
+}
 
 // DMA channels
 // ============
@@ -183,7 +513,8 @@ static void Sound_Mix_Buffers_VBL(void)
         int16_t sample_left = 0;
         int16_t sample_right = 0;
 
-        // TODO: PSG channels
+        sample_left += sound_psg.buffer[read_ptr * 2 + 0];
+        sample_right += sound_psg.buffer[read_ptr * 2 + 1];
 
         {
             int16_t sample_dma_a = sound_dma[0].buffer[read_ptr];
@@ -250,8 +581,9 @@ void Sound_Handle_VBL(void)
     // Check if the sound master enable flag is disabled
     if (REG_SOUNDCNT_X & SOUNDCNT_X_MASTER_ENABLE)
     {
-        // TODO: PSG channels
+        UGBA_RefreshPSGState();
 
+        Sound_FillBuffers_VBL_PSG();
         Sound_FillBuffers_VBL_DMA(0);
         Sound_FillBuffers_VBL_DMA(1);
 
