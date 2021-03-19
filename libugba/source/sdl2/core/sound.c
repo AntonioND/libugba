@@ -44,6 +44,35 @@ static const int8_t GBA_SquareWave[4][32] = {
 
 typedef struct
 {
+    struct // Tone & Sweep
+    {
+        int frequency;
+        int sample_pointer;
+        int frequency_steps; // Elapsed steps out of 'frequency'
+
+        int sweep_shift;
+        int sweep_increase; // 1 = increase, 0 = decrease
+        int sweep_steps; // (1 / 128) second steps
+        int sweep_elapsed_steps;
+
+        int duty_cycle;
+
+        int volume;
+
+        int env_active; // If != 0, activate
+        int env_increment; // Value to add to volume at every step
+        int env_steps_to_change; // Steps needed to change envelope value
+        int env_steps_left; // It counts from env_steps_to_change to 0.
+
+        // Steps to end the sound (if 0, continue forever). Each step is 1/256 s
+        int steps_total;
+        int steps_elapsed;
+
+        int running;
+
+        int current_value;
+    } ch1;
+
     struct // Tone
     {
         int frequency;
@@ -85,7 +114,73 @@ static void UGBA_RefreshPSGState(void)
 {
     // Channel 1
 
-    // TODO
+    uint16_t sound1cnt_l = REG_SOUND1CNT_L;
+    uint16_t sound1cnt_h = REG_SOUND1CNT_H;
+    uint16_t sound1cnt_x = REG_SOUND1CNT_X;
+
+    if (sound1cnt_x & SOUND1CNT_X_RESTART)
+    {
+        REG_SOUND1CNT_X &= ~SOUND1CNT_X_RESTART;
+
+        sound_psg.ch1.running = 1;
+
+        // Length
+
+        if (sound1cnt_x & SOUND1CNT_X_ONE_SHOT)
+        {
+            sound_psg.ch1.steps_total = 64 - SOUND1CNT_H_LENGTH_GET(sound1cnt_h);
+        }
+        else
+        {
+            sound_psg.ch1.steps_total = 0;
+        }
+
+        // Sweep
+
+        // Sweep steps are 1 / 128 of a second. The other steps are 1 / 256.
+        sound_psg.ch1.sweep_steps = 2 * SOUND1CNT_L_SWEEP_TIME_GET(sound1cnt_l);
+
+        if (sound_psg.ch1.sweep_steps)
+        {
+            sound_psg.ch1.sweep_shift = SOUND1CNT_L_SWEEP_SHIFT_GET(sound1cnt_l);
+            sound_psg.ch1.sweep_increase = sound1cnt_l & SOUND1CNT_L_SWEEP_DIR_DEC;
+            sound_psg.ch1.sweep_elapsed_steps = 0;
+        }
+
+        // Envelope
+
+        int step_time = SOUND1CNT_H_ENV_STEP_TIME_GET(sound1cnt_h);
+
+        if (step_time == 0)
+        {
+            sound_psg.ch1.env_active = 0;
+        }
+        else
+        {
+            sound_psg.ch1.env_active = 1;
+
+            if (sound1cnt_h & SOUND1CNT_H_ENV_DIR_INC)
+                sound_psg.ch1.env_increment = 1;
+            else
+                sound_psg.ch1.env_increment = -1;
+
+            sound_psg.ch1.env_steps_to_change = step_time;
+            sound_psg.ch1.env_steps_left = step_time;
+        }
+
+        sound_psg.ch1.volume = SOUND1CNT_H_ENV_VOLUME_GET(sound1cnt_h);
+
+        // Frequency
+
+        sound_psg.ch1.frequency = 2048 - SOUND1CNT_X_FREQUENCY_GET(sound1cnt_x);
+    }
+    else
+    {
+        if (sound_psg.ch1.sweep_steps == 0)
+            sound_psg.ch1.frequency = 2048 - SOUND1CNT_X_FREQUENCY_GET(sound1cnt_x);
+    }
+
+    sound_psg.ch1.duty_cycle = SOUND1CNT_H_WAVE_DUTY_GET(sound1cnt_h);
 
     // Channel 2
 
@@ -181,8 +276,15 @@ static void Sound_FillBuffers_VBL_PSG(void)
 
     // Get individual left and right volumes (master volume is included here)
 
+    int ch1_vol_left = 0;
+    int ch1_vol_right = 0;
     int ch2_vol_left = 0;
     int ch2_vol_right = 0;
+
+    if (soundcnt_l & SOUNDCNT_L_PSG_1_ENABLE_LEFT)
+        ch1_vol_left = sound_psg.ch1.volume * psg_vol_left;
+    if (soundcnt_l & SOUNDCNT_L_PSG_1_ENABLE_RIGHT)
+        ch1_vol_right = sound_psg.ch1.volume * psg_vol_right;
 
     if (soundcnt_l & SOUNDCNT_L_PSG_2_ENABLE_LEFT)
         ch2_vol_left = sound_psg.ch2.volume * psg_vol_left;
@@ -202,7 +304,84 @@ static void Sound_FillBuffers_VBL_PSG(void)
 
             // Channel 1
 
-            // TODO
+            if (sound_psg.ch1.running)
+            {
+                // Sound length
+
+                if (sound_psg.ch1.steps_total > 0)
+                {
+                    if (sound_psg.ch1.steps_total > sound_psg.ch1.steps_elapsed)
+                    {
+                        sound_psg.ch1.steps_elapsed++;
+                    }
+                    else
+                    {
+                        sound_psg.ch1.running = 0;
+                        sound_psg.ch1.env_active = 0;
+                    }
+                }
+
+                // Sweep
+
+                if (sound_psg.ch1.sweep_steps)
+                {
+                    sound_psg.ch1.sweep_elapsed_steps++;
+
+                    if (sound_psg.ch1.sweep_elapsed_steps >=
+                            sound_psg.ch1.sweep_steps)
+                    {
+                        sound_psg.ch1.sweep_elapsed_steps = 0;
+
+                        int value = sound_psg.ch1.frequency;
+                        value >>= sound_psg.ch1.sweep_shift;
+
+                        if (sound_psg.ch1.sweep_increase)
+                        {
+                            if (sound_psg.ch1.frequency + value <= 2047)
+                            {
+                                sound_psg.ch1.frequency += value;
+                            }
+                        }
+                        else
+                        {
+                            sound_psg.ch1.frequency -= value;
+                            // No need to check for underflows. "value" is, at
+                            // most, the same value as the frequency, so the
+                            // result can only be 0 or greater than 0.
+                        }
+                    }
+                }
+
+                // Envelope
+
+                if (sound_psg.ch1.env_active)
+                {
+                    sound_psg.ch1.env_steps_left--;
+                    if (sound_psg.ch1.env_steps_left == 0)
+                    {
+                        sound_psg.ch1.env_steps_left =
+                            sound_psg.ch1.env_steps_to_change;
+
+                        sound_psg.ch1.volume += sound_psg.ch1.env_increment;
+
+                        if (sound_psg.ch1.volume < 0)
+                        {
+                            sound_psg.ch1.volume = 0;
+                            sound_psg.ch1.env_active = 0;
+                        }
+                        else if (sound_psg.ch1.volume > 7)
+                        {
+                            sound_psg.ch1.volume = 7;
+                            sound_psg.ch1.env_active = 0;
+                        }
+                    }
+
+                    if (soundcnt_l & SOUNDCNT_L_PSG_1_ENABLE_LEFT)
+                        ch1_vol_left = sound_psg.ch1.volume * psg_vol_left;
+                    if (soundcnt_l & SOUNDCNT_L_PSG_1_ENABLE_RIGHT)
+                        ch1_vol_right = sound_psg.ch1.volume * psg_vol_right;
+                }
+            }
 
             // Channel 2
 
@@ -270,7 +449,23 @@ static void Sound_FillBuffers_VBL_PSG(void)
 
             // Channel 1
 
-            // TODO
+            if (sound_psg.ch1.running)
+            {
+                sound_psg.ch1.frequency_steps++;
+
+                if (sound_psg.ch1.frequency_steps >= sound_psg.ch1.frequency)
+                {
+                    sound_psg.ch1.frequency_steps = 0;
+
+                    int duty = sound_psg.ch1.duty_cycle;
+                    int pointer = sound_psg.ch1.sample_pointer;
+
+                    sound_psg.ch1.current_value = GBA_SquareWave[duty][pointer];
+
+                    sound_psg.ch1.sample_pointer++;
+                    sound_psg.ch1.sample_pointer &= 31;
+                }
+            }
 
             // Channel 2
 
@@ -308,6 +503,12 @@ static void Sound_FillBuffers_VBL_PSG(void)
 
             int sound_left = 0;
             int sound_right = 0;
+
+            if (sound_psg.ch1.running)
+            {
+                sound_left = sound_psg.ch1.current_value * ch1_vol_left;
+                sound_right = sound_psg.ch1.current_value * ch1_vol_right;
+            }
 
             if (sound_psg.ch2.running)
             {
