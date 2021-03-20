@@ -422,7 +422,14 @@ typedef struct {
 #define REG_SOUNDCNT_H      REG_16(OFFSET_SOUNDCNT_H)
 #define REG_SOUNDCNT_X      REG_16(OFFSET_SOUNDCNT_X)
 #define REG_SOUNDBIAS       REG_16(OFFSET_SOUNDBIAS)
-#define REG_WAVE_RAM        PTR_REG_16(OFFSET_WAVE_RAM)
+
+#ifdef __GBA__
+# define REG_WAVE_RAM       PTR_REG_16(OFFSET_WAVE_RAM)
+#else // __GBA__
+EXPORT_API uint16_t *UGBA_MemWaveRam(void);
+# define REG_WAVE_RAM       (UGBA_MemWaveRam())
+#endif // __GBA__
+
 #define REG_FIFO_A          PTR_REG_32(OFFSET_FIFO_A)
 #define REG_FIFO_B          PTR_REG_32(OFFSET_FIFO_B)
 

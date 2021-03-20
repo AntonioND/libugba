@@ -12,6 +12,40 @@
 #include "../sound_utils.h"
 #include "../wav_utils.h"
 
+// Banked wave RAM
+// ===============
+
+#define WAV_BUFFER_SIZE     ((32 * 4) / (8 * sizeof(uint16_t)))
+
+static uint16_t channel_3_wave_ram[2 * WAV_BUFFER_SIZE];
+
+uint16_t *UGBA_MemWaveRam(void)
+{
+    if (SOUND3CNT_L_BANK_GET(REG_SOUND3CNT_L) == 0)
+        return &(channel_3_wave_ram[0]);
+    else
+        return &(channel_3_wave_ram[WAV_BUFFER_SIZE]);
+}
+
+static int GetWaveRamSample(int index)
+{
+    uint16_t val = channel_3_wave_ram[index >> 2];
+
+    switch (index & 3)
+    {
+        case 0:
+            return (val >> 4) & 0xF;
+        case 1:
+            return (val >> 0) & 0xF;
+        case 2:
+            return (val >> 12) & 0xF;
+        case 3:
+            return (val >> 8) & 0xF;
+        default:
+            return 0;
+    }
+}
+
 // PSG channels
 // ============
 
@@ -96,6 +130,26 @@ typedef struct
 
         int current_value;
     } ch2;
+
+    struct // Wave Output
+    {
+        int frequency;
+        int sample_pointer;
+        int frequency_steps; // Elapsed steps out of 'frequency'
+
+        int bank_selected;
+        int bank_size;
+
+        int volume;
+
+        // Steps to end the sound (if 0, continue forever). Each step is 1/256 s
+        int steps_total;
+        int steps_elapsed;
+
+        int running;
+
+        int current_value;
+    } ch3;
 
     int8_t buffer[GBA_SAMPLES_PER_FRAME * 2];
     int write_ptr;
@@ -236,7 +290,65 @@ static void UGBA_RefreshPSGState(void)
 
     // Channel 3
 
-    // TODO
+    uint16_t sound3cnt_l = REG_SOUND3CNT_L;
+    uint16_t sound3cnt_h = REG_SOUND3CNT_H;
+    uint16_t sound3cnt_x = REG_SOUND3CNT_X;
+
+    if (sound3cnt_x & SOUND3CNT_X_RESTART)
+    {
+        REG_SOUND3CNT_X &= ~SOUND3CNT_X_RESTART;
+
+        if ((sound3cnt_l & SOUND3CNT_L_ENABLE) == 0)
+        {
+            sound_psg.ch3.running = 0;
+        }
+        else
+        {
+            sound_psg.ch3.running = 1;
+
+            // Bank settings
+
+            sound_psg.ch3.bank_selected = SOUND3CNT_L_BANK_GET(sound3cnt_l);
+            sound_psg.ch3.sample_pointer = sound_psg.ch3.bank_selected * 32;
+
+            if (sound3cnt_l & SOUND3CNT_L_SIZE_64)
+                sound_psg.ch3.bank_size = 64;
+            else
+                sound_psg.ch3.bank_size = 32;
+
+            // Length
+
+            if (sound3cnt_x & SOUND3CNT_X_ONE_SHOT)
+            {
+                sound_psg.ch3.steps_total =
+                            256 - SOUND3CNT_H_LENGTH_GET(sound3cnt_l);
+            }
+            else
+            {
+                sound_psg.ch3.steps_total = 0;
+            }
+
+            // Volume
+
+            int vol = sound3cnt_h & SOUND3CNT_H_VOLUME_MASK;
+
+            if (vol == SOUND3CNT_H_VOLUME_0)
+                sound_psg.ch3.volume = 0;
+            else if (vol == SOUND3CNT_H_VOLUME_25)
+                sound_psg.ch3.volume = 1;
+            else if (vol == SOUND3CNT_H_VOLUME_50)
+                sound_psg.ch3.volume = 2;
+            else if (vol == SOUND3CNT_H_VOLUME_100)
+                sound_psg.ch3.volume = 4;
+            else // if (vol == SOUND3CNT_H_VOLUME_75)
+                sound_psg.ch3.volume = 3;
+
+            // Frequency
+
+            sound_psg.ch3.frequency =
+                        2048 - SOUND3CNT_X_SAMPLE_RATE_GET(sound3cnt_x);
+        }
+    }
 
     // Channel 4
 
@@ -253,7 +365,10 @@ static void Sound_FillBuffers_VBL_PSG(void)
     // 256 steps per second
     const int clocks_per_step = GBA_CLOCKS_PER_SECOND / 256;
 
-    // The frequency goes through a full cycle 131072 times per second
+    // The frequency goes through a full cycle 131072 times per second. This is
+    // the same as saying 2097152 times per second for channel 3, or 2097152
+    // times per second if you imagine the waves of channels 1 and 2 to be
+    // formed of 16 samples.
     const int clocks_per_frequency = GBA_CLOCKS_PER_SECOND / (131072 * 16);
 
     const int clocks_per_sample = GBA_CLOCKS_PER_SAMPLE_60_FPS;
@@ -280,6 +395,10 @@ static void Sound_FillBuffers_VBL_PSG(void)
     int ch1_vol_right = 0;
     int ch2_vol_left = 0;
     int ch2_vol_right = 0;
+    int ch3_vol_left = 0;
+    int ch3_vol_right = 0;
+    int ch4_vol_left = 0;
+    int ch4_vol_right = 0;
 
     if (soundcnt_l & SOUNDCNT_L_PSG_1_ENABLE_LEFT)
         ch1_vol_left = sound_psg.ch1.volume * psg_vol_left;
@@ -290,6 +409,11 @@ static void Sound_FillBuffers_VBL_PSG(void)
         ch2_vol_left = sound_psg.ch2.volume * psg_vol_left;
     if (soundcnt_l & SOUNDCNT_L_PSG_2_ENABLE_RIGHT)
         ch2_vol_right = sound_psg.ch2.volume * psg_vol_right;
+
+    if (soundcnt_l & SOUNDCNT_L_PSG_3_ENABLE_LEFT)
+        ch3_vol_left = sound_psg.ch3.volume * psg_vol_left;
+    if (soundcnt_l & SOUNDCNT_L_PSG_3_ENABLE_RIGHT)
+        ch3_vol_right = sound_psg.ch3.volume * psg_vol_right;
 
     // Always reset pointer to the start of the buffer, as all the data is
     // always sent to SDL.
@@ -435,7 +559,22 @@ static void Sound_FillBuffers_VBL_PSG(void)
 
             // Channel 3
 
-            // TODO
+            if (sound_psg.ch3.running)
+            {
+                // Sound length
+
+                if (sound_psg.ch3.steps_total > 0)
+                {
+                    if (sound_psg.ch3.steps_total > sound_psg.ch3.steps_elapsed)
+                    {
+                        sound_psg.ch3.steps_elapsed++;
+                    }
+                    else
+                    {
+                        sound_psg.ch3.running = 0;
+                    }
+                }
+            }
 
             // Channel 4
 
@@ -489,7 +628,34 @@ static void Sound_FillBuffers_VBL_PSG(void)
 
             // Channel 3
 
-            // TODO
+            if (sound_psg.ch3.running)
+            {
+                sound_psg.ch3.frequency_steps++;
+
+                if (sound_psg.ch3.frequency_steps >= sound_psg.ch3.frequency)
+                {
+                    sound_psg.ch3.frequency_steps = 0;
+
+                    int pointer = sound_psg.ch3.sample_pointer;
+                    int sample = (GetWaveRamSample(pointer) - 8) << 4;
+
+                    sound_psg.ch3.current_value = sample;
+
+                    if (sound_psg.ch3.bank_size == 64)
+                    {
+                        sound_psg.ch3.sample_pointer++;
+                        sound_psg.ch3.sample_pointer &= 63;
+                    }
+                    else // if (sound_psg.ch3.bank_size == 32)
+                    {
+                        sound_psg.ch3.sample_pointer++;
+                        sound_psg.ch3.sample_pointer &= 31;
+
+                        sound_psg.ch3.sample_pointer |=
+                            sound_psg.ch3.bank_selected << 5;
+                    }
+                }
+            }
 
             // Channel 4
 
@@ -514,6 +680,12 @@ static void Sound_FillBuffers_VBL_PSG(void)
             {
                 sound_left = sound_psg.ch2.current_value * ch2_vol_left;
                 sound_right = sound_psg.ch2.current_value * ch2_vol_right;
+            }
+
+            if (sound_psg.ch3.running)
+            {
+                sound_left = sound_psg.ch3.current_value * ch3_vol_left;
+                sound_right = sound_psg.ch3.current_value * ch3_vol_right;
             }
 
             // TODO
