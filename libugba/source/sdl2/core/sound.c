@@ -257,6 +257,10 @@ static void UGBA_RefreshPSGState(void)
         // Frequency
 
         sound_psg.ch1.frequency = 2048 - SOUND1CNT_X_FREQUENCY_GET(sound1cnt_x);
+
+        // Flag it as enabled
+
+        REG_SOUNDCNT_X |= SOUNDCNT_X_PSG_1_IS_ON;
     }
     else
     {
@@ -314,6 +318,10 @@ static void UGBA_RefreshPSGState(void)
         // Frequency
 
         sound_psg.ch2.frequency = 2048 - SOUND2CNT_H_FREQUENCY_GET(sound2cnt_h);
+
+        // Flag it as enabled
+
+        REG_SOUNDCNT_X |= SOUNDCNT_X_PSG_2_IS_ON;
     }
 
     sound_psg.ch2.duty_cycle = SOUND2CNT_L_WAVE_DUTY_GET(sound2cnt_l);
@@ -377,6 +385,10 @@ static void UGBA_RefreshPSGState(void)
 
             sound_psg.ch3.frequency =
                         2048 - SOUND3CNT_X_SAMPLE_RATE_GET(sound3cnt_x);
+
+            // Flag it as enabled
+
+            REG_SOUNDCNT_X |= SOUNDCNT_X_PSG_3_IS_ON;
         }
     }
 
@@ -442,9 +454,17 @@ static void UGBA_RefreshPSGState(void)
         int freq_div = SOUND4CNT_H_FREQUENCY_GET(sound4cnt_h);
 
         if (freq_div > 0xD) // Invalid values
+        {
             sound_psg.ch4.running = 0;
+        }
         else
+        {
             sound_psg.ch4.frequency = div_ratio * freq_div;
+
+            // Flag it as enabled
+
+            REG_SOUNDCNT_X |= SOUNDCNT_X_PSG_4_IS_ON;
+        }
     }
 }
 
@@ -542,6 +562,9 @@ static void Sound_FillBuffers_VBL_PSG(void)
                     {
                         sound_psg.ch1.running = 0;
                         sound_psg.ch1.env_active = 0;
+
+                        // Flag it as disabled
+                        REG_SOUNDCNT_X &= ~SOUNDCNT_X_PSG_1_IS_ON;
                     }
                 }
 
@@ -623,6 +646,9 @@ static void Sound_FillBuffers_VBL_PSG(void)
                     {
                         sound_psg.ch2.running = 0;
                         sound_psg.ch2.env_active = 0;
+
+                        // Flag it as disabled
+                        REG_SOUNDCNT_X &= ~SOUNDCNT_X_PSG_2_IS_ON;
                     }
                 }
 
@@ -672,6 +698,9 @@ static void Sound_FillBuffers_VBL_PSG(void)
                     else
                     {
                         sound_psg.ch3.running = 0;
+
+                        // Flag it as disabled
+                        REG_SOUNDCNT_X &= ~SOUNDCNT_X_PSG_3_IS_ON;
                     }
                 }
             }
@@ -692,6 +721,9 @@ static void Sound_FillBuffers_VBL_PSG(void)
                     {
                         sound_psg.ch4.running = 0;
                         sound_psg.ch4.env_active = 0;
+
+                        // Flag it as disabled
+                        REG_SOUNDCNT_X &= ~SOUNDCNT_X_PSG_4_IS_ON;
                     }
                 }
 
