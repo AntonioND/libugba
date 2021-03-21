@@ -969,3 +969,9 @@ void Sound_Handle_VBL(void)
 
     Sound_SendToStream();
 }
+
+void Sound_MemWaveRamInitialize(void)
+{
+    for (size_t i = 0; i < sizeof(channel_3_wave_ram) / sizeof(uint16_t); i++)
+        channel_3_wave_ram[i] = 0xFF00;
+}

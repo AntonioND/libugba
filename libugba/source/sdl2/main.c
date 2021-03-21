@@ -14,6 +14,7 @@
 #include "save_file.h"
 #include "sound_utils.h"
 
+#include "core/sound.h"
 #include "core/video.h"
 #include "gui/win_main.h"
 #include "gui/window_handler.h"
@@ -138,6 +139,10 @@ void UGBA_Init(int *argc, char **argv[])
 
     GBA_FillFadeTables();
 
+    // Initialize hardware status
+
+    Sound_MemWaveRamInitialize();
+
     // Detect arguments
 
     UGBA_ParseArgs(argc, argv);
@@ -164,6 +169,10 @@ void UGBA_InitHeadless(int *argc, char **argv[])
         exit(1);
 
     GBA_FillFadeTables();
+
+    // Initialize hardware status
+
+    Sound_MemWaveRamInitialize();
 
     // Detect arguments
 
