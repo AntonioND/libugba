@@ -10,7 +10,16 @@ UGBA limitations
    switch. Most games do the switch during the VBL, though, so this shouldn't be
    a problem.
 
-   PSG channels not supported yet.
+   PSG channels are supported, but they are also hard to simulate in the PC
+   port. In short, if you want to use one of them, set all the registers to the
+   right values, then trigger the restart bit. During the VBL handler, this bit
+   is checked, and the sound settings will be updated accordingly. This also
+   means that the PSG flags that say if a channel is playing sound are also
+   updated during the VBL handler only.
+
+   In order to access the channel 3 wave RAM, always use the definition
+   ``MEM_WAVE_RAM``, never store the pointer. This macro expands to a function
+   call on PC, and points at the right wave RAM bank.
 
 2. It is not possible to run GBA assembly code when building for PC.
 
@@ -42,6 +51,9 @@ UGBA limitations
    If you decide to write to the registers directly you'll have to use the
    macros as well.
 
+   Sound registers are always checked at the start of VBL, and there are no
+   helpers to update them right away on PC.
+
 4. When writing to memory or I/O registers, use the provided definitions.
 
    Instead of manually using addresses of VRAM or I/O registers, use the
@@ -59,7 +71,10 @@ UGBA limitations
 6. Interrupts can't be implemented as they are on the GBA.
 
    - VBLANK: It works mostly as expected. Just make sure that you call the
-     function SWI_VBlankIntrWait() in your main game loop.
+     function SWI_VBlankIntrWait() in your main game loop. Also, note that a PC
+     has a lot more computing power than the GBA. Most likely an unoptimized
+     game loop will be able to run at 60 FPS on PC no matter what you do, but it
+     may be slower on a real GBA.
 
    - HBLANK: This one is very different on PC. On GBA, the HBLANK interrupt
      happens whenever a scanline is drawn on the screen, and it can be used to

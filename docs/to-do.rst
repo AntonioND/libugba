@@ -8,7 +8,6 @@ SDL2
 - Add helper to configure user input.
 - Interrupts: SERIAL and GAMEPAK are missing.
 - DMA 3 Video Capture Mode
-- PSG sound channels.
 - Save SRAM to file every few seconds?
 
 Common
@@ -41,4 +40,5 @@ General
 Known bugs
 ==========
 
+- The PSG sound channels aren't too accurate.
 - Mosaic effect is broken, it doesn't work like on hardware.
