@@ -426,7 +426,7 @@ typedef struct {
 #ifdef __GBA__
 # define REG_WAVE_RAM       PTR_REG_16(OFFSET_WAVE_RAM)
 #else // __GBA__
-EXPORT_API uint16_t *UGBA_MemWaveRam(void);
+EXPORT_API volatile uint16_t *UGBA_MemWaveRam(void);
 # define REG_WAVE_RAM       (UGBA_MemWaveRam())
 #endif // __GBA__
 

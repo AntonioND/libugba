@@ -23,12 +23,16 @@ static uint16_t channel_3_wave_ram[2 * WAV_BUFFER_SIZE];
 
 // TODO: The volume envelope and sweep timers treat a period of 0 as 8.
 
-uint16_t *UGBA_MemWaveRam(void)
+volatile uint16_t *UGBA_MemWaveRam(void)
 {
-    if (SOUND3CNT_L_BANK_GET(REG_SOUND3CNT_L) == 0)
-        return &(channel_3_wave_ram[0]);
-    else
+    if ((REG_SOUNDCNT_X & SOUNDCNT_X_MASTER_ENABLE) == 0)
         return &(channel_3_wave_ram[WAV_BUFFER_SIZE]);
+
+    // Return the buffer that isn't selected for playback.
+    if (SOUND3CNT_L_BANK_GET(REG_SOUND3CNT_L) == 0)
+        return &(channel_3_wave_ram[WAV_BUFFER_SIZE]);
+    else
+        return &(channel_3_wave_ram[0]);
 }
 
 static int GetWaveRamSample(int index)
@@ -1193,6 +1197,11 @@ void Sound_Handle_VBL(void)
 
 void Sound_MemWaveRamInitialize(void)
 {
-    for (size_t i = 0; i < sizeof(channel_3_wave_ram) / sizeof(uint16_t); i++)
+    // Fill bank 1 with 0xFF00 and bank 0 with 0x0000
+    size_t size = sizeof(channel_3_wave_ram) / sizeof(uint16_t);
+
+    for (size_t i = 0; i < size / 2; i++)
+        channel_3_wave_ram[i] = 0x0000;
+    for (size_t i = size / 2; i < size; i++)
         channel_3_wave_ram[i] = 0xFF00;
 }
