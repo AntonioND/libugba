@@ -108,7 +108,7 @@ function(unittest_screenshot)
         COMMAND ${CMAKE_COMMAND}
                     -DCMD1=${CMD1}
                     -DCMD2=${CMD2}
-                    -P ${CMAKE_SOURCE_DIR}/examples/cmake/runcommands.cmake
+                    -P ${CMAKE_SOURCE_DIR}/cmake/runcommands.cmake
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
     )
 
@@ -135,7 +135,7 @@ function(unittest_screenshot)
             COMMAND ${CMAKE_COMMAND}
                         -DCMD1=${CMD1}
                         -DCMD2=${CMD2}
-                        -P ${CMAKE_SOURCE_DIR}/examples/cmake/runcommands.cmake
+                        -P ${CMAKE_SOURCE_DIR}/cmake/runcommands.cmake
             WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
         )
     endif()
@@ -171,7 +171,7 @@ function(unittest_two_screenshots)
                     -DCMD1=${CMD1}
                     -DCMD2=${CMD2}
                     -DCMD3=${CMD3}
-                    -P ${CMAKE_SOURCE_DIR}/examples/cmake/runcommands.cmake
+                    -P ${CMAKE_SOURCE_DIR}/cmake/runcommands.cmake
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
     )
 
@@ -205,7 +205,7 @@ function(unittest_two_screenshots)
                         -DCMD1=${CMD1}
                         -DCMD2=${CMD2}
                         -DCMD3=${CMD3}
-                        -P ${CMAKE_SOURCE_DIR}/examples/cmake/runcommands.cmake
+                        -P ${CMAKE_SOURCE_DIR}/cmake/runcommands.cmake
             WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
         )
     endif()
@@ -248,7 +248,7 @@ function(unittest_three_screenshots)
                     -DCMD2=${CMD2}
                     -DCMD3=${CMD3}
                     -DCMD4=${CMD4}
-                    -P ${CMAKE_SOURCE_DIR}/examples/cmake/runcommands.cmake
+                    -P ${CMAKE_SOURCE_DIR}/cmake/runcommands.cmake
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
     )
 
@@ -289,7 +289,7 @@ function(unittest_three_screenshots)
                         -DCMD2=${CMD2}
                         -DCMD3=${CMD3}
                         -DCMD4=${CMD4}
-                        -P ${CMAKE_SOURCE_DIR}/examples/cmake/runcommands.cmake
+                        -P ${CMAKE_SOURCE_DIR}/cmake/runcommands.cmake
             WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
         )
     endif()
@@ -323,7 +323,7 @@ function(unittest_audio)
         COMMAND ${CMAKE_COMMAND}
                     -DCMD1=${CMD1}
                     -DCMD2=${CMD2}
-                    -P ${CMAKE_SOURCE_DIR}/examples/cmake/runcommands.cmake
+                    -P ${CMAKE_SOURCE_DIR}/cmake/runcommands.cmake
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
     )
 
@@ -350,7 +350,7 @@ function(unittest_audio)
             COMMAND ${CMAKE_COMMAND}
                         -DCMD1=${CMD1}
                         -DCMD2=${CMD2}
-                        -P ${CMAKE_SOURCE_DIR}/examples/cmake/runcommands.cmake
+                        -P ${CMAKE_SOURCE_DIR}/cmake/runcommands.cmake
             WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
         )
     endif()
@@ -380,7 +380,7 @@ function(unittest_sram)
                     -DCMD1=${CMD1}
                     -DCMD2=${CMD2}
                     -DCMD3=${CMD3}
-                    -P ${CMAKE_SOURCE_DIR}/examples/cmake/runcommands.cmake
+                    -P ${CMAKE_SOURCE_DIR}/cmake/runcommands.cmake
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
     )
 
@@ -399,7 +399,7 @@ function(unittest_sram)
                         -DCMD1=${CMD1}
                         -DCMD2=${CMD2}
                         -DCMD3=${CMD3}
-                        -P ${CMAKE_SOURCE_DIR}/examples/cmake/runcommands.cmake
+                        -P ${CMAKE_SOURCE_DIR}/cmake/runcommands.cmake
             WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
         )
     endif()
