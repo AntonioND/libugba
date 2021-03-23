@@ -1200,8 +1200,6 @@ void Sound_MemWaveRamInitialize(void)
     // Fill bank 1 with 0xFF00 and bank 0 with 0x0000
     size_t size = sizeof(channel_3_wave_ram) / sizeof(uint16_t);
 
-    for (size_t i = 0; i < size / 2; i++)
+    for (size_t i = 0; i < size; i++)
         channel_3_wave_ram[i] = 0x0000;
-    for (size_t i = size / 2; i < size; i++)
-        channel_3_wave_ram[i] = 0xFF00;
 }
