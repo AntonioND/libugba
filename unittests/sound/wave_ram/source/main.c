@@ -21,6 +21,39 @@ int main(int argc, char *argv[])
 
     CON_InitDefault();
 
+    // Check initial state of wave RAM
+    // -------------------------------
+
+    CON_Print("Initial state\n");
+
+    SOUND_MasterEnable(1);
+
+    REG_SOUND3CNT_L = SOUND3CNT_L_BANK_SET(0);
+
+    for (int i = 0; i < 8; i++)
+    {
+        if (REG_WAVE_RAM[i] != 0x0000)
+        {
+            char str[50];
+            snprintf(str, sizeof(str), "%d: Failed: 0x%04X\n",
+                    __LINE__, REG_WAVE_RAM[i]);
+            CON_Print(str);
+        }
+    }
+
+    REG_SOUND3CNT_L = SOUND3CNT_L_BANK_SET(1);
+
+    for (int i = 0; i < 8; i++)
+    {
+        if (REG_WAVE_RAM[i] != 0x0000)
+        {
+            char str[50];
+            snprintf(str, sizeof(str), "%d: Failed: 0x%04X\n",
+                    __LINE__, REG_WAVE_RAM[i]);
+            CON_Print(str);
+        }
+    }
+
     // Test with sound hardware OFF
     // ----------------------------
 
