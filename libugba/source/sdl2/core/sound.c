@@ -93,7 +93,7 @@ typedef struct
         int frequency_steps; // Elapsed steps out of 'frequency'
 
         int sweep_shift;
-        int sweep_increase; // 1 = increase, 0 = decrease
+        int sweep_decrease; // 0 = decrease, else increase
         int sweep_steps; // (1 / 128) second steps
         int sweep_elapsed_steps;
 
@@ -216,6 +216,7 @@ static void UGBA_RefreshPSGState(void)
         if (sound1cnt_x & SOUND1CNT_X_ONE_SHOT)
         {
             sound_psg.ch1.steps_total = 64 - SOUND1CNT_H_LENGTH_GET(sound1cnt_h);
+            sound_psg.ch1.steps_elapsed = 0;
         }
         else
         {
@@ -230,7 +231,7 @@ static void UGBA_RefreshPSGState(void)
         if (sound_psg.ch1.sweep_steps)
         {
             sound_psg.ch1.sweep_shift = SOUND1CNT_L_SWEEP_SHIFT_GET(sound1cnt_l);
-            sound_psg.ch1.sweep_increase = sound1cnt_l & SOUND1CNT_L_SWEEP_DIR_DEC;
+            sound_psg.ch1.sweep_decrease = sound1cnt_l & SOUND1CNT_L_SWEEP_DIR_DEC;
             sound_psg.ch1.sweep_elapsed_steps = 0;
         }
 
@@ -260,6 +261,8 @@ static void UGBA_RefreshPSGState(void)
         // Frequency
 
         sound_psg.ch1.frequency = 2048 - SOUND1CNT_X_FREQUENCY_GET(sound1cnt_x);
+        sound_psg.ch1.frequency_steps = 0;
+        sound_psg.ch2.sample_pointer = 0;
 
         // Flag it as enabled
 
@@ -289,6 +292,7 @@ static void UGBA_RefreshPSGState(void)
         if (sound2cnt_h & SOUND2CNT_H_ONE_SHOT)
         {
             sound_psg.ch2.steps_total = 64 - SOUND2CNT_L_LENGTH_GET(sound2cnt_l);
+            sound_psg.ch2.steps_elapsed = 0;
         }
         else
         {
@@ -321,6 +325,8 @@ static void UGBA_RefreshPSGState(void)
         // Frequency
 
         sound_psg.ch2.frequency = 2048 - SOUND2CNT_H_FREQUENCY_GET(sound2cnt_h);
+        sound_psg.ch2.frequency_steps = 0;
+        sound_psg.ch2.sample_pointer = 0;
 
         // Flag it as enabled
 
@@ -342,6 +348,10 @@ static void UGBA_RefreshPSGState(void)
         if ((sound3cnt_l & SOUND3CNT_L_ENABLE) == 0)
         {
             sound_psg.ch3.running = 0;
+
+            // Flag it as disabled
+
+            REG_SOUNDCNT_X &= ~SOUNDCNT_X_PSG_3_IS_ON;
         }
         else
         {
@@ -363,6 +373,7 @@ static void UGBA_RefreshPSGState(void)
             {
                 sound_psg.ch3.steps_total =
                             256 - SOUND3CNT_H_LENGTH_GET(sound3cnt_l);
+                sound_psg.ch3.steps_elapsed = 0;
             }
             else
             {
@@ -388,6 +399,8 @@ static void UGBA_RefreshPSGState(void)
 
             sound_psg.ch3.frequency =
                         2048 - SOUND3CNT_X_SAMPLE_RATE_GET(sound3cnt_x);
+            sound_psg.ch3.frequency_steps = 0;
+            sound_psg.ch3.sample_pointer = 0;
 
             // Flag it as enabled
 
@@ -411,6 +424,7 @@ static void UGBA_RefreshPSGState(void)
         if (sound4cnt_h & SOUND4CNT_H_ONE_SHOT)
         {
             sound_psg.ch4.steps_total = 64 - SOUND4CNT_L_LENGTH_GET(sound4cnt_l);
+            sound_psg.ch4.steps_elapsed = 0;
         }
         else
         {
@@ -463,6 +477,7 @@ static void UGBA_RefreshPSGState(void)
         else
         {
             sound_psg.ch4.frequency = div_ratio * freq_div;
+            sound_psg.ch4.frequency_steps = 0;
 
             // Flag it as enabled
 
@@ -585,7 +600,7 @@ static void Sound_FillBuffers_VBL_PSG(void)
                         int value = sound_psg.ch1.frequency;
                         value >>= sound_psg.ch1.sweep_shift;
 
-                        if (sound_psg.ch1.sweep_increase)
+                        if (sound_psg.ch1.sweep_decrease)
                         {
                             if (sound_psg.ch1.frequency + value <= 2047)
                             {
@@ -598,6 +613,14 @@ static void Sound_FillBuffers_VBL_PSG(void)
                             // No need to check for underflows. "value" is, at
                             // most, the same value as the frequency, so the
                             // result can only be 0 or greater than 0.
+
+                            if (sound_psg.ch1.frequency <= 0)
+                            {
+                                sound_psg.ch1.running = 0;
+
+                                // Flag it as disabled
+                                REG_SOUNDCNT_X &= ~SOUNDCNT_X_PSG_1_IS_ON;
+                            }
                         }
                     }
                 }
