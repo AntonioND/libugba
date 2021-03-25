@@ -161,7 +161,6 @@ typedef struct
 
     struct // Noise
     {
-        int dividing_ratio;
         int counter_width;
         int frequency;
         int frequency_steps; // Elapsed steps out of 'frequency'
