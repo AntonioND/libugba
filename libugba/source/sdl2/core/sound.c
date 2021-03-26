@@ -372,7 +372,7 @@ static void UGBA_RefreshPSGState(void)
             if (sound3cnt_x & SOUND3CNT_X_ONE_SHOT)
             {
                 sound_psg.ch3.steps_total =
-                            256 - SOUND3CNT_H_LENGTH_GET(sound3cnt_l);
+                            256 - SOUND3CNT_H_LENGTH_GET(sound3cnt_h);
                 sound_psg.ch3.steps_elapsed = 0;
             }
             else
@@ -562,6 +562,9 @@ static void Sound_FillBuffers_VBL_PSG(void)
 
     while (clocks_left > 0)
     {
+        // Handle envelope, sweep and sound length of channels 1, 2, 3 and 4
+        // -----------------------------------------------------------------
+
         sound_psg.clocks_current_step++;
         if (sound_psg.clocks_current_step == clocks_per_step)
         {
@@ -788,6 +791,9 @@ static void Sound_FillBuffers_VBL_PSG(void)
             }
         }
 
+        // Handle waveform changes of channels 1, 2 and 3
+        // ----------------------------------------------
+
         sound_psg.clocks_current_frequency++;
         if (sound_psg.clocks_current_frequency == clocks_per_frequency)
         {
@@ -865,7 +871,8 @@ static void Sound_FillBuffers_VBL_PSG(void)
             }
         }
 
-        // Channel 4
+        // Handle waveform changes of channel 4
+        // ------------------------------------
 
         sound_psg.clocks_current_frequency_ch4++;
         if (sound_psg.clocks_current_frequency_ch4 == clocks_per_frequency_ch4)
@@ -911,6 +918,9 @@ static void Sound_FillBuffers_VBL_PSG(void)
                 }
             }
         }
+
+        // Generate sample combining the 4 channels
+        // ----------------------------------------
 
         sound_psg.clocks_current_sample++;
         if (sound_psg.clocks_current_sample == clocks_per_sample)
