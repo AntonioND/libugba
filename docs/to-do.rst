@@ -9,6 +9,7 @@ SDL2
 - Interrupts: SERIAL and GAMEPAK are missing.
 - DMA 3 Video Capture Mode
 - Save SRAM to file every few seconds?
+- Fix wave RAM viewer.
 
 Common
 ------
@@ -23,7 +24,8 @@ Examples
 ========
 
 - DMA 3 Video Capture Mode
-- PSG sound channels.
+- PSG sound channels when multiple channels are used at the same time.
+- DMA + PSG sound channels at the same time.
 
 Unit tests
 ==========
@@ -41,4 +43,6 @@ Known bugs
 ==========
 
 - The PSG sound channels aren't too accurate.
+- PSG channel 1 sweep is a bit broken. See the example ``basic_psg_ch1`` to see
+  what fails.
 - Mosaic effect is broken, it doesn't work like on hardware.
