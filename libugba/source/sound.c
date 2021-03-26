@@ -28,7 +28,7 @@ void SOUND_DMA_Volume(int dma_a_max, int dma_b_max)
 
 void SOUND_PSG_MasterVolume(int volume)
 {
-    uint16_t mask = SOUNDCNT_H_PSG_VOLUME_100;
+    uint16_t mask = SOUNDCNT_H_PSG_VOLUME_MASK;
     uint16_t value = REG_SOUNDCNT_H & ~mask;
 
     if (volume == 100)
