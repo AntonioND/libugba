@@ -919,26 +919,26 @@ static void Sound_FillBuffers_VBL_PSG(void)
 
             if (sound_psg.ch1.running)
             {
-                sound_left = sound_psg.ch1.current_value * ch1_vol_left;
-                sound_right = sound_psg.ch1.current_value * ch1_vol_right;
+                sound_left += sound_psg.ch1.current_value * ch1_vol_left;
+                sound_right += sound_psg.ch1.current_value * ch1_vol_right;
             }
 
             if (sound_psg.ch2.running)
             {
-                sound_left = sound_psg.ch2.current_value * ch2_vol_left;
-                sound_right = sound_psg.ch2.current_value * ch2_vol_right;
+                sound_left += sound_psg.ch2.current_value * ch2_vol_left;
+                sound_right += sound_psg.ch2.current_value * ch2_vol_right;
             }
 
             if (sound_psg.ch3.running)
             {
-                sound_left = sound_psg.ch3.current_value * ch3_vol_left;
-                sound_right = sound_psg.ch3.current_value * ch3_vol_right;
+                sound_left += sound_psg.ch3.current_value * ch3_vol_left;
+                sound_right += sound_psg.ch3.current_value * ch3_vol_right;
             }
 
             if (sound_psg.ch4.running)
             {
-                sound_left = sound_psg.ch4.current_value * ch4_vol_left;
-                sound_right = sound_psg.ch4.current_value * ch4_vol_right;
+                sound_left += sound_psg.ch4.current_value * ch4_vol_left;
+                sound_right += sound_psg.ch4.current_value * ch4_vol_right;
             }
 
             sound_left >>= 8;
