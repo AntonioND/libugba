@@ -476,7 +476,10 @@ static void UGBA_RefreshPSGState(void)
         }
         else
         {
-            sound_psg.ch4.frequency = div_ratio * freq_div;
+            if (div_ratio > 0) // For div_ratio = 0 assume 0.5 instead
+                div_ratio <<= 1;
+
+            sound_psg.ch4.frequency = div_ratio * (1 << (freq_div + 1));
             sound_psg.ch4.frequency_steps = 0;
 
             // Flag it as enabled
@@ -502,7 +505,7 @@ static void Sound_FillBuffers_VBL_PSG(void)
     // formed of 16 samples.
     const int clocks_per_frequency = GBA_CLOCKS_PER_SECOND / (131072 * 16);
 
-    const int clocks_per_frequency_ch4 = GBA_CLOCKS_PER_SECOND / (512 * 1024);
+    const int clocks_per_frequency_ch4 = GBA_CLOCKS_PER_SECOND / (1024 * 1024);
 
     const int clocks_per_sample = GBA_CLOCKS_PER_SAMPLE_60_FPS;
 
