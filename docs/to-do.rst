@@ -24,8 +24,6 @@ Examples
 ========
 
 - DMA 3 Video Capture Mode
-- PSG sound channels when multiple channels are used at the same time.
-- DMA + PSG sound channels at the same time.
 
 Unit tests
 ==========
