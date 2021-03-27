@@ -33,6 +33,12 @@ volatile uint16_t *UGBA_MemWaveRam(void)
         return &(channel_3_wave_ram[0]);
 }
 
+// This is only used by the debugger window
+volatile uint16_t *UGBA_MemWaveRamTwoBanks(void)
+{
+    return &(channel_3_wave_ram[0]);
+}
+
 static int GetWaveRamSample(int index)
 {
     uint16_t val = channel_3_wave_ram[index >> 2];

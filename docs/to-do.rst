@@ -9,7 +9,6 @@ SDL2
 - Interrupts: SERIAL and GAMEPAK are missing.
 - DMA 3 Video Capture Mode
 - Save SRAM to file every few seconds?
-- Fix wave RAM viewer.
 
 Common
 ------
