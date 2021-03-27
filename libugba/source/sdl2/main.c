@@ -141,7 +141,7 @@ void UGBA_Init(int *argc, char **argv[])
 
     // Initialize hardware status
 
-    Sound_MemWaveRamInitialize();
+    Sound_Initialize();
 
     // Detect arguments
 
@@ -172,7 +172,7 @@ void UGBA_InitHeadless(int *argc, char **argv[])
 
     // Initialize hardware status
 
-    Sound_MemWaveRamInitialize();
+    Sound_Initialize();
 
     // Detect arguments
 

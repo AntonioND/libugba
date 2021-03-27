@@ -235,5 +235,5 @@ void SWI_SoundBias(uint32_t level)
     uint32_t value = level ? 0x100 : 0;
 
     REG_SOUNDBIAS &= ~SOUNDBIAS_BIAS_MASK;
-    REG_SOUNDBIAS |= SOUNDBIAS_BIAS_LEVEL(value);
+    REG_SOUNDBIAS |= SOUNDBIAS_BIAS_LEVEL_SET(value);
 }

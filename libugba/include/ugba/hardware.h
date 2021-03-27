@@ -888,7 +888,8 @@ EXPORT_API void UGBA_RegisterUpdatedOffset(uint32_t offset);
 
 // SOUNDBIAS
 
-#define SOUNDBIAS_BIAS_LEVEL(v)         (((v) & 0x1FF) << 1)
+#define SOUNDBIAS_BIAS_LEVEL_SET(v)     (((v) & 0x1FF) << 1)
+#define SOUNDBIAS_BIAS_LEVEL_GET(v)     (((v) >> 1) & 0x1FF)
 #define SOUNDBIAS_BIAS_MASK             (0x1FF << 1)
 
 #define SOUNDBIAS_SAMPLE_RATE_32KHZ     (0 << 14) // Best for DMA channels A,B

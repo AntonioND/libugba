@@ -1,11 +1,13 @@
 // SPDX-License-Identifier: LGPL-3.0-only
 //
-// Copyright (c) 2020 Antonio Niño Díaz
+// Copyright (c) 2020-2021 Antonio Niño Díaz
 
 #include <stdlib.h>
 #include <string.h>
 
 #include <ugba/ugba.h>
+
+#include "sound.h"
 
 #include "../debug_utils.h"
 
@@ -67,11 +69,9 @@ void SWI_RegisterRamReset(uint32_t flags)
         REG_SOUNDCNT_H = 0x880E;
         REG_SOUNDCNT_X = 0;
 
-        REG_SOUNDBIAS = 0;
+        Sound_Initialize();
 
         // TODO: Clear FIFO buffer
-
-        // TODO: Fill channel 3 wave RAMs with this pattern: 0x00, 0xFF
     }
     if (flags & SWI_RAM_RESET_IO_OTHER)
     {

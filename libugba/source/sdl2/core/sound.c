@@ -1230,11 +1230,13 @@ void Sound_Handle_VBL(void)
     Sound_SendToStream();
 }
 
-void Sound_MemWaveRamInitialize(void)
+void Sound_Initialize(void)
 {
     // Fill bank 1 with 0xFF00 and bank 0 with 0x0000
     size_t size = sizeof(channel_3_wave_ram) / sizeof(uint16_t);
 
     for (size_t i = 0; i < size; i++)
         channel_3_wave_ram[i] = 0x0000;
+
+    REG_SOUNDBIAS = SOUNDBIAS_BIAS_LEVEL_SET(0x100);
 }

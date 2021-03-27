@@ -6,6 +6,6 @@
 #define SDL2_SOUND_H__
 
 void Sound_Handle_VBL(void);
-void Sound_MemWaveRamInitialize(void);
+void Sound_Initialize(void);
 
 #endif // SDL2_SOUND_H__
