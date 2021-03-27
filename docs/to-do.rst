@@ -23,6 +23,7 @@ Examples
 ========
 
 - DMA 3 Video Capture Mode
+- Make sound examples run with CTest.
 
 Unit tests
 ==========
