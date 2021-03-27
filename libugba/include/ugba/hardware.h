@@ -817,8 +817,8 @@ EXPORT_API void UGBA_RegisterUpdatedOffset(uint32_t offset);
 
 // SOUND4CNT_H (NR43, NR44)
 
-#define SOUND4CNT_H_DIV_RATIO_SET(n)    ((n) & 0x3) // R/W
-#define SOUND4CNT_H_DIV_RATIO_GET(n)    ((n) & 0x3)
+#define SOUND4CNT_H_DIV_RATIO_SET(n)    ((n) & 0x7) // R/W
+#define SOUND4CNT_H_DIV_RATIO_GET(n)    ((n) & 0x7)
 
 #define SOUND4CNT_H_WIDTH_15_BITS       (0 << 3) // R/W
 #define SOUND4CNT_H_WIDTH_7_BITS        (1 << 3)
