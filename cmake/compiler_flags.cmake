@@ -49,8 +49,15 @@ if(CMAKE_C_COMPILER_ID STREQUAL "GNU")
         option(ENABLE_UBSAN "Compile with UBSan support (GCC)" OFF)
 
         if(ENABLE_UBSAN)
-            add_compile_options(-fsanitize=undefined)
-            add_link_options(-fsanitize=undefined)
+            add_compile_options(
+                -fsanitize=address      # Detect out-of-bounds accesses
+                -fsanitize=undefined    # Detect C undefined behaviour
+
+            )
+            add_link_options(
+                -fsanitize=address
+                -fsanitize=undefined
+            )
         endif()
     endif()
 elseif(CMAKE_C_COMPILER_ID STREQUAL "MSVC")
