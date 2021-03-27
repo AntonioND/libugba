@@ -19,8 +19,6 @@
 
 static uint16_t channel_3_wave_ram[2 * WAV_BUFFER_SIZE];
 
-// TODO: Balance volumes of PSG and DMA channels to the right proportions.
-
 // TODO: The volume envelope and sweep timers treat a period of 0 as 8.
 
 volatile uint16_t *UGBA_MemWaveRam(void)
@@ -183,7 +181,7 @@ typedef struct
         int current_value;
     } ch4;
 
-    int8_t buffer[GBA_SAMPLES_PER_FRAME * 2];
+    int16_t buffer[GBA_SAMPLES_PER_FRAME * 2];
     int write_ptr;
     int read_ptr;
 
@@ -850,7 +848,7 @@ static void Sound_FillBuffers_VBL_PSG(void)
                     sound_psg.ch3.frequency_steps = 0;
 
                     int pointer = sound_psg.ch3.sample_pointer;
-                    int sample = (GetWaveRamSample(pointer) - 8) << 4;
+                    int sample = (GetWaveRamSample(pointer) - 7) << 5;
 
                     sound_psg.ch3.current_value = sample;
 
@@ -922,6 +920,9 @@ static void Sound_FillBuffers_VBL_PSG(void)
         // Generate sample combining the 4 channels
         // ----------------------------------------
 
+        // GBATEK: Each of the four PSGs can span one QUARTER of the output
+        // range (+/-80h).
+
         sound_psg.clocks_current_sample++;
         if (sound_psg.clocks_current_sample == clocks_per_sample)
         {
@@ -954,17 +955,8 @@ static void Sound_FillBuffers_VBL_PSG(void)
                 sound_right += sound_psg.ch4.current_value * ch4_vol_right;
             }
 
-            sound_left >>= 8;
-            if (sound_left > 127)
-                sound_left = 127;
-            if (sound_left < -128)
-                sound_left = -128;
-
-            sound_right >>= 8;
-            if (sound_right > 127)
-                sound_right = 127;
-            if (sound_right < -128)
-                sound_right = -128;
+            sound_left >>= 10;
+            sound_right >>= 10;
 
             sound_psg.buffer[sound_psg.write_ptr++] = sound_left;
             sound_psg.buffer[sound_psg.write_ptr++] = sound_right;
@@ -1141,10 +1133,14 @@ static void Sound_Mix_Buffers_VBL(void)
     // always sent to SDL.
     mixed.write_ptr = 0;
 
+    // GBATEK: The BIAS value is added to that signed value. With default BIAS
+    // (200h), the possible range becomes -400h..+800h
+    int16_t bias = SOUNDBIAS_BIAS_LEVEL_GET(REG_SOUNDBIAS) << 1;
+
     for (int read_ptr = 0; read_ptr < GBA_SAMPLES_PER_FRAME; read_ptr++)
     {
-        int16_t sample_left = 0;
-        int16_t sample_right = 0;
+        int16_t sample_left = bias;
+        int16_t sample_right = bias;
 
         sample_left += sound_psg.buffer[read_ptr * 2 + 0];
         sample_right += sound_psg.buffer[read_ptr * 2 + 1];
@@ -1161,9 +1157,23 @@ static void Sound_Mix_Buffers_VBL(void)
             sample_right += sample_dma_b * dma_b_right_vol;
         }
 
-        // Increase the volume a bit so that it reaches the full 16-bit range
-        mixed.buffer[mixed.write_ptr++] = sample_left << 7;
-        mixed.buffer[mixed.write_ptr++] = sample_right << 7;
+        // GBATEK: Values that exceed the unsigned 10bit output range of 0..3FFh
+        // are clipped to MinMax(0,3FFh).
+
+        if (sample_left > 0x3FF)
+            sample_left = 0x3FF;
+        if (sample_left < 0)
+            sample_left = 0;
+
+        if (sample_right > 0x3FF)
+            sample_right = 0x3FF;
+        if (sample_right < 0)
+            sample_right = 0;
+
+        // Turn values into signed values and increase the volume a bit so that
+        // it reaches the full 16-bit range
+        mixed.buffer[mixed.write_ptr++] = (sample_left - 0x200) << 6;
+        mixed.buffer[mixed.write_ptr++] = (sample_right - 0x200) << 6;
     }
 }
 
