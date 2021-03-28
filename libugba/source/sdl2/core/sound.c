@@ -264,7 +264,7 @@ static void UGBA_RefreshPSGState(void)
 
         // Frequency
 
-        sound_psg.ch1.frequency = 2048 - SOUND1CNT_X_FREQUENCY_GET(sound1cnt_x);
+        sound_psg.ch1.frequency = SOUND1CNT_X_FREQUENCY_GET(sound1cnt_x);
         sound_psg.ch1.frequency_steps = 0;
         sound_psg.ch2.sample_pointer = 0;
 
@@ -275,7 +275,7 @@ static void UGBA_RefreshPSGState(void)
     else
     {
         if (sound_psg.ch1.sweep_steps == 0)
-            sound_psg.ch1.frequency = 2048 - SOUND1CNT_X_FREQUENCY_GET(sound1cnt_x);
+            sound_psg.ch1.frequency = SOUND1CNT_X_FREQUENCY_GET(sound1cnt_x);
     }
 
     sound_psg.ch1.duty_cycle = SOUND1CNT_H_WAVE_DUTY_GET(sound1cnt_h);
@@ -328,7 +328,7 @@ static void UGBA_RefreshPSGState(void)
 
         // Frequency
 
-        sound_psg.ch2.frequency = 2048 - SOUND2CNT_H_FREQUENCY_GET(sound2cnt_h);
+        sound_psg.ch2.frequency = SOUND2CNT_H_FREQUENCY_GET(sound2cnt_h);
         sound_psg.ch2.frequency_steps = 0;
         sound_psg.ch2.sample_pointer = 0;
 
@@ -401,8 +401,7 @@ static void UGBA_RefreshPSGState(void)
 
             // Frequency
 
-            sound_psg.ch3.frequency =
-                        2048 - SOUND3CNT_X_SAMPLE_RATE_GET(sound3cnt_x);
+            sound_psg.ch3.frequency = SOUND3CNT_X_SAMPLE_RATE_GET(sound3cnt_x);
             sound_psg.ch3.frequency_steps = 0;
             sound_psg.ch3.sample_pointer = 0;
 
@@ -612,13 +611,6 @@ static void Sound_FillBuffers_VBL_PSG(void)
 
                         if (sound_psg.ch1.sweep_decrease)
                         {
-                            if (sound_psg.ch1.frequency + value <= 2047)
-                            {
-                                sound_psg.ch1.frequency += value;
-                            }
-                        }
-                        else
-                        {
                             sound_psg.ch1.frequency -= value;
                             // No need to check for underflows. "value" is, at
                             // most, the same value as the frequency, so the
@@ -630,6 +622,13 @@ static void Sound_FillBuffers_VBL_PSG(void)
 
                                 // Flag it as disabled
                                 REG_SOUNDCNT_X &= ~SOUNDCNT_X_PSG_1_IS_ON;
+                            }
+                        }
+                        else
+                        {
+                            if (sound_psg.ch1.frequency + value <= 2047)
+                            {
+                                sound_psg.ch1.frequency += value;
                             }
                         }
                     }
@@ -809,9 +808,9 @@ static void Sound_FillBuffers_VBL_PSG(void)
             {
                 sound_psg.ch1.frequency_steps++;
 
-                if (sound_psg.ch1.frequency_steps >= sound_psg.ch1.frequency)
+                if (sound_psg.ch1.frequency_steps >= 2048)
                 {
-                    sound_psg.ch1.frequency_steps = 0;
+                    sound_psg.ch1.frequency_steps = sound_psg.ch1.frequency;
 
                     int duty = sound_psg.ch1.duty_cycle;
                     int pointer = sound_psg.ch1.sample_pointer;
@@ -829,9 +828,9 @@ static void Sound_FillBuffers_VBL_PSG(void)
             {
                 sound_psg.ch2.frequency_steps++;
 
-                if (sound_psg.ch2.frequency_steps >= sound_psg.ch2.frequency)
+                if (sound_psg.ch2.frequency_steps >= 2048)
                 {
-                    sound_psg.ch2.frequency_steps = 0;
+                    sound_psg.ch2.frequency_steps = sound_psg.ch2.frequency;
 
                     int duty = sound_psg.ch2.duty_cycle;
                     int pointer = sound_psg.ch2.sample_pointer;
@@ -849,9 +848,9 @@ static void Sound_FillBuffers_VBL_PSG(void)
             {
                 sound_psg.ch3.frequency_steps++;
 
-                if (sound_psg.ch3.frequency_steps >= sound_psg.ch3.frequency)
+                if (sound_psg.ch3.frequency_steps >= 2048)
                 {
-                    sound_psg.ch3.frequency_steps = 0;
+                    sound_psg.ch3.frequency_steps = sound_psg.ch3.frequency;
 
                     int pointer = sound_psg.ch3.sample_pointer;
                     int sample = (GetWaveRamSample(pointer) - 7) << 5;

@@ -120,9 +120,6 @@ void TestChannel1(void)
     CON_Print("\n");
 
     // Sweep up
-#if 0
-    // TODO: This fails on UGBA. On real hardware it stops after half a second,
-    // on UGBA it keeps going forever.
 
     CON_Print("4");
 
@@ -147,8 +144,6 @@ void TestChannel1(void)
     WaitPressA();
 
     CON_Print("\n");
-
-#endif
 
     // Sweep down
 
