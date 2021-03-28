@@ -615,20 +615,19 @@ static void Sound_FillBuffers_VBL_PSG(void)
                             // No need to check for underflows. "value" is, at
                             // most, the same value as the frequency, so the
                             // result can only be 0 or greater than 0.
-
-                            if (sound_psg.ch1.frequency <= 0)
-                            {
-                                sound_psg.ch1.running = 0;
-
-                                // Flag it as disabled
-                                REG_SOUNDCNT_X &= ~SOUNDCNT_X_PSG_1_IS_ON;
-                            }
                         }
                         else
                         {
                             if (sound_psg.ch1.frequency + value <= 2047)
                             {
                                 sound_psg.ch1.frequency += value;
+                            }
+                            else
+                            {
+                                sound_psg.ch1.running = 0;
+
+                                // Flag it as disabled
+                                REG_SOUNDCNT_X &= ~SOUNDCNT_X_PSG_1_IS_ON;
                             }
                         }
                     }

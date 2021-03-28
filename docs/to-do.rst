@@ -41,6 +41,4 @@ Known bugs
 ==========
 
 - The PSG sound channels aren't too accurate.
-- PSG channel 1 sweep is a bit broken. See the example ``basic_psg_ch1`` to see
-  what fails.
 - Mosaic effect is broken, it doesn't work like on hardware.
