@@ -357,6 +357,81 @@ function(unittest_audio)
 
 endfunction()
 
+function(unittest_audio_screenshot)
+
+    # Get name of the folder we are in
+    # --------------------------------
+
+    get_filename_component(EXECUTABLE_NAME ${CMAKE_CURRENT_SOURCE_DIR} NAME)
+
+    # SDL2 test
+    # ---------
+
+    set(TEST_SCRIPT "${CMAKE_CURRENT_SOURCE_DIR}/test-sdl2.lua")
+    if(NOT EXISTS ${TEST_SCRIPT})
+        set(TEST_SCRIPT "${CMAKE_CURRENT_SOURCE_DIR}/test.lua")
+    endif()
+
+    set(REF_WAV "${CMAKE_CURRENT_SOURCE_DIR}/reference-sdl2.wav")
+    if(NOT EXISTS ${REF_WAV})
+        set(REF_WAV "${CMAKE_CURRENT_SOURCE_DIR}/reference.wav")
+    endif()
+
+    set(REF_PNG "${CMAKE_CURRENT_SOURCE_DIR}/reference-sdl2.png")
+    if(NOT EXISTS ${REF_PNG})
+        set(REF_PNG "${CMAKE_CURRENT_SOURCE_DIR}/reference.png")
+    endif()
+
+    set(CMD1 "$<TARGET_FILE:${EXECUTABLE_NAME}> --lua ${TEST_SCRIPT}")
+    set(CMD2 "${CMAKE_COMMAND} -E compare_files ${REF_WAV} audio.wav")
+    set(CMD3 "$<TARGET_FILE:pngmatch> ${REF_PNG} screenshot.png")
+
+    add_test(NAME ${EXECUTABLE_NAME}_test
+        COMMAND ${CMAKE_COMMAND}
+                    -DCMD1=${CMD1}
+                    -DCMD2=${CMD2}
+                    -DCMD3=${CMD3}
+                    -P ${CMAKE_SOURCE_DIR}/cmake/runcommands.cmake
+        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+    )
+
+    # Emulator test
+    # -------------
+
+    if(BUILD_GBA)
+        set(TEST_SCRIPT "${CMAKE_CURRENT_SOURCE_DIR}/test-gba.lua")
+        if(NOT EXISTS ${TEST_SCRIPT})
+            set(TEST_SCRIPT "${CMAKE_CURRENT_SOURCE_DIR}/test.lua")
+        endif()
+
+        set(REF_WAV "${CMAKE_CURRENT_SOURCE_DIR}/reference-gba.wav")
+        if(NOT EXISTS ${REF_WAV})
+            set(REF_WAV "${CMAKE_CURRENT_SOURCE_DIR}/reference.wav")
+        endif()
+
+        set(REF_PNG "${CMAKE_CURRENT_SOURCE_DIR}/reference-gba.png")
+        if(NOT EXISTS ${REF_PNG})
+            set(REF_PNG "${CMAKE_CURRENT_SOURCE_DIR}/reference.png")
+        endif()
+
+        set(GBA_ROM "${CMAKE_CURRENT_SOURCE_DIR}/${EXECUTABLE_NAME}.gba")
+
+        set(CMD1 "$<TARGET_FILE:giibiiadvance> --lua ${TEST_SCRIPT} ${GBA_ROM}")
+        set(CMD2 "${CMAKE_COMMAND} -E compare_files ${REF_WAV} audio.wav")
+        set(CMD3 "$<TARGET_FILE:pngmatch> ${REF_PNG} screenshot.png")
+
+        add_test(NAME ${EXECUTABLE_NAME}_gba_test
+            COMMAND ${CMAKE_COMMAND}
+                        -DCMD1=${CMD1}
+                        -DCMD2=${CMD2}
+                        -DCMD3=${CMD3}
+                        -P ${CMAKE_SOURCE_DIR}/cmake/runcommands.cmake
+            WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+        )
+    endif()
+
+endfunction()
+
 function(unittest_sram)
 
     # Get name of the folder we are in
