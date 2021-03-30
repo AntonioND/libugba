@@ -108,9 +108,9 @@ void TestGlobal(void)
     CON_Print("Master volume\n");
 
     SOUND_PSG_MasterVolume(100);
-    DelayFrames(30);
+    DelayFrames(20);
     SOUND_PSG_MasterVolume(50);
-    DelayFrames(30);
+    DelayFrames(20);
     SOUND_PSG_MasterVolume(100);
 
     WaitPressA();
@@ -120,45 +120,44 @@ void TestGlobal(void)
     CON_Print("L/R volume\n");
 
     SOUND_PSG_Volume(7, 7);
-    DelayFrames(30);
+    DelayFrames(20);
     SOUND_PSG_Volume(2, 7);
-    DelayFrames(30);
+    DelayFrames(20);
     SOUND_PSG_Volume(7, 2);
-    DelayFrames(30);
+    DelayFrames(20);
     SOUND_PSG_Volume(7, 7);
 
     WaitPressA();
 
     // Panning
 
+    SOUND_PSG_Pan(0, 0, 0, 0, 0, 0, 0, 0);
+    DelayFrames(20);
+
     CON_Print("Left panning\n");
 
-    SOUND_PSG_Pan(0, 0, 0, 0, 0, 0, 0, 0);
-    DelayFrames(30);
     SOUND_PSG_Pan(1, 0, 0, 0, 0, 0, 0, 0);
-    DelayFrames(30);
+    DelayFrames(20);
     SOUND_PSG_Pan(0, 0, 1, 0, 0, 0, 0, 0);
-    DelayFrames(30);
+    DelayFrames(20);
     SOUND_PSG_Pan(0, 0, 0, 0, 1, 0, 0, 0);
-    DelayFrames(30);
+    DelayFrames(20);
     SOUND_PSG_Pan(0, 0, 0, 0, 0, 0, 1, 0);
-    DelayFrames(30);
+    DelayFrames(20);
     SOUND_PSG_Pan(0, 0, 0, 0, 0, 0, 0, 0);
 
     WaitPressA();
 
     CON_Print("Right panning\n");
 
-    SOUND_PSG_Pan(0, 0, 0, 0, 0, 0, 0, 0);
-    DelayFrames(30);
     SOUND_PSG_Pan(0, 1, 0, 0, 0, 0, 0, 0);
-    DelayFrames(30);
+    DelayFrames(20);
     SOUND_PSG_Pan(0, 0, 0, 1, 0, 0, 0, 0);
-    DelayFrames(30);
+    DelayFrames(20);
     SOUND_PSG_Pan(0, 0, 0, 0, 0, 1, 0, 0);
-    DelayFrames(30);
+    DelayFrames(20);
     SOUND_PSG_Pan(0, 0, 0, 0, 0, 0, 0, 1);
-    DelayFrames(30);
+    DelayFrames(20);
     SOUND_PSG_Pan(0, 0, 0, 0, 0, 0, 0, 0);
 
     WaitPressA();
