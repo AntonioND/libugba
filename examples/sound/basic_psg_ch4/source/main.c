@@ -75,8 +75,8 @@ void TestChannel4(void)
 
     CON_Print("2");
 
-    REG_SOUND4CNT_L = SOUND4CNT_L_ENV_VOLUME_SET(3)
-                    | SOUND4CNT_L_ENV_STEP_TIME_SET(1)
+    REG_SOUND4CNT_L = SOUND4CNT_L_ENV_VOLUME_SET(2)
+                    | SOUND4CNT_L_ENV_STEP_TIME_SET(6)
                     | SOUND4CNT_L_ENV_DIR_INC;
 
     REG_SOUND4CNT_H = SOUND4CNT_H_DIV_RATIO_SET(2)
@@ -84,7 +84,7 @@ void TestChannel4(void)
                     | SOUND4CNT_H_FREQUENCY_SET(4)
                     | SOUND4CNT_H_RESTART;
 
-    DelayFrames(60);
+    DelayFrames(20);
 
     if ((REG_SOUNDCNT_X & SOUNDCNT_X_PSG_4_IS_ON) == 0)
         CON_Print(" Fail");
@@ -98,8 +98,8 @@ void TestChannel4(void)
 
     CON_Print("3");
 
-    REG_SOUND4CNT_L = SOUND4CNT_L_ENV_VOLUME_SET(7)
-                    | SOUND4CNT_L_ENV_STEP_TIME_SET(3)
+    REG_SOUND4CNT_L = SOUND4CNT_L_ENV_VOLUME_SET(5)
+                    | SOUND4CNT_L_ENV_STEP_TIME_SET(6)
                     | SOUND4CNT_L_ENV_DIR_DEC;
 
     REG_SOUND4CNT_H = SOUND4CNT_H_DIV_RATIO_SET(2)
@@ -107,7 +107,7 @@ void TestChannel4(void)
                     | SOUND4CNT_H_FREQUENCY_SET(4)
                     | SOUND4CNT_H_RESTART;
 
-    DelayFrames(60);
+    DelayFrames(20);
 
     if ((REG_SOUNDCNT_X & SOUNDCNT_X_PSG_4_IS_ON) == 0)
         CON_Print(" Fail");
@@ -150,7 +150,7 @@ void TestChannel4(void)
                     | SOUND4CNT_H_FREQUENCY_SET(6)
                     | SOUND4CNT_H_RESTART;
 
-    DelayFrames(60);
+    DelayFrames(30);
 
     if ((REG_SOUNDCNT_X & SOUNDCNT_X_PSG_4_IS_ON) == 0)
         CON_Print(" Fail");
@@ -171,7 +171,7 @@ void TestChannel4(void)
                     | SOUND4CNT_H_FREQUENCY_SET(6)
                     | SOUND4CNT_H_RESTART;
 
-    DelayFrames(60);
+    DelayFrames(30);
 
     if ((REG_SOUNDCNT_X & SOUNDCNT_X_PSG_4_IS_ON) == 0)
         CON_Print(" Fail");
@@ -192,7 +192,7 @@ void TestChannel4(void)
                     | SOUND4CNT_H_FREQUENCY_SET(7)
                     | SOUND4CNT_H_RESTART;
 
-    DelayFrames(60);
+    DelayFrames(30);
 
     if ((REG_SOUNDCNT_X & SOUNDCNT_X_PSG_4_IS_ON) == 0)
         CON_Print(" Fail");
@@ -213,7 +213,7 @@ void TestChannel4(void)
                     | SOUND4CNT_H_FREQUENCY_SET(14)
                     | SOUND4CNT_H_RESTART;
 
-    DelayFrames(60);
+    DelayFrames(30);
 
     if ((REG_SOUNDCNT_X & SOUNDCNT_X_PSG_4_IS_ON) == 0)
         CON_Print(" Fail");
@@ -234,7 +234,7 @@ void TestChannel4(void)
                     | SOUND4CNT_H_FREQUENCY_SET(6)
                     | SOUND4CNT_H_RESTART;
 
-    DelayFrames(60);
+    DelayFrames(30);
 
     if ((REG_SOUNDCNT_X & SOUNDCNT_X_PSG_4_IS_ON) == 0)
         CON_Print(" Fail");
