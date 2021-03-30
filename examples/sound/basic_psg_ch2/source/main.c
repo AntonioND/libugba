@@ -164,7 +164,7 @@ void TestChannel2(void)
     REG_SOUND2CNT_H = SOUND2CNT_H_FREQUENCY_SET(1900)
                     | SOUND2CNT_H_RESTART;
 
-    DelayFrames(60);
+    DelayFrames(15);
 
     if ((REG_SOUNDCNT_X & SOUNDCNT_X_PSG_2_IS_ON) == 0)
         CON_Print(" Fail!");
