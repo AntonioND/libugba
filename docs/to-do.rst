@@ -23,7 +23,6 @@ Examples
 ========
 
 - DMA 3 Video Capture Mode
-- Make sound examples run with CTest.
 
 Unit tests
 ==========
@@ -40,5 +39,4 @@ General
 Known bugs
 ==========
 
-- The PSG sound channels aren't too accurate.
 - Mosaic effect is broken, it doesn't work like on hardware.
