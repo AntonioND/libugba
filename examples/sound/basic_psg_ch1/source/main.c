@@ -86,7 +86,7 @@ void TestChannel1(void)
     REG_SOUND1CNT_X = SOUND1CNT_X_FREQUENCY_SET(1900)
                     | SOUND1CNT_X_RESTART;
 
-    DelayFrames(60);
+    DelayFrames(40);
 
     if ((REG_SOUNDCNT_X & SOUNDCNT_X_PSG_1_IS_ON) == 0)
         CON_Print(" Fail ");
@@ -110,7 +110,7 @@ void TestChannel1(void)
     REG_SOUND1CNT_X = SOUND1CNT_X_FREQUENCY_SET(1900)
                     | SOUND1CNT_X_RESTART;
 
-    DelayFrames(60);
+    DelayFrames(20);
 
     if ((REG_SOUNDCNT_X & SOUNDCNT_X_PSG_1_IS_ON) == 0)
         CON_Print(" Fail ");
@@ -136,7 +136,7 @@ void TestChannel1(void)
                     | SOUND1CNT_X_ONE_SHOT
                     | SOUND1CNT_X_RESTART;
 
-    DelayFrames(60);
+    DelayFrames(15);
 
     if (REG_SOUNDCNT_X & SOUNDCNT_X_PSG_1_IS_ON)
         CON_Print(" Fail ");

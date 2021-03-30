@@ -3,4 +3,4 @@
 # Copyright (c) 2021 Antonio Niño Díaz
 
 define_example()
-#unittest_audio()
+unittest_audio_screenshot()
