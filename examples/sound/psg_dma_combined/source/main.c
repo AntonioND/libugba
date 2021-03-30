@@ -172,37 +172,37 @@ int main(int argc, char *argv[])
 
     CON_Print("-\n");
 
-    delay_frames(60);
+    delay_frames(30);
 
     CON_Print("1\n");
     SOUND_PSG_Pan(1, 1, 0, 0, 0, 0, 0, 0);
 
-    delay_frames(60);
+    delay_frames(30);
 
     CON_Print("2\n");
     SOUND_PSG_Pan(0, 0, 1, 1, 0, 0, 0, 0);
 
-    delay_frames(60);
+    delay_frames(30);
 
     CON_Print("3\n");
     SOUND_PSG_Pan(0, 0, 0, 0, 1, 1, 0, 0);
 
-    delay_frames(60);
+    delay_frames(30);
 
     CON_Print("4\n");
     SOUND_PSG_Pan(0, 0, 0, 0, 0, 0, 1, 1);
 
-    delay_frames(60);
+    delay_frames(30);
 
     CON_Print("2 + 4\n");
     SOUND_PSG_Pan(0, 0, 1, 1, 0, 0, 1, 1);
 
-    delay_frames(60);
+    delay_frames(30);
 
     CON_Print("-\n");
     SOUND_PSG_Pan(0, 0, 0, 0, 0, 0, 0, 0);
 
-    delay_frames(60);
+    delay_frames(30);
 
     SOUND_MasterEnable(0);
 
