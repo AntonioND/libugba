@@ -61,7 +61,7 @@ function(define_example)
     # Build GBA version if requested
     # ------------------------------
 
-    if(BUILD_GBA)
+    if(BUILD_GBA_INTERNAL)
         add_custom_command(
             OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/${EXECUTABLE_NAME}.gba
             BYPRODUCTS ${CMAKE_CURRENT_SOURCE_DIR}/build
@@ -115,7 +115,7 @@ function(unittest_screenshot)
     # Emulator test
     # -------------
 
-    if(BUILD_GBA)
+    if(BUILD_GBA_INTERNAL)
         set(TEST_SCRIPT "${CMAKE_CURRENT_SOURCE_DIR}/test-gba.lua")
         if(NOT EXISTS ${TEST_SCRIPT})
             set(TEST_SCRIPT "${CMAKE_CURRENT_SOURCE_DIR}/test.lua")
@@ -178,7 +178,7 @@ function(unittest_two_screenshots)
     # Emulator test
     # -------------
 
-    if(BUILD_GBA)
+    if(BUILD_GBA_INTERNAL)
         set(TEST_SCRIPT "${CMAKE_CURRENT_SOURCE_DIR}/test-gba.lua")
         if(NOT EXISTS ${TEST_SCRIPT})
             set(TEST_SCRIPT "${CMAKE_CURRENT_SOURCE_DIR}/test.lua")
@@ -255,7 +255,7 @@ function(unittest_three_screenshots)
     # Emulator test
     # -------------
 
-    if(BUILD_GBA)
+    if(BUILD_GBA_INTERNAL)
         set(TEST_SCRIPT "${CMAKE_CURRENT_SOURCE_DIR}/test-gba.lua")
         if(NOT EXISTS ${TEST_SCRIPT})
             set(TEST_SCRIPT "${CMAKE_CURRENT_SOURCE_DIR}/test.lua")
@@ -330,7 +330,7 @@ function(unittest_audio)
     # Emulator test
     # -------------
 
-    if(BUILD_GBA)
+    if(BUILD_GBA_INTERNAL)
         set(TEST_SCRIPT "${CMAKE_CURRENT_SOURCE_DIR}/test-gba.lua")
         if(NOT EXISTS ${TEST_SCRIPT})
             set(TEST_SCRIPT "${CMAKE_CURRENT_SOURCE_DIR}/test.lua")
@@ -398,7 +398,7 @@ function(unittest_audio_screenshot)
     # Emulator test
     # -------------
 
-    if(BUILD_GBA)
+    if(BUILD_GBA_INTERNAL)
         set(TEST_SCRIPT "${CMAKE_CURRENT_SOURCE_DIR}/test-gba.lua")
         if(NOT EXISTS ${TEST_SCRIPT})
             set(TEST_SCRIPT "${CMAKE_CURRENT_SOURCE_DIR}/test.lua")
@@ -462,7 +462,7 @@ function(unittest_sram)
     # Emulator test
     # -------------
 
-    if(BUILD_GBA)
+    if(BUILD_GBA_INTERNAL)
         set(GBA_ROM "${CMAKE_CURRENT_SOURCE_DIR}/${EXECUTABLE_NAME}.gba")
 
         set(CMD1 "$<TARGET_FILE:giibiiadvance> --lua ${TEST_SCRIPT_1} ${GBA_ROM}")

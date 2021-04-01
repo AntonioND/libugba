@@ -151,7 +151,7 @@ add_grit_files(graphics ${LIBRARY_NAME})
 # Build GBA version if requested
 # ------------------------------
 
-if(BUILD_GBA)
+if(BUILD_GBA_INTERNAL)
     add_custom_command(
         OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/lib/libugba.a
         BYPRODUCTS ${CMAKE_CURRENT_SOURCE_DIR}/build

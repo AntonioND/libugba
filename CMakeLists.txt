@@ -21,6 +21,9 @@ set(PROJECT_IS_SUBMODULE ${PROJECT_HAS_PARENT})
 
 option(BUILD_GBA "Build GBA binaries in addition to PC binaries" OFF)
 
+# Save it to a regular variable so that it can be disabled per-folder.
+set(BUILD_GBA_INTERNAL "${BUILD_GBA}")
+
 # Global compiler-specific options
 # --------------------------------
 
@@ -45,7 +48,7 @@ if(NOT PROJECT_IS_SUBMODULE)
 
         # GiiBiiAdvance is needed for unit tests
 
-        if(BUILD_GBA)
+        if(BUILD_GBA_INTERNAL)
             # Get absolute path to default folder
             if("${GIIBIIADVANCE_PATH}" STREQUAL "")
                 get_filename_component(GIIBIIADVANCE_PATH
