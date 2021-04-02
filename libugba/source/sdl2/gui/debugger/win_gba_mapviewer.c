@@ -11,13 +11,13 @@
 #include "../../debug_utils.h"
 #include "../../png_utils.h"
 
+#include "../font_utils.h"
+#include "../win_utils.h"
 #include "../window_handler.h"
 
 #include "file_utils.h"
-#include "font_utils.h"
 #include "gba_debug_video.h"
 #include "win_gba_debugger.h"
-#include "win_utils.h"
 
 //------------------------------------------------------------------------------
 

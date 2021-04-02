@@ -11,10 +11,9 @@
 #include "../../debug_utils.h"
 #include "../../core/sound.h"
 
+#include "../font_utils.h"
+#include "../win_utils.h"
 #include "../window_handler.h"
-
-#include "font_utils.h"
-#include "win_utils.h"
 
 //------------------------------------------------------------------------------
 
