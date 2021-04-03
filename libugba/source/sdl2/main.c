@@ -8,6 +8,7 @@
 
 #include <ugba/ugba.h>
 
+#include "config.h"
 #include "debug_utils.h"
 #include "input_utils.h"
 #include "lua_handler.h"
@@ -135,6 +136,8 @@ void UGBA_Init(int *argc, char **argv[])
     if (Init() != 0)
         exit(1);
 
+    Config_Load();
+
     Win_MainCreate();
 
     GBA_FillFadeTables();
@@ -167,6 +170,8 @@ void UGBA_InitHeadless(int *argc, char **argv[])
 
     if (InitHeadless() != 0)
         exit(1);
+
+    Config_Load();
 
     GBA_FillFadeTables();
 
