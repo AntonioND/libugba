@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: LGPL-3.0-only
 //
-// Copyright (c) 2011-2015, 2019-2020 Antonio Niño Díaz
+// Copyright (c) 2011-2015, 2019-2021 Antonio Niño Díaz
 
 #include <SDL2/SDL.h>
 
@@ -156,13 +156,6 @@ static int Win_MainEventCallback(SDL_Event *e)
                 break;
 
 #endif // ENABLE_SCREENSHOTS
-
-            case SDLK_c:
-                if (SDL_GetModState() & KMOD_CTRL)
-                {
-                    exit_program = 1;
-                }
-                break;
 
             case SDLK_ESCAPE:
                 exit_program = 1;
