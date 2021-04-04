@@ -9,6 +9,7 @@
 
 #include <ugba/ugba.h>
 
+#include "config.h"
 #include "debug_utils.h"
 #include "input_utils.h"
 #include "sound_utils.h"
@@ -57,7 +58,8 @@ static void emulate_sound_callback(Uint8 *buffer, int len)
 static void sound_callback(UNUSED void *userdata, Uint8 *buffer, int len)
 {
     // Don't play audio during speedup or if it is disabled
-    if ((sound_enabled == 0) || Input_Speedup_Enabled())
+    if ((sound_enabled == 0) ||  Input_Speedup_Enabled() ||
+        GlobalConfig.sound_mute)
     {
         // Output silence
         memset(buffer, 0, len);

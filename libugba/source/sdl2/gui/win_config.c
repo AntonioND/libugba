@@ -55,19 +55,24 @@ static void Win_ConfigUpdate(void)
     GUI_ConsoleClear(&config_con);
 
     GUI_ConsoleModePrintf(&config_con, 20, 0, "Configuration");
-    GUI_ConsoleModePrintf(&config_con, 0, 1,
-                          "  Zoom: x%d\n"
-                          "\n"
-                          "  Sound enabled: ON\n"
-                          "\n"
-                          "  Volume: 64\n"
-                          "\n"
+
+    GUI_ConsoleModePrintf(&config_con, 2, 1, "Zoom: x%d",
+                          GlobalConfig.screen_size);
+
+    GUI_ConsoleModePrintf(&config_con, 2, 3, "Sound enabled: %s",
+                          GlobalConfig.sound_mute ? "OFF" : "ON");
+
+    GUI_ConsoleModePrintf(&config_con, 2, 5, "Volume: %d",
+                          GlobalConfig.volume);
+
+    // TODO
+    GUI_ConsoleModePrintf(&config_con, 0, 7,
                           "  Sound channels:\n"
                           "    PSG  1[ ]  2[ ]  3[ ]  4[ ]\n"
-                          "    DMA  A[ ]  B[ ]\n"
-                          "\n"
-                          "  Input configuration menu\n",
-                          GlobalConfig.screen_size);
+                          "    DMA  A[ ]  B[ ]");
+
+    // TODO
+    GUI_ConsoleModePrintf(&config_con, 2, 11, "Input configuration menu");
 
     const int selection_offset_y[5] = { 1, 3, 5, 7, 11 };
 
@@ -104,8 +109,11 @@ void Win_ConfigEventCallback(SDL_Event *e)
                         }
                         break;
                     case SELECTION_SOUND_ENABLE:
+                        GlobalConfig.sound_mute ^= 1;
                         break;
                     case SELECTION_SOUND_VOLUME:
+                        if (GlobalConfig.volume < 100)
+                            GlobalConfig.volume++;
                         break;
                     case SELECTION_SOUND_CHANNELS:
                         break;
@@ -128,8 +136,11 @@ void Win_ConfigEventCallback(SDL_Event *e)
                         }
                         break;
                     case SELECTION_SOUND_ENABLE:
+                        GlobalConfig.sound_mute ^= 1;
                         break;
                     case SELECTION_SOUND_VOLUME:
+                        if (GlobalConfig.volume > 0)
+                            GlobalConfig.volume--;
                         break;
                     case SELECTION_SOUND_CHANNELS:
                         break;

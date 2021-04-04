@@ -16,7 +16,7 @@
 global_config GlobalConfig = {
     .screen_size = 3,
 
-    .volume = 64,
+    .volume = 100,
     .channel_flags = 0x3F,
     .sound_mute = 0,
 };
@@ -47,7 +47,7 @@ void Config_Save(void)
 
     fprintf(f, "[Sound]\n");
     fprintf(f, CFG_SND_CHN_ENABLE "=#%02X\n", GlobalConfig.channel_flags);
-    fprintf(f, CFG_SND_VOLUME "=#%02X\n", GlobalConfig.volume);
+    fprintf(f, CFG_SND_VOLUME "=%d\n", GlobalConfig.volume);
     fprintf(f, CFG_SND_MUTE "=%s\n", GlobalConfig.sound_mute ? "true" : "false");
     fprintf(f, "\n");
 
@@ -167,15 +167,7 @@ void Config_Load(void)
     if (tmp)
     {
         tmp += strlen(CFG_SND_VOLUME) + 1;
-        if (*tmp == '#')
-        {
-            tmp++;
-            char aux[3];
-            aux[0] = *tmp++;
-            aux[1] = *tmp;
-            aux[2] = '\0';
-            GlobalConfig.volume = asciihex_to_int(aux);
-        }
+        GlobalConfig.volume = atoi(tmp);
     }
 
     tmp = strstr(ini, CFG_SND_MUTE);

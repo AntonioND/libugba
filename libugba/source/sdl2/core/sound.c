@@ -8,6 +8,7 @@
 
 #include "dma.h"
 
+#include "../config.h"
 #include "../debug_utils.h"
 #include "../sound_utils.h"
 #include "../wav_utils.h"
@@ -1176,8 +1177,13 @@ static void Sound_Mix_Buffers_VBL(void)
 
         // Turn values into signed values and increase the volume a bit so that
         // it reaches the full 16-bit range
-        mixed.buffer[mixed.write_ptr++] = (sample_left - 0x200) << 6;
-        mixed.buffer[mixed.write_ptr++] = (sample_right - 0x200) << 6;
+        sample_left = (sample_left - 0x200) << 6;
+        sample_right = (sample_right - 0x200) << 6;
+
+        mixed.buffer[mixed.write_ptr++] =
+                (sample_left * GlobalConfig.volume) / 100;
+        mixed.buffer[mixed.write_ptr++] =
+                (sample_right * GlobalConfig.volume) / 100;
     }
 }
 
