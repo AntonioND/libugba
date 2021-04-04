@@ -9,6 +9,8 @@
 
 #include <ugba/ugba.h>
 
+#include "gui/win_main.h"
+
 #include "debug_utils.h"
 #include "input_utils.h"
 
@@ -226,18 +228,25 @@ static void GBA_HandleInput(int a, int b, int l, int r, int st, int se,
 
 void Input_Update_GBA(void)
 {
-    int a = Input_IsGameBoyKeyPressed(P_KEY_A);
-    int b = Input_IsGameBoyKeyPressed(P_KEY_B);
-    int l = Input_IsGameBoyKeyPressed(P_KEY_L);
-    int r = Input_IsGameBoyKeyPressed(P_KEY_R);
-    int st = Input_IsGameBoyKeyPressed(P_KEY_START);
-    int se = Input_IsGameBoyKeyPressed(P_KEY_SELECT);
-    int dr = Input_IsGameBoyKeyPressed(P_KEY_RIGHT);
-    int dl = Input_IsGameBoyKeyPressed(P_KEY_LEFT);
-    int du = Input_IsGameBoyKeyPressed(P_KEY_UP);
-    int dd = Input_IsGameBoyKeyPressed(P_KEY_DOWN);
+    if (Win_MainIsConfigEnabled())
+    {
+        GBA_HandleInput(0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+    }
+    else
+    {
+        int a = Input_IsGameBoyKeyPressed(P_KEY_A);
+        int b = Input_IsGameBoyKeyPressed(P_KEY_B);
+        int l = Input_IsGameBoyKeyPressed(P_KEY_L);
+        int r = Input_IsGameBoyKeyPressed(P_KEY_R);
+        int st = Input_IsGameBoyKeyPressed(P_KEY_START);
+        int se = Input_IsGameBoyKeyPressed(P_KEY_SELECT);
+        int dr = Input_IsGameBoyKeyPressed(P_KEY_RIGHT);
+        int dl = Input_IsGameBoyKeyPressed(P_KEY_LEFT);
+        int du = Input_IsGameBoyKeyPressed(P_KEY_UP);
+        int dd = Input_IsGameBoyKeyPressed(P_KEY_DOWN);
 
-    GBA_HandleInput(a, b, l, r, st, se, dr, dl, du, dd);
+        GBA_HandleInput(a, b, l, r, st, se, dr, dl, du, dd);
+    }
 }
 
 int Input_Speedup_Enabled(void)

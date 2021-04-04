@@ -4,10 +4,11 @@ Library
 SDL2
 ----
 
-- Allow setting up screen size.
+- Sound options (volume, mute, disable individual channels).
 - Add helper to configure user input.
 - Interrupts: SERIAL and GAMEPAK are missing.
 - DMA 3 Video Capture Mode
+- Screenshots.
 
 Common
 ------

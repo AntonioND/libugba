@@ -6,9 +6,11 @@
 
 #include <ugba/ugba.h>
 
+#include "win_config.h"
 #include "win_main.h"
 #include "window_handler.h"
 
+#include "../config.h"
 #include "../debug_utils.h"
 #include "../png_utils.h"
 #include "../core/video.h"
@@ -117,6 +119,13 @@ void Win_MainExit(void)
     exit_program_requested = 1;
 }
 
+static int config_shown = 0;
+
+int Win_MainIsConfigEnabled(void)
+{
+    return config_shown;
+}
+
 static int Win_MainEventCallback(SDL_Event *e)
 {
     int exit_program = 0;
@@ -125,6 +134,19 @@ static int Win_MainEventCallback(SDL_Event *e)
     {
         switch (e->key.keysym.sym)
         {
+            case SDLK_F3:
+                if (config_shown == 0)
+                {
+                    Win_ConfigCreate();
+                    config_shown = 1;
+                }
+                else
+                {
+                    Config_Save();
+                    config_shown = 0;
+                }
+                break;
+
 #ifdef ENABLE_DEBUGGER
 
             case SDLK_F5:
@@ -160,6 +182,11 @@ static int Win_MainEventCallback(SDL_Event *e)
             case SDLK_ESCAPE:
                 exit_program = 1;
                 break;
+
+            default:
+                if (config_shown)
+                    Win_ConfigEventCallback(e);
+                break;
         }
     }
     else if (e->type == SDL_WINDOWEVENT)
@@ -185,13 +212,12 @@ int Win_MainCreate(void)
     // Default screen size is 2x
     WIN_MAIN_CONFIG_ZOOM = 2;
 
-#if 0
-    int newzoom = EmulatorConfig.screen_size;
+    int newzoom = GlobalConfig.screen_size;
+
     if ((newzoom > 0) && (newzoom <= ZOOM_MAX))
     {
         WIN_MAIN_CONFIG_ZOOM = newzoom;
     }
-#endif
 
     WinIDMain = WH_Create(240 * WIN_MAIN_CONFIG_ZOOM,
                           160 * WIN_MAIN_CONFIG_ZOOM, 0, 0, 0);
@@ -219,6 +245,16 @@ void Win_MainRender(void)
     WH_Render(WinIDMain, WIN_MAIN_GAME_SCREEN_BUFFER);
 }
 
+void Win_MainSetZoom(int factor)
+{
+    WIN_MAIN_CONFIG_ZOOM = factor;
+
+    int w = 240 * WIN_MAIN_CONFIG_ZOOM;
+    int h = 160 * WIN_MAIN_CONFIG_ZOOM;
+
+    WH_SetSize(WinIDMain, w, h, w, h, 0);
+}
+
 void Win_MainLoopHandle(void)
 {
     if (exit_program_requested)
@@ -228,6 +264,9 @@ void Win_MainLoopHandle(void)
     }
 
     GBA_ConvertScreenBufferTo24RGB(GBA_SCREEN);
+
+    if (config_shown)
+        Win_ConfigDrawOverlay(GBA_SCREEN);
 
     ScaleImage24RGB(WIN_MAIN_CONFIG_ZOOM, GBA_SCREEN,
                     240, 160, WIN_MAIN_GAME_SCREEN_BUFFER,
