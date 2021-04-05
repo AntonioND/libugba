@@ -4,7 +4,6 @@ Library
 SDL2
 ----
 
-- Sound options (disable individual channels).
 - Add helper to configure user input.
 - Interrupts: SERIAL and GAMEPAK are missing.
 - DMA 3 Video Capture Mode

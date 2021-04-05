@@ -49,6 +49,7 @@ static gui_global config_window_gui = {
 #define SELECTION_INPUT_MENU        (4)
 
 static int config_selected_item = 0;
+static int config_selected_sound_channel = 0;
 
 static void Win_ConfigUpdate(void)
 {
@@ -65,20 +66,45 @@ static void Win_ConfigUpdate(void)
     GUI_ConsoleModePrintf(&config_con, 2, 5, "Volume: %d",
                           GlobalConfig.volume);
 
-    // TODO
+    int channel[6] = { 0 };
+    for (int i = 0; i < 6; i++)
+    {
+        int c = ' ';
+
+        if (GlobalConfig.channel_flags & (1 << i))
+            c = CHR_SQUAREBLACK_MID;
+
+        channel[i] = c;
+    }
+
     GUI_ConsoleModePrintf(&config_con, 0, 7,
                           "  Sound channels:\n"
-                          "    PSG  1[ ]  2[ ]  3[ ]  4[ ]\n"
-                          "    DMA  A[ ]  B[ ]");
+                          "    PSG  1[%c]  2[%c]  3[%c]  4[%c]\n"
+                          "    DMA  A[%c]  B[%c]",
+                          channel[0], channel[1], channel[2], channel[3],
+                          channel[4], channel[5]);
 
     // TODO
     GUI_ConsoleModePrintf(&config_con, 2, 11, "Input configuration menu");
+
+    // Print cursor
 
     const int selection_offset_y[5] = { 1, 3, 5, 7, 11 };
 
     GUI_ConsoleModePrintf(&config_con,
                           1, selection_offset_y[config_selected_item],
                           STR_ARROW_LEFT);
+
+    if (config_selected_item == SELECTION_SOUND_CHANNELS)
+    {
+        const int channel_x[6] = { 8, 14, 20, 26, 8, 14 };
+        const int channel_y[6] = { 8, 8, 8, 8, 9, 9 };
+
+        int x = channel_x[config_selected_sound_channel];
+        int y = channel_y[config_selected_sound_channel];
+
+        GUI_ConsoleModePrintf(&config_con, x, y, STR_ARROW_LEFT);
+    }
 }
 
 void Win_ConfigEventCallback(SDL_Event *e)
@@ -116,6 +142,8 @@ void Win_ConfigEventCallback(SDL_Event *e)
                             GlobalConfig.volume++;
                         break;
                     case SELECTION_SOUND_CHANNELS:
+                        if (config_selected_sound_channel < 5)
+                            config_selected_sound_channel++;
                         break;
                     case SELECTION_INPUT_MENU:
                         break;
@@ -143,7 +171,33 @@ void Win_ConfigEventCallback(SDL_Event *e)
                             GlobalConfig.volume--;
                         break;
                     case SELECTION_SOUND_CHANNELS:
+                        if (config_selected_sound_channel > 0)
+                            config_selected_sound_channel--;
                         break;
+                    case SELECTION_INPUT_MENU:
+                        break;
+                    default:
+                        break;
+                }
+                break;
+            }
+            case SDLK_RETURN:
+            {
+                switch (config_selected_item)
+                {
+                    case SELECTION_ZOOM:
+                        break;
+                    case SELECTION_SOUND_ENABLE:
+                        GlobalConfig.sound_mute ^= 1;
+                        break;
+                    case SELECTION_SOUND_VOLUME:
+                        break;
+                    case SELECTION_SOUND_CHANNELS:
+                    {
+                        int flag = 1 << config_selected_sound_channel;
+                        GlobalConfig.channel_flags ^= flag;
+                        break;
+                    }
                     case SELECTION_INPUT_MENU:
                         break;
                     default:

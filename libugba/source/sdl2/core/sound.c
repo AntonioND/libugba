@@ -936,25 +936,25 @@ static void Sound_FillBuffers_VBL_PSG(void)
             int sound_left = 0;
             int sound_right = 0;
 
-            if (sound_psg.ch1.running)
+            if ((sound_psg.ch1.running) && (GlobalConfig.channel_flags & (1 << 0)))
             {
                 sound_left += sound_psg.ch1.current_value * ch1_vol_left;
                 sound_right += sound_psg.ch1.current_value * ch1_vol_right;
             }
 
-            if (sound_psg.ch2.running)
+            if ((sound_psg.ch2.running) && (GlobalConfig.channel_flags & (1 << 1)))
             {
                 sound_left += sound_psg.ch2.current_value * ch2_vol_left;
                 sound_right += sound_psg.ch2.current_value * ch2_vol_right;
             }
 
-            if (sound_psg.ch3.running)
+            if ((sound_psg.ch3.running) && (GlobalConfig.channel_flags & (1 << 2)))
             {
                 sound_left += sound_psg.ch3.current_value * ch3_vol_left;
                 sound_right += sound_psg.ch3.current_value * ch3_vol_right;
             }
 
-            if (sound_psg.ch4.running)
+            if ((sound_psg.ch4.running) && (GlobalConfig.channel_flags & (1 << 3)))
             {
                 sound_left += sound_psg.ch4.current_value * ch4_vol_left;
                 sound_right += sound_psg.ch4.current_value * ch4_vol_right;
@@ -1031,6 +1031,15 @@ static uint32_t UGBA_TimerClocksPerPeriod(int timer)
 // DMA A: dma_channel = 0 | DMA B: dma_channel = 1
 static void Sound_FillBuffers_VBL_DMA(int dma_channel)
 {
+    sound_dma_info_t *dma = &sound_dma[dma_channel];
+
+    // If this channel is disabled in the global configuration,skip it.
+    if ((GlobalConfig.channel_flags & (1 << (dma_channel + 4))) == 0)
+    {
+        memset(dma->buffer, 0, sizeof(dma->buffer));
+        return;
+    }
+
     int timer;
 
     if (dma_channel == 0)
@@ -1039,8 +1048,6 @@ static void Sound_FillBuffers_VBL_DMA(int dma_channel)
         timer = REG_SOUNDCNT_H & SOUNDCNT_H_DMA_B_TIMER1;
 
     uint32_t clocks_per_period = UGBA_TimerClocksPerPeriod(timer);
-
-    sound_dma_info_t *dma = &sound_dma[dma_channel];
 
     if (clocks_per_period == 0)
     {
