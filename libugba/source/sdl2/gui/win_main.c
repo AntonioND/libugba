@@ -180,7 +180,16 @@ static int Win_MainEventCallback(SDL_Event *e)
 #endif // ENABLE_SCREENSHOTS
 
             case SDLK_ESCAPE:
-                exit_program = 1;
+                if (config_shown)
+                {
+                    if (Win_ConfigEventCallback(e))
+                    {
+                        Config_Save();
+                        config_shown = 0;
+                    }
+                }
+                else
+                    exit_program = 1;
                 break;
 
             default:

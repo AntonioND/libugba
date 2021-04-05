@@ -7,7 +7,7 @@
 
 #include <SDL2/SDL.h>
 
-void Win_ConfigEventCallback(SDL_Event *e);
+int Win_ConfigEventCallback(SDL_Event *e);
 void Win_ConfigDrawOverlay(unsigned char *dest_buffer);
 int Win_ConfigCreate(void);
 
