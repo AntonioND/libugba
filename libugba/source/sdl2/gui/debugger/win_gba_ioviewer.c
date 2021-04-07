@@ -1051,7 +1051,7 @@ void Win_GBAIOViewerUpdate(void)
                     "%04X : 064h SOUND1CNT_X", REG_SOUND1CNT_X);
 
             GUI_ConsoleModePrintf(&gba_ioview_sound_chn1_con, 0, 4,
-                    "[%2d] Volume", 0); // gba_debug_get_psg_vol(1)); // TODO
+                    "[%2d] Volume", Sound_PSG_GetChannelVolume(1));
 
             char text_freq[10];
             snprintf(text_freq, sizeof(text_freq), "%9.2f",
@@ -1069,7 +1069,7 @@ void Win_GBAIOViewerUpdate(void)
                     "%04X : 06Ch SOUND2CNT_H", REG_SOUND2CNT_H);
 
             GUI_ConsoleModePrintf(&gba_ioview_sound_chn2_con, 0, 4,
-                    "[%2d] Volume", 0); // gba_debug_get_psg_vol(2)); // TODO
+                    "[%2d] Volume", Sound_PSG_GetChannelVolume(2));
 
             snprintf(text_freq, sizeof(text_freq), "%9.2f",
                     131072.0 / (float)(2048 - (REG_SOUND2CNT_H & 0x7FF)));
@@ -1088,7 +1088,7 @@ void Win_GBAIOViewerUpdate(void)
                     "%04X : 074h SOUND3CNT_X", REG_SOUND3CNT_X);
 
             GUI_ConsoleModePrintf(&gba_ioview_sound_chn3_con, 0, 4,
-                    "[%2d] Volume", 0); // gba_debug_get_psg_vol(3)); // TODO
+                    "[%2d] Volume", Sound_PSG_GetChannelVolume(3));
 
             snprintf(text_freq, sizeof(text_freq), "%9.2f",
                     2097152.0 / (float)(2048 - (REG_SOUND3CNT_X & 0x7FF)));
@@ -1105,7 +1105,7 @@ void Win_GBAIOViewerUpdate(void)
                     "%04X : 07Ch SOUND4CNT_H", REG_SOUND4CNT_H);
 
             GUI_ConsoleModePrintf(&gba_ioview_sound_chn4_con, 0, 4,
-                    "[%2d] Volume", 0); // gba_debug_get_psg_vol(4)); // TODO
+                    "[%2d] Volume", Sound_PSG_GetChannelVolume(4));
 
             const int32_t NoiseFreqRatio[8] = {
                 1048576, 524288, 262144, 174763, 131072, 104858, 87381, 74898

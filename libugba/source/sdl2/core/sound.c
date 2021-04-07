@@ -1257,6 +1257,25 @@ void Sound_Handle_VBL(void)
     Sound_SendToStream();
 }
 
+int Sound_PSG_GetChannelVolume(int channel)
+{
+    switch (channel)
+    {
+        case 1:
+            return sound_psg.ch1.volume;
+        case 2:
+            return sound_psg.ch2.volume;
+        case 3:
+            return sound_psg.ch3.volume;
+        case 4:
+            return sound_psg.ch4.volume;
+        default:
+            break;
+    }
+
+    return 0;
+}
+
 void Sound_Initialize(void)
 {
     // Fill bank 1 with 0xFF00 and bank 0 with 0x0000
