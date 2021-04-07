@@ -2,6 +2,8 @@
 //
 // Copyright (c) 2011-2015, 2019-2021 Antonio Niño Díaz
 
+#include <time.h>
+
 #include <SDL2/SDL.h>
 
 #include <ugba/ugba.h>
@@ -112,6 +114,53 @@ static unsigned char WIN_MAIN_GAME_SCREEN_BUFFER[240 * ZOOM_MAX *
 
 //------------------------------------------------------------------
 
+#ifdef ENABLE_SCREENSHOTS
+
+static char timestamp_filename[256];
+
+static void GenerateNewScreenshotTimestampFilename(void)
+{
+    long long int number = 0;
+
+    time_t rawtime;
+    time(&rawtime);
+    struct tm *ptm = gmtime(&rawtime);
+
+    // Generate base file name based on the current time and date
+    char timestamp[50];
+    snprintf(timestamp, sizeof(timestamp), "%04d%02d%02d_%02d%02d%02d",
+             1900 + ptm->tm_year, 1 + ptm->tm_mon, ptm->tm_mday,
+             1 + ptm->tm_hour, ptm->tm_min, ptm->tm_sec);
+
+    // Append a number to the name so that we can take multiple screenshots the
+    // same second.
+    while (1)
+    {
+        snprintf(timestamp_filename, sizeof(timestamp_filename),
+                 "screenshot_%s_%lld.png", timestamp, number);
+
+        FILE *file = fopen(timestamp_filename, "rb");
+        if (file == NULL)
+            break; // This name is available
+
+        fclose(file);
+
+        number++;
+    }
+}
+
+void Debug_Screenshot(const char *name)
+{
+    if (name == NULL)
+        name = "screenshot.png";
+
+    Save_PNG(name, &GBA_SCREEN[0], 240, 160, 0);
+}
+
+#endif // ENABLE_SCREENSHOTS
+
+//------------------------------------------------------------------
+
 static int exit_program_requested = 0;
 
 void Win_MainExit(void)
@@ -174,7 +223,8 @@ static int Win_MainEventCallback(SDL_Event *e)
 #ifdef ENABLE_SCREENSHOTS
 
             case SDLK_F12:
-                //GBA_Screenshot(); // TODO
+                GenerateNewScreenshotTimestampFilename();
+                Debug_Screenshot(timestamp_filename);
                 break;
 
 #endif // ENABLE_SCREENSHOTS
@@ -309,15 +359,3 @@ void Win_MainLoopHandle(void)
 
 #endif // ENABLE_DEBUGGER
 }
-
-#ifdef ENABLE_SCREENSHOTS
-
-void Debug_Screenshot(const char *name)
-{
-    if (name == NULL)
-        name = "screenshot.png";
-
-    Save_PNG(name, &GBA_SCREEN[0], 240, 160, 0);
-}
-
-#endif // ENABLE_SCREENSHOTS
