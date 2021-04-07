@@ -4,10 +4,8 @@ Library
 SDL2
 ----
 
-- Add helper to configure user input.
 - Interrupts: SERIAL and GAMEPAK are missing.
 - DMA 3 Video Capture Mode
-- Screenshots.
 
 Common
 ------
