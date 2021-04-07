@@ -1239,7 +1239,7 @@ void Win_GBAIOViewerUpdate(void)
 
             GUI_ConsoleClear(&gba_ioview_others_int_flags_con);
 
-            uint16_t biosflags = 0; // GBA_MemoryReadFast16(0x03007FF8); // TODO
+            uint16_t biosflags = BIOS_INTR_FLAGS;
 
             GUI_ConsoleModePrintf(&gba_ioview_others_int_flags_con, 0, 0,
                     "IE IF Bios");
