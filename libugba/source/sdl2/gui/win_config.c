@@ -6,6 +6,7 @@
 
 #include "../config.h"
 #include "../debug_utils.h"
+#include "../input_utils.h"
 
 #include "font_utils.h"
 #include "win_main.h"
@@ -52,6 +53,9 @@ static int config_selected_item = 0;
 static int config_selected_sound_channel = 0;
 
 static int config_input_menu_enabled = 0;
+static int config_input_selected_item = 0;
+static int config_input_waiting_for_press = 0;
+static int config_input_waiting_blink_frames = 0;
 
 static void Win_ConfigUpdate(void)
 {
@@ -113,7 +117,47 @@ static void Win_ConfigUpdate(void)
     {
         GUI_ConsoleModePrintf(&config_con, 14, 0, "Input Configuration");
 
-        // TODO
+        int selected_controller = Input_PlayerGetController();
+        const char *name = "Unknown";
+
+        if (selected_controller == -1)
+            name = "Keyboard";
+        else if (selected_controller != -2)
+            name = Input_GetJoystickName(selected_controller);
+
+        char str[31];
+        snprintf(str, sizeof(str), " < %s >", name);
+        GUI_ConsoleModePrintf(&config_con, 2, 1, str);
+
+        for (int i = 0; i < P_NUM_KEYS; i++)
+        {
+            char keyname[20];
+            int btn = Input_ControlsGetKey(i);
+
+            if (Input_PlayerGetController() == -1)
+                Input_GetKeyboardElementName(keyname, sizeof(keyname), btn);
+            else
+                Input_GetJoystickElementName(keyname, sizeof(keyname), btn);
+
+            GUI_ConsoleModePrintf(&config_con, 2, i + 2, "%s: %s",
+                                  GBKeyNames[i], keyname);
+        }
+
+        int show_cursor = 1;
+
+        if (config_input_waiting_for_press)
+        {
+            if ((config_input_waiting_blink_frames & 16) == 0)
+                show_cursor = 0;
+            config_input_waiting_blink_frames++;
+        }
+
+        if (show_cursor)
+        {
+            GUI_ConsoleModePrintf(&config_con,
+                                  1, 1 + config_input_selected_item,
+                                  STR_ARROW_LEFT);
+        }
     }
 }
 
@@ -213,6 +257,9 @@ static int GlobalConfigEventCallback(SDL_Event *e)
                     }
                     case SELECTION_INPUT_MENU:
                         config_input_menu_enabled = 1;
+                        config_input_selected_item = 0;
+                        config_input_waiting_for_press = 0;
+                        config_input_waiting_blink_frames = 0;
                         break;
                     default:
                         break;
@@ -228,8 +275,74 @@ static int GlobalConfigEventCallback(SDL_Event *e)
     return 0;
 }
 
+static int win_config_inputget_callback(SDL_Event *e)
+{
+    if (config_input_waiting_for_press == 0)
+        return 0;
+
+    int controller = Input_PlayerGetController();
+
+    if (controller == -1)
+    {
+        // Keyboard
+        if (e->type == SDL_KEYDOWN)
+        {
+            SDL_KeyCode scancode; // scancode name
+
+            scancode = SDL_GetKeyFromScancode(e->key.keysym.scancode);
+
+            Input_ControlsSetKey(config_input_selected_item - 1, scancode);
+
+            config_input_waiting_for_press = 0;
+        }
+    }
+    else // Joypad
+    {
+        if (e->type == SDL_JOYBUTTONDOWN)
+        {
+            if (e->jbutton.which == controller)
+            {
+                int btn = e->jbutton.button;
+
+                Input_ControlsSetKey(config_input_selected_item - 1, btn);
+
+                config_input_waiting_for_press = 0;
+            }
+        }
+        else if (e->type == SDL_JOYAXISMOTION)
+        {
+            if (e->jbutton.which == controller)
+            {
+                int btn = KEYCODE_IS_AXIS
+                          + ((e->jaxis.value > 0) ? KEYCODE_POSITIVE_AXIS : 0)
+                          + e->jaxis.axis;
+
+                Input_ControlsSetKey(config_input_selected_item - 1, btn);
+
+                config_input_waiting_for_press = 0;
+            }
+        }
+        else if (e->type == SDL_JOYHATMOTION)
+        {
+            if (e->jbutton.which == controller)
+            {
+                int btn = KEYCODE_IS_HAT + (e->jhat.value << 4) + e->jhat.hat;
+
+                Input_ControlsSetKey(config_input_selected_item - 1, btn);
+
+                config_input_waiting_for_press = 0;
+            }
+        }
+    }
+
+    return 0;
+}
+
+
 static int InputConfigEventCallback(SDL_Event *e)
 {
+    win_config_inputget_callback(e);
+
     if (e->type == SDL_KEYDOWN)
     {
         switch (e->key.keysym.sym)
@@ -238,7 +351,51 @@ static int InputConfigEventCallback(SDL_Event *e)
                 config_input_menu_enabled = 0;
                 break;
 
-            // TODO
+            case SDLK_UP:
+                if (config_input_waiting_for_press == 0)
+                {
+                    if (config_input_selected_item > 0)
+                        config_input_selected_item--;
+                }
+                break;
+
+            case SDLK_DOWN:
+                if (config_input_waiting_for_press == 0)
+                {
+                    if (config_input_selected_item < 10)
+                        config_input_selected_item++;
+                }
+                break;
+
+            case SDLK_RIGHT:
+                if (config_input_selected_item == 0)
+                {
+                    int current = Input_PlayerGetController();
+                    int max = Input_GetJoystickNumber() - 1;
+                    if (current < max)
+                        Input_PlayerSetController(current + 1);
+                }
+                break;
+
+            case SDLK_LEFT:
+                if (config_input_selected_item == 0)
+                {
+                    int current = Input_PlayerGetController();
+                    if (current > -1)
+                        Input_PlayerSetController(current - 1);
+                }
+                break;
+
+            case SDLK_RETURN:
+                if (config_input_waiting_for_press == 0)
+                {
+                    if (config_input_selected_item > 0)
+                    {
+                        config_input_waiting_for_press = 1;
+                        config_input_waiting_blink_frames = 0;
+                    }
+                }
+                break;
 
             default:
                 break;

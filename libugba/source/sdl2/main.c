@@ -33,6 +33,13 @@ static int Init(void)
     }
     atexit(SDL_Quit);
 
+    // Try to init joystick but don't abort if it fails
+    if (SDL_InitSubSystem(SDL_INIT_JOYSTICK) != 0)
+    {
+        Debug_Log("SDL could not initialize joystick! SDL Error: %s\n",
+                  SDL_GetError());
+    }
+
     // Init this before loading the configuration
     Input_InitSystem();
 
