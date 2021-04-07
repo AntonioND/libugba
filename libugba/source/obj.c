@@ -15,6 +15,22 @@ static void OBJ_TileSet_internal(oam_entry *e, oam_color_mode colors,
         e->attr2 |= ATTR2_16_COLOR_TILE(tile);
 }
 
+static int OBJ_IsRegular(oam_entry *e)
+{
+    if ((e->attr0 & ATTR0_TYPE_MASK) == ATTR0_REGULAR)
+        return 1;
+
+    return 0;
+}
+
+static int OBJ_IsAffine(oam_entry *e)
+{
+    if ((e->attr0 & ATTR0_TYPE_MASK) == ATTR0_AFFINE)
+        return 1;
+
+    return 0;
+}
+
 // Regular objects functions
 // -------------------------
 
@@ -47,7 +63,8 @@ void OBJ_RegularEnableSet(int index, int enable)
 
     oam_entry *e = &MEM_OAM_ENTRIES[index];
 
-    // TODO: Check object mode
+#line 67 "source/obj.c"
+    UMOD_Assert(OBJ_IsRegular(e));
 
     if (enable)
         e->attr0 &= ~ATTR0_DISABLE;
@@ -62,7 +79,8 @@ void OBJ_RegularHFlipSet(int index, int enable)
 
     oam_entry *e = &MEM_OAM_ENTRIES[index];
 
-    // TODO: Check object mode
+#line 83 "source/obj.c"
+    UMOD_Assert(OBJ_IsRegular(e));
 
     if (enable)
         e->attr1 &= ~ATTR1_REGULAR_HFLIP;
@@ -77,7 +95,8 @@ void OBJ_RegularVFlipSet(int index, int enable)
 
     oam_entry *e = &MEM_OAM_ENTRIES[index];
 
-    // TODO: Check object mode
+#line 99 "source/obj.c"
+    UMOD_Assert(OBJ_IsRegular(e));
 
     if (enable)
         e->attr1 &= ~ATTR1_REGULAR_VFLIP;
@@ -118,7 +137,8 @@ void OBJ_AffineMatrixSet(int index, int matrix_index)
 
     oam_entry *e = &MEM_OAM_ENTRIES[index];
 
-    // TODO: Check object mode
+#line 141 "source/obj.c"
+    UMOD_Assert(OBJ_IsAffine(e));
 
     e->attr1 &= ~ATTR1_AFFINE_MATRIX_MASK;
     e->attr1 |= ~ATTR1_AFFINE_MATRIX(matrix_index);
@@ -131,7 +151,8 @@ void OBJ_AffineDoubleSizeSet(int index, int enable)
 
     oam_entry *e = &MEM_OAM_ENTRIES[index];
 
-    // TODO: Check object mode
+#line 155 "source/obj.c"
+    UMOD_Assert(OBJ_IsAffine(e));
 
     if (enable)
         e->attr0 &= ~ATTR0_DOUBLE_SIZE;

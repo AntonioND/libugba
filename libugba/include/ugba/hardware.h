@@ -165,6 +165,7 @@ typedef struct {
 
 #define ATTR0_REGULAR               (0 << 8)
 #define ATTR0_AFFINE                (1 << 8)
+#define ATTR0_TYPE_MASK             (1 << 8)
 
 #define ATTR0_DOUBLE_SIZE           (1 << 9) // Affine objects
 #define ATTR0_DISABLE               (1 << 9) // Regular objects
