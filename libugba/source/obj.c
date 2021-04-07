@@ -4,6 +4,11 @@
 
 #include <ugba/ugba.h>
 
+// This directive helps with unit testing. Every build system deals differently
+// with relative vs absolute paths. This makes asserts always print the same
+// error message.
+#line 11 "source/obj.c"
+
 static void OBJ_TileSet_internal(oam_entry *e, oam_color_mode colors,
                                  int tile)
 {
@@ -63,7 +68,6 @@ void OBJ_RegularEnableSet(int index, int enable)
 
     oam_entry *e = &MEM_OAM_ENTRIES[index];
 
-#line 67 "source/obj.c"
     UMOD_Assert(OBJ_IsRegular(e));
 
     if (enable)
@@ -79,7 +83,6 @@ void OBJ_RegularHFlipSet(int index, int enable)
 
     oam_entry *e = &MEM_OAM_ENTRIES[index];
 
-#line 83 "source/obj.c"
     UMOD_Assert(OBJ_IsRegular(e));
 
     if (enable)
@@ -95,7 +98,6 @@ void OBJ_RegularVFlipSet(int index, int enable)
 
     oam_entry *e = &MEM_OAM_ENTRIES[index];
 
-#line 99 "source/obj.c"
     UMOD_Assert(OBJ_IsRegular(e));
 
     if (enable)
@@ -137,7 +139,6 @@ void OBJ_AffineMatrixSet(int index, int matrix_index)
 
     oam_entry *e = &MEM_OAM_ENTRIES[index];
 
-#line 141 "source/obj.c"
     UMOD_Assert(OBJ_IsAffine(e));
 
     e->attr1 &= ~ATTR1_AFFINE_MATRIX_MASK;
@@ -151,7 +152,6 @@ void OBJ_AffineDoubleSizeSet(int index, int enable)
 
     oam_entry *e = &MEM_OAM_ENTRIES[index];
 
-#line 155 "source/obj.c"
     UMOD_Assert(OBJ_IsAffine(e));
 
     if (enable)
