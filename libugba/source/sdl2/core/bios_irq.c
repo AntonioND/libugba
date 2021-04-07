@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: LGPL-3.0-only
 //
-// Copyright (c) 2020 Antonio Niño Díaz
+// Copyright (c) 2020-2021 Antonio Niño Díaz
 
 #include <SDL2/SDL.h>
 
@@ -212,7 +212,8 @@ void SWI_VBlankIntrWait(void)
 
 NORETURN void SWI_SoftReset(void)
 {
-    // TODO: Is there a way to implement this in a cross platform way?
+    // There is no way to reset a C program in a cross-platform way. Print a
+    // debug message and exit the program.
 
     Debug_Log("%s(): Not supported!\n");
     WH_CloseAll();
@@ -221,7 +222,8 @@ NORETURN void SWI_SoftReset(void)
 
 NORETURN void SWI_HardReset(void)
 {
-    // TODO: Is there a way to implement this in a cross platform way?
+    // There is no way to reset a C program in a cross-platform way. Print a
+    // debug message and exit the program.
 
     Debug_Log("%s(): Not supported!\n");
     WH_CloseAll();
@@ -230,7 +232,7 @@ NORETURN void SWI_HardReset(void)
 
 void SWI_SoundBias(uint32_t level)
 {
-    // This function ignores the delay
+    // The SDL2 version of this function ignores the delay.
 
     uint32_t value = level ? 0x100 : 0;
 
