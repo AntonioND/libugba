@@ -299,7 +299,7 @@ void SWI_LZ77UnCompReadNormalWrite16bit(const void *source, void *dest)
 void SWI_HuffUnComp(const void *source, void *dest)
 {
     UMOD_Assert(((uint32_t)source & 3) == 0);
-    UMOD_Assert(((uint32_t)dest & 3) == 0); // TODO: Verify this
+    UMOD_Assert(((uint32_t)dest & 3) == 0);
 
     register uint32_t source_ asm("r0") = (uint32_t)source;
     register uint32_t dest_ asm("r1") = (uint32_t)dest;

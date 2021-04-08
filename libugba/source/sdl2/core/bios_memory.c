@@ -418,7 +418,7 @@ void SWI_LZ77UnCompReadNormalWrite16bit(const void *source, void *dest)
 void SWI_HuffUnComp(const void *source, void *dest)
 {
     UMOD_Assert(((uintptr_t)source & 3) == 0);
-    UMOD_Assert(((uintptr_t)dest & 3) == 0); // TODO: Verify this
+    UMOD_Assert(((uintptr_t)dest & 3) == 0);
 
     const uint8_t *src = source;
     uint8_t *dst = dest;
