@@ -88,7 +88,14 @@ static void UGBA_ExitSaveFileClose(void)
 {
     SDL_RemoveTimer(AutosaveTimerID);
 
-    UGBA_SaveFileClose();
+    // Check if there have been changes to SRAM
+
+    uint64_t hash = UGBA_FNV_1_Hash(MEM_SRAM, MEM_SRAM_SIZE);
+
+    // If so, save the changes
+
+    if (hash != oldhash)
+        UGBA_SaveFileClose();
 
     free(sav_path);
 }
@@ -130,14 +137,19 @@ void UGBA_SaveFileOpen(const char *path)
 
         memcpy(MEM_SRAM, buffer, size);
 
-        // Calculate hash of the initial state
-
-        oldhash = UGBA_FNV_1_Hash(MEM_SRAM, MEM_SRAM_SIZE);
-
         // Cleanup
 
         free(buffer);
     }
+    else
+    {
+        memset(MEM_SRAM, 0, MEM_SRAM_SIZE);
+    }
+
+    // Calculate hash of the initial state: Either the file that has been read
+    // or a cleared SRAM.
+
+    oldhash = UGBA_FNV_1_Hash(MEM_SRAM, MEM_SRAM_SIZE);
 
     // Make sure that save file is written back to disk on exit
 
