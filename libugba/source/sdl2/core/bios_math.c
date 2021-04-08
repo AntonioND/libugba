@@ -115,6 +115,9 @@ int16_t SWI_ArcTan2(int16_t x, int16_t y)
 void SWI_BgAffineSet(const bg_affine_src *src, bg_affine_dst *dst,
                      uint32_t count)
 {
+    UMOD_Assert(((uintptr_t)src & 3) == 0);
+    UMOD_Assert(((uintptr_t)dst & 3) == 0);
+
     while (count--)
     {
         int32_t cx = src->bgx;
@@ -146,10 +149,9 @@ void SWI_BgAffineSet(const bg_affine_src *src, bg_affine_dst *dst,
 void SWI_ObjAffineSet(const obj_affine_src *src, void *dst,
                       uint32_t count, uint32_t increment)
 {
-    if (increment & 1)
-    {
-        Debug_Log("%s: Please, set increment to a multiple of 2", __func__);
-    }
+    UMOD_Assert(((uintptr_t)src & 1) == 0);
+    UMOD_Assert(((uintptr_t)dst & 1) == 0);
+    UMOD_Assert((increment & 1) == 0);
 
     int16_t *out = dst;
 
