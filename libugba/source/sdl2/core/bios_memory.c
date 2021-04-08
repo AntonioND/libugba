@@ -147,6 +147,17 @@ uint32_t SWI_GetBiosChecksum(void)
 
 void SWI_CpuSet(const void *src, void *dst, uint32_t len_mode)
 {
+    if (len_mode & SWI_MODE_32BIT)
+    {
+        UMOD_Assert(((uintptr_t)src & 3) == 0);
+        UMOD_Assert(((uintptr_t)dst & 3) == 0);
+    }
+    else
+    {
+        UMOD_Assert(((uintptr_t)src & 1) == 0);
+        UMOD_Assert(((uintptr_t)dst & 1) == 0);
+    }
+
     int count = len_mode & 0x001FFFFF;
     uint32_t mode = len_mode & ~0x001FFFFF;
 
@@ -188,6 +199,10 @@ void SWI_CpuSet(const void *src, void *dst, uint32_t len_mode)
 
 void SWI_CpuFastSet(const void *src, void *dst, uint32_t len_mode)
 {
+    UMOD_Assert(((uintptr_t)src & 3) == 0);
+    UMOD_Assert(((uintptr_t)dst & 3) == 0);
+    UMOD_Assert((len_mode & 7) == 0);
+
     int count = len_mode & 0x001FFFF8; // Must be a multiple of 8 words
     uint32_t mode = len_mode & ~0x001FFFFF;
 
@@ -209,6 +224,8 @@ void SWI_CpuFastSet(const void *src, void *dst, uint32_t len_mode)
 
 void SWI_BitUnPack(const void *source, void *dest, const bit_unpack_info *info)
 {
+    UMOD_Assert(((uintptr_t)dest & 3) == 0);
+
     const uint8_t *src = source;
     uint32_t *dst = dest;
 
@@ -385,16 +402,24 @@ static void SWI_UncompressLZ77(const void *source, void *dest)
 
 void SWI_LZ77UnCompReadNormalWrite8bit(const void *source, void *dest)
 {
+    UMOD_Assert(((uintptr_t)source & 3) == 0);
+
     SWI_UncompressLZ77(source, dest);
 }
 
 void SWI_LZ77UnCompReadNormalWrite16bit(const void *source, void *dest)
 {
+    UMOD_Assert(((uintptr_t)source & 3) == 0);
+    UMOD_Assert(((uintptr_t)dest & 1) == 0);
+
     SWI_UncompressLZ77(source, dest);
 }
 
 void SWI_HuffUnComp(const void *source, void *dest)
 {
+    UMOD_Assert(((uintptr_t)source & 3) == 0);
+    UMOD_Assert(((uintptr_t)dest & 3) == 0); // TODO: Verify this
+
     const uint8_t *src = source;
     uint8_t *dst = dest;
 
@@ -527,14 +552,16 @@ static void GBA_SWI_RLUnComp(const void *source, void *dest)
 
 void SWI_RLUnCompWram(const void *source, void *dest)
 {
-    // TODO: Check alignment of arguments
+    UMOD_Assert(((uintptr_t)source & 3) == 0);
 
     GBA_SWI_RLUnComp(source, dest);
 }
 
 void SWI_RLUnCompVram(const void *source, void *dest)
 {
-    // TODO: Check alignment of arguments
+    UMOD_Assert(((uintptr_t)source & 3) == 0);
+    UMOD_Assert(((uintptr_t)dest & 1) == 0);
+
     // TODO: Can the size be not a multiple of 2?
 
     GBA_SWI_RLUnComp(source, dest);
@@ -565,14 +592,16 @@ static void GBA_Diff8bitUnFilter(const void *source, void *dest)
 
 void SWI_Diff8bitUnFilterWram(const void *source, void *dest)
 {
-    // TODO: Check alignment of arguments
+    UMOD_Assert(((uintptr_t)source & 3) == 0);
 
     GBA_Diff8bitUnFilter(source, dest);
 }
 
 void SWI_Diff8bitUnFilterVram(const void *source, void *dest)
 {
-    // TODO: Check alignment of arguments
+    UMOD_Assert(((uintptr_t)source & 3) == 0);
+    UMOD_Assert(((uintptr_t)dest & 1) == 0);
+
     // TODO: Can the size be not a multiple of 2?
 
     GBA_Diff8bitUnFilter(source, dest);
@@ -580,7 +609,8 @@ void SWI_Diff8bitUnFilterVram(const void *source, void *dest)
 
 void SWI_Diff16bitUnFilter(const void *source, void *dest)
 {
-    // TODO: Check alignment of arguments
+    UMOD_Assert(((uintptr_t)source & 3) == 0);
+    UMOD_Assert(((uintptr_t)dest & 1) == 0);
 
     const uint16_t *src = source;
     uint16_t *dst = dest;

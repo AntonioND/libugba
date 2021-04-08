@@ -1,8 +1,13 @@
 // SPDX-License-Identifier: MIT
 //
-// Copyright (c) 2020 Antonio Niño Díaz
+// Copyright (c) 2020-2021 Antonio Niño Díaz
 
 #include <ugba/ugba.h>
+
+// This directive helps with unit testing. Every build system deals differently
+// with relative vs absolute paths. This makes asserts always print the same
+// error message.
+#line 11 "source/gba/bios.c"
 
 // The functions here access the BIOS services directly. Some of the calls have
 // awkward arguments, so the library has  wrappers for some of them.
@@ -43,14 +48,12 @@ void SWI_Halt(void)
 }
 
 #if 0
-SWI_Stop 0x03
+SWI_Stop 0x03 // TODO
 #endif
 
 void SWI_IntrWait(uint32_t discard_old_flags, uint16_t wait_flags)
 {
-    // TODO: Print error message
-    if (wait_flags == 0)
-        return;
+    UMOD_Assert(wait_flags != 0);
 
     register uint32_t discard_ asm("r0") = discard_old_flags;
     register uint32_t flags_ asm("r1") = wait_flags;
@@ -72,6 +75,8 @@ void SWI_VBlankIntrWait(void)
 
 int32_t SWI_Div(int32_t num, int32_t div)
 {
+    UMOD_Assert(div != 0);
+
     if (div == 0)
         return 0;
 
@@ -91,6 +96,8 @@ int32_t SWI_Div(int32_t num, int32_t div)
 
 int32_t SWI_DivMod(int32_t num, int32_t div)
 {
+    UMOD_Assert(div != 0);
+
     if (div == 0)
         return 0;
 
@@ -156,7 +163,16 @@ int16_t SWI_ArcTan2(int16_t x, int16_t y)
 
 void SWI_CpuSet(const void *src, void *dst, uint32_t len_mode)
 {
-    // TODO: Verify arguments? Alignment?
+    if (len_mode & SWI_MODE_32BIT)
+    {
+        UMOD_Assert(((uint32_t)src & 3) == 0);
+        UMOD_Assert(((uint32_t)dst & 3) == 0);
+    }
+    else
+    {
+        UMOD_Assert(((uint32_t)src & 1) == 0);
+        UMOD_Assert(((uint32_t)dst & 1) == 0);
+    }
 
     register uint32_t src_ asm("r0") = (uint32_t)src;
     register uint32_t dst_ asm("r1") = (uint32_t)dst;
@@ -171,7 +187,9 @@ void SWI_CpuSet(const void *src, void *dst, uint32_t len_mode)
 
 void SWI_CpuFastSet(const void *src, void *dst, uint32_t len_mode)
 {
-    // TODO: Verify arguments? Alignment?
+    UMOD_Assert(((uint32_t)src & 3) == 0);
+    UMOD_Assert(((uint32_t)dst & 3) == 0);
+    UMOD_Assert((len_mode & 7) == 0);
 
     register uint32_t src_ asm("r0") = (uint32_t)src;
     register uint32_t dst_ asm("r1") = (uint32_t)dst;
@@ -200,7 +218,9 @@ uint32_t SWI_GetBiosChecksum(void)
 void SWI_BgAffineSet(const bg_affine_src *src, bg_affine_dst *dst,
                      uint32_t count)
 {
-    // TODO: Verify arguments? Alignment?
+    // TODO: Check if this is needed
+    UMOD_Assert(((uint32_t)src & 3) == 0);
+    UMOD_Assert(((uint32_t)dst & 3) == 0);
 
     register uint32_t src_ asm("r0") = (uint32_t)src;
     register uint32_t dst_ asm("r1") = (uint32_t)dst;
@@ -216,7 +236,9 @@ void SWI_BgAffineSet(const bg_affine_src *src, bg_affine_dst *dst,
 void SWI_ObjAffineSet(const obj_affine_src *src, void *dst,
                       uint32_t count, uint32_t increment)
 {
-    // TODO: Verify arguments? Alignment?
+    // TODO: Check if this is needed
+    UMOD_Assert(((uint32_t)src & 3) == 0);
+    UMOD_Assert(((uint32_t)dst & 3) == 0);
 
     register uint32_t src_ asm("r0") = (uint32_t)src;
     register uint32_t dst_ asm("r1") = (uint32_t)dst;
@@ -232,7 +254,7 @@ void SWI_ObjAffineSet(const obj_affine_src *src, void *dst,
 
 void SWI_BitUnPack(const void *source, void *dest, const bit_unpack_info *info)
 {
-    // TODO: Verify arguments? Alignment?
+    UMOD_Assert(((uint32_t)dest & 3) == 0);
 
     register uint32_t source_ asm("r0") = (uint32_t)source;
     register uint32_t dest_ asm("r1") = (uint32_t)dest;
@@ -247,7 +269,7 @@ void SWI_BitUnPack(const void *source, void *dest, const bit_unpack_info *info)
 
 void SWI_LZ77UnCompReadNormalWrite8bit(const void *source, void *dest)
 {
-    // TODO: Verify arguments? Alignment?
+    UMOD_Assert(((uint32_t)source & 3) == 0);
 
     register uint32_t source_ asm("r0") = (uint32_t)source;
     register uint32_t dest_ asm("r1") = (uint32_t)dest;
@@ -261,7 +283,8 @@ void SWI_LZ77UnCompReadNormalWrite8bit(const void *source, void *dest)
 
 void SWI_LZ77UnCompReadNormalWrite16bit(const void *source, void *dest)
 {
-    // TODO: Verify arguments? Alignment?
+    UMOD_Assert(((uint32_t)source & 3) == 0);
+    UMOD_Assert(((uint32_t)dest & 1) == 0);
 
     register uint32_t source_ asm("r0") = (uint32_t)source;
     register uint32_t dest_ asm("r1") = (uint32_t)dest;
@@ -273,10 +296,10 @@ void SWI_LZ77UnCompReadNormalWrite16bit(const void *source, void *dest)
     );
 }
 
-
 void SWI_HuffUnComp(const void *source, void *dest)
 {
-    // TODO: Verify arguments? Alignment?
+    UMOD_Assert(((uint32_t)source & 3) == 0);
+    UMOD_Assert(((uint32_t)dest & 3) == 0); // TODO: Verify this
 
     register uint32_t source_ asm("r0") = (uint32_t)source;
     register uint32_t dest_ asm("r1") = (uint32_t)dest;
@@ -290,7 +313,7 @@ void SWI_HuffUnComp(const void *source, void *dest)
 
 void SWI_RLUnCompWram(const void *source, void *dest)
 {
-    // TODO: Verify arguments? Alignment?
+    UMOD_Assert(((uint32_t)source & 3) == 0);
 
     register uint32_t source_ asm("r0") = (uint32_t)source;
     register uint32_t dest_ asm("r1") = (uint32_t)dest;
@@ -304,7 +327,8 @@ void SWI_RLUnCompWram(const void *source, void *dest)
 
 void SWI_RLUnCompVram(const void *source, void *dest)
 {
-    // TODO: Verify arguments? Alignment?
+    UMOD_Assert(((uint32_t)source & 3) == 0);
+    UMOD_Assert(((uint32_t)dest & 1) == 0);
 
     register uint32_t source_ asm("r0") = (uint32_t)source;
     register uint32_t dest_ asm("r1") = (uint32_t)dest;
@@ -318,7 +342,7 @@ void SWI_RLUnCompVram(const void *source, void *dest)
 
 void SWI_Diff8bitUnFilterWram(const void *source, void *dest)
 {
-    // TODO: Verify arguments? Alignment?
+    UMOD_Assert(((uint32_t)source & 3) == 0);
 
     register uint32_t source_ asm("r0") = (uint32_t)source;
     register uint32_t dest_ asm("r1") = (uint32_t)dest;
@@ -332,7 +356,8 @@ void SWI_Diff8bitUnFilterWram(const void *source, void *dest)
 
 void SWI_Diff8bitUnFilterVram(const void *source, void *dest)
 {
-    // TODO: Verify arguments? Alignment?
+    UMOD_Assert(((uint32_t)source & 3) == 0);
+    UMOD_Assert(((uint32_t)dest & 1) == 0);
 
     register uint32_t source_ asm("r0") = (uint32_t)source;
     register uint32_t dest_ asm("r1") = (uint32_t)dest;
@@ -346,7 +371,8 @@ void SWI_Diff8bitUnFilterVram(const void *source, void *dest)
 
 void SWI_Diff16bitUnFilter(const void *source, void *dest)
 {
-    // TODO: Verify arguments? Alignment?
+    UMOD_Assert(((uint32_t)source & 3) == 0);
+    UMOD_Assert(((uint32_t)dest & 1) == 0);
 
     register uint32_t source_ asm("r0") = (uint32_t)source;
     register uint32_t dest_ asm("r1") = (uint32_t)dest;
