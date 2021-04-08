@@ -19,10 +19,12 @@ static uint32_t rgb16to32(uint16_t color)
     return (b << 16) | (g << 8) | r;
 }
 
+#ifndef min
 static inline int min(int a, int b)
 {
     return (a < b) ? a : b;
 }
+#endif // min
 
 //----------------------------------------------------------------
 
