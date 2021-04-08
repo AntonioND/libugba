@@ -147,6 +147,17 @@ typedef struct {
 EXPORT_API
 void SWI_BitUnPack(const void *source, void *dest, const bit_unpack_info *info);
 
+// Values that specify the type of the compression in the 32-bit header of a
+// compressed blob. It can be found in bits 4-7 of the header.
+#define SWI_UNCOMP_TYPE_LZ77        (1)
+#define SWI_UNCOMP_TYPE_HUFFMAN     (2)
+#define SWI_UNCOMP_TYPE_RL          (3)
+#define SWI_UNCOMP_TYPE_DIFF        (8)
+
+// Value specified in bits 0-3 of the header
+#define SWI_DIFF_SIZE_8BIT          (1)
+#define SWI_DIFF_SIZE_16BIT         (2)
+
 // Decompresses LZ77 data from the source and writes the result to the
 // destination using 8-bit writes. It can't be used to decompress directly to
 // VRAM, as it only accepts 16 and 32-bit accesses.

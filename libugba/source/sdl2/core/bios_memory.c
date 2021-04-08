@@ -334,8 +334,8 @@ static void SWI_UncompressLZ77(const void *source, void *dest)
     uint32_t header = *(uint32_t *)src;
     src += 4;
 
-    uint32_t compression_type = (header >> 4) & 7;
-    if (compression_type != 1)
+    uint32_t compression_type = (header >> 4) & 0xF;
+    if (compression_type != SWI_UNCOMP_TYPE_LZ77)
     {
         Debug_Log("%s: Invalid type: %d", __func__, compression_type);
         return;
@@ -426,7 +426,12 @@ void SWI_HuffUnComp(const void *source, void *dest)
     uint32_t header = *(uint32_t *)source;
     src += 4;
 
-    // TODO: Check extra fields in header
+    uint32_t compression_type = (header >> 4) & 0xF;
+    if (compression_type != SWI_UNCOMP_TYPE_HUFFMAN)
+    {
+        Debug_Log("%s: Invalid type: %d", __func__, compression_type);
+        return;
+    }
 
     int chunk_size = header & 0xF; // In bits
     if ((chunk_size != 4) && (chunk_size != 8))
@@ -516,7 +521,12 @@ static void GBA_SWI_RLUnComp(const void *source, void *dest)
 
     src += 4;
 
-    // TODO: Check extra fields in header
+    uint32_t compression_type = (header >> 4) & 0xF;
+    if (compression_type != SWI_UNCOMP_TYPE_RL)
+    {
+        Debug_Log("%s: Invalid type: %d", __func__, compression_type);
+        return;
+    }
 
     int32_t size = (header >> 8) & 0x00FFFFFF;
 
@@ -576,7 +586,19 @@ static void GBA_Diff8bitUnFilter(const void *source, void *dest)
 
     src += 4;
 
-    // TODO: Check extra fields in header
+    uint32_t compression_type = (header >> 4) & 0xF;
+    if (compression_type != SWI_UNCOMP_TYPE_DIFF)
+    {
+        Debug_Log("%s: Invalid type: %d", __func__, compression_type);
+        return;
+    }
+
+    uint32_t data_size = header & 0xF;
+    if (data_size != SWI_DIFF_SIZE_8BIT)
+    {
+        Debug_Log("%s: Invalid data size: %d", __func__, data_size);
+        return;
+    }
 
     int32_t size = (header >> 8) & 0x00FFFFFF;
 
@@ -619,7 +641,19 @@ void SWI_Diff16bitUnFilter(const void *source, void *dest)
 
     src += 2;
 
-    // TODO: Check extra fields in header
+    uint32_t compression_type = (header >> 4) & 0xF;
+    if (compression_type != SWI_UNCOMP_TYPE_DIFF)
+    {
+        Debug_Log("%s: Invalid type: %d", __func__, compression_type);
+        return;
+    }
+
+    uint32_t data_size = header & 0xF;
+    if (data_size != SWI_DIFF_SIZE_16BIT)
+    {
+        Debug_Log("%s: Invalid data size: %d", __func__, data_size);
+        return;
+    }
 
     int32_t size = (header >> 8) & 0x00FFFFFF;
 
