@@ -20,8 +20,6 @@
 
 static uint16_t channel_3_wave_ram[2 * WAV_BUFFER_SIZE];
 
-// TODO: The volume envelope and sweep timers treat a period of 0 as 8.
-
 volatile uint16_t *UGBA_MemWaveRam(void)
 {
     if ((REG_SOUNDCNT_X & SOUNDCNT_X_MASTER_ENABLE) == 0)
