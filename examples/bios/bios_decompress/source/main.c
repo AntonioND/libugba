@@ -85,8 +85,6 @@ int main(int argc, char *argv[])
     SWI_HuffUnComp(&(main_c_huff_4_bin[0]), &(buffer[0]));
     verify_extract();
 
-    // TODO: Other formats
-
     while (1)
         SWI_VBlankIntrWait();
 
