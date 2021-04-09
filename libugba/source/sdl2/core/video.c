@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: LGPL-3.0-only
 //
-// Copyright (c) 2011-2015, 2019-2020 Antonio Niño Díaz
+// Copyright (c) 2011-2015, 2019-2021 Antonio Niño Díaz
 
 #include <string.h>
 
@@ -23,6 +23,7 @@ static void GBA_DrawScanlineMode2(int32_t y);
 static void GBA_DrawScanlineMode3(int32_t y);
 static void GBA_DrawScanlineMode4(int32_t y);
 static void GBA_DrawScanlineMode5(int32_t y);
+static void GBA_DrawScanlineMode67(int32_t y);
 void GBA_DrawScanlineWhite(int32_t y);
 
 static int32_t BG2lastx, BG2lasty; // For affine transformation
@@ -71,7 +72,7 @@ void GBA_UpdateDrawScanlineFn(void)
         case 7:
         default:
             // TODO: Check how this works in real hardware
-            DrawScanlineFn = &GBA_DrawScanlineMode3;
+            DrawScanlineFn = &GBA_DrawScanlineMode67;
             break;
     }
 }
@@ -2891,6 +2892,26 @@ static void GBA_DrawScanlineMode5(int32_t y)
         gba_sprites_draw_mode345(y);
     if (REG_DISPCNT & BIT(10)) // BG2 enabled
         gba_bg2drawbitmapmode5(y);
+    gba_window_apply(y, REG_DISPCNT & BIT(13), REG_DISPCNT & BIT(14),
+                     REG_DISPCNT & BIT(15));
+
+    // Mix
+    gba_sort_layers(5);
+    gba_effects_apply();
+    gba_blit_layers(y);
+    gba_greenswap_apply(y);
+}
+
+static void GBA_DrawScanlineMode67(int32_t y)
+{
+    gba_video_all_buffers_clear();
+
+    // Draw layers
+    uint16_t bd_col = *((uint16_t *)((uint8_t *)MEM_PALETTE_ADDR));
+    for (int i = 0; i < 240; i++)
+        backdrop[i] = bd_col;
+    if (REG_DISPCNT & BIT(12))
+        gba_sprites_draw_mode012(y);
     gba_window_apply(y, REG_DISPCNT & BIT(13), REG_DISPCNT & BIT(14),
                      REG_DISPCNT & BIT(15));
 
