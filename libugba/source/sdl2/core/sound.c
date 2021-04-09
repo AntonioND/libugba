@@ -1282,5 +1282,15 @@ void Sound_Initialize(void)
     for (size_t i = 0; i < size; i++)
         channel_3_wave_ram[i] = 0x0000;
 
+    // Reset DMA channels FIFO
+
+    sound_dma[0].current_sample = 0;
+    sound_dma[0].sample_data = 0;
+    sound_dma[0].sample_count = 0;
+
+    sound_dma[1].current_sample = 0;
+    sound_dma[1].sample_data = 0;
+    sound_dma[1].sample_count = 0;
+
     REG_SOUNDBIAS = SOUNDBIAS_BIAS_LEVEL_SET(0x100);
 }

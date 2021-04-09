@@ -70,8 +70,6 @@ void SWI_RegisterRamReset(uint32_t flags)
         REG_SOUNDCNT_X = 0;
 
         Sound_Initialize();
-
-        // TODO: Clear FIFO buffer
     }
     if (flags & SWI_RAM_RESET_IO_OTHER)
     {
