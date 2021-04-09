@@ -87,6 +87,8 @@ function(unittest_screenshot)
     # --------------------------------
 
     get_filename_component(EXECUTABLE_NAME ${CMAKE_CURRENT_SOURCE_DIR} NAME)
+    get_filename_component(PARENT_PATH "${CMAKE_CURRENT_SOURCE_DIR}/.." ABSOLUTE)
+    get_filename_component(GROUP_NAME "${PARENT_PATH}" NAME)
 
     # SDL2 test
     # ---------
@@ -110,6 +112,9 @@ function(unittest_screenshot)
                     -DCMD2=${CMD2}
                     -P ${CMAKE_SOURCE_DIR}/cmake/runcommands.cmake
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+    )
+    set_tests_properties(${EXECUTABLE_NAME}_test
+        PROPERTIES LABELS "${GROUP_NAME}"
     )
 
     # Emulator test
@@ -138,6 +143,9 @@ function(unittest_screenshot)
                         -P ${CMAKE_SOURCE_DIR}/cmake/runcommands.cmake
             WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
         )
+        set_tests_properties(${EXECUTABLE_NAME}_gba_test
+            PROPERTIES LABELS "${GROUP_NAME};gba"
+        )
     endif()
 
 endfunction()
@@ -146,6 +154,8 @@ function(unittest_two_screenshots)
 
     # Get name of the folder we are in
     get_filename_component(EXECUTABLE_NAME ${CMAKE_CURRENT_SOURCE_DIR} NAME)
+    get_filename_component(PARENT_PATH "${CMAKE_CURRENT_SOURCE_DIR}/.." ABSOLUTE)
+    get_filename_component(GROUP_NAME "${PARENT_PATH}" NAME)
 
     set(TEST_SCRIPT "${CMAKE_CURRENT_SOURCE_DIR}/test-sdl2.lua")
     if(NOT EXISTS ${TEST_SCRIPT})
@@ -173,6 +183,9 @@ function(unittest_two_screenshots)
                     -DCMD3=${CMD3}
                     -P ${CMAKE_SOURCE_DIR}/cmake/runcommands.cmake
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+    )
+    set_tests_properties(${EXECUTABLE_NAME}_test
+        PROPERTIES LABELS "${GROUP_NAME}"
     )
 
     # Emulator test
@@ -208,6 +221,9 @@ function(unittest_two_screenshots)
                         -P ${CMAKE_SOURCE_DIR}/cmake/runcommands.cmake
             WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
         )
+        set_tests_properties(${EXECUTABLE_NAME}_gba_test
+            PROPERTIES LABELS "${GROUP_NAME};gba"
+        )
     endif()
 
 endfunction()
@@ -216,6 +232,8 @@ function(unittest_three_screenshots)
 
     # Get name of the folder we are in
     get_filename_component(EXECUTABLE_NAME ${CMAKE_CURRENT_SOURCE_DIR} NAME)
+    get_filename_component(PARENT_PATH "${CMAKE_CURRENT_SOURCE_DIR}/.." ABSOLUTE)
+    get_filename_component(GROUP_NAME "${PARENT_PATH}" NAME)
 
     set(TEST_SCRIPT "${CMAKE_CURRENT_SOURCE_DIR}/test-sdl2.lua")
     if(NOT EXISTS ${TEST_SCRIPT})
@@ -250,6 +268,9 @@ function(unittest_three_screenshots)
                     -DCMD4=${CMD4}
                     -P ${CMAKE_SOURCE_DIR}/cmake/runcommands.cmake
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+    )
+    set_tests_properties(${EXECUTABLE_NAME}_test
+        PROPERTIES LABELS "${GROUP_NAME}"
     )
 
     # Emulator test
@@ -292,6 +313,9 @@ function(unittest_three_screenshots)
                         -P ${CMAKE_SOURCE_DIR}/cmake/runcommands.cmake
             WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
         )
+        set_tests_properties(${EXECUTABLE_NAME}_gba_test
+            PROPERTIES LABELS "${GROUP_NAME};gba"
+        )
     endif()
 
 endfunction()
@@ -302,6 +326,8 @@ function(unittest_audio)
     # --------------------------------
 
     get_filename_component(EXECUTABLE_NAME ${CMAKE_CURRENT_SOURCE_DIR} NAME)
+    get_filename_component(PARENT_PATH "${CMAKE_CURRENT_SOURCE_DIR}/.." ABSOLUTE)
+    get_filename_component(GROUP_NAME "${PARENT_PATH}" NAME)
 
     # SDL2 test
     # ---------
@@ -325,6 +351,9 @@ function(unittest_audio)
                     -DCMD2=${CMD2}
                     -P ${CMAKE_SOURCE_DIR}/cmake/runcommands.cmake
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+    )
+    set_tests_properties(${EXECUTABLE_NAME}_test
+        PROPERTIES LABELS "${GROUP_NAME}"
     )
 
     # Emulator test
@@ -353,6 +382,9 @@ function(unittest_audio)
                         -P ${CMAKE_SOURCE_DIR}/cmake/runcommands.cmake
             WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
         )
+        set_tests_properties(${EXECUTABLE_NAME}_gba_test
+            PROPERTIES LABELS "${GROUP_NAME};gba"
+        )
     endif()
 
 endfunction()
@@ -363,6 +395,8 @@ function(unittest_audio_screenshot)
     # --------------------------------
 
     get_filename_component(EXECUTABLE_NAME ${CMAKE_CURRENT_SOURCE_DIR} NAME)
+    get_filename_component(PARENT_PATH "${CMAKE_CURRENT_SOURCE_DIR}/.." ABSOLUTE)
+    get_filename_component(GROUP_NAME "${PARENT_PATH}" NAME)
 
     # SDL2 test
     # ---------
@@ -393,6 +427,9 @@ function(unittest_audio_screenshot)
                     -DCMD3=${CMD3}
                     -P ${CMAKE_SOURCE_DIR}/cmake/runcommands.cmake
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+    )
+    set_tests_properties(${EXECUTABLE_NAME}_test
+        PROPERTIES LABELS "${GROUP_NAME}"
     )
 
     # Emulator test
@@ -428,6 +465,9 @@ function(unittest_audio_screenshot)
                         -P ${CMAKE_SOURCE_DIR}/cmake/runcommands.cmake
             WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
         )
+        set_tests_properties(${EXECUTABLE_NAME}_gba_test
+            PROPERTIES LABELS "${GROUP_NAME};gba"
+        )
     endif()
 
 endfunction()
@@ -438,6 +478,8 @@ function(unittest_sram)
     # --------------------------------
 
     get_filename_component(EXECUTABLE_NAME ${CMAKE_CURRENT_SOURCE_DIR} NAME)
+    get_filename_component(PARENT_PATH "${CMAKE_CURRENT_SOURCE_DIR}/.." ABSOLUTE)
+    get_filename_component(GROUP_NAME "${PARENT_PATH}" NAME)
 
     # SDL2 test
     # ---------
@@ -458,6 +500,9 @@ function(unittest_sram)
                     -P ${CMAKE_SOURCE_DIR}/cmake/runcommands.cmake
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
     )
+    set_tests_properties(${EXECUTABLE_NAME}_test
+        PROPERTIES LABELS "${GROUP_NAME}"
+    )
 
     # Emulator test
     # -------------
@@ -476,6 +521,9 @@ function(unittest_sram)
                         -DCMD3=${CMD3}
                         -P ${CMAKE_SOURCE_DIR}/cmake/runcommands.cmake
             WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+        )
+        set_tests_properties(${EXECUTABLE_NAME}_gba_test
+            PROPERTIES LABELS "${GROUP_NAME};gba"
         )
     endif()
 
