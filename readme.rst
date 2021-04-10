@@ -26,8 +26,15 @@ emulators. The PC builds have some parts of the emulator inside them to simulate
 the GBA hardware, and it would be a good idea to test the code against a
 different emulator to have a second opinion.
 
-Note that this is still a very early version of the library. The public
-interface is likely to change. Expect breaking changes every now and then.
+Also note that most of the library is optional and is included for conveniency.
+The only interfaces that you must use in your project are described in `this
+document <docs/interfaces.rst>`_.
+
+Note that this is still an early version of the library. The public interface is
+likely to change a bit, so expect breaking changes at some point. Hopefully,
+they will be minimal, and the interfaces described in the link above will most
+likely stay the same even if the internal code changes. The SDL2 port needs a
+pretty big cleanup.
 
 The GBA version of the library is a static library licensed under the MIT
 license. The PC version of the library is a dynamic library licensed under the
