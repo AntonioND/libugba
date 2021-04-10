@@ -10,7 +10,7 @@
 // This library follows the Semantic Versioning rules: https://semver.org/
 
 #define LIBUGBA_VERSION_MAJOR   (0U)
-#define LIBUGBA_VERSION_MINOR   (1U)
+#define LIBUGBA_VERSION_MINOR   (2U)
 #define LIBUGBA_VERSION_PATCH   (0U)
 
 #define LIBUGBA_VERSION         ((LIBUGBA_VERSION_MAJOR << 16) | \
