@@ -71,8 +71,8 @@ UGBA limitations
 6. Interrupts can't be implemented as they are on the GBA.
 
    - VBLANK: It works mostly as expected. Just make sure that you call the
-     function SWI_VBlankIntrWait() in your main game loop. Also, note that a PC
-     has a lot more computing power than the GBA. Most likely an unoptimized
+     function ``SWI_VBlankIntrWait()`` in your main game loop. Also, note that a
+     PC has a lot more computing power than the GBA. Most likely an unoptimized
      game loop will be able to run at 60 FPS on PC no matter what you do, but it
      may be slower on a real GBA.
 
@@ -103,8 +103,9 @@ UGBA limitations
      still possible to interrupt VBL or HBL handlers as they run in the main
      thread.
 
-   - KEYPAD: On PC, the keypad state is refreshed inside SWI_VBlankIntrWait(),
-     so that's when the interrupt handler may be called.
+   - KEYPAD: On PC, the keypad state is refreshed inside
+     ``SWI_VBlankIntrWait()``, so that's when the interrupt handler may be
+     called.
 
    - DMA: Works as expected.
 
