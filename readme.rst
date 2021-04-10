@@ -1,5 +1,5 @@
-Universal GBA Library v0.1.0
-============================
+Universal GBA Library
+=====================
 
 1. Introduction
 ---------------
@@ -55,41 +55,52 @@ For a list of planned features, check `this link <docs/to-do.rst>`_.
 
 To generate PC executables:
 
-* Required:
+Required
+^^^^^^^^
 
-  - **GCC**, **Clang**, **MSVC** or another compiler supported by CMake.
-  - **CMake 3.15** or later
-  - **SDL2 2.0.7** or later (AudioStream support needed)
-  - **Grit**
+- **GCC**, **Clang**, **MSVC** or another compiler supported by CMake.
+- **CMake 3.15** or later
+- **SDL2 2.0.7** or later (AudioStream support needed)
+- **Grit** (either the one that comes with devkitPro, or standalone).
 
-* Optional:
+Optional
+^^^^^^^^
 
-  - **libpng 1.6** or later (Simplified API support needed): Needed to save PNGs
-    like screenshots and dumps from VRAM debugger windows.
-  - **liblua 5.2** or later (Integer support needed): Needed for the Lua
-    interpreter used for the unit tests.
+- **libpng 1.6** or later (Simplified API support needed): Needed to save PNGs
+  like screenshots and dumps from VRAM debugger windows.
+- **liblua 5.2** or later (Integer support needed): Needed for the Lua
+  interpreter used for the unit tests.
 
 To generate GBA ROMs:
 
 - `devkitPro`_
-
-To build all the examples and run all unit tests (optional dependencies):
-
-- `UMOD Player`_: For some audio tests
-- `GiiBiiAdvance`_: To run the GBA ROM version of the unit tests.
 
 You need to install devkitPro following the instructions in this link, then
 follow the instructions in the sections below.
 
 https://devkitpro.org/wiki/Getting_Started
 
-Note: If you don't install devkitPro because you only want to build the PC
+To build examples and run tests
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+- `UMOD Player`_: For some audio tests.
+- `GiiBiiAdvance`_: To run the GBA ROM version of the unit tests.
+
+The versions used for UGBA v0.2.0 have been UMOD Player v0.1.0 and GiiBiiAdvance
+v0.4.0.
+
+Note regarding Grit
+^^^^^^^^^^^^^^^^^^^
+
+If you don't install devkitPro because you only want to build the PC
 executables, you still need to get Grit to convert the graphics into the right
 format for the GBA: https://github.com/devkitPro/grit/releases
 
 You'll need to make sure that CMake can find it by adding it to your system's
 ``PATH`` environment variable. If you have installed devkitPro, the build system
-should be able to find the Grit executable installed by it.
+should be able to find the Grit executable installed by it. If you don't want to
+have it in your ``PATH``, you can also set the ``GRIT_PATH`` variable when
+invoking cmake: ``cmake .. -DGRIT_PATH=/path/to/grit/folder/``
 
 4. Build PC library and examples on Linux
 -----------------------------------------
