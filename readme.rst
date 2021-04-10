@@ -60,6 +60,7 @@ To generate PC executables:
   - **GCC**, **Clang**, **MSVC** or another compiler supported by CMake.
   - **CMake 3.15** or later
   - **SDL2 2.0.7** or later (AudioStream support needed)
+  - **Grit**
 
 * Optional:
 
@@ -87,7 +88,8 @@ executables, you still need to get Grit to convert the graphics into the right
 format for the GBA: https://github.com/devkitPro/grit/releases
 
 You'll need to make sure that CMake can find it by adding it to your system's
-``PATH`` environment variable.
+``PATH`` environment variable. If you have installed devkitPro, the build system
+should be able to find the Grit executable installed by it.
 
 4. Build PC library and examples on Linux
 -----------------------------------------
