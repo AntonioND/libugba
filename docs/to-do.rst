@@ -15,6 +15,7 @@ Common
 - "Infinite" maps with "infinite" tileset.
 - DLDI.
 - libgba compatibility.
+- Improve build system.
 
 Examples
 ========
