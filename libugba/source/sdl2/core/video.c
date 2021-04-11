@@ -2911,7 +2911,7 @@ static void GBA_DrawScanlineMode67(int32_t y)
     for (int i = 0; i < 240; i++)
         backdrop[i] = bd_col;
     if (REG_DISPCNT & BIT(12))
-        gba_sprites_draw_mode012(y);
+        gba_sprites_draw_mode345(y);
     gba_window_apply(y, REG_DISPCNT & BIT(13), REG_DISPCNT & BIT(14),
                      REG_DISPCNT & BIT(15));
 
