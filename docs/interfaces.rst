@@ -5,6 +5,19 @@ This document is a list of the functions and definitions that you must use if
 you want your game to be compatible with **UGBA**. All other functions and
 definitions are optional, and are only included in the library for convenience.
 
+Pointer width
+-------------
+
+Pointers on a GBA are 32-bit wide, but in most computers they are 64-bit wide.
+This means that it is wrong to use ``uint32_t`` as type to store an address.
+Using ``uint64_t`` would be a waste, though. The right types to use are
+``uintptr_t`` and ``intptr_t``, which are the correct width for the system the
+code is compiled for.
+
+Note that registers like ``REG_DMA0SAD`` or ``REG_DMA0DAD`` are affected by
+this. The registers are 32-bit wide on the GBA, but they have been expanded to
+64-bits on the SDL2 port.
+
 Memory definitions
 ------------------
 
