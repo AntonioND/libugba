@@ -15,7 +15,7 @@ function(add_data_file source_file destination_target)
 
     # Replace dots by underscores
 
-    STRING(REGEX REPLACE "\\." "_" DATA_NAME ${DATA_NAME_RAW})
+    string(REGEX REPLACE "\\." "_" DATA_NAME ${DATA_NAME_RAW})
 
     # Generate the output file names
 
