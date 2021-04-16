@@ -255,6 +255,11 @@ static int Win_MainEventCallback(SDL_Event *e)
             exit_program = 1;
         }
     }
+    else
+    {
+        if (config_shown)
+            Win_ConfigEventCallback(e);
+    }
 
     if (exit_program)
     {
