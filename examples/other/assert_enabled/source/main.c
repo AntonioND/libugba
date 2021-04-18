@@ -19,13 +19,13 @@ int main(int argc, char *argv[])
 
     CON_Print("This goes before the asserts.\n");
 
-    UMOD_Assert(sizeof(uint32_t) == 4);
+    UGBA_Assert(sizeof(uint32_t) == 4);
 
     // The following is needed so that the filename is consistent in every
     // environment (__FILE__ uses the absolute path if the build system passes
     // an absolute path to the compiler). Don't do this in your own code.
 #line 25 "main.c"
-    UMOD_Assert(sizeof(uint32_t) == 10);
+    UGBA_Assert(sizeof(uint32_t) == 10);
 
     CON_Print("This goes after the asserts.\n");
 

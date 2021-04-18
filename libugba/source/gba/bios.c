@@ -53,7 +53,7 @@ SWI_Stop 0x03 // TODO
 
 void SWI_IntrWait(uint32_t discard_old_flags, uint16_t wait_flags)
 {
-    UMOD_Assert(wait_flags != 0);
+    UGBA_Assert(wait_flags != 0);
 
     register uint32_t discard_ asm("r0") = discard_old_flags;
     register uint32_t flags_ asm("r1") = wait_flags;
@@ -75,7 +75,7 @@ void SWI_VBlankIntrWait(void)
 
 int32_t SWI_Div(int32_t num, int32_t div)
 {
-    UMOD_Assert(div != 0);
+    UGBA_Assert(div != 0);
 
     if (div == 0)
         return 0;
@@ -96,7 +96,7 @@ int32_t SWI_Div(int32_t num, int32_t div)
 
 int32_t SWI_DivMod(int32_t num, int32_t div)
 {
-    UMOD_Assert(div != 0);
+    UGBA_Assert(div != 0);
 
     if (div == 0)
         return 0;
@@ -165,13 +165,13 @@ void SWI_CpuSet(const void *src, void *dst, uint32_t len_mode)
 {
     if (len_mode & SWI_MODE_32BIT)
     {
-        UMOD_Assert(((uint32_t)src & 3) == 0);
-        UMOD_Assert(((uint32_t)dst & 3) == 0);
+        UGBA_Assert(((uint32_t)src & 3) == 0);
+        UGBA_Assert(((uint32_t)dst & 3) == 0);
     }
     else
     {
-        UMOD_Assert(((uint32_t)src & 1) == 0);
-        UMOD_Assert(((uint32_t)dst & 1) == 0);
+        UGBA_Assert(((uint32_t)src & 1) == 0);
+        UGBA_Assert(((uint32_t)dst & 1) == 0);
     }
 
     register uint32_t src_ asm("r0") = (uint32_t)src;
@@ -187,9 +187,9 @@ void SWI_CpuSet(const void *src, void *dst, uint32_t len_mode)
 
 void SWI_CpuFastSet(const void *src, void *dst, uint32_t len_mode)
 {
-    UMOD_Assert(((uint32_t)src & 3) == 0);
-    UMOD_Assert(((uint32_t)dst & 3) == 0);
-    UMOD_Assert((len_mode & 7) == 0);
+    UGBA_Assert(((uint32_t)src & 3) == 0);
+    UGBA_Assert(((uint32_t)dst & 3) == 0);
+    UGBA_Assert((len_mode & 7) == 0);
 
     register uint32_t src_ asm("r0") = (uint32_t)src;
     register uint32_t dst_ asm("r1") = (uint32_t)dst;
@@ -218,8 +218,8 @@ uint32_t SWI_GetBiosChecksum(void)
 void SWI_BgAffineSet(const bg_affine_src *src, bg_affine_dst *dst,
                      uint32_t count)
 {
-    UMOD_Assert(((uint32_t)src & 3) == 0);
-    UMOD_Assert(((uint32_t)dst & 3) == 0);
+    UGBA_Assert(((uint32_t)src & 3) == 0);
+    UGBA_Assert(((uint32_t)dst & 3) == 0);
 
     register uint32_t src_ asm("r0") = (uint32_t)src;
     register uint32_t dst_ asm("r1") = (uint32_t)dst;
@@ -235,9 +235,9 @@ void SWI_BgAffineSet(const bg_affine_src *src, bg_affine_dst *dst,
 void SWI_ObjAffineSet(const obj_affine_src *src, void *dst,
                       uint32_t count, uint32_t increment)
 {
-    UMOD_Assert(((uint32_t)src & 1) == 0);
-    UMOD_Assert(((uint32_t)dst & 1) == 0);
-    UMOD_Assert((increment & 1) == 0);
+    UGBA_Assert(((uint32_t)src & 1) == 0);
+    UGBA_Assert(((uint32_t)dst & 1) == 0);
+    UGBA_Assert((increment & 1) == 0);
 
     register uint32_t src_ asm("r0") = (uint32_t)src;
     register uint32_t dst_ asm("r1") = (uint32_t)dst;
@@ -253,7 +253,7 @@ void SWI_ObjAffineSet(const obj_affine_src *src, void *dst,
 
 void SWI_BitUnPack(const void *source, void *dest, const bit_unpack_info *info)
 {
-    UMOD_Assert(((uint32_t)dest & 3) == 0);
+    UGBA_Assert(((uint32_t)dest & 3) == 0);
 
     register uint32_t source_ asm("r0") = (uint32_t)source;
     register uint32_t dest_ asm("r1") = (uint32_t)dest;
@@ -268,7 +268,7 @@ void SWI_BitUnPack(const void *source, void *dest, const bit_unpack_info *info)
 
 void SWI_LZ77UnCompReadNormalWrite8bit(const void *source, void *dest)
 {
-    UMOD_Assert(((uint32_t)source & 3) == 0);
+    UGBA_Assert(((uint32_t)source & 3) == 0);
 
     register uint32_t source_ asm("r0") = (uint32_t)source;
     register uint32_t dest_ asm("r1") = (uint32_t)dest;
@@ -282,8 +282,8 @@ void SWI_LZ77UnCompReadNormalWrite8bit(const void *source, void *dest)
 
 void SWI_LZ77UnCompReadNormalWrite16bit(const void *source, void *dest)
 {
-    UMOD_Assert(((uint32_t)source & 3) == 0);
-    UMOD_Assert(((uint32_t)dest & 1) == 0);
+    UGBA_Assert(((uint32_t)source & 3) == 0);
+    UGBA_Assert(((uint32_t)dest & 1) == 0);
 
     register uint32_t source_ asm("r0") = (uint32_t)source;
     register uint32_t dest_ asm("r1") = (uint32_t)dest;
@@ -297,8 +297,8 @@ void SWI_LZ77UnCompReadNormalWrite16bit(const void *source, void *dest)
 
 void SWI_HuffUnComp(const void *source, void *dest)
 {
-    UMOD_Assert(((uint32_t)source & 3) == 0);
-    UMOD_Assert(((uint32_t)dest & 3) == 0);
+    UGBA_Assert(((uint32_t)source & 3) == 0);
+    UGBA_Assert(((uint32_t)dest & 3) == 0);
 
     register uint32_t source_ asm("r0") = (uint32_t)source;
     register uint32_t dest_ asm("r1") = (uint32_t)dest;
@@ -312,7 +312,7 @@ void SWI_HuffUnComp(const void *source, void *dest)
 
 void SWI_RLUnCompWram(const void *source, void *dest)
 {
-    UMOD_Assert(((uint32_t)source & 3) == 0);
+    UGBA_Assert(((uint32_t)source & 3) == 0);
 
     register uint32_t source_ asm("r0") = (uint32_t)source;
     register uint32_t dest_ asm("r1") = (uint32_t)dest;
@@ -326,8 +326,8 @@ void SWI_RLUnCompWram(const void *source, void *dest)
 
 void SWI_RLUnCompVram(const void *source, void *dest)
 {
-    UMOD_Assert(((uint32_t)source & 3) == 0);
-    UMOD_Assert(((uint32_t)dest & 1) == 0);
+    UGBA_Assert(((uint32_t)source & 3) == 0);
+    UGBA_Assert(((uint32_t)dest & 1) == 0);
 
     register uint32_t source_ asm("r0") = (uint32_t)source;
     register uint32_t dest_ asm("r1") = (uint32_t)dest;
@@ -341,7 +341,7 @@ void SWI_RLUnCompVram(const void *source, void *dest)
 
 void SWI_Diff8bitUnFilterWram(const void *source, void *dest)
 {
-    UMOD_Assert(((uint32_t)source & 3) == 0);
+    UGBA_Assert(((uint32_t)source & 3) == 0);
 
     register uint32_t source_ asm("r0") = (uint32_t)source;
     register uint32_t dest_ asm("r1") = (uint32_t)dest;
@@ -355,8 +355,8 @@ void SWI_Diff8bitUnFilterWram(const void *source, void *dest)
 
 void SWI_Diff8bitUnFilterVram(const void *source, void *dest)
 {
-    UMOD_Assert(((uint32_t)source & 3) == 0);
-    UMOD_Assert(((uint32_t)dest & 1) == 0);
+    UGBA_Assert(((uint32_t)source & 3) == 0);
+    UGBA_Assert(((uint32_t)dest & 1) == 0);
 
     register uint32_t source_ asm("r0") = (uint32_t)source;
     register uint32_t dest_ asm("r1") = (uint32_t)dest;
@@ -370,8 +370,8 @@ void SWI_Diff8bitUnFilterVram(const void *source, void *dest)
 
 void SWI_Diff16bitUnFilter(const void *source, void *dest)
 {
-    UMOD_Assert(((uint32_t)source & 3) == 0);
-    UMOD_Assert(((uint32_t)dest & 1) == 0);
+    UGBA_Assert(((uint32_t)source & 3) == 0);
+    UGBA_Assert(((uint32_t)dest & 1) == 0);
 
     register uint32_t source_ asm("r0") = (uint32_t)source;
     register uint32_t dest_ asm("r1") = (uint32_t)dest;

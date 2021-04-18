@@ -6,7 +6,7 @@
 
 #include <ugba/ugba.h>
 
-void UMOD_AssertFunction(const char *file, int line, const char *func,
+void UGBA_AssertFunction(const char *file, int line, const char *func,
                          const char *expr)
 {
     // Disable interrupts so that nothing can interrupt this

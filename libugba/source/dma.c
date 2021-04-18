@@ -24,7 +24,7 @@ int DMA_Transfer(int channel, const void *src, void *dst, size_t size,
     // rules like in GBA.
     if (channel < 3)
     {
-        UMOD_Assert(source < MEM_ROM_ADDR_WS0);
+        UGBA_Assert(source < MEM_ROM_ADDR_WS0);
 
         // If asserts are disabled, return an error code at least.
         if (source >= MEM_ROM_ADDR_WS0)

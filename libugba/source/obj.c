@@ -68,7 +68,7 @@ void OBJ_RegularEnableSet(int index, int enable)
 
     oam_entry *e = &MEM_OAM_ENTRIES[index];
 
-    UMOD_Assert(OBJ_IsRegular(e));
+    UGBA_Assert(OBJ_IsRegular(e));
 
     if (enable)
         e->attr0 &= ~ATTR0_DISABLE;
@@ -83,7 +83,7 @@ void OBJ_RegularHFlipSet(int index, int enable)
 
     oam_entry *e = &MEM_OAM_ENTRIES[index];
 
-    UMOD_Assert(OBJ_IsRegular(e));
+    UGBA_Assert(OBJ_IsRegular(e));
 
     if (enable)
         e->attr1 &= ~ATTR1_REGULAR_HFLIP;
@@ -98,7 +98,7 @@ void OBJ_RegularVFlipSet(int index, int enable)
 
     oam_entry *e = &MEM_OAM_ENTRIES[index];
 
-    UMOD_Assert(OBJ_IsRegular(e));
+    UGBA_Assert(OBJ_IsRegular(e));
 
     if (enable)
         e->attr1 &= ~ATTR1_REGULAR_VFLIP;
@@ -139,7 +139,7 @@ void OBJ_AffineMatrixSet(int index, int matrix_index)
 
     oam_entry *e = &MEM_OAM_ENTRIES[index];
 
-    UMOD_Assert(OBJ_IsAffine(e));
+    UGBA_Assert(OBJ_IsAffine(e));
 
     e->attr1 &= ~ATTR1_AFFINE_MATRIX_MASK;
     e->attr1 |= ~ATTR1_AFFINE_MATRIX(matrix_index);
@@ -152,7 +152,7 @@ void OBJ_AffineDoubleSizeSet(int index, int enable)
 
     oam_entry *e = &MEM_OAM_ENTRIES[index];
 
-    UMOD_Assert(OBJ_IsAffine(e));
+    UGBA_Assert(OBJ_IsAffine(e));
 
     if (enable)
         e->attr0 &= ~ATTR0_DOUBLE_SIZE;
