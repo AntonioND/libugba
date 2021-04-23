@@ -18,16 +18,24 @@ int DMA_Transfer(int channel, const void *src, void *dst, size_t size,
     uint16_t newflags = flags | DMACNT_DMA_ENABLE;
 
 #ifdef __GBA__
-    // On GBA, DMA channels 0, 1 and 2 don't work when the source address is in
-    // the external cartridge. Unfortunately, this error check can't work on the
-    // SDL2 port, as all code, data and heap don't need to follow any placement
-    // rules like in GBA.
-    if (channel < 3)
+    // On GBA, DMA channel 0 can't read from the external cartridge. Also, only
+    // DMA channel 3 can write to the external cartridge. Unfortunately, this
+    // error check can't work on the SDL2 port, as all code, data and heap don't
+    // need to follow any placement rules like in GBA.
+    if (channel == 0)
     {
         UGBA_Assert(source < MEM_ROM_ADDR_WS0);
 
         // If asserts are disabled, return an error code at least.
         if (source >= MEM_ROM_ADDR_WS0)
+            return -1;
+    }
+    if (channel < 3)
+    {
+        UGBA_Assert(dest < MEM_ROM_ADDR_WS0);
+
+        // If asserts are disabled, return an error code at least.
+        if (dest >= MEM_ROM_ADDR_WS0)
             return -1;
     }
 #endif // __GBA__
