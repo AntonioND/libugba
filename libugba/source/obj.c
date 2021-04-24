@@ -86,9 +86,9 @@ void OBJ_RegularHFlipSet(int index, int enable)
     UGBA_Assert(OBJ_IsRegular(e));
 
     if (enable)
-        e->attr1 &= ~ATTR1_REGULAR_HFLIP;
-    else
         e->attr1 |= ATTR1_REGULAR_HFLIP;
+    else
+        e->attr1 &= ~ATTR1_REGULAR_HFLIP;
 }
 
 void OBJ_RegularVFlipSet(int index, int enable)
@@ -101,9 +101,9 @@ void OBJ_RegularVFlipSet(int index, int enable)
     UGBA_Assert(OBJ_IsRegular(e));
 
     if (enable)
-        e->attr1 &= ~ATTR1_REGULAR_VFLIP;
-    else
         e->attr1 |= ATTR1_REGULAR_VFLIP;
+    else
+        e->attr1 &= ~ATTR1_REGULAR_VFLIP;
 }
 
 // Affine objects functions
