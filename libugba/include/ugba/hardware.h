@@ -187,8 +187,8 @@ typedef struct {
 
 // Attribute 1
 
-#define ATTR1_X(v)                  ((v) & 0xFF)
-#define ATTR1_X_MASK                (0xFF)
+#define ATTR1_X(v)                  ((v) & 0x1FF)
+#define ATTR1_X_MASK                (0x1FF)
 
 #define ATTR1_AFFINE_MATRIX(v)      (((v) & 0x1F) << 9) // Affine objects
 #define ATTR1_AFFINE_MATRIX_MASK    (0x1F << 9) // Affine objects
