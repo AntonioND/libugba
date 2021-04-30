@@ -2,9 +2,43 @@
 //
 // Copyright (c) 2021 Antonio Niño Díaz
 
-#include <stdlib.h>
+#include <string.h>
 
 #include <ugba/ugba.h>
+
+static void reverse(char *s)
+{
+    int e = strlen(s) - 1;
+
+    for (int b = 0; b < e; b++, e--)
+    {
+        char c = s[b];
+        s[b] = s[e];
+        s[e] = c;
+    }
+}
+
+static void itoa(int value, char *str)
+{
+    if (value < 0)
+    {
+        *str++ = '-';
+        value = -value;
+    }
+
+    char *num = str;
+
+    do
+    {
+        *str++ = (value % 10) + '0';
+        value = value / 10;
+    }
+    while (value > 0);
+
+    *str = '\0';
+
+    reverse(num);
+}
 
 void UGBA_AssertFunction(const char *file, int line, const char *func,
                          const char *expr)
@@ -33,7 +67,7 @@ void UGBA_AssertFunction(const char *file, int line, const char *func,
     CON_Print(":");
 
     char str[10];
-    itoa(line, &str[0], 10);
+    itoa(line, &str[0]);
     CON_Print(str);
 
     CON_Print("\n\n");
