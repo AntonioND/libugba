@@ -2,7 +2,7 @@
 //
 // Copyright (c) 2021 Antonio Niño Díaz
 
-#include <stdio.h>
+#include <stdlib.h>
 
 #include <ugba/ugba.h>
 
@@ -33,7 +33,7 @@ void UGBA_AssertFunction(const char *file, int line, const char *func,
     CON_Print(":");
 
     char str[10];
-    snprintf(str, sizeof(str), "%d", line);
+    itoa(line, &str[0], 10);
     CON_Print(str);
 
     CON_Print("\n\n");
