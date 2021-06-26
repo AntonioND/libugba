@@ -316,7 +316,7 @@ void GBA_Debug_PrintTiles(unsigned char *buffer,
 
         // If cbb >= 0x06010000 --> sprite
         uint32_t pal = (cbb >= 0x06010000) ? (palette + 16) : palette;
-        uint16_t *palptr = &(((uint16_t *)MEM_PALETTE)[pal * 2 * 16]);
+        uint16_t *palptr = &(((uint16_t *)MEM_PALETTE)[pal * 16]);
 
         for (int i = 0; i < 256; i++)
         {
@@ -411,7 +411,7 @@ void GBA_Debug_PrintTilesAlpha(unsigned char *buffer,
 
         // If cbb >= 0x06010000 --> sprite
         uint32_t pal = (cbb >= 0x06010000) ? (palette + 16) : palette;
-        uint16_t *palptr = &((uint16_t *)MEM_PALETTE)[pal * 2 * 16];
+        uint16_t *palptr = &((uint16_t *)MEM_PALETTE)[pal * 16];
 
         for (int i = 0; i < 256; i++)
         {
@@ -489,7 +489,7 @@ void GBA_Debug_TilePrint64x64(unsigned char *buffer, UNUSED int bufw,
 
         // If cbb >= 0x06010000 --> sprite
         uint32_t pal = (cbb >= 0x06010000) ? (selected_pal + 16) : selected_pal;
-        uint16_t *palptr = &((uint16_t *)MEM_PALETTE)[pal * 2 * 16];
+        uint16_t *palptr = &((uint16_t *)MEM_PALETTE)[pal * 16];
 
         for (int i = 0; i < 8; i++)
         {
