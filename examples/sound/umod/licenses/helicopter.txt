@@ -1,8 +1,0 @@
-Name:    Helicopter Sounds
-Author:  aquinn
-License: CC0-1.0
-
-https://opengameart.org/content/helicopter-sounds
-
-Note: This file has been modified to be a 8-bit 1-channel WAV. Only the first SFX of the
-multiple present in the MP3 file has been saved to the WAV file.

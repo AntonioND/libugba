@@ -1,5 +1,0 @@
-Name:    Shots
-Author:  Gumichan01
-License: CC-BY-SA-3.0
-
-https://opengameart.org/content/shots
