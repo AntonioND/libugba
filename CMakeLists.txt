@@ -48,34 +48,25 @@ if(NOT PROJECT_IS_SUBMODULE)
 
         # GiiBiiAdvance is needed for unit tests
 
-        if(BUILD_GBA_INTERNAL)
-            # Get absolute path to default folder
-            if("${GIIBIIADVANCE_PATH}" STREQUAL "")
-                get_filename_component(GIIBIIADVANCE_PATH
-                    ../giibiiadvance ABSOLUTE
-                )
-            endif()
+        get_filename_component(GIIBIIADVANCE_PATH "giibiiadvance" ABSOLUTE)
 
-            if(EXISTS ${GIIBIIADVANCE_PATH})
-                set(ENABLE_CAMERA OFF CACHE BOOL "")
-                add_subdirectory(${GIIBIIADVANCE_PATH} giibiiadvance)
-            else()
-                message(FATAL_ERROR "GiiBiiAdvance repository not found")
-            endif()
-        endif()
-
-        # UMOD Player
-
-        if("${UMOD_PLAYER_PATH}" STREQUAL "")
-            get_filename_component(UMOD_PLAYER_PATH
-                ../umod-player ABSOLUTE
-            )
-        endif()
-
-        if(EXISTS ${UMOD_PLAYER_PATH})
-            add_subdirectory(${UMOD_PLAYER_PATH} umod_player)
+        if(EXISTS "${GIIBIIADVANCE_PATH}/.git")
+            set(ENABLE_CAMERA OFF CACHE BOOL "")
+            add_subdirectory(${GIIBIIADVANCE_PATH} giibiiadvance)
         else()
-            message(FATAL_ERROR "UMOD Player repository not found")
+            message(FATAL_ERROR "Git submodules not initialized."
+                    "Please run `git submodule update --init --recursive`")
+        endif()
+
+        # UMOD Player is needed by the tests that use it
+
+        get_filename_component(UMOD_PLAYER_PATH "umod-player" ABSOLUTE)
+
+        if(EXISTS "${UMOD_PLAYER_PATH}/.git")
+            add_subdirectory(${UMOD_PLAYER_PATH})
+        else()
+            message(FATAL_ERROR "Git submodules not initialized."
+                    "Please run `git submodule update --init --recursive`")
         endif()
 
     endif()

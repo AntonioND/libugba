@@ -5,7 +5,7 @@
 EXAMPLE_PATH := $(dir $(realpath $(firstword $(MAKEFILE_LIST))))
 
 LIBUGBA := $(EXAMPLE_PATH)/../../../libugba
-UMOD_PLAYER := $(EXAMPLE_PATH)/../../../../umod-player/player
-UMOD_PACKER := $(EXAMPLE_PATH)/../../../../umod-player/build/packer/umod_packer
+UMOD_PLAYER := $(EXAMPLE_PATH)/../../../umod-player/player
+UMOD_PACKER := $(EXAMPLE_PATH)/../../../build/umod-player/packer/umod_packer
 
 include $(EXAMPLE_PATH)/../../common.mk
