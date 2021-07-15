@@ -62,7 +62,7 @@ endif()
 # Option to enable the Lua interpreter. Requires screenshot support.
 
 if (LUA_FOUND)
-    option(LUA_INTERPRETER_ENABLED "Enable Lua interpreter" ON)
+    option(LUA_INTERPRETER_ENABLED "Enable Lua interpreter" OFF)
 else()
     set(LUA_INTERPRETER_ENABLED OFF)
 endif()
