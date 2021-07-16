@@ -4,7 +4,7 @@
 
 #include <ugba/ugba.h>
 
-#include "font.h"
+#include "graphics/font.h"
 
 // This is needed because the scroll registers are write-only.
 static int scroll_y;
