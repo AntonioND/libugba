@@ -43,10 +43,10 @@ replicate their behaviour in the library, it is needed to use the macro
    (in the HBL interrupt handler, for example). It isn't needed if the values
    are static during the whole frame.
 
-    - ``REG_BG2X_L``, ``REG_BG2X_H``, ``REG_BG2X``
-    - ``REG_BG2Y_L``, ``REG_BG2Y_H``, ``REG_BG2Y``
-    - ``REG_BG3X_L``, ``REG_BG3X_H``, ``REG_BG3X``
-    - ``REG_BG3Y_L``, ``REG_BG3Y_H``, ``REG_BG3Y``
+   - ``REG_BG2X_L``, ``REG_BG2X_H``, ``REG_BG2X``
+   - ``REG_BG2Y_L``, ``REG_BG2Y_H``, ``REG_BG2Y``
+   - ``REG_BG3X_L``, ``REG_BG3X_H``, ``REG_BG3X``
+   - ``REG_BG3Y_L``, ``REG_BG3Y_H``, ``REG_BG3Y``
 
 2. When starting a DMA transfer by writing to:
 
@@ -59,6 +59,7 @@ replicate their behaviour in the library, it is needed to use the macro
 The way the function has to be used is:
 
 .. code:: c
+
     REG_TM0CNT_H = MY_VALUE;
     UGBA_RegisterUpdatedOffset(OFFSET_TM0CNT_H);
 
