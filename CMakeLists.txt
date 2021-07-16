@@ -138,6 +138,7 @@ macro(search_source_files dir var)
     file(GLOB ${var} CONFIGURE_DEPENDS ${dir}/*.c ${dir}/*.h)
 endmacro()
 
+search_source_files(graphics FILES_GRAPHICS)
 search_source_files(source FILES_SOURCE)
 search_source_files(source/sdl2 FILES_SOURCE_SDL2)
 search_source_files(source/sdl2/core FILES_SOURCE_SDL2_CORE)
@@ -149,6 +150,7 @@ else()
 endif()
 
 target_sources(${LIBRARY_NAME} PRIVATE
+    ${FILES_GRAPHICS}
     ${FILES_SOURCE}
     ${FILES_SOURCE_SDL2}
     ${FILES_SOURCE_SDL2_CORE}
@@ -158,11 +160,8 @@ target_sources(${LIBRARY_NAME} PRIVATE
 
 target_include_directories(${LIBRARY_NAME} PUBLIC
     include
+    graphics
 )
-
-# Add graphics to library, like the default font
-
-add_grit_files(graphics ${LIBRARY_NAME})
 
 # Build GBA version if requested
 # ------------------------------

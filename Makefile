@@ -10,10 +10,8 @@ endif
 include $(DEVKITARM)/gba_rules
 
 BUILD		:=	build
-SOURCES		:=	source source/gba
-INCLUDES	:=	include build
-DATA		:=	data
-GRAPHICS	:=	graphics
+SOURCES		:=	source source/gba graphics
+INCLUDES	:=	include graphics
 ENABLE_DEBUG_CHECKS	:=	1
 
 #---------------------------------------------------------------------------------
@@ -36,21 +34,12 @@ ifneq ($(BUILD),$(notdir $(CURDIR)))
 
 export TARGET	:=	$(CURDIR)/lib/libugba.a
 
-export VPATH	:=	$(foreach dir,$(SOURCES),$(CURDIR)/$(dir)) \
-			$(foreach dir,$(DATA),$(CURDIR)/$(dir)) \
-			$(foreach dir,$(GRAPHICS),$(CURDIR)/$(dir))
+export VPATH	:=	$(foreach dir,$(SOURCES),$(CURDIR)/$(dir))
 
 CFILES		:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.c)))
 SFILES		:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.s)))
-PNGFILES	:=	$(foreach dir,$(GRAPHICS),$(notdir $(wildcard $(dir)/*.png)))
-BINFILES	:=	$(foreach dir,$(DATA),$(notdir $(wildcard $(dir)/*.*)))
 
-export OFILES_BIN	:=	$(addsuffix .o,$(BINFILES))
-export OFILES_SRC	:=	$(CFILES:.c=.o) $(SFILES:.s=.o)
-export OFILES_PNG	:=	$(PNGFILES:.png=.o)
-export OFILES	:=	$(OFILES_BIN) $(OFILES_SRC) $(OFILES_PNG)
-
-export GRIT_HFILES	:=	$(PNGFILES:.png=.h)
+export OFILES	:=	$(CFILES:.c=.o) $(SFILES:.s=.o)
 
 export INCLUDE	:=	$(foreach dir,$(INCLUDES),-I$(CURDIR)/$(dir))
 export DEPSDIR	:=	$(CURDIR)/build
@@ -73,19 +62,6 @@ DEPENDS	:=	$(OFILES:.o=.d)
 
 #---------------------------------------------------------------------------------
 $(TARGET): $(OFILES)
-
-$(OFILES_SRC) : $(GRIT_HFILES)
-
-#---------------------------------------------------------------------------------
-# This rule creates C source files using grit
-# grit takes an image file and a .grit describing how the file is to be processed
-# add additional rules like this for each image extension
-# you use in the graphics folders
-#---------------------------------------------------------------------------------
-%.c %.h: %.png %.grit
-#---------------------------------------------------------------------------------
-	@echo "grit $<"
-	@grit $< -ftc -o$*
 
 #---------------------------------------------------------------------------------
 %.a: $(OFILES)

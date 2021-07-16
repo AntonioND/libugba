@@ -60,10 +60,11 @@ Required
 - **GCC**, **Clang**, **MSVC** or another compiler supported by CMake.
 - **CMake 3.15** or later
 - **SDL2 2.0.7** or later (AudioStream support needed)
-- **Grit** (either the one that comes with devkitPro, or standalone).
 
 Optional
 ^^^^^^^^
+
+For the SDL port:
 
 - **libpng 1.6** or later (Simplified API support needed): Needed to save PNGs
   like screenshots and dumps from VRAM debugger windows.
@@ -72,25 +73,16 @@ Optional
 
 To generate the GBA library file:
 
-- `devkitPro`_
+- `devkitPro`_: You need to install devkitPro following the instructions in this
+  link, then follow the instructions in the sections below:
+  https://devkitpro.org/wiki/Getting_Started
 
-You need to install devkitPro following the instructions in this link, then
-follow the instructions in the sections below.
+To convert the font used by the library to the GBA format:
 
-https://devkitpro.org/wiki/Getting_Started
-
-Note regarding Grit
-^^^^^^^^^^^^^^^^^^^
-
-If you don't install devkitPro because you only want to build the PC
-executables, you still need to get Grit to convert the graphics into the right
-format for the GBA: https://github.com/devkitPro/grit/releases
-
-You'll need to make sure that CMake can find it by adding it to your system's
-``PATH`` environment variable. If you have installed devkitPro, the build system
-should be able to find the Grit executable installed by it. If you don't want to
-have it in your ``PATH``, you can also set the ``GRIT_PATH`` variable when
-invoking cmake: ``cmake .. -DGRIT_PATH=/path/to/grit/folder/``
+- **Grit**. It comes with devkitPro. If you don't install devkitPro because you
+  only want to build the PC executables, you still need to get Grit. Note that
+  you will need to add it to your system's ``PATH`` environment variable if you
+  download the standalone binary: https://github.com/devkitPro/grit/releases
 
 4. Build library
 ----------------
