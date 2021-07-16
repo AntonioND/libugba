@@ -36,7 +36,10 @@ resources used in the examples (like music and sound effects), but don't affect
 the library itself.
 
 This repository only holds the library code. For more information about testing
-check the following repository: https://github.com/AntonioND/ugba
+check the following repository: https://github.com/AntonioND/ugba-testing
+
+The following repository contains an example of a project that uses **libugba**:
+https://github.com/AntonioND/ugba-template
 
 2. Limitations
 --------------
