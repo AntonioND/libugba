@@ -43,7 +43,7 @@ include(cmake/umod-player.cmake)
 # Macro that searches all the source files in the specified directory in 'dir'
 # and saves them in 'var'
 macro(search_source_files dir var)
-    file(GLOB ${var} CONFIGURE_DEPENDS ${dir}/*.c ${dir}/*.h)
+    file(GLOB ${var} CONFIGURE_DEPENDS ${dir}/*.c ${dir}/*.h ${dir}/*.s)
 endmacro()
 
 search_source_files(source FILES_SOURCE)
