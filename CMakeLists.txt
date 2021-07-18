@@ -22,6 +22,10 @@ option(BUILD_GBA "Build GBA binaries in addition to PC binaries" OFF)
 
 option(ENABLE_DEBUG_CHECKS "Enable debug checks in the library." ON)
 
+# Option to enable the debugger windows in the SDL port. It requires libpng to
+# dump images.
+option(ENABLE_DEBUGGER "Support debugger windows (I/O registers, VRAM)" ON)
+
 # Add tools needed by libugba
 # ---------------------------
 

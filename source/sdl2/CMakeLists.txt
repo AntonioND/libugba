@@ -16,9 +16,6 @@ add_library(${LIBRARY_NAME} SHARED)
 # Build options
 # -------------
 
-# Option to enable the debugger windows. It requires libpng to dump images.
-
-option(ENABLE_DEBUGGER "Support debugger windows (I/O registers, VRAM)" ON)
 if(ENABLE_DEBUGGER)
     target_compile_definitions(${LIBRARY_NAME} PRIVATE -DENABLE_DEBUGGER)
 endif()
