@@ -17,14 +17,14 @@ add_library(${LIBRARY_NAME} SHARED)
 # -------------
 
 if(ENABLE_DEBUGGER)
-    target_compile_definitions(${LIBRARY_NAME} PRIVATE -DENABLE_DEBUGGER)
+    target_compile_definitions(${LIBRARY_NAME} PRIVATE ENABLE_DEBUGGER)
 endif()
 
 # Option to enable screenshots. It requires libpng.
 
 option(ENABLE_SCREENSHOTS "Support taking screenshots" ON)
 if(ENABLE_SCREENSHOTS)
-    target_compile_definitions(${LIBRARY_NAME} PRIVATE -DENABLE_SCREENSHOTS)
+    target_compile_definitions(${LIBRARY_NAME} PRIVATE ENABLE_SCREENSHOTS)
 endif()
 
 # Lua is optional. It can be used to run automated scripts.
@@ -45,7 +45,7 @@ else()
 endif()
 
 if(LUA_INTERPRETER_ENABLED)
-    target_compile_definitions(${LIBRARY_NAME} PRIVATE -DLUA_INTERPRETER_ENABLED)
+    target_compile_definitions(${LIBRARY_NAME} PRIVATE LUA_INTERPRETER_ENABLED)
     target_link_libraries(${LIBRARY_NAME} PRIVATE ${LUA_LIBRARIES})
     target_include_directories(${LIBRARY_NAME} PRIVATE ${LUA_INCLUDE_DIR})
 
@@ -65,7 +65,7 @@ if(ENABLE_SCREENSHOTS OR ENABLE_DEBUGGER OR LUA_INTERPRETER_ENABLED)
         target_include_directories(${LIBRARY_NAME} PRIVATE ${PNG_INCLUDE_DIRS})
         target_link_libraries(${LIBRARY_NAME} PRIVATE ${PNG_LIBRARIES})
     endif()
-    target_compile_definitions(${LIBRARY_NAME} PRIVATE -DENABLE_LIBPNG)
+    target_compile_definitions(${LIBRARY_NAME} PRIVATE ENABLE_LIBPNG)
 endif()
 
 # SLD2 is always required
@@ -90,7 +90,7 @@ else()
 endif()
 
 if(ENABLE_OPENGL)
-    target_compile_definitions(${LIBRARY_NAME} PRIVATE -DENABLE_OPENGL)
+    target_compile_definitions(${LIBRARY_NAME} PRIVATE ENABLE_OPENGL)
     target_include_directories(${LIBRARY_NAME} PRIVATE ${OPENGL_INCLUDE_DIRS})
     target_link_libraries(${LIBRARY_NAME} PRIVATE ${OPENGL_LIBRARIES})
 endif()
@@ -102,5 +102,5 @@ target_sources(${LIBRARY_NAME} PRIVATE ${SOURCES_SDL2})
 target_include_directories(${LIBRARY_NAME} PUBLIC SYSTEM ${INCLUDE_PATH})
 
 if(ENABLE_DEBUG_CHECKS)
-    target_compile_definitions(${LIBRARY_NAME} PRIVATE -DUGBA_DEBUG)
+    target_compile_definitions(${LIBRARY_NAME} PRIVATE UGBA_DEBUG)
 endif()

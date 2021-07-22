@@ -16,6 +16,27 @@ target_sources(${LIBRARY_NAME}_gba PRIVATE ${SOURCES_GBA})
 target_include_directories(${LIBRARY_NAME}_gba PUBLIC ${INCLUDE_PATH})
 
 if(ENABLE_DEBUG_CHECKS)
-    target_compile_definitions(${LIBRARY_NAME}_gba PRIVATE -DUGBA_DEBUG)
+    target_compile_definitions(${LIBRARY_NAME}_gba PRIVATE UGBA_DEBUG)
 endif()
 
+target_compile_definitions(${LIBRARY_NAME}_gba PRIVATE __GBA__)
+
+# Build options
+# -------------
+
+set(ARGS_ASM
+    -mthumb -mthumb-interwork
+    -ffunction-sections -fdata-sections
+)
+
+set(ARGS_C
+    -Wall -Wextra -Wno-unused-parameter
+    -mthumb -mthumb-interwork
+    -mcpu=arm7tdmi -mtune=arm7tdmi
+    -ffunction-sections -fdata-sections
+)
+
+target_compile_options(${LIBRARY_NAME}_gba PRIVATE
+    $<$<COMPILE_LANGUAGE:ASM>:${ARGS_ASM}>
+    $<$<COMPILE_LANGUAGE:C>:${ARGS_C}>
+)

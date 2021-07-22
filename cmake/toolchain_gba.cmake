@@ -10,7 +10,6 @@ endif()
 
 set(CMAKE_ASM_COMPILER "${DEVKITARM_BIN}arm-none-eabi-gcc")
 set(CMAKE_C_COMPILER "${DEVKITARM_BIN}arm-none-eabi-gcc")
-set(CMAKE_OBJCOPY "${DEVKITARM_BIN}arm-none-eabi-objcopy")
 set(CMAKE_LINKER "${DEVKITARM_BIN}arm-none-eabi-ld")
 set(CMAKE_AR "${DEVKITARM_BIN}arm-none-eabi-ar")
 
@@ -22,10 +21,4 @@ set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
 set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
 set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
 
-set(WARNFLAGS "-Wall -Wextra -Wno-unused-parameter")
-set(ARCHFLAGS "-mthumb -mthumb-interwork")
-set(DEFINES "-D__GBA__")
-
-set(CMAKE_ASM_FLAGS "${ARCHFLAGS} ${DEFINES} -c -x assembler-with-cpp")
-set(CMAKE_C_FLAGS "${ARCHFLAGS} ${DEFINES} ${WARNFLAGS} -g -O3 \
-    -mcpu=arm7tdmi -mtune=arm7tdmi -ffunction-sections -fdata-sections")
+set(CMAKE_ASM_FLAGS "-x assembler-with-cpp")
