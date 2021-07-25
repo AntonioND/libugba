@@ -35,6 +35,7 @@ add_subdirectory(tools)
 
 include(cmake/bin2c.cmake)
 include(cmake/grit.cmake)
+include(cmake/toolchain_gba_helpers.cmake)
 include(cmake/umod-player.cmake)
 
 # Add source code files
