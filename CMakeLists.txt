@@ -26,6 +26,19 @@ option(ENABLE_DEBUG_CHECKS "Enable debug checks in the library." ON)
 # dump images.
 option(ENABLE_DEBUGGER "Support debugger windows (I/O registers, VRAM)" ON)
 
+# Toolchain selection macros
+# --------------------------
+
+get_filename_component(LIBUGBA_PATH "." ABSOLUTE)
+
+macro(toolchain_gba)
+    include(${LIBUGBA_PATH}/cmake/toolchain_gba.cmake)
+endmacro()
+
+macro(toolchain_sdl2)
+    include(${LIBUGBA_PATH}/cmake/toolchain_sdl2.cmake)
+endmacro()
+
 # Add tools needed by libugba
 # ---------------------------
 
