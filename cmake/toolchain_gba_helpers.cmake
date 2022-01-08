@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: GPL-3.0-only
 #
-# Copyright (c) 2021 Antonio Niño Díaz
+# Copyright (c) 2021-2022 Antonio Niño Díaz
 
 macro(gba_set_compiler_options elf_target)
     set(ARGS_C
@@ -26,7 +26,7 @@ macro(make_gba_rom elf_target rom_name game_title game_code)
     add_custom_command(
         OUTPUT ${rom_name}.gba
         COMMAND ${CMAKE_OBJCOPY} -O binary $<TARGET_FILE:${elf_target}> ${rom_name}.gba
-        COMMAND ${DEVKITPRO_TOOLS}gbafix ${rom_name}.gba -t${game_title} -c${game_code}
+        COMMAND $<TARGET_FILE:gbafix> ${rom_name}.gba -t${game_title} -c${game_code}
         DEPENDS $<TARGET_FILE:${elf_target}>
     )
 
