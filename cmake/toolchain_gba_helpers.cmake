@@ -16,10 +16,15 @@ macro(gba_set_compiler_options elf_target)
     target_compile_definitions(${elf_target} PRIVATE __GBA__)
 
     target_link_options(${elf_target} PRIVATE
-        -specs=gba.specs
         -mthumb -mthumb-interwork
         -Wl,-Map,${elf_target}.map -Wl,--gc-sections
     )
+
+    if(USE_DEVKITARM)
+        target_link_options(${elf_target} PRIVATE
+            -specs=gba.specs
+        )
+    endif()
 endmacro()
 
 macro(make_gba_rom elf_target rom_name game_title game_code)

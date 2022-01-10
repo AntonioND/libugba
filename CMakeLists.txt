@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: MIT
 #
-# Copyright (c) 2020-2021 Antonio Niño Díaz
+# Copyright (c) 2020-2022 Antonio Niño Díaz
 
 cmake_minimum_required(VERSION 3.15)
 project(libugba)
@@ -19,6 +19,8 @@ set(LIBRARY_NAME libugba)
 # --------------------
 
 option(BUILD_GBA "Build GBA binaries in addition to PC binaries" OFF)
+
+option(USE_DEVKITARM "Use devkitARM to build GBA binaries" ON)
 
 option(ENABLE_DEBUG_CHECKS "Enable debug checks in the library." ON)
 
@@ -52,6 +54,15 @@ include(cmake/bin2c.cmake)
 include(cmake/grit.cmake)
 include(cmake/toolchain_gba_helpers.cmake)
 include(cmake/umod-player.cmake)
+
+# Add libsysgba module
+# --------------------
+
+if(NOT USE_DEVKITARM)
+    if(BUILD_GBA)
+        add_subdirectory(libsysgba)
+    endif()
+endif()
 
 # Add source code files
 # ---------------------
