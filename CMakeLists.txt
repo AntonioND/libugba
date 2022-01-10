@@ -29,7 +29,9 @@ option(ENABLE_DEBUGGER "Support debugger windows (I/O registers, VRAM)" ON)
 # Toolchain selection macros
 # --------------------------
 
-get_filename_component(LIBUGBA_PATH "." ABSOLUTE)
+get_filename_component(LIBUGBA_PATH_local "." ABSOLUTE)
+
+set(LIBUGBA_PATH "${LIBUGBA_PATH_local}" CACHE STRING "" FORCE)
 
 macro(toolchain_gba)
     include(${LIBUGBA_PATH}/cmake/toolchain_gba.cmake)
