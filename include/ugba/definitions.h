@@ -39,21 +39,33 @@
 # endif
 #endif
 
+// NOTE: To use the following defines:
+//
+//     ARM_CODE IWRAM_CODE int add(int a, int b)
+//     {
+//         return a + b;
+//     }
+//
+//     IWRAM_BSS int empty_array[100];
+//
+//     IWRAM_DATA int non_empty_array[3] = { 1, 2, 3 };
 #ifdef __GBA__
 # define ARM_CODE   __attribute__((target("arm")))
 # define THUMB_CODE __attribute__((target("thumb")))
-# define IWRAM_DATA __attribute__((section(".iwram_data")))
-# define EWRAM_DATA __attribute__((section(".ewram_data")))
-# define EWRAM_BSS  __attribute__((section(".sbss")))
+# define IWRAM_BSS  // IWRAM is the default location for .bss symbols
+# define IWRAM_DATA // IWRAM is the default location for .data symbols
 # define IWRAM_CODE __attribute__((section(".iwram_code"), long_call))
+# define EWRAM_BSS  __attribute__((section(".sbss")))
+# define EWRAM_DATA __attribute__((section(".ewram_data")))
 # define EWRAM_CODE __attribute__((section(".ewram_code"), long_call))
 #else
 # define ARM_CODE
 # define THUMB_CODE
+# define IWRAM_BSS
 # define IWRAM_DATA
-# define EWRAM_DATA
-# define EWRAM_BSS
 # define IWRAM_CODE
+# define EWRAM_BSS
+# define EWRAM_DATA
 # define EWRAM_CODE
 #endif
 
