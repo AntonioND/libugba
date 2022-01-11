@@ -48,12 +48,9 @@ endmacro()
 
 add_subdirectory(tools)
 
-# Add utilities to work with other tools like GRIT
+# Add utilities to work with other tools
 
-include(cmake/bin2c.cmake)
-include(cmake/grit.cmake)
 include(cmake/toolchain_gba_helpers.cmake)
-include(cmake/umod-player.cmake)
 
 # Add libsysgba module
 # --------------------
