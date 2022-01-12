@@ -24,6 +24,8 @@ macro(gba_set_compiler_options elf_target)
         target_link_options(${elf_target} PRIVATE
             -specs=gba.specs
         )
+    else()
+        libsysgba_set_compiler_options(${elf_target})
     endif()
 endmacro()
 
