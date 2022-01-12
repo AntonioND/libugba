@@ -49,6 +49,7 @@ SECTIONS
     {
         *(.text)
         *(.text*)
+        *(.gnu.linkonce.t.*) /* Used for vague linking */
 
         /* ARM/Thumb interworking code */
         *(.glue_7)  /* glue arm to thumb code */
@@ -70,6 +71,7 @@ SECTIONS
     {
         *(.rodata)
         *(.rodata*)
+        *(.gnu.linkonce.r.*) /* Used for vague linking */
     } > ROM
 
     /* Needed for C++ exceptions. They can be disabled with -fno-exceptions */
@@ -129,6 +131,7 @@ SECTIONS
     {
         *(.bss)
         *(.bss*)
+        *(.gnu.linkonce.b.*) /* Used for vague linking */
         *(COMMON) /* In case -fcommon is used in gcc (not used by default) */
         . = ALIGN(4);
     } > IWRAM
@@ -144,6 +147,7 @@ SECTIONS
         __DATA_START__ = .;
         *(.data)
         *(.data*)
+        *(.gnu.linkonce.d.*) /* Used for vague linking */
         . = ALIGN(4);
         __DATA_END__ = .;
     } > IWRAM AT> ROM
