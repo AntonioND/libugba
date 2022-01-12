@@ -57,6 +57,11 @@ SECTIONS
         /* Information needed for C++ exception handling */
         *(.eh_frame)
         *(.gcc_except_table)
+
+        /* Array of functions to be called at the start of the program */
+        KEEP(*(.init))
+        /* Array of functions to be called at the end of the program */
+        KEEP(*(.fini))
     } > ROM
 
     /* Read-only data */
@@ -79,6 +84,38 @@ SECTIONS
         __exidx_start = .;
         *(.ARM.exidx* .gnu.linkonce.armexidx.*)
         __exidx_end = .;
+    } > ROM
+
+    /* Array of functions to be called during initialization of the program */
+
+    .preinit_array : ALIGN(4)
+    {
+        __preinit_array_start = .;
+        KEEP(*(.preinit_array*))
+        __preinit_array_end = .;
+    } > ROM
+
+    /*
+     * Array of functions to be called during initialization of the program.
+     * They are called after calling everything in .preinit_array
+     */
+
+    .init_array : ALIGN(4)
+    {
+        __init_array_start = .;
+        KEEP(*(SORT(.init_array.*)))
+        KEEP(*(.init_array*))
+        __init_array_end = .;
+    } > ROM
+
+    /* Array of functions called when the program ends. */
+
+    .fini_array : ALIGN(4)
+    {
+        __fini_array_start = .;
+        KEEP(*(SORT(.fini_array.*)))
+        KEEP(*(.fini_array*))
+        __fini_array_end = .;
     } > ROM
 
     /*

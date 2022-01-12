@@ -85,14 +85,18 @@ start_vector:
     ldr     r2, =__EWRAM_SIZE__
     bl      mem_copy
 
-    // global constructors
-//  ldr     r2, =__libc_init_array
-//  bl      blx_r2_trampoline
+    // Global constructors
+    ldr     r2, =__libc_init_array
+    bl      blx_r2_trampoline
 
     // Call main()
     mov     r0, #0 // int argc
     mov     r1, #0 // char *argv[]
     ldr     r2, =main
+    bl      blx_r2_trampoline
+
+    // Global destructors
+    ldr     r2, =__libc_fini_array
     bl      blx_r2_trampoline
 
     // If main() returns, reboot the GBA using SoftReset
