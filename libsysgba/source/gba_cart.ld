@@ -49,6 +49,10 @@ SECTIONS
     {
         *(.text)
         *(.text*)
+
+        /* ARM/Thumb interworking code */
+        *(.glue_7)  /* glue arm to thumb code */
+        *(.glue_7t) /* glue thumb to arm code */
     } > ROM
 
     /* Read-only data */
