@@ -53,6 +53,10 @@ SECTIONS
         /* ARM/Thumb interworking code */
         *(.glue_7)  /* glue arm to thumb code */
         *(.glue_7t) /* glue thumb to arm code */
+
+        /* Information needed for C++ exception handling */
+        *(.eh_frame)
+        *(.gcc_except_table)
     } > ROM
 
     /* Read-only data */
@@ -61,6 +65,20 @@ SECTIONS
     {
         *(.rodata)
         *(.rodata*)
+    } > ROM
+
+    /* Needed for C++ exceptions. They can be disabled with -fno-exceptions */
+
+    .ARM.extab : ALIGN(4)
+    {
+        *(.ARM.extab* .gnu.linkonce.armextab.*)
+    } > ROM
+
+    .ARM.exidx : ALIGN(4)
+    {
+        __exidx_start = .;
+        *(.ARM.exidx* .gnu.linkonce.armexidx.*)
+        __exidx_end = .;
     } > ROM
 
     /*
