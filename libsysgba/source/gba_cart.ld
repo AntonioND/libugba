@@ -55,10 +55,6 @@ SECTIONS
         *(.glue_7)  /* glue arm to thumb code */
         *(.glue_7t) /* glue thumb to arm code */
 
-        /* Information needed for C++ exception handling */
-        *(.eh_frame)
-        *(.gcc_except_table)
-
         /* Array of functions to be called at the start of the program */
         KEEP(*(.init))
         /* Array of functions to be called at the end of the program */
@@ -72,20 +68,6 @@ SECTIONS
         *(.rodata)
         *(.rodata*)
         *(.gnu.linkonce.r.*) /* Used for vague linking */
-    } > ROM
-
-    /* Needed for C++ exceptions. They can be disabled with -fno-exceptions */
-
-    .ARM.extab : ALIGN(4)
-    {
-        *(.ARM.extab* .gnu.linkonce.armextab.*)
-    } > ROM
-
-    .ARM.exidx : ALIGN(4)
-    {
-        __exidx_start = .;
-        *(.ARM.exidx* .gnu.linkonce.armexidx.*)
-        __exidx_end = .;
     } > ROM
 
     /* Array of functions to be called during initialization of the program */
