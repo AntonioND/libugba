@@ -2,6 +2,6 @@
 #
 # Copyright (c) 2022 Antonio Niño Díaz
 
-toolchain_sdl2()
+ugba_toolchain_sdl2()
 
 add_executable(gbafix gbafix.c)

@@ -28,29 +28,17 @@ option(ENABLE_DEBUG_CHECKS "Enable debug checks in the library." ON)
 # dump images.
 option(ENABLE_DEBUGGER "Support debugger windows (I/O registers, VRAM)" ON)
 
-# Toolchain selection macros
-# --------------------------
+# Toolchain utilities
+# -------------------
 
-get_filename_component(LIBUGBA_PATH_local "." ABSOLUTE)
-
-set(LIBUGBA_PATH "${LIBUGBA_PATH_local}" CACHE STRING "" FORCE)
-
-macro(toolchain_gba)
-    include(${LIBUGBA_PATH}/cmake/toolchain_gba.cmake)
-endmacro()
-
-macro(toolchain_sdl2)
-    include(${LIBUGBA_PATH}/cmake/toolchain_sdl2.cmake)
-endmacro()
+include(cmake/toolchain_gba.cmake)
+include(cmake/toolchain_sdl2.cmake)
+include(cmake/toolchain_gba_helpers.cmake)
 
 # Add tools needed by libugba
 # ---------------------------
 
 add_subdirectory(tools)
-
-# Add utilities to work with other tools
-
-include(cmake/toolchain_gba_helpers.cmake)
 
 # Add libsysgba module
 # --------------------

@@ -5,7 +5,7 @@
 # Define toolchain
 # ----------------
 
-toolchain_gba()
+ugba_toolchain_gba()
 
 # Define library target
 # ---------------------
