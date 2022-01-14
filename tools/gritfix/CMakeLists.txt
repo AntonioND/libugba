@@ -5,3 +5,6 @@
 ugba_toolchain_sdl2()
 
 add_executable(gritfix gritfix.c)
+
+compiler_flags_sdl2(gritfix)
+linker_flags_sdl2(gritfix)

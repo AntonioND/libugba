@@ -31,6 +31,7 @@ option(ENABLE_DEBUGGER "Support debugger windows (I/O registers, VRAM)" ON)
 # Toolchain utilities
 # -------------------
 
+include(cmake/compiler_flags.cmake)
 include(cmake/toolchain_gba.cmake)
 include(cmake/toolchain_sdl2.cmake)
 include(cmake/toolchain_gba_helpers.cmake)
