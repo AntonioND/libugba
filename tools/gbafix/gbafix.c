@@ -171,7 +171,11 @@ int main(int argc, char *argv[])
 	infile = fopen(argfile, "r+b");
 	if (!infile) { printf("Error opening input file!\n"); return -1; }
 	fseek(infile, 0, SEEK_SET);
-	fread(&header, sizeof(header), 1, infile);
+	if (fread(&header, sizeof(header), 1, infile) != 1)
+	{
+		printf("Error reading header of input file!\n");
+		return -1;
+	}
 
 	// fix some data
 	memcpy(header.logo, good_header.logo, sizeof(header.logo));
@@ -214,7 +218,7 @@ int main(int argc, char *argv[])
 						t = strrchr(s, '\\'); if (t) begin = t+1;
 						t = strrchr(s, '/'); if (t) begin = t+1;
 						t = strrchr(s, '.'); if (t) *t = 0;
-						strncpy(title, begin, sizeof(header.title));
+						snprintf(title, sizeof(header.title), "%s", begin);
 						printf("%s\n",begin);
 					}
 					memcpy(header.title, title, sizeof(header.title));	// copy
