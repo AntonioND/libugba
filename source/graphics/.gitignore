@@ -1,0 +1,6 @@
+tools/SuperFamiconv/
+tools/bin2c
+tools/lzss
+
+font_palette.bin
+font_tiles.bin
