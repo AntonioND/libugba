@@ -15,8 +15,9 @@
 /*--  You should have received a copy of the GNU General Public License     --*/
 /*--  along with this program. If not, see <http://www.gnu.org/licenses/>.  --*/
 /*----------------------------------------------------------------------------*/
-
+/*--  Copyright (c) 2022 Antonio Niño Díaz                                  --*/
 /*----------------------------------------------------------------------------*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -89,13 +90,13 @@ int main(int argc, char **argv) {
   Title();
 
   if (argc < 2) Usage();
-  if      (!strcmpi(argv[1], "-d"))   { cmd = CMD_DECODE; }
-  else if (!strcmpi(argv[1], "-evn")) { cmd = CMD_CODE_10; mode = LZS_VRAM; }
-  else if (!strcmpi(argv[1], "-ewn")) { cmd = CMD_CODE_10; mode = LZS_WRAM; }
-  else if (!strcmpi(argv[1], "-evf")) { cmd = CMD_CODE_10; mode = LZS_VFAST; }
-  else if (!strcmpi(argv[1], "-ewf")) { cmd = CMD_CODE_10; mode = LZS_WFAST; }
-  else if (!strcmpi(argv[1], "-evo")) { cmd = CMD_CODE_10; mode = LZS_VBEST; }
-  else if (!strcmpi(argv[1], "-ewo")) { cmd = CMD_CODE_10; mode = LZS_WBEST; }
+  if      (!strcmp(argv[1], "-d"))   { cmd = CMD_DECODE; }
+  else if (!strcmp(argv[1], "-evn")) { cmd = CMD_CODE_10; mode = LZS_VRAM; }
+  else if (!strcmp(argv[1], "-ewn")) { cmd = CMD_CODE_10; mode = LZS_WRAM; }
+  else if (!strcmp(argv[1], "-evf")) { cmd = CMD_CODE_10; mode = LZS_VFAST; }
+  else if (!strcmp(argv[1], "-ewf")) { cmd = CMD_CODE_10; mode = LZS_WFAST; }
+  else if (!strcmp(argv[1], "-evo")) { cmd = CMD_CODE_10; mode = LZS_VBEST; }
+  else if (!strcmp(argv[1], "-ewo")) { cmd = CMD_CODE_10; mode = LZS_WBEST; }
   else                                  EXIT("Command not supported\n");
   if (argc < 3) EXIT("Filename not specified\n");
 
@@ -151,7 +152,10 @@ char *Load(char *filename, int *length, int min, int max) {
   char *fb;
 
   if ((fp = fopen(filename, "rb")) == NULL) EXIT("\nFile open error\n");
-  fs = filelength(fileno(fp));
+  fseek(fp, 0, SEEK_END);
+  fs = ftell(fp);
+  if (fs == 0) EXIT("\nFile tell error\n");
+  rewind(fp);
   if ((fs < min) || (fs > max)) EXIT("\nFile size error\n");
   fb = Memory(fs + 3, sizeof(char));
   if (fread(fb, 1, fs, fp) != fs) EXIT("\nFile read error\n");
