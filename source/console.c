@@ -1,10 +1,11 @@
 // SPDX-License-Identifier: MIT
 //
-// Copyright (c) 2020-2021 Antonio Niño Díaz
+// Copyright (c) 2020-2022 Antonio Niño Díaz
 
 #include <ugba/ugba.h>
 
-#include "graphics/font.h"
+#include "graphics/font_palette_bin.h"
+#include "graphics/font_tiles_bin.h"
 
 // This is needed because the scroll registers are write-only.
 static int scroll_y;
@@ -56,10 +57,10 @@ void CON_InitDefault(void)
     // Load font tileset and palette
 
     uint16_t *dst = (uint16_t *)tiles_block_base_addr;
-    SWI_LZ77UnCompReadNormalWrite16bit(fontTiles, dst);
+    SWI_LZ77UnCompReadNormalWrite16bit(font_tiles_bin, dst);
 
     dst = MEM_PALETTE_BG + (15 * 16);
-    SWI_CpuSet_Copy16(fontPal, dst, fontPalLen);
+    SWI_CpuSet_Copy16(font_palette_bin, dst, font_palette_bin_size);
 
     // Clear console map
 
