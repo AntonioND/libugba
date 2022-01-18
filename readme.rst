@@ -12,7 +12,6 @@ This means you can do things like:
 
 - Build a GBA ROM and run it in an emulator.
 - Build a Linux executable file and debug it using GDB.
-- Build a Windows executable with MSVC and debug it using Visual Studio.
 - Easily implement unit tests for your game and run them on your PC.
 
 It comes with several examples of how to use each one of the subsystems of the
@@ -41,6 +40,9 @@ check the following repository: https://github.com/AntonioND/ugba-testing
 The following repository contains an example of a project that uses **libugba**:
 https://github.com/AntonioND/ugba-template
 
+Another example is my game, **µCity Advance**:
+https://github.com/AntonioND/ucity-advance
+
 2. Limitations
 --------------
 
@@ -54,15 +56,13 @@ For a list of planned features, check `this link <docs/to-do.rst>`_.
 
 To generate PC executables:
 
-Required
-^^^^^^^^
+**Required**
 
-- **GCC**, **Clang**, **MSVC** or another compiler supported by CMake.
+- **GCC**, **Clang** or another compiler supported by CMake.
 - **CMake 3.15** or later
 - **SDL2 2.0.7** or later (AudioStream support needed)
 
-Optional
-^^^^^^^^
+**Optional**
 
 For the SDL port:
 
@@ -71,24 +71,24 @@ For the SDL port:
 - **liblua 5.2** or later (Integer support needed): Needed for the Lua
   interpreter used for the unit tests.
 
-To generate the GBA library file:
+To generate the GBA library file you need one of:
 
-- `devkitPro`_: You need to install devkitPro following the instructions in this
-  link, then follow the instructions in the sections below:
-  https://devkitpro.org/wiki/Getting_Started
+- A ``gcc-arm-none-eabi`` toolchain: You can get it from your package manager,
+  or from `Arm's GNU toolchain downloads website`_. In Ubuntu you can just do:
 
-To convert the font used by the library to the GBA format:
+.. code:: bash
 
-- **Grit**. It comes with devkitPro. If you don't install devkitPro because you
-  only want to build the PC executables, you still need to get Grit. Note that
-  you will need to add it to your system's ``PATH`` environment variable if you
-  download the standalone binary: https://github.com/devkitPro/grit/releases
+    sudo apt install gcc-arm-none-eabi
+
+- `devkitPro`_: You need to install devkitPro following the instructions in the
+  `devkitPro Getting Started guide`_, then follow the instructions in this
+  readme. It comes with its own build of ``gcc-arm-none-eabi``.
 
 4. Build library
 ----------------
 
-Linux
-^^^^^
+Building PC library
+^^^^^^^^^^^^^^^^^^^
 
 If you're on Linux or any Linux-like environment (like MinGW or Cygwin), install
 the dependencies using your package manager. For example, in Debian or Ubuntu:
@@ -104,65 +104,17 @@ Clone this repository:
     git clone https://github.com/AntonioND/libugba
     cd libugba
 
-Finally, go to the folder of **libugba**. The following will build the library:
+Run this to build the library:
 
 .. code:: bash
 
     mkdir build
     cd build
     cmake ..
-    make
+    make -j`nproc`
 
-Note: In order to make the compilation process faster you can run make in
-multiple threads by doing ``make -j`nproc``.
-
-Windows
-^^^^^^^
-
-In order to build with **MinGW** or **Cygwin**, you should use the Linux
-instructions. The following instructions have been tested with Microsoft Visual
-C++ 2019.
-
-You need to install `vcpkg`_. In short, open a **PowerShell** window and do:
-
-.. code:: bash
-
-    git clone https://github.com/Microsoft/vcpkg.git
-    cd vcpkg
-    .\bootstrap-vcpkg.bat
-    .\vcpkg integrate install --triplet x64-windows
-
-Then, install the dependencies (SDL2, libpng and liblua):
-
-.. code:: bash
-
-    .\vcpkg install SDL2 libpng liblua --triplet x64-windows
-
-Clone this repository:
-
-.. code:: bash
-
-    git clone https://github.com/AntonioND/libugba
-    cd libugba
-
-Finally, go to the folder of **ugba**. The following will build the library,
-and examples, in **Developer Command Prompt for VS 2019**:
-
-.. code:: bash
-
-    mkdir build
-    cd build
-    cmake .. -DCMAKE_TOOLCHAIN_FILE=C:\...\vcpkg\scripts\buildsystems\vcpkg.cmake -DVCPKG_TARGET_TRIPLET=x64-windows
-    msbuild ugba.sln
-
-In order to get a release build, do:
-
-.. code:: bash
-
-    msbuild ugba.sln /property:Configuration=Release
-
-GBA
-^^^
+Building GBA library with devkitPro
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Clone this repository and build it like this:
 
@@ -170,18 +122,47 @@ Clone this repository and build it like this:
 
     git clone https://github.com/AntonioND/libugba
     cd libugba
-    make
+    make -j`nproc`
 
-Note: In order to make the compilation process faster you can run make in
-multiple threads by doing ``make -j`nproc``.
+You can also build it with **CMake** (at the sime time as the PC version):
 
-5. Acknowledgements
+.. code:: bash
+
+    git clone https://github.com/AntonioND/libugba
+    cd libugba
+    mkdir build
+    cd build
+    cmake .. -DBUILD_GBA=ON
+    make -j`nproc`
+
+Building GBA library without devkitPro
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Run the following commands to build the GBA and PC versions at the same time:
+
+.. code:: bash
+
+    git clone https://github.com/AntonioND/libugba
+    cd libugba
+    mkdir build
+    cd build
+    cmake .. -DBUILD_GBA=ON -DUSE_DEVKITARM=OFF
+    make -j`nproc`
+
+5. Regenerating font
+--------------------
+
+If you want to replace the font used for the console, go to ``source/graphics``
+and run the ``convert.sh`` script.
+
+6. Acknowledgements
 -------------------
 
 - Dave Murphy (WinterMute) (and others) for devkitPro and devkitARM.
-- Jasper Vijn (cearn) for Grit and Tonc.
+- Jasper Vijn (cearn) for Tonc.
 - Martin Korth (Nocash) for no$gba and GBATEK.
 - Vicki Pfau (endrift) for mGBA.
 
+.. _Arm's GNU toolchain downloads website: https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads
+.. _devkitPro Getting Started guide: https://devkitpro.org/wiki/Getting_Started
 .. _devkitPro: https://devkitpro.org/
-.. _vcpkg: https://github.com/microsoft/vcpkg
