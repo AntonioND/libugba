@@ -4,4 +4,3 @@
 
 add_subdirectory(bin2c)
 add_subdirectory(gbafix)
-add_subdirectory(gritfix)
