@@ -20,7 +20,7 @@
 
 NORETURN void SWI_SoftReset(void)
 {
-    asm volatile(
+    __asm__ volatile(
         SWI_NUMBER(0x00) :::
         "r0", "r1", "r2", "r3", "memory"
     );
@@ -30,9 +30,9 @@ NORETURN void SWI_SoftReset(void)
 
 void SWI_RegisterRamReset(uint32_t flags)
 {
-    register uint32_t flags_ asm("r0") = flags;
+    register uint32_t flags_ __asm__("r0") = flags;
 
-    asm volatile(
+    __asm__ volatile(
         SWI_NUMBER(0x01) ::
         "r"(flags_) :
         "r1", "r2", "r3", "memory"
@@ -41,7 +41,7 @@ void SWI_RegisterRamReset(uint32_t flags)
 
 void SWI_Halt(void)
 {
-    asm volatile(
+    __asm__ volatile(
         SWI_NUMBER(0x02) :::
         "r0", "r1", "r2", "r3", "memory"
     );
@@ -55,10 +55,10 @@ void SWI_IntrWait(uint32_t discard_old_flags, uint16_t wait_flags)
 {
     UGBA_Assert(wait_flags != 0);
 
-    register uint32_t discard_ asm("r0") = discard_old_flags;
-    register uint32_t flags_ asm("r1") = wait_flags;
+    register uint32_t discard_ __asm__("r0") = discard_old_flags;
+    register uint32_t flags_ __asm__("r1") = wait_flags;
 
-    asm volatile(
+    __asm__ volatile(
         SWI_NUMBER(0x04) ::
         "r"(discard_), "r"(flags_) :
         "r2", "r3", "memory"
@@ -67,7 +67,7 @@ void SWI_IntrWait(uint32_t discard_old_flags, uint16_t wait_flags)
 
 void SWI_VBlankIntrWait(void)
 {
-    asm volatile(
+    __asm__ volatile(
         SWI_NUMBER(0x05) :::
         "r0", "r1", "r2", "r3", "memory"
     );
@@ -80,11 +80,11 @@ int32_t SWI_Div(int32_t num, int32_t div)
     if (div == 0)
         return 0;
 
-    register int32_t num_ asm("r0") = num;
-    register int32_t div_ asm("r1") = div;
-    register int32_t result asm("r0");
+    register int32_t num_ __asm__("r0") = num;
+    register int32_t div_ __asm__("r1") = div;
+    register int32_t result __asm__("r0");
 
-    asm volatile(
+    __asm__ volatile(
         SWI_NUMBER(0x06) :
         "=r"(result) :
         "r"(num_), "r"(div_) :
@@ -101,11 +101,11 @@ int32_t SWI_DivMod(int32_t num, int32_t div)
     if (div == 0)
         return 0;
 
-    register int32_t num_ asm("r0") = num;
-    register int32_t div_ asm("r1") = div;
-    register int32_t result asm("r1");
+    register int32_t num_ __asm__("r0") = num;
+    register int32_t div_ __asm__("r1") = div;
+    register int32_t result __asm__("r1");
 
-    asm volatile(
+    __asm__ volatile(
         SWI_NUMBER(0x06) :
         "=r"(result) :
         "r"(num_), "r"(div_) :
@@ -117,10 +117,10 @@ int32_t SWI_DivMod(int32_t num, int32_t div)
 
 uint16_t SWI_Sqrt(uint32_t value)
 {
-    register uint32_t value_ asm("r0") = value;
-    register uint32_t result asm("r0");
+    register uint32_t value_ __asm__("r0") = value;
+    register uint32_t result __asm__("r0");
 
-    asm volatile(
+    __asm__ volatile(
         SWI_NUMBER(0x08) :
         "=r"(result) :
         "r"(value_) :
@@ -132,10 +132,10 @@ uint16_t SWI_Sqrt(uint32_t value)
 
 int16_t SWI_ArcTan(int16_t tan)
 {
-    register uint32_t tan_ asm("r0") = tan;
-    register uint32_t result asm("r0");
+    register uint32_t tan_ __asm__("r0") = tan;
+    register uint32_t result __asm__("r0");
 
-    asm volatile(
+    __asm__ volatile(
         SWI_NUMBER(0x09) :
         "=r"(result) :
         "r"(tan_) :
@@ -147,11 +147,11 @@ int16_t SWI_ArcTan(int16_t tan)
 
 int16_t SWI_ArcTan2(int16_t x, int16_t y)
 {
-    register uint32_t x_ asm("r0") = x;
-    register uint32_t y_ asm("r1") = y;
-    register uint32_t result asm("r0");
+    register uint32_t x_ __asm__("r0") = x;
+    register uint32_t y_ __asm__("r1") = y;
+    register uint32_t result __asm__("r0");
 
-    asm volatile(
+    __asm__ volatile(
         SWI_NUMBER(0x0A) :
         "=r"(result) :
         "r"(x_), "r"(y_) :
@@ -174,11 +174,11 @@ void SWI_CpuSet(const void *src, void *dst, uint32_t len_mode)
         UGBA_Assert(((uint32_t)dst & 1) == 0);
     }
 
-    register uint32_t src_ asm("r0") = (uint32_t)src;
-    register uint32_t dst_ asm("r1") = (uint32_t)dst;
-    register uint32_t len_mode_ asm("r2") = len_mode;
+    register uint32_t src_ __asm__("r0") = (uint32_t)src;
+    register uint32_t dst_ __asm__("r1") = (uint32_t)dst;
+    register uint32_t len_mode_ __asm__("r2") = len_mode;
 
-    asm volatile(
+    __asm__ volatile(
         SWI_NUMBER(0x0B) ::
         "r"(src_), "r"(dst_), "r"(len_mode_) :
         "r3", "memory"
@@ -191,11 +191,11 @@ void SWI_CpuFastSet(const void *src, void *dst, uint32_t len_mode)
     UGBA_Assert(((uint32_t)dst & 3) == 0);
     UGBA_Assert((len_mode & 7) == 0);
 
-    register uint32_t src_ asm("r0") = (uint32_t)src;
-    register uint32_t dst_ asm("r1") = (uint32_t)dst;
-    register uint32_t len_mode_ asm("r2") = len_mode;
+    register uint32_t src_ __asm__("r0") = (uint32_t)src;
+    register uint32_t dst_ __asm__("r1") = (uint32_t)dst;
+    register uint32_t len_mode_ __asm__("r2") = len_mode;
 
-    asm volatile(
+    __asm__ volatile(
         SWI_NUMBER(0x0C) ::
         "r"(src_), "r"(dst_), "r"(len_mode_) :
         "r3", "memory"
@@ -204,9 +204,9 @@ void SWI_CpuFastSet(const void *src, void *dst, uint32_t len_mode)
 
 uint32_t SWI_GetBiosChecksum(void)
 {
-    register uint32_t sum asm("r0");
+    register uint32_t sum __asm__("r0");
 
-    asm volatile(
+    __asm__ volatile(
         SWI_NUMBER(0x0D) :
         "=r"(sum) ::
         "r1", "r2", "r3", "memory"
@@ -221,11 +221,11 @@ void SWI_BgAffineSet(const bg_affine_src *src, bg_affine_dst *dst,
     UGBA_Assert(((uint32_t)src & 3) == 0);
     UGBA_Assert(((uint32_t)dst & 3) == 0);
 
-    register uint32_t src_ asm("r0") = (uint32_t)src;
-    register uint32_t dst_ asm("r1") = (uint32_t)dst;
-    register uint32_t count_ asm("r2") = count;
+    register uint32_t src_ __asm__("r0") = (uint32_t)src;
+    register uint32_t dst_ __asm__("r1") = (uint32_t)dst;
+    register uint32_t count_ __asm__("r2") = count;
 
-    asm volatile(
+    __asm__ volatile(
         SWI_NUMBER(0x0E) ::
         "r"(src_), "r"(dst_), "r"(count_) :
         "r3", "memory"
@@ -239,12 +239,12 @@ void SWI_ObjAffineSet(const obj_affine_src *src, void *dst,
     UGBA_Assert(((uint32_t)dst & 1) == 0);
     UGBA_Assert((increment & 1) == 0);
 
-    register uint32_t src_ asm("r0") = (uint32_t)src;
-    register uint32_t dst_ asm("r1") = (uint32_t)dst;
-    register uint32_t count_ asm("r2") = count;
-    register uint32_t increment_ asm("r3") = increment;
+    register uint32_t src_ __asm__("r0") = (uint32_t)src;
+    register uint32_t dst_ __asm__("r1") = (uint32_t)dst;
+    register uint32_t count_ __asm__("r2") = count;
+    register uint32_t increment_ __asm__("r3") = increment;
 
-    asm volatile(
+    __asm__ volatile(
         SWI_NUMBER(0x0F) ::
         "r"(src_), "r"(dst_), "r"(count_), "r"(increment_) :
         "memory"
@@ -255,11 +255,11 @@ void SWI_BitUnPack(const void *source, void *dest, const bit_unpack_info *info)
 {
     UGBA_Assert(((uint32_t)dest & 3) == 0);
 
-    register uint32_t source_ asm("r0") = (uint32_t)source;
-    register uint32_t dest_ asm("r1") = (uint32_t)dest;
-    register uint32_t info_ asm("r2") = (uint32_t)info;
+    register uint32_t source_ __asm__("r0") = (uint32_t)source;
+    register uint32_t dest_ __asm__("r1") = (uint32_t)dest;
+    register uint32_t info_ __asm__("r2") = (uint32_t)info;
 
-    asm volatile(
+    __asm__ volatile(
         SWI_NUMBER(0x10) ::
         "r"(source_), "r"(dest_), "r"(info_) :
         "r3", "memory"
@@ -270,10 +270,10 @@ void SWI_LZ77UnCompReadNormalWrite8bit(const void *source, void *dest)
 {
     UGBA_Assert(((uint32_t)source & 3) == 0);
 
-    register uint32_t source_ asm("r0") = (uint32_t)source;
-    register uint32_t dest_ asm("r1") = (uint32_t)dest;
+    register uint32_t source_ __asm__("r0") = (uint32_t)source;
+    register uint32_t dest_ __asm__("r1") = (uint32_t)dest;
 
-    asm volatile(
+    __asm__ volatile(
         SWI_NUMBER(0x11) ::
         "r"(source_), "r"(dest_) :
         "r2", "r3", "memory"
@@ -285,10 +285,10 @@ void SWI_LZ77UnCompReadNormalWrite16bit(const void *source, void *dest)
     UGBA_Assert(((uint32_t)source & 3) == 0);
     UGBA_Assert(((uint32_t)dest & 1) == 0);
 
-    register uint32_t source_ asm("r0") = (uint32_t)source;
-    register uint32_t dest_ asm("r1") = (uint32_t)dest;
+    register uint32_t source_ __asm__("r0") = (uint32_t)source;
+    register uint32_t dest_ __asm__("r1") = (uint32_t)dest;
 
-    asm volatile(
+    __asm__ volatile(
         SWI_NUMBER(0x12) ::
         "r"(source_), "r"(dest_) :
         "r2", "r3", "memory"
@@ -300,10 +300,10 @@ void SWI_HuffUnComp(const void *source, void *dest)
     UGBA_Assert(((uint32_t)source & 3) == 0);
     UGBA_Assert(((uint32_t)dest & 3) == 0);
 
-    register uint32_t source_ asm("r0") = (uint32_t)source;
-    register uint32_t dest_ asm("r1") = (uint32_t)dest;
+    register uint32_t source_ __asm__("r0") = (uint32_t)source;
+    register uint32_t dest_ __asm__("r1") = (uint32_t)dest;
 
-    asm volatile(
+    __asm__ volatile(
         SWI_NUMBER(0x13) ::
         "r"(source_), "r"(dest_) :
         "r2", "r3", "memory"
@@ -314,10 +314,10 @@ void SWI_RLUnCompWram(const void *source, void *dest)
 {
     UGBA_Assert(((uint32_t)source & 3) == 0);
 
-    register uint32_t source_ asm("r0") = (uint32_t)source;
-    register uint32_t dest_ asm("r1") = (uint32_t)dest;
+    register uint32_t source_ __asm__("r0") = (uint32_t)source;
+    register uint32_t dest_ __asm__("r1") = (uint32_t)dest;
 
-    asm volatile(
+    __asm__ volatile(
         SWI_NUMBER(0x14) ::
         "r"(source_), "r"(dest_) :
         "r2", "r3", "memory"
@@ -329,10 +329,10 @@ void SWI_RLUnCompVram(const void *source, void *dest)
     UGBA_Assert(((uint32_t)source & 3) == 0);
     UGBA_Assert(((uint32_t)dest & 1) == 0);
 
-    register uint32_t source_ asm("r0") = (uint32_t)source;
-    register uint32_t dest_ asm("r1") = (uint32_t)dest;
+    register uint32_t source_ __asm__("r0") = (uint32_t)source;
+    register uint32_t dest_ __asm__("r1") = (uint32_t)dest;
 
-    asm volatile(
+    __asm__ volatile(
         SWI_NUMBER(0x15) ::
         "r"(source_), "r"(dest_) :
         "r2", "r3", "memory"
@@ -343,10 +343,10 @@ void SWI_Diff8bitUnFilterWram(const void *source, void *dest)
 {
     UGBA_Assert(((uint32_t)source & 3) == 0);
 
-    register uint32_t source_ asm("r0") = (uint32_t)source;
-    register uint32_t dest_ asm("r1") = (uint32_t)dest;
+    register uint32_t source_ __asm__("r0") = (uint32_t)source;
+    register uint32_t dest_ __asm__("r1") = (uint32_t)dest;
 
-    asm volatile(
+    __asm__ volatile(
         SWI_NUMBER(0x16) ::
         "r"(source_), "r"(dest_) :
         "r2", "r3", "memory"
@@ -358,10 +358,10 @@ void SWI_Diff8bitUnFilterVram(const void *source, void *dest)
     UGBA_Assert(((uint32_t)source & 3) == 0);
     UGBA_Assert(((uint32_t)dest & 1) == 0);
 
-    register uint32_t source_ asm("r0") = (uint32_t)source;
-    register uint32_t dest_ asm("r1") = (uint32_t)dest;
+    register uint32_t source_ __asm__("r0") = (uint32_t)source;
+    register uint32_t dest_ __asm__("r1") = (uint32_t)dest;
 
-    asm volatile(
+    __asm__ volatile(
         SWI_NUMBER(0x17) ::
         "r"(source_), "r"(dest_) :
         "r2", "r3", "memory"
@@ -373,10 +373,10 @@ void SWI_Diff16bitUnFilter(const void *source, void *dest)
     UGBA_Assert(((uint32_t)source & 3) == 0);
     UGBA_Assert(((uint32_t)dest & 1) == 0);
 
-    register uint32_t source_ asm("r0") = (uint32_t)source;
-    register uint32_t dest_ asm("r1") = (uint32_t)dest;
+    register uint32_t source_ __asm__("r0") = (uint32_t)source;
+    register uint32_t dest_ __asm__("r1") = (uint32_t)dest;
 
-    asm volatile(
+    __asm__ volatile(
         SWI_NUMBER(0x18) ::
         "r"(source_), "r"(dest_) :
         "r2", "r3", "memory"
@@ -385,9 +385,9 @@ void SWI_Diff16bitUnFilter(const void *source, void *dest)
 
 void SWI_SoundBias(uint32_t level)
 {
-    register uint32_t level_ asm("r0") = level;
+    register uint32_t level_ __asm__("r0") = level;
 
-    asm volatile(
+    __asm__ volatile(
         SWI_NUMBER(0x19) ::
         "r"(level_) :
         "r1", "r2", "r3", "memory"
@@ -396,7 +396,7 @@ void SWI_SoundBias(uint32_t level)
 
 NORETURN void SWI_HardReset(void)
 {
-    asm volatile(
+    __asm__ volatile(
         SWI_NUMBER(0x26) :::
         "r0", "r1", "r2", "r3", "memory"
     );

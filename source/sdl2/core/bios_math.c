@@ -8,6 +8,10 @@
 
 #include "../debug_utils.h"
 
+#ifndef M_PI
+#define M_PI (3.14159265358979323846)
+#endif
+
 int32_t SWI_Div(int32_t num, int32_t div)
 {
     if (div == 0)
