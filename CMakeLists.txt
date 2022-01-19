@@ -55,18 +55,19 @@ endif()
 
 # Macro that searches all the source files in the specified directory in 'dir'
 # and saves them in 'var'
-macro(search_source_files dir var)
+macro(ugba_search_source_files dir var)
     file(GLOB ${var} CONFIGURE_DEPENDS ${dir}/*.c ${dir}/*.h ${dir}/*.s)
 endmacro()
 
-search_source_files(source FILES_SOURCE)
-search_source_files(source/graphics FILES_SOURCE_GRAPHICS)
-search_source_files(source/gba FILES_SOURCE_GBA)
-search_source_files(source/sdl2 FILES_SOURCE_SDL2)
-search_source_files(source/sdl2/core FILES_SOURCE_SDL2_CORE)
-search_source_files(source/sdl2/gui FILES_SOURCE_SDL2_GUI)
+ugba_search_source_files(source FILES_SOURCE)
+ugba_search_source_files(source/graphics FILES_SOURCE_GRAPHICS)
+ugba_search_source_files(source/gba FILES_SOURCE_GBA)
+ugba_search_source_files(source/sdl2 FILES_SOURCE_SDL2)
+ugba_search_source_files(source/sdl2/core FILES_SOURCE_SDL2_CORE)
+ugba_search_source_files(source/sdl2/gui FILES_SOURCE_SDL2_GUI)
 if(ENABLE_DEBUGGER)
-    search_source_files(source/sdl2/gui/debugger FILES_SOURCE_SDL2_GUI_DEBUGGER)
+    ugba_search_source_files(source/sdl2/gui/debugger
+                             FILES_SOURCE_SDL2_GUI_DEBUGGER)
 else()
     set(FILES_SOURCE_SDL2_GUI_DEBUGGER "")
 endif()

@@ -16,7 +16,7 @@ add_library(${LIBRARY_NAME} SHARED)
 # User-specified compiler flags
 # -----------------------------
 
-compiler_flags_sdl2(${LIBRARY_NAME})
+ugba_compiler_flags_sdl2(${LIBRARY_NAME})
 
 # Build options
 # -------------

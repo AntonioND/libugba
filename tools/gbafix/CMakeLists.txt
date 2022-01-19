@@ -6,5 +6,5 @@ ugba_toolchain_sdl2()
 
 add_executable(gbafix gbafix.c)
 
-compiler_flags_sdl2(gbafix)
-linker_flags_sdl2(gbafix)
+ugba_compiler_flags_sdl2(gbafix)
+ugba_linker_flags_sdl2(gbafix)

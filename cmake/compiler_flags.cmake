@@ -2,7 +2,7 @@
 #
 # Copyright (c) 2020-2022 Antonio Niño Díaz
 
-macro(compiler_flags_sdl2 target_name)
+macro(ugba_compiler_flags_sdl2 target_name)
 
     if(CMAKE_C_COMPILER_ID STREQUAL "GNU")
         target_compile_options(${target_name} PRIVATE
@@ -57,7 +57,7 @@ macro(compiler_flags_sdl2 target_name)
 endmacro()
 
 
-macro(linker_flags_sdl2 target_name)
+macro(ugba_linker_flags_sdl2 target_name)
 
     if(CMAKE_C_COMPILER_ID STREQUAL "GNU")
         if(CMAKE_C_COMPILER_VERSION VERSION_GREATER_EQUAL 9.3)
