@@ -38,3 +38,9 @@ Known bugs
 ==========
 
 - Mosaic effect is broken, it doesn't work like on hardware.
+
+- Writing to OAM using the provided definitions may not work correctly. GCC
+  sometimes (in Debug builds, apparently) generates byte writes to OAM when
+  modifying 16-bit fields. This GCC bug seems to not be fixed, and it prevents
+  a trivial fix of just flagging all fields as volatile:
+  https://gcc.gnu.org/bugzilla/show_bug.cgi?id=50521
