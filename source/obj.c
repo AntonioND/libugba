@@ -212,7 +212,7 @@ void OBJ_ModeSet(int index, oam_entry_mode mode)
 void OBJ_GetShapeSize(oam_entry_size size,
                       uint16_t *attr0_shape, uint16_t *attr1_size)
 {
-    if (size > OBJ_SIZE_NUMBER)
+    if (size >= OBJ_SIZE_NUMBER)
     {
         *attr0_shape = 0;
         *attr1_size = 0;
