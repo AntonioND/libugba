@@ -31,6 +31,9 @@ option(ENABLE_DEBUGGER "Support debugger windows (I/O registers, VRAM)" ON)
 # Toolchain utilities
 # -------------------
 
+get_filename_component(LIBSYSGBA_PATH_local "libsysgba" ABSOLUTE)
+set(LIBSYSGBA_PATH "${LIBSYSGBA_PATH_local}" CACHE STRING "" FORCE)
+
 include(cmake/compiler_flags.cmake)
 include(cmake/toolchain_gba.cmake)
 include(cmake/toolchain_sdl2.cmake)

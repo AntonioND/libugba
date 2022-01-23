@@ -9,15 +9,6 @@ ugba_toolchain_gba()
 
 add_library(${LIBRARY_NAME}_gba STATIC)
 
-# Link with libsysgba if needed
-# -----------------------------
-
-# By doing this, projects that use libugba don't have to link with libsysgba
-# explicitly.
-if(NOT USE_DEVKITARM)
-    target_link_libraries(${LIBRARY_NAME}_gba libsysgba_gba)
-endif()
-
 # Source code, include directories and global definitions
 # -------------------------------------------------------
 

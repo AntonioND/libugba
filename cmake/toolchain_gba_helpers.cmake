@@ -3,6 +3,12 @@
 # Copyright (c) 2021-2022 Antonio Niño Díaz
 
 macro(gba_set_compiler_options elf_target)
+
+    set(ARGS_ASM
+        -mthumb -mthumb-interwork
+        -ffunction-sections -fdata-sections
+    )
+
     set(ARGS_C
         -mthumb -mthumb-interwork
         -mcpu=arm7tdmi -mtune=arm7tdmi
@@ -10,6 +16,7 @@ macro(gba_set_compiler_options elf_target)
     )
 
     target_compile_options(${elf_target} PRIVATE
+        $<$<COMPILE_LANGUAGE:ASM>:${ARGS_ASM}>
         $<$<COMPILE_LANGUAGE:C>:${ARGS_C}>
     )
 
@@ -23,7 +30,15 @@ macro(gba_set_compiler_options elf_target)
     if(USE_DEVKITARM)
         target_link_options(${elf_target} PRIVATE -specs=gba.specs)
     else()
+        # By doing this, projects that use libugba don't have to add the files
+        # of libsysgba explicitly.
+
         libsysgba_set_compiler_options(${elf_target})
+
+        target_sources(${elf_target} PRIVATE
+            ${LIBSYSGBA_PATH}/source/gba_crt0.s
+            ${LIBSYSGBA_PATH}/source/syscalls.c
+        )
     endif()
 endmacro()
 
