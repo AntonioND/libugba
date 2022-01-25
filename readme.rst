@@ -149,6 +149,9 @@ Run the following commands to build the GBA and PC versions at the same time:
     cmake .. -DUSE_DEVKITARM=OFF
     make -j`nproc`
 
+To override the autodetected location of the cross compiler, you can add
+``-DARM_GCC_PATH=/path/to/folder/`` to the ``cmake`` command.
+
 5. Regenerating font
 --------------------
 
