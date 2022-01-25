@@ -18,8 +18,6 @@ set(LIBRARY_NAME libugba)
 # Global build options
 # --------------------
 
-option(BUILD_GBA "Build GBA binaries in addition to PC binaries" OFF)
-
 option(USE_DEVKITARM "Use devkitARM to build GBA binaries" ON)
 
 option(ENABLE_DEBUG_CHECKS "Enable debug checks in the library." ON)
@@ -38,6 +36,23 @@ include(cmake/compiler_flags.cmake)
 include(cmake/toolchain_gba.cmake)
 include(cmake/toolchain_sdl2.cmake)
 include(cmake/toolchain_gba_helpers.cmake)
+
+# Look for an ARM toolchain. If this library is included by a parent project,
+# check if the path has already been specified.
+
+if(NOT "${BUILD_GBA}" STREQUAL OFF)
+    if("${ARM_GCC_PATH}" STREQUAL "")
+        message(STATUS "libugba: GBA toolchain not specified")
+        ugba_search_toolchain_gba(BUILD_GBA)
+    else()
+        message(STATUS "libugba: GBA toolchain has been specified")
+        set(BUILD_GBA ON)
+    endif()
+endif()
+
+if(BUILD_GBA)
+    message(STATUS "libugba: GBA toolchain: ${ARM_GCC_PATH}")
+endif()
 
 # Add tools needed by libugba
 # ---------------------------

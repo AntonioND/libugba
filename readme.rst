@@ -110,13 +110,13 @@ Run this to build the library:
 
     mkdir build
     cd build
-    cmake ..
+    cmake .. -DBUILD_GBA=OFF
     make -j`nproc`
 
 Building GBA library with devkitPro
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Clone this repository and build it like this:
+Clone this repository and build it with just **make** like this:
 
 .. code:: bash
 
@@ -132,7 +132,7 @@ You can also build it with **CMake** (at the sime time as the PC version):
     cd libugba
     mkdir build
     cd build
-    cmake .. -DBUILD_GBA=ON
+    cmake ..
     make -j`nproc`
 
 Building GBA library without devkitPro
@@ -146,7 +146,7 @@ Run the following commands to build the GBA and PC versions at the same time:
     cd libugba
     mkdir build
     cd build
-    cmake .. -DBUILD_GBA=ON -DUSE_DEVKITARM=OFF
+    cmake .. -DUSE_DEVKITARM=OFF
     make -j`nproc`
 
 5. Regenerating font
