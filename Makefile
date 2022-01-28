@@ -26,8 +26,10 @@ endif
 
 CFLAGS	:=	-g -O3 -Wall -Wno-switch -Wno-multichar \
 		-ffunction-sections -fdata-sections \
-		$(ARCH) $(INCLUDE) $(DEFINES)
-ASFLAGS	:=	-g -Wa,--warn $(ARCH) $(DEFINES)
+		$(ARCH) $(INCLUDE) $(DEFINES) \
+		-gdwarf-4 # Needed by no$gba v3.05
+ASFLAGS	:=	-g -Wa,--warn $(ARCH) $(DEFINES) \
+		-gdwarf-4 # Needed by no$gba v3.05
 
 #---------------------------------------------------------------------------------
 ifneq ($(BUILD),$(notdir $(CURDIR)))

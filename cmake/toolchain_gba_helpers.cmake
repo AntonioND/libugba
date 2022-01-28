@@ -7,12 +7,14 @@ macro(gba_set_compiler_options elf_target)
     set(ARGS_ASM
         -mthumb -mthumb-interwork
         -ffunction-sections -fdata-sections
+        -gdwarf-4 # Needed by no$gba v3.05
     )
 
     set(ARGS_C
         -mthumb -mthumb-interwork
         -mcpu=arm7tdmi -mtune=arm7tdmi
         -ffunction-sections -fdata-sections
+        -gdwarf-4 # Needed by no$gba v3.05
     )
 
     target_compile_options(${elf_target} PRIVATE
@@ -25,6 +27,7 @@ macro(gba_set_compiler_options elf_target)
     target_link_options(${elf_target} PRIVATE
         -mthumb -mthumb-interwork
         -Wl,-Map,${elf_target}.map -Wl,--gc-sections
+        -gdwarf-4 # Needed by no$gba v3.05
     )
 
     if(USE_DEVKITARM)
