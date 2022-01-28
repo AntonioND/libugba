@@ -4,6 +4,16 @@
  * SPDX-FileContributor: Antonio Niño Díaz, 2022
  */
 
+/*
+ * Some links with information about linker scripts:
+ *
+ * - https://refspecs.linuxbase.org/LSB_3.1.1/LSB-Core-generic/LSB-Core-generic/specialsections.html
+ *
+ * - https://blog.thea.codes/the-most-thoroughly-commented-linker-script/
+ *
+ * - http://beefchunk.com/documentation/sys-programming/binary_formats/elf/elf_from_the_programmers_perspective/node4.html
+ */
+
 OUTPUT_FORMAT("elf32-littlearm")
 OUTPUT_ARCH(arm)
 ENTRY(entrypoint)
