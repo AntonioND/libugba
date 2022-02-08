@@ -1,9 +1,11 @@
 // SPDX-License-Identifier: MIT
 //
-// Copyright (c) 2020 Antonio Niño Díaz
+// Copyright (c) 2020, 2022 Antonio Niño Díaz
 
 #ifndef BIOS_H__
 #define BIOS_H__
+
+#include <assert.h>
 
 #include "definitions.h"
 #include "hardware.h"
@@ -78,8 +80,7 @@ EXPORT_API int16_t SWI_ArcTan2(int16_t x, int16_t y);
 EXPORT_API uint32_t SWI_GetBiosChecksum(void);
 
 // Struct that holds the input to SWI_BgAffineSet()
-#pragma pack(push, 1)
-typedef struct {
+typedef struct ALIGNED(4) {
     int32_t bgx;        // 24.8 fixed point
     int32_t bgy;        // 24.8 fixed point
     int16_t scrx;
@@ -87,15 +88,15 @@ typedef struct {
     int16_t scalex;     // 8.8 fixed point
     int16_t scaley;     // 8.8 fixed point
     uint32_t angle;     // 8.8 fixed point. Low 8 bits ignored.
-    // The angle is a 32 bit integer instead of adding a padding field for
+    // The angle is a 32 bit integer (instead of adding a padding field) for
     // conveniency. Only bits 8-15 are actually used.
 } bg_affine_src;
-#pragma pack(pop)
+
+static_assert(sizeof(bg_affine_src) == 20, "Wrong bg_affine_src size");
 
 // Struct that holds the state of a background affine transformation. It is used
 // as container of the output of SWI_BgAffineSet()
-#pragma pack(push, 1)
-typedef struct {
+typedef struct ALIGNED(4) {
     int16_t pa;
     int16_t pb;
     int16_t pc;
@@ -103,7 +104,8 @@ typedef struct {
     int32_t xoff;
     int32_t yoff;
 } bg_affine_dst;
-#pragma pack(pop)
+
+static_assert(sizeof(bg_affine_dst) == 16, "Wrong bg_affine_dst size");
 
 // This function gets a list of background transformations and outputs the
 // correct affine matrices for the GBA hardware.
@@ -112,14 +114,14 @@ void SWI_BgAffineSet(const bg_affine_src *src, bg_affine_dst *dst,
                      uint32_t count);
 
 // Struct that holds the input to SWI_ObjAffineSet()
-#pragma pack(push, 1)
-typedef struct {
+typedef struct ALIGNED(2) {
     int16_t sx;         // 8.8 fixed point
     int16_t sy;         // 8.8 fixed point
     uint16_t angle;     // 8.8 fixed point. Range: 0 - 0xFFFF
     uint16_t padding;
 } obj_affine_src;
-#pragma pack(pop)
+
+static_assert(sizeof(obj_affine_src) == 8, "Wrong obj_affine_src size");
 
 // This function gets a list of objects transformations and outputs the correct
 // affine matrices for the GBA hardware.
@@ -128,14 +130,14 @@ void SWI_ObjAffineSet(const obj_affine_src *src, void *dst,
                       uint32_t count, uint32_t increment);
 
 // Struct that holds information used by SWI_BitUnPack()
-#pragma pack(push, 1)
-typedef struct {
+typedef struct ALIGNED(4) {
     int16_t source_length;
     uint8_t source_width;
     uint8_t dest_width;
     uint32_t data_offset;
 } bit_unpack_info;
-#pragma pack(pop)
+
+static_assert(sizeof(bit_unpack_info) == 8, "Wrong bit_unpack_info size");
 
 // Used in data_offset in bit_unpack_info.
 #define SWI_BITUNPACK_OFFSET_ZERO (1 << 31)

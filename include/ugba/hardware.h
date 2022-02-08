@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 //
-// Copyright (c) 2020-2021 Antonio Niño Díaz
+// Copyright (c) 2020-2022 Antonio Niño Díaz
 
 #ifndef HARDWARE_H__
 #define HARDWARE_H__
@@ -146,14 +146,14 @@ EXPORT_API uintptr_t UGBA_MemSRAM(void);
 // OAM Definitions
 // ===============
 
-#pragma pack(push, 1)
-typedef struct {
+typedef struct ALIGNED(8) {
     uint16_t attr0;
     uint16_t attr1;
     uint16_t attr2;
     uint16_t padding;
 } oam_entry;
-#pragma pack(pop)
+
+static_assert(sizeof(oam_entry) == 8, "Wrong oam_entry size");
 
 #define MEM_OAM_NUMBER_ENTRIES      (128)
 #define MEM_OAM_ENTRIES             ((oam_entry *)MEM_OAM)
@@ -214,8 +214,7 @@ typedef struct {
 #define ATTR2_PALETTE(v)            (((v) & 0xF) << 12) // 16 color objects
 #define ATTR2_PALETTE_MASK          (0xF << 12)
 
-#pragma pack(push, 1)
-typedef struct {
+typedef struct ALIGNED(32) {
     uint16_t padding0[3];
     int16_t pa;
     uint16_t padding1[3];
@@ -225,7 +224,8 @@ typedef struct {
     uint16_t padding3[3];
     int16_t pd;
 } oam_matrix_entry;
-#pragma pack(pop)
+
+static_assert(sizeof(oam_matrix_entry) == 32, "Wrong oam_matrix_entry size");
 
 #define MEM_OAM_NUMBER_MATRICES     (32)
 #define MEM_OAM_MATRICES            ((oam_matrix_entry *)MEM_OAM)
