@@ -38,7 +38,7 @@ LZSS=tools/lzss
 ${SUPERFAMICONV} palette \
     --mode gba \
     --palettes 1 \
-    --colors 16 \
+    --colors 2 \
     --color-zero 000000 \
     --in-image font.png \
     --out-data font_palette.bin \

@@ -4,5 +4,5 @@
 
 #include <stdint.h>
 
-#define font_palette_bin_size (32)
-extern const uint8_t font_palette_bin[32];
+#define font_palette_bin_size (4)
+extern const uint8_t font_palette_bin[4];
