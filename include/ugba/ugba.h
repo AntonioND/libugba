@@ -23,6 +23,7 @@ extern "C" {
 #include "interrupts.h"
 #include "obj.h"
 #include "sound.h"
+#include "sram.h"
 #include "timer.h"
 #include "version.h"
 #include "vram.h"
