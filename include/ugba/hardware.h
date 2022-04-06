@@ -85,8 +85,8 @@ static inline uint16_t RGB15(uint16_t r, uint16_t g, uint16_t b)
 #define MEM_ROM_WS1             ((void *)MEM_ROM_ADDR_WS1)
 #define MEM_ROM_WS2             ((void *)MEM_ROM_ADDR_WS2)
 
-// Game Pak SRAM (max 64 KiB)
-#define MEM_SRAM_SIZE           (0x00010000)
+// Game Pak SRAM (32 KiB)
+#define MEM_SRAM_SIZE           (0x00008000)
 #define MEM_SRAM                ((void *)MEM_SRAM_ADDR)
 
 // Base addresses of all regions
