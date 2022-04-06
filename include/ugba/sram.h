@@ -30,11 +30,11 @@
 //      https://krikzz.com/pub/support/everdrive-gba/OS/changelist.txt
 
 // Writes a buffer into SRAM. The destination must be inside SRAM, and the size
-// of the buffer must be at most MEM_SRAM_SIZE bytes long.
-EXPORT_API EWRAM_CODE void SRAM_Write(void *dst, const void *src, size_t size);
+// of the buffer must be at most MEM_SRAM_SIZE bytes long. Returns 0 on success.
+EXPORT_API EWRAM_CODE int SRAM_Write(void *dst, const void *src, size_t size);
 
 // Reads a buffer from SRAM. The source must be inside SRAM, and the size of the
-// buffer must be at most MEM_SRAM_SIZE bytes long.
-EXPORT_API EWRAM_CODE void SRAM_Read(void *dst, const void *src, size_t size);
+// buffer must be at most MEM_SRAM_SIZE bytes long. Returns 0 on success.
+EXPORT_API EWRAM_CODE int SRAM_Read(void *dst, const void *src, size_t size);
 
 #endif // SRAM_H__
