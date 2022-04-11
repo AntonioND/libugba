@@ -524,8 +524,11 @@ static void Sound_FillBuffers_VBL_PSG(void)
     else
         psg_vol = 0;
 
-    int psg_vol_left = SOUNDCNT_L_PSG_VOL_LEFT_GET(soundcnt_l) * psg_vol;
-    int psg_vol_right = SOUNDCNT_L_PSG_VOL_RIGHT_GET(soundcnt_l) * psg_vol;
+    // A value of 0 doesn't mean off, it means 1/8th of the max
+    int psg_vol_left =
+            (1 + SOUNDCNT_L_PSG_VOL_LEFT_GET(soundcnt_l)) * psg_vol;
+    int psg_vol_right =
+            (1 + SOUNDCNT_L_PSG_VOL_RIGHT_GET(soundcnt_l)) * psg_vol;
 
     // Get individual left and right volumes (master volume is included here)
 
