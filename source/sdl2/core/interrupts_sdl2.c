@@ -67,11 +67,16 @@ void IRQ_Internal_CallHandler(irq_index index)
     if (index >= IRQ_NUMBER)
         return;
 
+    // Leave the flag pending if the interrupt is masked out.
+    REG_IF |= (1 << index);
+
     if (REG_IME == 0)
         return;
 
     if ((REG_IE & (1 << index)) == 0)
         return;
+
+    REG_IF &= ~(1 << index);
 
     uint16_t old_ime = REG_IME;
 

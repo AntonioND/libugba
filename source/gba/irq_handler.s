@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 //
-// Copyright (c) 2020 Antonio Niño Díaz
+// Copyright (c) 2020-2022 Antonio Niño Díaz
 
     .section .iwram, "ax", %progbits
     .code 32
@@ -24,13 +24,17 @@ IRQ_GlobalInterruptHandler:
 
     .extern IRQ_VectorTable
 
-    ldr     r3, =IRQ_VectorTable
+    // Notes on the default priority of interrupts:
+    //
+    // - HBLANK is first because it's very short, so saving a few cycles is
+    //   important, specially because it is called every scanline.
+    // - VCOUNT is second because it's similar to HBLANK, but it is triggered
+    //   less often. However, it needs higher priority than VBL because they
+    //   are both triggered at the same time when VBL starts, and VBL is much
+    //   longer.
 
-    mov     r2, #(1 << 0) // VBLANK
-    tst     r1, r2
-    bne     interrupt_found
+    ldr     r3, =IRQ_VectorTable + 4
 
-    add     r3, r3, #4
     mov     r2, #(1 << 1) // HBLANK
     tst     r1, r2
     bne     interrupt_found
@@ -40,7 +44,12 @@ IRQ_GlobalInterruptHandler:
     tst     r1, r2
     bne     interrupt_found
 
-    add     r3, r3, #4
+    sub     r3, r3, #8
+    mov     r2, #(1 << 0) // VBLANK
+    tst     r1, r2
+    bne     interrupt_found
+
+    add     r3, r3, #12
     mov     r2, #(1 << 3) // TIMER0
     tst     r1, r2
     bne     interrupt_found

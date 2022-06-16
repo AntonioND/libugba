@@ -42,15 +42,22 @@ static void Input_Handle_Interrupt(void)
     }
 }
 
-static void handle_hbl(void)
+static void check_trigger_vcount(void)
 {
-    // First, VCOUNT interrupt
-
     uint16_t dispstat_vcount = REG_DISPSTAT & DISPSTAT_VCOUNT_MASK;
     dispstat_vcount >>= DISPSTAT_VCOUNT_SHIFT;
 
     if (current_vcount == dispstat_vcount)
-        IRQ_Internal_CallHandler(IRQ_VCOUNT);
+    {
+        if (REG_DISPSTAT & DISPSTAT_VCOUNT_IRQ_ENABLE)
+            IRQ_Internal_CallHandler(IRQ_VCOUNT);
+    }
+}
+
+static void handle_hbl(void)
+{
+    // First, VCOUNT interrupt
+    check_trigger_vcount();
 
     // Then, draw
     GBA_DrawScanline(current_vcount);
@@ -59,23 +66,20 @@ static void handle_hbl(void)
     GBA_DMAHandleHBL();
 
     // Finally, HBL interrupt
-    IRQ_Internal_CallHandler(IRQ_HBLANK);
+    if (REG_DISPSTAT & DISPSTAT_HBLANK_IRQ_ENABLE)
+        IRQ_Internal_CallHandler(IRQ_HBLANK);
 }
 
 static void handle_hbl_during_vbl(void)
 {
     // First, VCOUNT interrupt
-
-    uint16_t dispstat_vcount = REG_DISPSTAT & DISPSTAT_VCOUNT_MASK;
-    dispstat_vcount >>= DISPSTAT_VCOUNT_SHIFT;
-
-    if (current_vcount == dispstat_vcount)
-        IRQ_Internal_CallHandler(IRQ_VCOUNT);
+    check_trigger_vcount();
 
     // In this case, there is nothing to draw, and DMA isn't triggered.
 
     // Finally, HBL interrupt
-    IRQ_Internal_CallHandler(IRQ_HBLANK);
+    if (REG_DISPSTAT & DISPSTAT_HBLANK_IRQ_ENABLE)
+        IRQ_Internal_CallHandler(IRQ_HBLANK);
 }
 
 static void handle_vbl(void)
@@ -87,7 +91,8 @@ static void handle_vbl(void)
     Sound_Handle_VBL();
 
     // Handle VBL interrupt
-    IRQ_Internal_CallHandler(IRQ_VBLANK);
+    if (REG_DISPSTAT & DISPSTAT_VBLANK_IRQ_ENABLE)
+        IRQ_Internal_CallHandler(IRQ_VBLANK);
 
     // Handle GUI
     // ----------
@@ -145,8 +150,15 @@ static void do_scanline_draw(void)
     }
     else if (current_vcount == 160)
     {
+        // First, VCOUNT interrupt. It has higher priority than the VBL
+        // interrupt in the GBA interrupt handler (see gba/irq_handler.s).
+        check_trigger_vcount();
+
         handle_vbl();
-        handle_hbl_during_vbl();
+
+        // Finally, HBL interrupt
+        if (REG_DISPSTAT & DISPSTAT_HBLANK_IRQ_ENABLE)
+            IRQ_Internal_CallHandler(IRQ_HBLANK);
     }
     else
     {
