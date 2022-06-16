@@ -7,6 +7,7 @@
 #include <ugba/ugba.h>
 
 #include "dma.h"
+#include "interrupts.h"
 #include "timer.h"
 #include "video.h"
 
@@ -92,6 +93,11 @@ void UGBA_RegisterUpdatedOffset(uint32_t offset)
         case OFFSET_BG3Y_L:
         case OFFSET_BG3Y_H:
             GBA_VideoUpdateRegister(offset);
+            break;
+
+        case OFFSET_IME:
+        case OFFSET_IE:
+            IRQ_TryHandleAllPendingInterrupts();
             break;
 
         default:

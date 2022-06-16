@@ -104,3 +104,29 @@ void IRQ_Internal_CallHandler(irq_index index)
 
     REG_IME = old_ime;
 }
+
+void IRQ_TryHandleAllPendingInterrupts(void)
+{
+    if (REG_IME == 0)
+        return;
+
+    // HBLANK has the highest priority
+    if (REG_IF & REG_IE & (1 << IRQ_HBLANK))
+        IRQ_Internal_CallHandler(IRQ_HBLANK);
+
+    // VCOUNT has the second highest priority
+    if (REG_IF & REG_IE & (1 << IRQ_VCOUNT))
+        IRQ_Internal_CallHandler(IRQ_VCOUNT);
+
+    // The rest are in order
+    for (int index = 0; index < IRQ_NUMBER; index++)
+    {
+        if ((index == IRQ_HBLANK) || (index == IRQ_VCOUNT))
+            continue;
+
+        if ((REG_IF & REG_IE & (1 << index)) == 0)
+            continue;
+
+        IRQ_Internal_CallHandler(index);
+    }
+}

@@ -8,5 +8,6 @@
 #include <ugba/ugba.h>
 
 void IRQ_Internal_CallHandler(irq_index index);
+void IRQ_TryHandleAllPendingInterrupts(void);
 
 #endif // SDL2_INTERRUPTS_H__
