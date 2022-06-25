@@ -210,13 +210,21 @@ void SWI_CpuFastSet(const void *src, void *dst, uint32_t len_mode)
     if (mode & SWI_MODE_FILL)
     {
         uint32_t fill = *src_;
-        while (count--)
-            *dst_++ = fill;
+        while (count > 0)
+        {
+            for (int i = 0; i < 8; i++)
+                *dst_++ = fill;
+            count -= 8;
+        }
     }
     else // Copy
     {
-        while (count--)
-            *dst_++ = *src_++;
+        while (count > 0)
+        {
+            for (int i = 0; i < 8; i++)
+                *dst_++ = *src_++;
+            count -= 8;
+        }
     }
 }
 
