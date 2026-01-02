@@ -76,10 +76,10 @@ endif()
 # SLD2 is always required
 
 if(CMAKE_C_COMPILER_ID STREQUAL "MSVC")
-    find_package(SDL2 REQUIRED 2.0.7)
+    find_package(SDL2 REQUIRED)
     target_link_libraries(${LIBRARY_NAME} PRIVATE SDL2::SDL2 SDL2::SDL2main)
 else()
-    find_package(SDL2 REQUIRED 2.0.7)
+    find_package(SDL2 REQUIRED)
     target_include_directories(${LIBRARY_NAME} PRIVATE ${SDL2_INCLUDE_DIRS})
     target_link_libraries(${LIBRARY_NAME} PRIVATE ${SDL2_LIBRARIES})
 endif()
