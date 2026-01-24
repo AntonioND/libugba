@@ -35,13 +35,13 @@ resources used in the examples (like music and sound effects), but don't affect
 the library itself.
 
 This repository only holds the library code. For more information about testing
-check the following repository: https://github.com/AntonioND/ugba-testing
+check the following repository: https://codeberg.org/SkyLyrac/ugba-testing
 
 The following repository contains an example of a project that uses **libugba**:
-https://github.com/AntonioND/ugba-template
+https://codeberg.org/SkyLyrac/ugba-template
 
 Another example is my game, **µCity Advance**:
-https://github.com/AntonioND/ucity-advance
+https://codeberg.org/SkyLyrac/ucity-advance
 
 2. Limitations
 --------------
@@ -101,7 +101,7 @@ Clone this repository:
 
 .. code:: bash
 
-    git clone https://github.com/AntonioND/libugba
+    git clone https://codeberg.org/SkyLyrac/libugba
     cd libugba
 
 Run this to build the library:
@@ -120,7 +120,7 @@ Clone this repository and build it with just **make** like this:
 
 .. code:: bash
 
-    git clone https://github.com/AntonioND/libugba
+    git clone https://codeberg.org/SkyLyrac/libugba
     cd libugba
     make -j`nproc`
 
@@ -128,7 +128,7 @@ You can also build it with **CMake** (at the sime time as the PC version):
 
 .. code:: bash
 
-    git clone https://github.com/AntonioND/libugba
+    git clone https://codeberg.org/SkyLyrac/libugba
     cd libugba
     mkdir build
     cd build
@@ -142,7 +142,7 @@ Run the following commands to build the GBA and PC versions at the same time:
 
 .. code:: bash
 
-    git clone https://github.com/AntonioND/libugba
+    git clone https://codeberg.org/SkyLyrac/libugba
     cd libugba
     mkdir build
     cd build
