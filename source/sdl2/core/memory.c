@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: LGPL-3.0-only
 //
-// Copyright (c) 2020 Antonio Niño Díaz
+// Copyright (c) 2020-2026 Antonio Niño Díaz
 
 #include <stdint.h>
 
@@ -11,15 +11,15 @@
 #include "timer.h"
 #include "video.h"
 
-uint64_t internal_bios[MEM_BIOS_SIZE / sizeof(uint64_t)];
-uint64_t internal_ewram[MEM_EWRAM_SIZE / sizeof(uint64_t)];
-uint64_t internal_iwram[MEM_IWRAM_SIZE / sizeof(uint64_t)];
-uint64_t internal_io[MEM_IO_SIZE / sizeof(uint64_t)];
-uint64_t internal_palette[MEM_PALETTE_SIZE / sizeof(uint64_t)];
-uint64_t internal_vram[MEM_VRAM_SIZE / sizeof(uint64_t)];
-uint64_t internal_oam[MEM_OAM_SIZE / sizeof(uint64_t)];
-uint64_t internal_rom[MEM_ROM_SIZE / sizeof(uint64_t)];
-uint64_t internal_sram[MEM_SRAM_SIZE / sizeof(uint64_t)];
+uint8_t internal_bios[MEM_BIOS_SIZE] ALIGNED(MEM_BIOS_SIZE);
+uint8_t internal_ewram[MEM_EWRAM_SIZE] ALIGNED(MEM_EWRAM_SIZE);
+uint8_t internal_iwram[MEM_IWRAM_SIZE] ALIGNED(MEM_IWRAM_SIZE);
+uint8_t internal_io[MEM_IO_SIZE] ALIGNED(MEM_IO_SIZE);
+uint8_t internal_palette[MEM_PALETTE_SIZE] ALIGNED(MEM_PALETTE_SIZE);
+uint8_t internal_vram[MEM_VRAM_SIZE] ALIGNED(MEM_VRAM_SIZE + 32 * 1024);
+uint8_t internal_oam[MEM_OAM_SIZE] ALIGNED(MEM_OAM_SIZE);
+uint8_t internal_rom[MEM_ROM_SIZE] ALIGNED(MEM_ROM_SIZE);
+uint8_t internal_sram[MEM_SRAM_SIZE] ALIGNED(MEM_SRAM_SIZE);
 
 uintptr_t UGBA_MemBIOS(void)
 {
